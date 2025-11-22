@@ -8,7 +8,7 @@ plugins {
 val projectName = project.name.replace("_", ".")
 
 android {
-    namespace = "com.mobiledevpro.$projectName"
+    namespace = "com.scto.$projectName"
     compileSdk = libs.versionInt("sdk.compile")
 
     defaultConfig {

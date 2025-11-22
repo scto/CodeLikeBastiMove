@@ -15,12 +15,12 @@ plugins {
 }
 
 android {
-    namespace = "com.mobiledevpro.apptemplate.compose"
+    namespace = "com.scto.apptemplate.compose"
     compileSdk = libs.versions.sdk.compile.get().toInt()
 
 
     defaultConfig {
-        applicationId = "com.mobiledevpro"
+        applicationId = "com.scto"
         minSdk = libs.versions.sdk.min.get().toInt()
         targetSdk = libs.versions.sdk.target.get().toInt()
         versionCode = libs.versions.app.version.code.get().toInt()

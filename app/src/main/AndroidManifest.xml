@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="com.mobiledevpro.app.App"
+        android:name="com.scto.app.App"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -15,7 +15,7 @@
         android:usesCleartextTraffic="false"
         android:theme="@style/Theme.AppTemplateCompose">
         <activity
-            android:name="com.mobiledevpro.app.MainActivity"
+            android:name="com.scto.app.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.AppTemplateCompose.Splash">

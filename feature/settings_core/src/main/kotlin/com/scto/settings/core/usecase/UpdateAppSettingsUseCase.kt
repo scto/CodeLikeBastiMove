@@ -1,0 +1,60 @@
+/*
+ * Copyright 2025 | Dmitri Chernysh | https://github.com/dmitriy-chernysh
+ *
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+package com.scto.settings.core.usecase
+
+import com.scto.coroutines.BaseCoroutinesUseCase
+import com.scto.coroutines.None
+import com.scto.settings.AppSettings
+import com.scto.settings.core.datastore.AppSettingsManager
+import com.scto.settings.core.model.Settings
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+
+/**
+ * Update general settings of the app
+ *
+ * Created on Jan 03, 2025.
+ *
+ */
+class UpdateAppSettingsUseCase(
+    private val settingsManager: AppSettingsManager
+) : BaseCoroutinesUseCase<Settings, None>(Dispatchers.IO) {
+
+    override suspend fun buildUseCase(params: Settings?): None =
+        params?.let { settings ->
+            settingsManager.get()
+                .first()
+                .let { existingSettings: AppSettings ->
+
+                    if (existingSettings.darkMode != settings.darkMode)
+                        settingsManager.setDarkMode(settings.darkMode)
+
+                    if (existingSettings.dynamicColors != settings.dynamicColors)
+                        settingsManager.setDynamicColors(settings.dynamicColors)
+
+                    // If current state is "first run" (true) and the new setting says it's not (false), update it.
+                    // We typically only go from true -> false.
+                    if (existingSettings.isFirstRun && !settings.isFirstRun) {
+                        settingsManager.setFirstRunShown()
+                    }
+
+                }
+            None()
+        } ?: throw RuntimeException("App Settings not found")
+
+}
