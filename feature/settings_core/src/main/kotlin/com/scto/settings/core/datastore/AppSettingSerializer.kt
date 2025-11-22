@@ -39,6 +39,7 @@ object SettingsSerializer : Serializer<AppSettings> {
             .setDarkMode(true)
             .setDynamicColors(true)
             .setIsFirstRun(true)
+            .setIsAnalyticsEnabled(true)
             .build()
 
     override suspend fun readFrom(input: InputStream): AppSettings {

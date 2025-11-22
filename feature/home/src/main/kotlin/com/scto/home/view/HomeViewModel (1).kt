@@ -1,12 +1,12 @@
 /*
- * Copyright 2025 | Dmitri Chernysh | https://github.com/dmitriy-chernysh
+ * Copyright 2022 | Dmitri Chernysh | https://mobile-dev.pro
  *
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,17 +15,15 @@
  * limitations under the License.
  *
  */
-package com.scto.analytics
+package com.scto.home.view
 
-import android.app.Activity
+import androidx.lifecycle.ViewModel
 
 /**
+ * Home screen
  *
- * Created on Feb 15, 2025.
+ * Created on Jan 24, 2023.
  *
  */
-interface Analytics {
-    fun trackScreen(screenName: String, activity: Activity?)
-    fun trackAction(actionName: String)
-    fun setCollectionEnabled(enabled: Boolean)
+class HomeViewModel : ViewModel() {
 }

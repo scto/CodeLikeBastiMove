@@ -47,6 +47,9 @@ class UpdateAppSettingsUseCase(
                     if (existingSettings.dynamicColors != settings.dynamicColors)
                         settingsManager.setDynamicColors(settings.dynamicColors)
 
+                    if (existingSettings.isAnalyticsEnabled != settings.isAnalyticsEnabled)
+                        settingsManager.setAnalyticsEnabled(settings.isAnalyticsEnabled)
+
                     // If current state is "first run" (true) and the new setting says it's not (false), update it.
                     // We typically only go from true -> false.
                     if (existingSettings.isFirstRun && !settings.isFirstRun) {

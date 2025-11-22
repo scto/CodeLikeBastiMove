@@ -6,7 +6,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,7 +21,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+
 import com.scto.navigation.Screen
+import com.scto.navigation.screen.onBoardingPermissionsScreen
 import com.scto.navigation.screen.onBoardingFirstScreen
 import com.scto.navigation.screen.onBoardingSecondScreen
 import com.scto.navigation.screen.onBoardingThirdScreen
@@ -37,14 +39,15 @@ fun OnBoardingNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
+    // Start mit dem ersten Info-Screen, Permissions kommen am Ende
     NavHost(
         navController = navController,
         startDestination = Screen.OnBoardingFirst.route,
         modifier = modifier,
     ) {
-
         onBoardingFirstScreen()
         onBoardingSecondScreen()
         onBoardingThirdScreen()
+        onBoardingPermissionsScreen()
     }
 }

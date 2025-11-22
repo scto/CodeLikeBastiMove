@@ -6,7 +6,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,7 +31,7 @@ class ImplAnalytics(
     private val provider: FirebaseAnalytics
 ) : Analytics {
     override fun trackAction(actionName: String) {
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
     }
 
     override fun trackScreen(screenName: String, activity: Activity?) {
@@ -42,5 +42,9 @@ class ImplAnalytics(
         }.also { bundle ->
             provider.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
+    }
+
+    override fun setCollectionEnabled(enabled: Boolean) {
+        provider.setAnalyticsCollectionEnabled(enabled)
     }
 }

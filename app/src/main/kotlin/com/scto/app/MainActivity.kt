@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +32,7 @@ class MainActivity : ComponentActivity(), KoinComponent {
 
     private val viewModel: MainViewModel by koinScope<MainActivity>().inject()
     private val firebaseAnalytics by getKoin().inject<FirebaseAnalytics>()
+    private val analyticsImpl by lazy { ImplAnalytics(firebaseAnalytics) }
 
     init {
         loadKoinModules(mainModule)
@@ -61,6 +63,11 @@ class MainActivity : ComponentActivity(), KoinComponent {
                     darkMode = it.darkMode
                     dynamicColors = it.dynamicColors
                     isFirstRun = it.isFirstRun
+                    
+                    // Update analytics state based on settings
+                    LaunchedEffect(it.isAnalyticsEnabled) {
+                        analyticsImpl.setCollectionEnabled(it.isAnalyticsEnabled)
+                    }
                 }
             }
 
@@ -69,7 +76,7 @@ class MainActivity : ComponentActivity(), KoinComponent {
                 dynamicColor = dynamicColors
             ) {
                 KoinContext {
-                    CompositionLocalProvider(LocalAnalytics provides ImplAnalytics(firebaseAnalytics)) {
+                    CompositionLocalProvider(LocalAnalytics provides analyticsImpl) {
                         val startDestination = if (isFirstRun) Screen.OnBoarding else Screen.Home
                         MainApp(startDestination = startDestination)
                     }

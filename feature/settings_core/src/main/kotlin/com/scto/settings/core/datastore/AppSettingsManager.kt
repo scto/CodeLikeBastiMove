@@ -28,4 +28,6 @@ interface AppSettingsManager {
     suspend fun setDynamicColors(isDynamicColors: Boolean)
 
     suspend fun setFirstRunShown()
+
+    suspend fun setAnalyticsEnabled(isEnabled: Boolean)
 }

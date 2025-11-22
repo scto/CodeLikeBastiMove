@@ -19,13 +19,13 @@ package com.scto.navigation.ext
 
 import android.util.Log
 import androidx.navigation.NavController
+
 import com.scto.navigation.Screen
 
 
 fun NavController.navigateTo(
     screen: Screen
 ) {
-
     val currentRoute: String? = this.currentBackStackEntry?.destination?.route
 
     val route = screen.routePath?.let { routePath ->

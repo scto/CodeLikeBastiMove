@@ -9,5 +9,6 @@ package com.scto.settings.core.model
 data class Settings(
     val darkMode: Boolean = true,
     val dynamicColors: Boolean = true,
-    val isFirstRun: Boolean = true
+    val isFirstRun: Boolean = true,
+    val isAnalyticsEnabled: Boolean = false
 )

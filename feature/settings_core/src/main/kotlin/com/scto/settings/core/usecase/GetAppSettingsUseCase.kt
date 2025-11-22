@@ -41,7 +41,8 @@ class GetAppSettingsUseCase(
                 Settings(
                     darkMode = appSettings.darkMode,
                     dynamicColors = appSettings.dynamicColors,
-                    isFirstRun = appSettings.isFirstRun
+                    isFirstRun = appSettings.isFirstRun,
+                    isAnalyticsEnabled = appSettings.isAnalyticsEnabled
                 )
             }
 }

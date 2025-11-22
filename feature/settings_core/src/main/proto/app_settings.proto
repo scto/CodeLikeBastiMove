@@ -7,4 +7,5 @@ message AppSettings {
   bool dark_mode = 1;
   bool dynamic_colors = 2;
   bool is_first_run = 3;
+  bool is_analytics_enabled = 4;
 }

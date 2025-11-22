@@ -54,4 +54,12 @@ class ImplAppSettingsManager(
         }
     }
 
+    override suspend fun setAnalyticsEnabled(isEnabled: Boolean) {
+        appSettings.updateData {
+            it.toBuilder()
+                .setIsAnalyticsEnabled(isEnabled)
+                .build()
+        }
+    }
+
 }

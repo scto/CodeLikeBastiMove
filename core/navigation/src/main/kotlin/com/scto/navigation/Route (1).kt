@@ -6,7 +6,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.scto.people.profile.view.args.PeopleProfileArgs
 
 const val navigationRouteOnBoarding = "on_boarding"
-const val navigationRouteOnBoardingPermissions = "on_boarding_permissions"
 const val navigationRouteOnBoardingFirst = "on_boarding_first"
 const val navigationRouteOnBoardingSecond = "on_boarding_second"
 const val navigationRouteOnBoardingThird = "on_boarding_third"
@@ -62,10 +61,10 @@ sealed class Screen(
     }
 
     object OnBoarding : Screen(navigationRouteOnBoarding)
-    object OnBoardingPermissions : Screen(navigationRouteOnBoardingPermissions)
     object OnBoardingFirst : Screen(navigationRouteOnBoardingFirst)
     object OnBoardingSecond : Screen(navigationRouteOnBoardingSecond)
     object OnBoardingThird : Screen(navigationRouteOnBoardingThird)
+
     object Home : Screen(navigationRouteHome)
 
     // 3 tabs of Bottom navigation

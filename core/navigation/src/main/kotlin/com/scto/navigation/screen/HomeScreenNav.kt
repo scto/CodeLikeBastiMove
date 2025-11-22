@@ -24,12 +24,12 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+
 import com.scto.home.view.HomeScreen
 import com.scto.navigation.HomeBottomNavigation
 import com.scto.navigation.Screen
 import com.scto.navigation.ext.navigateTo
 import com.scto.navigation.graph.HomeNavGraph
-
 
 fun NavGraphBuilder.homeScreen(onNavigateToRoot: (Screen) -> Unit) {
     composable(

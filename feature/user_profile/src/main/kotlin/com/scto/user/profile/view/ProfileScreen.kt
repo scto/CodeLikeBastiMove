@@ -6,7 +6,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -53,6 +53,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
+
 import com.scto.domain.model.UserProfile
 import com.scto.domain.model.fakeUser
 import com.scto.ui.component.LabeledDarkModeSwitch
@@ -63,6 +64,7 @@ import com.scto.ui.component.ScreenBackground
 import com.scto.ui.component.SettingsButton
 import com.scto.ui.theme.AppTheme
 import com.scto.user.profile.view.state.UserProfileUIState
+
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import com.scto.ui.R as RUi
@@ -71,6 +73,7 @@ import com.scto.ui.R as RUi
 fun ProfileScreen(
     state: StateFlow<UserProfileUIState>,
     onDarkModeSwitched: (Boolean) -> Unit,
+    onAnalyticsSwitched: (Boolean) -> Unit,
     onNavigateToSubscription: () -> Unit
 ) {
     Log.d("navigation", "ProfileScreen:")
@@ -79,6 +82,7 @@ fun ProfileScreen(
 
     var backgroundBoxTopOffset by remember { mutableIntStateOf(0) }
     var darkModeOn by remember { mutableStateOf(true) }
+    var analyticsOn by remember { mutableStateOf(true) }
     var userProfile by remember { mutableStateOf<UserProfile>(UserProfile()) }
 
     if (uiState is UserProfileUIState.Success) {
@@ -88,6 +92,7 @@ fun ProfileScreen(
 
         (uiState as UserProfileUIState.Success).settings?.let {
             darkModeOn = it.darkMode
+            analyticsOn = it.isAnalyticsEnabled
         }
     }
 
@@ -165,6 +170,19 @@ fun ProfileScreen(
                             onDarkModeSwitched(isDark)
                         })
 
+                    // Reusing the same UI component for Analytics Switch since it just needs a Label and Check state
+                    LabeledDarkModeSwitch(
+                        modifier = Modifier.padding(
+                            horizontal = 32.dp,
+                            vertical = 8.dp
+                        ),
+                        label = "Analytics",
+                        checked = analyticsOn,
+                        onCheckedChanged = { isEnabled ->
+                            analyticsOn = isEnabled
+                            onAnalyticsSwitched(isEnabled)
+                        })
+
                     SettingsButton(
                         modifier = Modifier.padding(
                             horizontal = 32.dp,
@@ -200,6 +218,7 @@ fun ProfileScreenPreview() {
         ProfileScreen(
             state = MutableStateFlow(UserProfileUIState.Success(fakeUser)),
             onDarkModeSwitched = {},
+            onAnalyticsSwitched = {},
             onNavigateToSubscription = {}
         )
     }
