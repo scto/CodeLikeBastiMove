@@ -1,7 +1,7 @@
-# Android Chat App entirely built with Jetpack Compose (in development)
+# Android Mobile IDE App entirely built with Jetpack Compose (in development)
 
-![Run Unit Tests](https://github.com/mobiledevpro/closetalk.app/actions/workflows/tests.yml/badge.svg)
-[![CodeFactor](https://www.codefactor.io/repository/github/mobiledevpro/closetalk.app/badge)](https://www.codefactor.io/repository/github/mobiledevpro/closetalk.app)
+![Run Unit Tests](https://github.com/scto/codelikebastimove/actions/workflows/tests.yml/badge.svg)
+[![CodeFactor](https://www.codefactor.io/repository/github/scto/codelikebastimove/badge)](https://www.codefactor.io/repository/github/scto/codelikebastimove)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mobiledevpro_Jetpack-Compose-ChatApp-Template&metric=alert_status)](https://sonarcloud.io/dashboard?id=mobiledevpro_Jetpack-Compose-ChatApp-Template)
 
 [![Kotlin Version](https://img.shields.io/badge/Kotlin-2.2.0-blue.svg?style=flat-square)](http://kotlinlang.org/)
@@ -12,13 +12,13 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](http://www.apache.org/licenses/LICENSE-2.0)
 [![Android Studio](https://img.shields.io/badge/Android%20Studio%20Narwhal-2025.1.2-orange.svg?style=flat-square)](https://developer.android.com/studio/preview)
 
-![GitHub last commit](https://img.shields.io/github/last-commit/mobiledevpro/closetalk.app?color=red&style=flat-square)
+![GitHub last commit](https://img.shields.io/github/last-commit/scto/codelikebastimove?color=red&style=flat-square)
 
 ### Try demo:
-[<img src="https://github.com/mobiledevpro/closetalk.app/assets/5750211/56e09ffa-faa5-4ad1-8ad8-4ee35957870b" width="250" alt="Demo"/>](https://play.google.com/store/apps/details?id=com.mobiledevpro.closetalk.app&utm_source=landing)
+[<img src="https://github.com/scto/codelikebastimove/assets/5750211/56e09ffa-faa5-4ad1-8ad8-4ee35957870b" width="250" alt="Demo"/>](https://play.google.com/store/apps/details?id=com.scto.codelikebastimove&utm_source=landing)
 
 ##
-![closetalk_github_social_preview](https://github.com/mobiledevpro/closetalk.app/assets/5750211/343f1ab5-54e4-41c2-a554-af0526aee382)
+![codelikebastimove_github_social_preview](https://github.com/scto/codelikebastimove/assets/5750211/343f1ab5-54e4-41c2-a554-af0526aee382)
 
 [![Youtube](https://img.shields.io/badge/-youtube-red?logo=youtube&message=Youtube&style=for-the-badge&label=Watch+on)](https://www.youtube.com/playlist?list=PL9IBbMupfHWrW419OtGlzc7cBEMNqyLa4)
 
@@ -202,7 +202,7 @@ moduleGraphConfig {
   <img src="https://s.gravatar.com/avatar/72c649d298a8f0f088fd0850e19b9147?s=400" width="70" align="left">
 </a>
 
-**Dmitri Chernysh**
+**Thomas Schmid**
 
 [![Instagram](https://img.shields.io/badge/-instagram-E4405F?logo=instagram&message=Tech+insights+on&label=Tech+insights+on&logoColor=white&style=for-the-badge)](https://www.instagram.com/mobiledevpro/)
 [![Youtube](https://img.shields.io/badge/-youtube-red?logo=youtube&message=Youtube&label=Watch+on&style=for-the-badge)](https://www.youtube.com/@mobiledevpro?sub_confirmation=1&utm_source=github_main_profile)
@@ -213,7 +213,7 @@ moduleGraphConfig {
 
 ## License:
 
-Copyright 2025 Dmitri Chernysh
+Copyright 2025 Thomas Schmid
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -230,8 +230,8 @@ limitations under the License.
 ## Thanks for the support
 **Stargazers**
 
-[![Stargazers repo roster for @mobiledevpro/closetalk.app](http://reporoster.com/stars/dark/mobiledevpro/closetalk.app)](https://github.com/mobiledevpro/closetalk.app/stargazers)
+[![Stargazers repo roster for @scto/codelikebastimove](http://reporoster.com/stars/dark/scto/codelikebastimove)](https://github.com/scto/codelikebastimove/stargazers)
 
 **Forkers**
 
-[![Forkers repo roster for @mobiledevpro/closetalk.app](http://reporoster.com/forks/dark/mobiledevpro/closetalk.app)](https://github.com/mobiledevpro/closetalk.app/network/members)
+[![Forkers repo roster for @scto/codelikebastimove](http://reporoster.com/forks/dark/scto/codelikebastimove)](https://github.com/scto/codelikebastimove/network/members)

@@ -1,7 +1,7 @@
-appId: com.mobiledevpro.apptemplate.compose
+appId: com.scto.apptemplate.compose
 ---
 - launchApp:
-        appId: "com.mobiledevpro.apptemplate.compose"
+        appId: "com.scto.apptemplate.compose"
         clearState: true
 - waitForAnimationToEnd:
         timeout: 1500

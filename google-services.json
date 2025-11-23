@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "361111288558",
+    "project_id": "codelikebastimove",
+    "storage_bucket": "codelikebastimove.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:361111288558:android:6980c34d067509b9ef11ff",
+        "android_client_info": {
+          "package_name": "com.scto.codelikebastimove"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCg2y_ZcDdqi9xXbQTuEInomZPN18VQ4dI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
