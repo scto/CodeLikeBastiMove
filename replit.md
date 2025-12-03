@@ -1,7 +1,7 @@
 # CodeLikeBastiMove
 
 ## Overview
-CodeLikeBastiMove is an Android mobile application built with Kotlin and Jetpack Compose. This app features a modern Material Design 3 navigation drawer with multiple screens (Home, Gallery, Slideshow, and Settings) demonstrating current Android development best practices with a highly modular architecture.
+CodeLikeBastiMove is an Android mobile application built with Kotlin and Jetpack Compose. This app features a modern Material Design 3 navigation drawer with multiple screens (Home, Gallery, Slideshow, and Settings) demonstrating current Android development best practices with a highly modular architecture. The app includes theme management with DataStore persistence.
 
 ## Project Type
 **Android Mobile Application** - This project builds an Android APK using Jetpack Compose for the UI layer with a multi-module Gradle structure.
@@ -13,7 +13,8 @@ CodeLikeBastiMove is an Android mobile application built with Kotlin and Jetpack
 - **Target SDK**: Android 34 (Android 14)
 - **Minimum SDK**: Android 29 (Android 10)
 - **Java Version**: Java 17 (OpenJDK 17.0.15)
-- **Modular Architecture**: Multi-module Gradle project with feature modules
+- **Modular Architecture**: Multi-module Gradle project with feature and core modules
+- **Data Persistence**: Proto DataStore for user preferences
 
 ## Project Structure
 ```
@@ -31,6 +32,18 @@ CodeLikeBastiMove/
 │   │   ├── res/
 │   │   └── AndroidManifest.xml
 │   └── build.gradle.kts
+├── core/                                   # Core modules
+│   ├── core-datastore/                     # DataStore repository module
+│   │   ├── src/main/java/.../core/datastore/
+│   │   │   ├── ThemeMode.kt
+│   │   │   ├── UserPreferences.kt
+│   │   │   ├── UserPreferencesRepository.kt
+│   │   │   └── UserPreferencesSerializer.kt
+│   │   └── build.gradle.kts
+│   └── core-datastore-proto/               # Proto DataStore schema module
+│       ├── src/main/proto/
+│       │   └── user_preferences.proto
+│       └── build.gradle.kts
 ├── features/                               # Features aggregator module
 │   ├── build.gradle.kts                    # Re-exports all feature modules via api()
 │   ├── feature-home/                       # Home feature module
@@ -50,12 +63,12 @@ CodeLikeBastiMove/
 │   │   └── build.gradle.kts
 │   └── feature-settings/                   # Settings feature module
 │       ├── src/main/java/.../feature/settings/
-│       │   ├── SettingsScreen.kt
+│       │   ├── SettingsScreen.kt (GeneralSettings)
 │       │   └── SettingsViewModel.kt
 │       └── build.gradle.kts
 ├── gradle/
 │   └── wrapper/
-├── build.gradle.kts                        # Root build file
+├── build.gradle.kts                        # Root build file (includes protobuf plugin)
 └── settings.gradle.kts                     # Includes all modules
 ```
 
@@ -63,26 +76,24 @@ CodeLikeBastiMove/
 
 ### app module
 The main application module containing:
-- `MainActivity.kt` - Entry point with Compose UI setup
+- `MainActivity.kt` - Entry point with Compose UI setup and theme management
 - `navigation/` - Navigation drawer and screen routing
-- `ui/theme/` - Material Design 3 theming
+- `ui/theme/` - Material Design 3 theming with dynamic colors and dark/light mode support
+
+### core modules
+Core functionality shared across the app:
+- **core-datastore-proto**: Proto DataStore schema definitions for user preferences (theme mode, dynamic colors)
+- **core-datastore**: Repository pattern implementation for reading/writing user preferences
 
 ### features module (Aggregator)
 A thin aggregator library that re-exports all feature modules via `api()` dependencies. The app module only needs to depend on `:features` to access all feature screens.
 
 ### Feature Modules (Android Libraries)
 Each feature is a separate Gradle module:
-- **feature-home**: Home screen with HomeViewModel
+- **feature-home**: Home screen with 6 buttons (Create Project, Open Project, Clone Repository, Settings, Help, FAQ). Settings button navigates to SettingsScreen.
 - **feature-gallery**: Gallery screen with GalleryViewModel
 - **feature-slideshow**: Slideshow screen with SlideshowViewModel
-- **feature-settings**: Settings screen with SettingsViewModel
-
-This modular approach allows for:
-- Better code organization and separation of concerns
-- Faster incremental builds (only changed modules recompile)
-- Independent testing of features
-- Potential for dynamic feature delivery
-- Clear dependency boundaries between features
+- **feature-settings**: GeneralSettings screen with theme switching and dynamic colors toggle
 
 ## Key Features
 - **Jetpack Compose UI**: Modern declarative UI framework
@@ -90,7 +101,19 @@ This modular approach allows for:
 - **MVVM Architecture**: Uses ViewModel with StateFlow for reactive UI
 - **Compose Navigation**: AndroidX Navigation Compose for screen navigation
 - **Material Design 3**: Latest Material You design language
-- **Multi-module Architecture**: Separated features into dedicated modules
+- **Multi-module Architecture**: Separated features and core modules
+- **Theme Management**: Light/Dark/Follow System theme switching with DataStore persistence
+- **Dynamic Colors**: Material You dynamic color support toggle
+
+## Settings Screen (GeneralSettings)
+The Settings screen provides:
+1. **Design Section**: Theme mode selection
+   - Hell (Light)
+   - Dunkel (Dark)
+   - System folgen (Follow System)
+2. **Dynamic Colors Section**: Toggle for Material You dynamic colors
+
+Settings are persisted using Proto DataStore and applied app-wide.
 
 ## Dependencies
 
@@ -101,6 +124,12 @@ This modular approach allows for:
 - Lifecycle ViewModel Compose
 - Kotlin Coroutines
 - features module (project dependency)
+- core-datastore module (project dependency)
+
+### core-datastore module
+- Proto DataStore 1.1.1
+- DataStore Preferences 1.1.1
+- Protobuf JavaLite 3.25.1
 
 ### Feature modules (each)
 - Jetpack Compose BOM 2024.06.00
@@ -116,8 +145,9 @@ This modular approach allows for:
 - **Android SDK**: Installed in `~/android-sdk`
   - Platform Tools
   - Android Platform 34
-  - Build Tools
+  - Build Tools 34.0.0 and 35.0.0
 - **Gradle**: 8.14.3 (installed via wrapper)
+- **Protobuf**: 3.25.1 (via Gradle plugin 0.9.4)
 
 ### Environment Variables
 - `ANDROID_HOME=/home/runner/android-sdk`
@@ -152,6 +182,10 @@ app/build/outputs/apk/debug/app-debug.apk
 ./gradlew :features:feature-slideshow:assembleDebug
 ./gradlew :features:feature-settings:assembleDebug
 
+# Build core modules
+./gradlew :core:core-datastore:assembleDebug
+./gradlew :core:core-datastore-proto:assembleDebug
+
 # Build only the app module
 ./gradlew :app:assembleDebug
 ```
@@ -172,7 +206,12 @@ Since this is an Android application, it needs to be run on:
 - ✅ Created features aggregator module
 - ✅ Split features into 4 separate modules (home, gallery, slideshow, settings)
 - ✅ Added new Settings screen to navigation drawer
-- ✅ Successfully built modular Compose APK (~54MB)
+- ✅ Added core-datastore-proto module with Proto DataStore schema
+- ✅ Added core-datastore module with UserPreferencesRepository
+- ✅ Implemented GeneralSettings screen with theme and dynamic colors sections
+- ✅ Connected Settings button in HomeScreen to navigate to SettingsScreen
+- ✅ Integrated theme settings into MainActivity for app-wide theming
+- ✅ Successfully built modular Compose APK (~57MB)
 
 ## Development Workflow
 1. Make changes to Kotlin/Compose source files in the appropriate feature module
@@ -185,3 +224,4 @@ Since this is an Android application, it needs to be run on:
 - Check that Kotlin version matches Compose Compiler Plugin version
 - For module-related issues, verify settings.gradle.kts includes all modules
 - If imports fail, ensure the features aggregator module uses `api()` instead of `implementation()`
+- For Proto DataStore issues, ensure the protobuf plugin version is 0.9.4 and protobuf-javalite is 3.25.1
