@@ -1,0 +1,16 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/runner/workspace/core/core-datastore/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10565391075069143339.xml:2:13-83
+INJECTED from /home/runner/workspace/core/core-datastore/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10565391075069143339.xml:2:13-83
+	package
+		INJECTED from /home/runner/workspace/core/core-datastore/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10565391075069143339.xml
+	xmlns:android
+		ADDED from /home/runner/workspace/core/core-datastore/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10565391075069143339.xml:2:23-81
+uses-sdk
+INJECTED from /home/runner/workspace/core/core-datastore/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10565391075069143339.xml reason: use-sdk injection requested
+INJECTED from /home/runner/workspace/core/core-datastore/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10565391075069143339.xml
+INJECTED from /home/runner/workspace/core/core-datastore/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10565391075069143339.xml
+	android:targetSdkVersion
+		INJECTED from /home/runner/workspace/core/core-datastore/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10565391075069143339.xml
+	android:minSdkVersion
+		INJECTED from /home/runner/workspace/core/core-datastore/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10565391075069143339.xml
