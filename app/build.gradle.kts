@@ -1,202 +1,156 @@
-import com.android.build.gradle.AppExtension
-import java.io.FileNotFoundException
+
 import java.util.Properties
+import java.io.FileInputStream
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    kotlin("kapt")
-    alias(libs.plugins.compose.compiler)
-
-    alias(libs.plugins.google.services)
-    alias(libs.plugins.crashlytics)
-    alias(libs.plugins.performance.monitor)
+    id("com.android.application") version "8.11.0" 
+    kotlin("android") version "1.9.22" 
 }
 
-android {
-    namespace = "com.scto.apptemplate.compose"
-    compileSdk = libs.versions.sdk.compile.get().toInt()
+val keystorePropsFile = rootProject.file("release.properties")
+val keystoreProps = Properties()
 
+if (keystorePropsFile.exists()) {
+    keystoreProps.load(FileInputStream(keystorePropsFile))
+}
+
+val hasValidSigningProps = keystorePropsFile.exists().also { exists ->
+    if (exists) {
+        FileInputStream(keystorePropsFile).use { keystoreProps.load(it) }
+    }
+}.let {
+    listOf("storeFile", "storePassword", 
+            "keyAlias", "keyPassword").all { key ->
+        keystoreProps[key] != null
+    }
+}
+
+
+android {
+    namespace = "com.scto.codelikebastimove"
+    compileSdk = 33
+    
+    // disable linter
+    lint {
+        checkReleaseBuilds = false
+    }
+        
+    signingConfigs {
+        if (hasValidSigningProps) {
+            create("release") {
+                storeFile = rootProject.file(keystoreProps["storeFile"] as String)
+                storePassword = keystoreProps["storePassword"] as String
+                keyAlias = keystoreProps["keyAlias"] as String
+                keyPassword = keystoreProps["keyPassword"] as String
+            }
+        }
+    }
 
     defaultConfig {
-        applicationId = "com.scto"
-        minSdk = libs.versions.sdk.min.get().toInt()
-        targetSdk = libs.versions.sdk.target.get().toInt()
-        versionCode = libs.versions.app.version.code.get().toInt()
-        versionName = libs.versions.app.version.name.get()
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        vectorDrawables {
+        applicationId = "com.scto.codelikebastimove"
+        minSdk = 29
+        targetSdk = 33 
+        versionCode = 1
+        versionName = "1.0"
+        
+        vectorDrawables { 
             useSupportLibrary = true
         }
     }
-
-    signingConfigs {
-        val keystoreProperties = Properties()
-        try {
-            keystoreProperties.load(File(rootDir, "keystore.properties").inputStream())
-
-            create("release") {
-                storeFile = file("release.jks")
-                storePassword = keystoreProperties["KSTOREPWD"] as String
-                keyAlias = keystoreProperties["KEYSTORE_ALIAS"] as String
-                keyPassword = keystoreProperties["KEYPWD"] as String
-            }
-        } catch (e: FileNotFoundException) {
-            println("Warning: keystore.properties file not found.")
-        }
+    
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     buildTypes {
-        getByName("debug") {
-            isDebuggable = true
-
-            firebaseCrashlytics {
-                mappingFileUploadEnabled = false
+        release {
+            if (hasValidSigningProps) {
+                signingConfig = signingConfigs.getByName("release")
             }
-        }
-
-        getByName("release") {
-            isDebuggable = false
             isMinifyEnabled = true
-            isShrinkResources = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-            signingConfig = try {
-                signingConfigs.getByName("release")
-            } catch (e: UnknownDomainObjectException) {
-                println("SigningConfig with not found. Skipping...")
-                null
-            }
-
-            firebaseCrashlytics {
-                mappingFileUploadEnabled = true
-            }
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-
-    flavorDimensions += listOf("default")
-
-    productFlavors {
-        create("production") {
-            dimension = "default"
-            applicationIdSuffix = ".closetalk.app"
-        }
-
-        create("dev") {
-            dimension = "default"
-            applicationIdSuffix = ".apptemplate.compose"
-            isDefault = true
-        }
-    }
-
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
-
-    kotlin {
-        jvmToolchain(17)
-    }
-
 
     buildFeatures {
-        compose = true
-        buildConfig = true
+        viewBinding = true
+        
     }
-
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.10"
+    }
     packaging {
-        resources.excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+        resources {
+            resources.excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+            resources.excludes.add("META-INF/kotlinx_coroutines_core.version")
+
+            // The part below is only needed for compose builds.
+            // This packaging block is required to solve interdependency conflicts.
+            // They arise only when using local maven repo, so I suppose online repos have some way of solving such issues.
+
+            // Caused by: com.android.builder.merge.DuplicateRelativeFileException: 4 files found with path 'commonMain/default/linkdata/module' from inputs:
+            // - AndroidIDE\libs_source\gradle\localMvnRepository\androidx\collection\collection\1.4.2\collection-1.4.2.jar
+            // - AndroidIDE\libs_source\gradle\localMvnRepository\androidx\lifecycle\lifecycle-common\2.8.7\lifecycle-common-2.8.7.jar
+            // - AndroidIDE\libs_source\gradle\localMvnRepository\androidx\annotation\annotation\1.8.1\annotation-1.8.1.jar
+            // - AndroidIDE\libs_source\gradle\localMvnRepository\org\jetbrains\kotlinx\kotlinx-coroutines-core\1.7.3\kotlinx-coroutines-core-1.7.3.jar
+            // And some others.
+            resources.pickFirsts.add("nonJvmMain/default/linkdata/package_androidx/0_androidx.knm")
+            resources.pickFirsts.add("nonJvmMain/default/linkdata/root_package/0_.knm")
+            resources.pickFirsts.add("nonJvmMain/default/linkdata/module")
+
+            resources.pickFirsts.add("nativeMain/default/linkdata/root_package/0_.knm")
+            resources.pickFirsts.add("nativeMain/default/linkdata/module")
+
+            resources.pickFirsts.add("commonMain/default/linkdata/root_package/0_.knm")
+            resources.pickFirsts.add("commonMain/default/linkdata/module")
+            resources.pickFirsts.add("commonMain/default/linkdata/package_androidx/0_androidx.knm")
+
+            resources.pickFirsts.add("META-INF/kotlin-project-structure-metadata.json")
+
+            resources.merges.add("commonMain/default/manifest")
+            resources.merges.add("nonJvmMain/default/manifest")
+            resources.merges.add("nativeMain/default/manifest")
+        }
     }
+    
+    configurations.all {
+        resolutionStrategy {
+            // Force the use of Kotlin stdlib 1.9.22 for all modules
+            force("org.jetbrains.kotlin:kotlin-stdlib:1.9.22")
+            force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.22")
+            force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.22")
+    
+            // Force specific AndroidX versions to avoid conflicts
+            force("androidx.collection:collection:1.4.2")
+            force("androidx.annotation:annotation:1.8.1")
+            force("androidx.core:core-ktx:1.8.0")
+            force("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
+            force("androidx.collection:collection-ktx:1.4.2")
+        }
+    }
+}
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-Xlint:deprecation")
+}
+
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions.jvmTarget = "17"
 }
 
 dependencies {
 
-    implementation(libs.androidx.core.ktx)
-    coreLibraryDesugaring(libs.desugaring)
-    implementation(libs.bundles.lifecycle)
 
-    implementation(projects.core.navigation)
-
-    implementation(libs.firebase.performance)
-    implementation(projects.core.analytics)
-    implementation(projects.core.database)
-
-    testApi(libs.bundles.test.common)
-
-    // Exclude Firebase from your Android tests due to errors "Could not resolve all files for configuration"
-    androidTestImplementation(libs.firebase.performance) {
-        exclude(group = "com.google.firebase", module = "firebase-perf")
-    }
-    androidTestImplementation(libs.firebase.analytics) {
-        exclude(group = "com.google.firebase", module = "firebase-analytics")
-    }
-    androidTestImplementation(libs.firebase.crashlytics) {
-        exclude(group = "com.google.firebase", module = "firebase-crashlytics")
-    }
-
-    implementation(projects.feature.main)
-    implementation(projects.feature.sync)
+    implementation("androidx.interpolator:interpolator:1.0.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
+    implementation("androidx.startup:startup-runtime:1.1.1")
+    implementation("com.google.android.material:material:1.9.0")
 }
-
-
-//This task is used for .AAB file renaming to following format:
-//{application_id}-v{version_name}-build{version_code}-{product_flavor}-{build_type}.aab
-
-tasks.register("renameBundle") {
-    doLast {
-        val androidExtension = project.extensions.findByType(AppExtension::class.java)
-
-        androidExtension?.also { android ->
-
-            println("Variant variants: ${android.applicationVariants}")
-
-            android.applicationVariants.forEach { variant ->
-                println("===============================")
-                println("Variant name: ${variant.name}")
-                println("Version name: ${variant.versionName}")
-                println("Version code: ${variant.versionCode}")
-                println("Flavor name: ${variant.productFlavors.map { it.name }.joinToString()}")
-                println("Build directory: ${layout.buildDirectory.get()}")
-
-                val flavorName = variant.productFlavors.map { it.name }.joinToString()
-                val variantName = variant.name
-                val buildType = variant.buildType.name
-                val versionName = variant.versionName
-                val versionCode = variant.versionCode
-
-                val bundleDir =
-                    "${layout.buildDirectory.get()}/outputs/bundle/${variantName}"
-
-                val oldFileName = "app-${flavorName}-${buildType}.aab"
-                val newFileName =
-                    "${variant.applicationId}-" +
-                            "v$versionName-" +
-                            "build$versionCode-" +
-                            "$flavorName-" +
-                            "$buildType.aab"
-
-                //remove an old file if exist
-                delete("$bundleDir/$newFileName")
-
-                val originalFile = file("$bundleDir/$oldFileName")
-
-                if (!originalFile.exists()) {
-                    println("Original '${originalFile.absolutePath}' file not found")
-                } else {
-                    println("newFileName: $newFileName")
-                    val newFile = file("$bundleDir/$newFileName")
-                    originalFile.renameTo(newFile)
-                    println("Renamed '$oldFileName' file to $newFileName")
-                }
-            }
-
-        }
-            ?: println("Android extension not found. This task is only valid for Android application projects.")
-    }
-}
-
-tasks.matching { task -> task.name.contains("release", ignoreCase = true) }
-    .configureEach {
-        finalizedBy("renameBundle")
-    }
