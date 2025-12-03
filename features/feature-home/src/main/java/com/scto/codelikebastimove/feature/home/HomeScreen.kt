@@ -27,7 +27,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onNavigateToSettings: () -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -62,7 +64,7 @@ fun HomeScreen() {
         HomeButton(
             icon = Icons.Default.Settings,
             text = "Einstellungen",
-            onClick = { }
+            onClick = onNavigateToSettings
         )
         
         Spacer(modifier = Modifier.height(16.dp))

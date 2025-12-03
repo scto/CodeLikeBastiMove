@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_package = "com.scto.codelikebastimove.core.datastore.proto";
+option java_multiple_files = true;
+
+enum ThemeMode {
+    THEME_MODE_UNSPECIFIED = 0;
+    THEME_MODE_LIGHT = 1;
+    THEME_MODE_DARK = 2;
+    THEME_MODE_FOLLOW_SYSTEM = 3;
+}
+
+message UserPreferencesProto {
+    ThemeMode theme_mode = 1;
+    bool dynamic_colors_enabled = 2;
+}

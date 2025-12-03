@@ -43,9 +43,12 @@ dependencies {
     api("androidx.compose.ui:ui-tooling-preview")
     api("androidx.compose.material3:material3")
     api("androidx.compose.foundation:foundation")
+    api("androidx.compose.material:material-icons-extended")
 
     api("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
     api("androidx.lifecycle:lifecycle-runtime-compose:2.8.0")
+
+    api(project(":core:core-datastore"))
 
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")

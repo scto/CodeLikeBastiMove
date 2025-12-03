@@ -103,6 +103,7 @@ android {
 
 dependencies {
     implementation(project(":features"))
+    implementation(project(":core:core-datastore"))
     
     val composeBom = platform("androidx.compose:compose-bom:2024.06.00")
     implementation(composeBom)
