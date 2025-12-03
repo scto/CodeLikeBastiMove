@@ -1,0 +1,1 @@
+com.scto.codelikebastimove.core.templates.impl

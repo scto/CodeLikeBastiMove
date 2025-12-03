@@ -27,4 +27,6 @@ dependencies {
     api(project(":features:feature-gallery"))
     api(project(":features:feature-slideshow"))
     api(project(":features:feature-settings"))
+    api(project(":features:feature-treeview"))
+    api(project(":features:feature-editor"))
 }

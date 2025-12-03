@@ -21,15 +21,25 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.scto.codelikebastimove.core.templates.api.Project
 
 @Composable
 fun HomeScreen(
-    onNavigateToSettings: () -> Unit = {}
+    onNavigateToSettings: () -> Unit = {},
+    onNavigateToEditor: (Project) -> Unit = {}
 ) {
+    val context = LocalContext.current
+    var showCreateProjectDialog by remember { mutableStateOf(false) }
+    
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -40,7 +50,7 @@ fun HomeScreen(
         HomeButton(
             icon = Icons.Default.Add,
             text = "Erstelle ein Projekt",
-            onClick = { }
+            onClick = { showCreateProjectDialog = true }
         )
         
         Spacer(modifier = Modifier.height(16.dp))
@@ -81,6 +91,17 @@ fun HomeScreen(
             icon = Icons.Default.QuestionAnswer,
             text = "FAQ",
             onClick = { }
+        )
+    }
+    
+    if (showCreateProjectDialog) {
+        CreateProjectDialog(
+            context = context,
+            onDismiss = { showCreateProjectDialog = false },
+            onProjectCreated = { project ->
+                showCreateProjectDialog = false
+                onNavigateToEditor(project)
+            }
         )
     }
 }
