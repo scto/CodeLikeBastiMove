@@ -13,20 +13,42 @@ object TreeViewUtils {
             children = mutableListOf()
         )
         
+        val allPaths = mutableSetOf<String>()
+        val fileMap = mutableMapOf<String, ProjectFile>()
+        
+        for (file in files) {
+            fileMap[file.relativePath] = file
+            allPaths.add(file.relativePath)
+            
+            var path = file.relativePath
+            while (path.contains("/")) {
+                path = path.substringBeforeLast("/")
+                if (path.isNotEmpty()) {
+                    allPaths.add(path)
+                }
+            }
+        }
+        
         val nodeMap = mutableMapOf<String, MutableList<TreeNodeData>>()
         nodeMap[""] = mutableListOf()
         
-        val sortedFiles = files.sortedWith(compareBy({ !it.isDirectory }, { it.relativePath }))
+        val sortedPaths = allPaths.sortedWith(compareBy({ 
+            val file = fileMap[it]
+            file == null || !file.isDirectory
+        }, { it }))
         
-        for (file in sortedFiles) {
-            val parts = file.relativePath.split("/")
+        for (path in sortedPaths) {
+            val parts = path.split("/")
             val fileName = parts.last()
             val parentPath = parts.dropLast(1).joinToString("/")
             
+            val existingFile = fileMap[path]
+            val isDirectory = existingFile?.isDirectory ?: true
+            
             val node = TreeNodeData(
                 name = fileName,
-                path = file.relativePath,
-                isDirectory = file.isDirectory,
+                path = path,
+                isDirectory = isDirectory,
                 children = emptyList()
             )
             

@@ -89,9 +89,9 @@ include ':app'
         val content = when (config.gradleLanguage) {
             GradleLanguage.KOTLIN_DSL -> """
 plugins {
-    id("com.android.application") apply false version "8.2.0"
-    id("org.jetbrains.kotlin.android") apply false version "2.0.0"
-    id("org.jetbrains.kotlin.plugin.compose") apply false version "2.0.0"
+    id("com.android.application") version "8.2.0" apply false
+    id("org.jetbrains.kotlin.android") version "2.0.0" apply false
+    id("org.jetbrains.kotlin.plugin.compose") version "2.0.0" apply false
 }
 """.trimIndent()
             GradleLanguage.GROOVY -> """

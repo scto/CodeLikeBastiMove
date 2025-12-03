@@ -1,7 +1,7 @@
 # CodeLikeBastiMove
 
 ## Overview
-CodeLikeBastiMove is an Android mobile application built with Kotlin and Jetpack Compose. This app features a modern Material Design 3 navigation drawer with multiple screens (Home, Gallery, Slideshow, and Settings) demonstrating current Android development best practices with a highly modular architecture. The app includes theme management with DataStore persistence.
+CodeLikeBastiMove is an Android mobile application built with Kotlin and Jetpack Compose. This app features a modern Material Design 3 navigation drawer with multiple screens (Home, Gallery, Slideshow, Settings, and Editor) demonstrating current Android development best practices with a highly modular architecture. The app includes theme management with DataStore persistence and a project template system for creating new Android projects.
 
 ## Project Type
 **Android Mobile Application** - This project builds an Android APK using Jetpack Compose for the UI layer with a multi-module Gradle structure.
@@ -34,42 +34,46 @@ CodeLikeBastiMove/
 │   └── build.gradle.kts
 ├── core/                                   # Core modules
 │   ├── core-datastore/                     # DataStore repository module
-│   │   ├── src/main/java/.../core/datastore/
-│   │   │   ├── ThemeMode.kt
-│   │   │   ├── UserPreferences.kt
-│   │   │   ├── UserPreferencesRepository.kt
-│   │   │   └── UserPreferencesSerializer.kt
-│   │   └── build.gradle.kts
-│   └── core-datastore-proto/               # Proto DataStore schema module
-│       ├── src/main/proto/
-│       │   └── user_preferences.proto
-│       └── build.gradle.kts
+│   │   └── src/main/java/.../core/datastore/
+│   ├── core-datastore-proto/               # Proto DataStore schema module
+│   │   └── src/main/proto/user_preferences.proto
+│   ├── templates-api/                      # Project templates API module
+│   │   └── src/main/java/.../core/templates/api/
+│   │       ├── GradleLanguage.kt
+│   │       ├── Project.kt
+│   │       ├── ProjectConfig.kt
+│   │       ├── ProjectFile.kt
+│   │       ├── ProjectLanguage.kt
+│   │       ├── ProjectManager.kt
+│   │       ├── ProjectTemplate.kt
+│   │       └── TreeNode.kt
+│   └── templates-impl/                     # Project templates implementation
+│       └── src/main/java/.../core/templates/impl/
+│           ├── EmptyActivityTemplate.kt
+│           ├── EmptyComposeActivityTemplate.kt
+│           └── ProjectManagerImpl.kt
 ├── features/                               # Features aggregator module
-│   ├── build.gradle.kts                    # Re-exports all feature modules via api()
+│   ├── build.gradle.kts
 │   ├── feature-home/                       # Home feature module
-│   │   ├── src/main/java/.../feature/home/
-│   │   │   ├── HomeScreen.kt
-│   │   │   └── HomeViewModel.kt
-│   │   └── build.gradle.kts
+│   │   └── src/main/java/.../feature/home/
+│   │       ├── CreateProjectDialog.kt
+│   │       ├── HomeScreen.kt
+│   │       └── HomeViewModel.kt
 │   ├── feature-gallery/                    # Gallery feature module
-│   │   ├── src/main/java/.../feature/gallery/
-│   │   │   ├── GalleryScreen.kt
-│   │   │   └── GalleryViewModel.kt
-│   │   └── build.gradle.kts
 │   ├── feature-slideshow/                  # Slideshow feature module
-│   │   ├── src/main/java/.../feature/slideshow/
-│   │   │   ├── SlideshowScreen.kt
-│   │   │   └── SlideshowViewModel.kt
-│   │   └── build.gradle.kts
-│   └── feature-settings/                   # Settings feature module
-│       ├── src/main/java/.../feature/settings/
-│       │   ├── SettingsScreen.kt (GeneralSettings)
-│       │   └── SettingsViewModel.kt
-│       └── build.gradle.kts
+│   ├── feature-settings/                   # Settings feature module
+│   ├── feature-treeview/                   # TreeView component module
+│   │   └── src/main/java/.../feature/treeview/
+│   │       ├── TreeView.kt
+│   │       └── TreeViewUtils.kt
+│   └── feature-editor/                     # Editor feature module
+│       └── src/main/java/.../feature/editor/
+│           ├── EditorScreen.kt
+│           └── EditorViewModel.kt
 ├── gradle/
 │   └── wrapper/
-├── build.gradle.kts                        # Root build file (includes protobuf plugin)
-└── settings.gradle.kts                     # Includes all modules
+├── build.gradle.kts
+└── settings.gradle.kts
 ```
 
 ## Module Structure
@@ -77,43 +81,55 @@ CodeLikeBastiMove/
 ### app module
 The main application module containing:
 - `MainActivity.kt` - Entry point with Compose UI setup and theme management
-- `navigation/` - Navigation drawer and screen routing
+- `navigation/` - Navigation drawer and screen routing (includes Editor route)
 - `ui/theme/` - Material Design 3 theming with dynamic colors and dark/light mode support
 
 ### core modules
 Core functionality shared across the app:
-- **core-datastore-proto**: Proto DataStore schema definitions for user preferences (theme mode, dynamic colors)
+- **core-datastore-proto**: Proto DataStore schema definitions for user preferences
 - **core-datastore**: Repository pattern implementation for reading/writing user preferences
+- **templates-api**: Interfaces and data classes for project templates (ProjectTemplate, ProjectConfig, ProjectManager)
+- **templates-impl**: Implementation of project templates (EmptyActivityTemplate, EmptyComposeActivityTemplate)
 
 ### features module (Aggregator)
-A thin aggregator library that re-exports all feature modules via `api()` dependencies. The app module only needs to depend on `:features` to access all feature screens.
+A thin aggregator library that re-exports all feature modules via `api()` dependencies.
 
 ### Feature Modules (Android Libraries)
-Each feature is a separate Gradle module:
-- **feature-home**: Home screen with 6 buttons (Create Project, Open Project, Clone Repository, Settings, Help, FAQ). Settings button navigates to SettingsScreen.
+- **feature-home**: Home screen with project creation dialog. "Erstelle ein Projekt" opens CreateProjectDialog.
 - **feature-gallery**: Gallery screen with GalleryViewModel
 - **feature-slideshow**: Slideshow screen with SlideshowViewModel
 - **feature-settings**: GeneralSettings screen with theme switching and dynamic colors toggle
+- **feature-treeview**: Reusable TreeView component for displaying hierarchical file structures
+- **feature-editor**: EditorScreen with file tree on the left and code editor on the right
 
 ## Key Features
 - **Jetpack Compose UI**: Modern declarative UI framework
-- **Navigation Drawer**: Material Design 3 modal navigation drawer with 4 screens
+- **Navigation Drawer**: Material Design 3 modal navigation drawer
 - **MVVM Architecture**: Uses ViewModel with StateFlow for reactive UI
 - **Compose Navigation**: AndroidX Navigation Compose for screen navigation
 - **Material Design 3**: Latest Material You design language
 - **Multi-module Architecture**: Separated features and core modules
 - **Theme Management**: Light/Dark/Follow System theme switching with DataStore persistence
 - **Dynamic Colors**: Material You dynamic color support toggle
+- **Project Templates**: Create new Android projects (Empty Activity, Empty Compose Activity)
+- **File TreeView**: Hierarchical file structure display with expand/collapse
+- **Code Editor**: Basic code editor with line numbers and syntax highlighting colors
+
+## Project Creation System
+The CreateProjectDialog allows users to:
+1. **Select Template**: Empty Activity or Empty Compose Activity
+2. **Configure Project**:
+   - Project Name
+   - Package Name
+   - Minimum SDK (API 21-34)
+   - Language (Java or Kotlin)
+   - Gradle Language (Groovy or Kotlin DSL)
+
+After creation, the Editor screen displays the project files in a TreeView.
 
 ## Settings Screen (GeneralSettings)
-The Settings screen provides:
-1. **Design Section**: Theme mode selection
-   - Hell (Light)
-   - Dunkel (Dark)
-   - System folgen (Follow System)
+1. **Design Section**: Theme mode selection (Hell/Dunkel/System folgen)
 2. **Dynamic Colors Section**: Toggle for Material You dynamic colors
-
-Settings are persisted using Proto DataStore and applied app-wide.
 
 ## Dependencies
 
@@ -125,43 +141,25 @@ Settings are persisted using Proto DataStore and applied app-wide.
 - Kotlin Coroutines
 - features module (project dependency)
 - core-datastore module (project dependency)
+- templates-api module (project dependency)
 
 ### core-datastore module
 - Proto DataStore 1.1.1
 - DataStore Preferences 1.1.1
 - Protobuf JavaLite 3.25.1
 
-### Feature modules (each)
+### templates-api/templates-impl modules
+- Kotlin Coroutines
+
+### Feature modules
 - Jetpack Compose BOM 2024.06.00
 - Compose Material 3
 - Lifecycle ViewModel Compose
 - Kotlin Coroutines
 
-## Replit Environment Setup
-
-### Installed Tools
-- **Java 17**: OpenJDK 17.0.15 (required for Android builds)
-- **Kotlin 2.0.0**: With Compose Compiler Plugin
-- **Android SDK**: Installed in `~/android-sdk`
-  - Platform Tools
-  - Android Platform 34
-  - Build Tools 34.0.0 and 35.0.0
-- **Gradle**: 8.14.3 (installed via wrapper)
-- **Protobuf**: 3.25.1 (via Gradle plugin 0.9.4)
-
-### Environment Variables
-- `ANDROID_HOME=/home/runner/android-sdk`
-- `JAVA_HOME=/nix/store/.../openjdk-17.0.15+6`
-
 ## Building the Application
 
 ### Using the Workflow
-The "Build Android App" workflow is configured to build the debug APK:
-```bash
-./gradlew assembleDebug
-```
-
-### Manual Build
 ```bash
 ./gradlew assembleDebug
 ```
@@ -176,47 +174,29 @@ app/build/outputs/apk/debug/app-debug.apk
 # Build all feature modules
 ./gradlew :features:assembleDebug
 
-# Build specific feature modules
-./gradlew :features:feature-home:assembleDebug
-./gradlew :features:feature-gallery:assembleDebug
-./gradlew :features:feature-slideshow:assembleDebug
-./gradlew :features:feature-settings:assembleDebug
-
 # Build core modules
 ./gradlew :core:core-datastore:assembleDebug
-./gradlew :core:core-datastore-proto:assembleDebug
+./gradlew :core:templates-api:assembleDebug
+./gradlew :core:templates-impl:assembleDebug
 
-# Build only the app module
-./gradlew :app:assembleDebug
+# Build feature modules
+./gradlew :features:feature-treeview:assembleDebug
+./gradlew :features:feature-editor:assembleDebug
 ```
 
 ## Running the Application
-Since this is an Android application, it needs to be run on:
-1. **Android Device**: Download the APK and install it on an Android device
-2. **Android Emulator**: Use Android Studio's emulator or other Android emulators
-3. **Android Debugging Bridge (adb)**: Install via `adb install app/build/outputs/apk/debug/app-debug.apk`
+1. **Android Device**: Download the APK and install it
+2. **Android Emulator**: Use Android Studio's emulator
+3. **ADB**: `adb install app/build/outputs/apk/debug/app-debug.apk`
 
 ## Recent Changes (December 3, 2025)
-- ✅ Migrated from View-based UI to Jetpack Compose
-- ✅ Upgraded to Kotlin 2.0.0 with Compose Compiler Plugin
-- ✅ Converted ViewModels from LiveData to StateFlow
-- ✅ Replaced Fragments with Compose Screens
-- ✅ Implemented Compose Navigation with Navigation Drawer
-- ✅ Created Material Design 3 theme
-- ✅ Created features aggregator module
-- ✅ Split features into 4 separate modules (home, gallery, slideshow, settings)
-- ✅ Added new Settings screen to navigation drawer
-- ✅ Added core-datastore-proto module with Proto DataStore schema
-- ✅ Added core-datastore module with UserPreferencesRepository
-- ✅ Implemented GeneralSettings screen with theme and dynamic colors sections
-- ✅ Connected Settings button in HomeScreen to navigate to SettingsScreen
-- ✅ Integrated theme settings into MainActivity for app-wide theming
-- ✅ Successfully built modular Compose APK (~57MB)
-
-## Development Workflow
-1. Make changes to Kotlin/Compose source files in the appropriate feature module
-2. Run the workflow or `./gradlew assembleDebug` to build
-3. Install the APK on an Android device/emulator for testing
+- ✅ Added templates-api module with ProjectTemplate, ProjectConfig, ProjectManager interfaces
+- ✅ Added templates-impl module with EmptyActivityTemplate and EmptyComposeActivityTemplate
+- ✅ Added feature-treeview module with TreeView composable component
+- ✅ Added feature-editor module with EditorScreen and code editor
+- ✅ Added CreateProjectDialog to HomeScreen for project creation
+- ✅ Updated navigation to include Editor route
+- ✅ Successfully built modular Compose APK (~55MB)
 
 ## Troubleshooting
 - If build fails, ensure ANDROID_HOME and JAVA_HOME are set correctly
@@ -224,4 +204,4 @@ Since this is an Android application, it needs to be run on:
 - Check that Kotlin version matches Compose Compiler Plugin version
 - For module-related issues, verify settings.gradle.kts includes all modules
 - If imports fail, ensure the features aggregator module uses `api()` instead of `implementation()`
-- For Proto DataStore issues, ensure the protobuf plugin version is 0.9.4 and protobuf-javalite is 3.25.1
+- For Proto DataStore issues, ensure the protobuf plugin version is 0.9.4
