@@ -1,15 +1,16 @@
 # CodeLikeBastiMove
 
 ## Overview
-CodeLikeBastiMove is an Android mobile application built with Kotlin and the Android SDK. This is a navigation drawer-based app template with multiple fragments (Home, Gallery, and Slideshow) demonstrating modern Android development practices.
+CodeLikeBastiMove is an Android mobile application built with Kotlin and Jetpack Compose. This app features a modern Material Design 3 navigation drawer with multiple screens (Home, Gallery, and Slideshow) demonstrating current Android development best practices.
 
 ## Project Type
-**Android Mobile Application** - This project builds an Android APK that can be installed on Android devices or emulators.
+**Android Mobile Application** - This project builds an Android APK using Jetpack Compose for the UI layer.
 
 ## Architecture
-- **Language**: Kotlin 1.9.22
+- **Language**: Kotlin 2.0.0
+- **UI Framework**: Jetpack Compose with Material Design 3
 - **Build System**: Gradle 8.14.3 with Kotlin DSL
-- **Target SDK**: Android 33 (Android 13)
+- **Target SDK**: Android 34 (Android 14)
 - **Minimum SDK**: Android 29 (Android 10)
 - **Java Version**: Java 17 (OpenJDK 17.0.15)
 
@@ -20,68 +21,71 @@ CodeLikeBastiMove/
 │   ├── src/main/
 │   │   ├── java/com/scto/codelikebastimove/
 │   │   │   ├── MainActivity.kt
-│   │   │   └── ui/
-│   │   │       ├── home/
-│   │   │       ├── gallery/
-│   │   │       └── slideshow/
-│   │   ├── res/
-│   │   │   ├── layout/
-│   │   │   ├── drawable/
 │   │   │   ├── navigation/
+│   │   │   │   ├── AppNavigation.kt
+│   │   │   │   └── DrawerHeader.kt
+│   │   │   └── ui/
+│   │   │       ├── theme/
+│   │   │       │   ├── Theme.kt
+│   │   │       │   └── Type.kt
+│   │   │       ├── home/
+│   │   │       │   ├── HomeScreen.kt
+│   │   │       │   └── HomeViewModel.kt
+│   │   │       ├── gallery/
+│   │   │       │   ├── GalleryScreen.kt
+│   │   │       │   └── GalleryViewModel.kt
+│   │   │       └── slideshow/
+│   │   │           ├── SlideshowScreen.kt
+│   │   │           └── SlideshowViewModel.kt
+│   │   ├── res/
+│   │   │   ├── drawable/
 │   │   │   └── values/
 │   │   └── AndroidManifest.xml
 │   └── build.gradle.kts
 ├── gradle/
-│   ├── wrapper/
-│   └── libs.versions.toml
+│   └── wrapper/
 ├── build.gradle.kts
 └── settings.gradle.kts
 ```
 
 ## Key Features
-- **Navigation Drawer**: Material Design navigation drawer with multiple destinations
-- **MVVM Architecture**: Uses ViewModel and LiveData for reactive UI
-- **View Binding**: Enabled for type-safe view access
-- **Material Design**: Google Material Design 3 components
-- **Jetpack Navigation**: AndroidX Navigation component for fragment navigation
+- **Jetpack Compose UI**: Modern declarative UI framework
+- **Navigation Drawer**: Material Design 3 modal navigation drawer
+- **MVVM Architecture**: Uses ViewModel with StateFlow for reactive UI
+- **Compose Navigation**: AndroidX Navigation Compose for screen navigation
+- **Material Design 3**: Latest Material You design language
 
 ## Dependencies
-- AndroidX Core KTX
-- AndroidX AppCompat
-- Material Design Components
-- Navigation Component (Fragment & UI)
-- Lifecycle ViewModel & LiveData
+- Jetpack Compose BOM 2024.06.00
+- Compose Material 3
+- Compose Navigation
+- Lifecycle ViewModel Compose
 - Kotlin Coroutines
-- ConstraintLayout
 
 ## Replit Environment Setup
 
 ### Installed Tools
 - **Java 17**: OpenJDK 17.0.15 (required for Android builds)
+- **Kotlin 2.0.0**: With Compose Compiler Plugin
 - **Android SDK**: Installed in `~/android-sdk`
   - Platform Tools
-  - Android Platform 33
-  - Build Tools 33.0.0+
+  - Android Platform 34
+  - Build Tools
 - **Gradle**: 8.14.3 (installed via wrapper)
-- **System Tools**: android-tools, wget, unzip
 
 ### Environment Variables
 - `ANDROID_HOME=/home/runner/android-sdk`
 - `JAVA_HOME=/nix/store/.../openjdk-17.0.15+6`
 
-### Build Configuration
-The project includes `local.properties` with the Android SDK path, which is automatically used by Gradle.
-
 ## Building the Application
 
 ### Using the Workflow
-The "Build Android App" workflow is configured to build the debug APK automatically. It runs:
+The "Build Android App" workflow is configured to build the debug APK:
 ```bash
 ./gradlew assembleDebug
 ```
 
 ### Manual Build
-To build manually, run:
 ```bash
 ./gradlew assembleDebug
 ```
@@ -91,60 +95,42 @@ The APK will be generated at:
 app/build/outputs/apk/debug/app-debug.apk
 ```
 
-### Other Gradle Tasks
-```bash
-./gradlew tasks          # List all available tasks
-./gradlew clean          # Clean build artifacts
-./gradlew assembleRelease # Build release APK (requires signing)
-./gradlew build          # Build and run tests
-```
-
 ## Running the Application
 Since this is an Android application, it needs to be run on:
-1. **Android Device**: Download the APK from `app/build/outputs/apk/debug/app-debug.apk` and install it on an Android device
+1. **Android Device**: Download the APK and install it on an Android device
 2. **Android Emulator**: Use Android Studio's emulator or other Android emulators
 3. **Android Debugging Bridge (adb)**: Install via `adb install app/build/outputs/apk/debug/app-debug.apk`
 
 ## Recent Changes (December 3, 2025)
-- ✅ Installed Java 17 (OpenJDK) for Android builds
-- ✅ Downloaded and configured Android SDK (Platform 33, Build Tools)
-- ✅ Created `local.properties` with SDK path
-- ✅ Set up environment variables (ANDROID_HOME, JAVA_HOME)
-- ✅ Successfully built debug APK (13MB)
-- ✅ Configured workflow for building the app
+- ✅ Migrated from View-based UI to Jetpack Compose
+- ✅ Upgraded to Kotlin 2.0.0 with Compose Compiler Plugin
+- ✅ Converted ViewModels from LiveData to StateFlow
+- ✅ Replaced Fragments with Compose Screens
+- ✅ Implemented Compose Navigation with Navigation Drawer
+- ✅ Created Material Design 3 theme
+- ✅ Successfully built 54MB Compose APK
 
-## Project Configuration Files
+## Compose Migration Notes
+The project was converted from the traditional View-based UI (XML layouts + Fragments) to Jetpack Compose:
 
-### build.gradle.kts (Root)
-- Android Gradle Plugin 8.11.0
-- Kotlin 1.9.22
-- Basic project configuration
+### Before (View-based)
+- XML layouts for each screen
+- Fragment classes with View Binding
+- ViewModels with LiveData
+- Navigation Component with XML navigation graph
 
-### app/build.gradle.kts
-- Application ID: `com.scto.codelikebastimove`
-- Compile SDK: 33
-- Min SDK: 29
-- View Binding enabled
-- ProGuard enabled for release builds
-- Release signing configuration (requires release.properties)
-
-### gradle/libs.versions.toml
-Contains version catalog for dependencies and plugins.
-
-## Notes
-- This is a **mobile application**, not a web application
-- No frontend server is needed (this is not a web app)
-- The APK must be installed on an Android device or emulator to run
-- The build workflow compiles the app but doesn't run it (no server to start)
+### After (Compose)
+- Composable functions for each screen
+- ViewModel with StateFlow
+- Compose Navigation with sealed classes for routes
+- Material Design 3 theming in Compose
 
 ## Development Workflow
-1. Make changes to Kotlin source files in `app/src/main/java/`
-2. Update layouts in `app/src/main/res/layout/`
-3. Run the workflow or `./gradlew assembleDebug` to build
-4. Install the APK on an Android device/emulator for testing
+1. Make changes to Kotlin/Compose source files
+2. Run the workflow or `./gradlew assembleDebug` to build
+3. Install the APK on an Android device/emulator for testing
 
 ## Troubleshooting
 - If build fails, ensure ANDROID_HOME and JAVA_HOME are set correctly
-- Check that Android SDK Platform 33 and Build Tools are installed
 - Run `./gradlew clean` before building if you encounter caching issues
-- Check build logs in the workflow output for detailed error messages
+- Check that Kotlin version matches Compose Compiler Plugin version

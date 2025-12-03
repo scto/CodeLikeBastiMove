@@ -3,8 +3,9 @@ import java.util.Properties
 import java.io.FileInputStream
 
 plugins {
-    id("com.android.application") version "8.11.0" 
-    kotlin("android") version "1.9.22" 
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 val keystorePropsFile = rootProject.file("release.properties")
@@ -28,9 +29,8 @@ val hasValidSigningProps = keystorePropsFile.exists().also { exists ->
 
 android {
     namespace = "com.scto.codelikebastimove"
-    compileSdk = 33
+    compileSdk = 34
     
-    // disable linter
     lint {
         checkReleaseBuilds = false
     }
@@ -49,7 +49,7 @@ android {
     defaultConfig {
         applicationId = "com.scto.codelikebastimove"
         minSdk = 29
-        targetSdk = 33 
+        targetSdk = 34 
         versionCode = 1
         versionName = "1.0"
         
@@ -63,6 +63,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
     buildTypes {
         release {
             if (hasValidSigningProps) {
@@ -74,83 +78,50 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
-        
+        compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.10"
-    }
+    
     packaging {
         resources {
             resources.excludes.add("/META-INF/{AL2.0,LGPL2.1}")
             resources.excludes.add("META-INF/kotlinx_coroutines_core.version")
-
-            // The part below is only needed for compose builds.
-            // This packaging block is required to solve interdependency conflicts.
-            // They arise only when using local maven repo, so I suppose online repos have some way of solving such issues.
-
-            // Caused by: com.android.builder.merge.DuplicateRelativeFileException: 4 files found with path 'commonMain/default/linkdata/module' from inputs:
-            // - AndroidIDE\libs_source\gradle\localMvnRepository\androidx\collection\collection\1.4.2\collection-1.4.2.jar
-            // - AndroidIDE\libs_source\gradle\localMvnRepository\androidx\lifecycle\lifecycle-common\2.8.7\lifecycle-common-2.8.7.jar
-            // - AndroidIDE\libs_source\gradle\localMvnRepository\androidx\annotation\annotation\1.8.1\annotation-1.8.1.jar
-            // - AndroidIDE\libs_source\gradle\localMvnRepository\org\jetbrains\kotlinx\kotlinx-coroutines-core\1.7.3\kotlinx-coroutines-core-1.7.3.jar
-            // And some others.
             resources.pickFirsts.add("nonJvmMain/default/linkdata/package_androidx/0_androidx.knm")
             resources.pickFirsts.add("nonJvmMain/default/linkdata/root_package/0_.knm")
             resources.pickFirsts.add("nonJvmMain/default/linkdata/module")
-
             resources.pickFirsts.add("nativeMain/default/linkdata/root_package/0_.knm")
             resources.pickFirsts.add("nativeMain/default/linkdata/module")
-
             resources.pickFirsts.add("commonMain/default/linkdata/root_package/0_.knm")
             resources.pickFirsts.add("commonMain/default/linkdata/module")
             resources.pickFirsts.add("commonMain/default/linkdata/package_androidx/0_androidx.knm")
-
             resources.pickFirsts.add("META-INF/kotlin-project-structure-metadata.json")
-
             resources.merges.add("commonMain/default/manifest")
             resources.merges.add("nonJvmMain/default/manifest")
             resources.merges.add("nativeMain/default/manifest")
         }
     }
-    
-    configurations.all {
-        resolutionStrategy {
-            // Force the use of Kotlin stdlib 1.9.22 for all modules
-            force("org.jetbrains.kotlin:kotlin-stdlib:1.9.22")
-            force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.22")
-            force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.22")
-    
-            // Force specific AndroidX versions to avoid conflicts
-            force("androidx.collection:collection:1.4.2")
-            force("androidx.annotation:annotation:1.8.1")
-            force("androidx.core:core-ktx:1.8.0")
-            force("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-            force("androidx.collection:collection-ktx:1.4.2")
-        }
-    }
-}
-
-tasks.withType<JavaCompile> {
-    options.compilerArgs.add("-Xlint:deprecation")
-}
-
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions.jvmTarget = "17"
 }
 
 dependencies {
-
-
-    implementation("androidx.interpolator:interpolator:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
-    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
-    implementation("androidx.startup:startup-runtime:1.1.1")
-    implementation("com.google.android.material:material:1.9.0")
+    val composeBom = platform("androidx.compose:compose-bom:2024.06.00")
+    implementation(composeBom)
+    
+    implementation("androidx.compose.runtime:runtime")
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation("androidx.compose.foundation:foundation")
+    
+    implementation("androidx.activity:activity-compose:1.9.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.0")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+    
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+    
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
