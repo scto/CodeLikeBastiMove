@@ -2,10 +2,9 @@ package com.scto.codelikebastimove.feature.editor
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.horizontalScroll
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -27,7 +25,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Description
@@ -55,13 +52,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.scto.codelikebastimove.core.templates.api.Project
 import com.scto.codelikebastimove.feature.treeview.TreeView
-import kotlin.math.roundToInt
 
 @Composable
 fun EditorScreen(
@@ -74,16 +70,16 @@ fun EditorScreen(
     val density = LocalDensity.current
     val treeViewWidth = 280.dp
     val treeViewWidthPx = with(density) { treeViewWidth.toPx() }
-    val swipeThreshold = treeViewWidthPx * 0.3f
+    val swipeThreshold = 100f
     
     if (state.project == null) {
         viewModel.setProject(project)
     }
     
-    val animatedOffset by animateFloatAsState(
-        targetValue = if (isTreeViewVisible) 0f else -treeViewWidthPx,
+    val animatedWidth: Dp by animateDpAsState(
+        targetValue = if (isTreeViewVisible) treeViewWidth else 0.dp,
         animationSpec = tween(durationMillis = 300),
-        label = "treeViewOffset"
+        label = "treeViewWidth"
     )
     
     Box(
@@ -107,64 +103,63 @@ fun EditorScreen(
             }
     ) {
         Row(modifier = Modifier.fillMaxSize()) {
-            Box(
-                modifier = Modifier
-                    .offset { IntOffset((animatedOffset + dragOffset).roundToInt(), 0) }
-                    .width(treeViewWidth)
-                    .fillMaxHeight()
+            AnimatedVisibility(
+                visible = isTreeViewVisible,
+                enter = expandHorizontally(animationSpec = tween(300)),
+                exit = shrinkHorizontally(animationSpec = tween(300))
             ) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.surfaceVariant
-                ) {
-                    Column {
-                        Surface(
-                            modifier = Modifier.fillMaxWidth(),
-                            color = MaterialTheme.colorScheme.primary
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                Row {
+                    Surface(
+                        modifier = Modifier
+                            .width(treeViewWidth)
+                            .fillMaxHeight(),
+                        color = MaterialTheme.colorScheme.surfaceVariant
+                    ) {
+                        Column {
+                            Surface(
+                                modifier = Modifier.fillMaxWidth(),
+                                color = MaterialTheme.colorScheme.primary
                             ) {
-                                Text(
-                                    text = project.name,
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .padding(vertical = 8.dp)
-                                )
-                                IconButton(
-                                    onClick = { isTreeViewVisible = false }
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                    verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Icon(
-                                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                                        contentDescription = "Schließen",
-                                        tint = MaterialTheme.colorScheme.onPrimary
+                                    Text(
+                                        text = project.name,
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = MaterialTheme.colorScheme.onPrimary,
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .padding(vertical = 8.dp)
                                     )
+                                    IconButton(
+                                        onClick = { isTreeViewVisible = false }
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                                            contentDescription = "Schließen",
+                                            tint = MaterialTheme.colorScheme.onPrimary
+                                        )
+                                    }
                                 }
                             }
+                            
+                            TreeView(
+                                nodes = state.treeNodes,
+                                onNodeClick = { node ->
+                                    if (!node.isDirectory) {
+                                        viewModel.selectFile(node.path)
+                                        viewModel.openFileInTab(node.path)
+                                    }
+                                },
+                                selectedPath = state.selectedFilePath,
+                                modifier = Modifier.weight(1f)
+                            )
                         }
-                        
-                        TreeView(
-                            nodes = state.treeNodes,
-                            onNodeClick = { node ->
-                                if (!node.isDirectory) {
-                                    viewModel.selectFile(node.path)
-                                    viewModel.openFileInTab(node.path)
-                                }
-                            },
-                            selectedPath = state.selectedFilePath,
-                            modifier = Modifier.weight(1f)
-                        )
                     }
+                    
+                    VerticalDivider()
                 }
-            }
-            
-            if (isTreeViewVisible) {
-                VerticalDivider(
-                    modifier = Modifier.offset { IntOffset((animatedOffset + dragOffset).roundToInt(), 0) }
-                )
             }
             
             Column(
