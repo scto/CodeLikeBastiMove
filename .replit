@@ -4,7 +4,7 @@ expertMode = true
 
 [nix]
 channel = "stable-25_05"
-packages = ["android-tools", "wget", "unzip", "openjdk17", "kotlin-language-server", "kotlin"]
+packages = ["android-tools", "wget", "unzip", "openjdk17", "kotlin-language-server", "kotlin", "sdkmanager"]
 
 [userenv]
 

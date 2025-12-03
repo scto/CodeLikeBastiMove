@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.ui.gallery
+package com.scto.codelikebastimove.features.gallery
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

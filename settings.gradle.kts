@@ -17,3 +17,4 @@ dependencyResolutionManagement {
 rootProject.name = "CodeLikeBastiMove"
 
 include(":app")
+include(":features")

@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.ui.home
+package com.scto.codelikebastimove.features.slideshow
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun HomeScreen(
-    viewModel: HomeViewModel = viewModel()
+fun SlideshowScreen(
+    viewModel: SlideshowViewModel = viewModel()
 ) {
     val text by viewModel.text.collectAsState()
     
