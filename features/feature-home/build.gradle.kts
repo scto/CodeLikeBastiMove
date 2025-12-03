@@ -42,6 +42,7 @@ dependencies {
     api("androidx.compose.ui:ui-graphics")
     api("androidx.compose.ui:ui-tooling-preview")
     api("androidx.compose.material3:material3")
+    api("androidx.compose.material:material-icons-extended")
     api("androidx.compose.foundation:foundation")
 
     api("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
