@@ -1,0 +1,36 @@
+modules = ["java-graalvm22.3"]
+[agent]
+expertMode = true
+
+[nix]
+channel = "stable-25_05"
+packages = ["android-tools", "wget", "unzip", "openjdk17", "kotlin-language-server", "kotlin"]
+
+[userenv]
+
+[userenv.shared]
+ANDROID_HOME = "/home/runner/android-sdk"
+JAVA_HOME = "/nix/store/xad649j61kwkh0id5wvyiab5rliprp4d-openjdk-17.0.15+6"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Build Android App"
+
+[[workflows.workflow]]
+name = "Build Android App"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "./gradlew assembleDebug"
+
+[workflows.workflow.metadata]
+outputType = "console"
