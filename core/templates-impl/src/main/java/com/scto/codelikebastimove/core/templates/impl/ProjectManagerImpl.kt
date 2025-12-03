@@ -1,12 +1,15 @@
 package com.scto.codelikebastimove.core.templates.impl
 
 import android.content.Context
+
 import com.scto.codelikebastimove.core.templates.api.Project
 import com.scto.codelikebastimove.core.templates.api.ProjectConfig
 import com.scto.codelikebastimove.core.templates.api.ProjectManager
 import com.scto.codelikebastimove.core.templates.api.ProjectTemplate
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+
 import java.io.File
 
 class ProjectManagerImpl(private val context: Context) : ProjectManager {

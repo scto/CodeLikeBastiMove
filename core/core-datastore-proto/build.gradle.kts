@@ -1,12 +1,15 @@
+import java.io.File
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("com.google.protobuf")
+    //id("com.google.protobuf")
+    alias(libs.plugins.google.protobuf)
 }
 
 android {
     namespace = "com.scto.codelikebastimove.core.datastore.proto"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 29
@@ -25,19 +28,38 @@ android {
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:3.25.1"
+        // Der Standard-Pfad für protoc in Termux
+        val termuxProtocPath = "/data/data/com.tom.rv2ide/files/usr/bin/protoc"
+        val termuxProtocFile = File(termuxProtocPath)
+
+        if (termuxProtocFile.exists()) {
+            // Nutze die lokale Installation auf dem Handy
+            path = termuxProtocPath
+        } else {
+            // Fallback für deinen PC/Mac (lädt das Artefakt herunter)
+            artifact = "com.google.protobuf:protoc:${libs.versions.protobuf.get()}"
+        }
     }
+
+    // WICHTIG: Die generierten Klassen (Lite vs Java)
     generateProtoTasks {
         all().forEach { task ->
             task.builtins {
                 create("java") {
                     option("lite")
                 }
+                
+                /*
+                create("kotlin") {
+                    option("lite")
+                }
+                */
+                
             }
         }
     }
 }
 
 dependencies {
-    api("com.google.protobuf:protobuf-javalite:3.25.1")
+    api(libs.protobuf.kotlin)
 }

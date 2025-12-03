@@ -1,10 +1,12 @@
 package com.scto.codelikebastimove.feature.editor
 
 import androidx.lifecycle.ViewModel
+
 import com.scto.codelikebastimove.core.templates.api.Project
 import com.scto.codelikebastimove.core.templates.api.ProjectFile
 import com.scto.codelikebastimove.feature.treeview.TreeNodeData
 import com.scto.codelikebastimove.feature.treeview.TreeViewUtils
+
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

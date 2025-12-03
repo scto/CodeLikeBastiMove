@@ -205,3 +205,65 @@ app/build/outputs/apk/debug/app-debug.apk
 - For module-related issues, verify settings.gradle.kts includes all modules
 - If imports fail, ensure the features aggregator module uses `api()` instead of `implementation()`
 - For Proto DataStore issues, ensure the protobuf plugin version is 0.9.4
+
+- If build :core:datastore-proto fails
+- Das ist ein klassisches Problem beim Entwickeln direkt auf Android (Termux).
+- Der Grund:
+- Das Protobuf-Gradle-Plugin versucht normalerweise, eine protoc-Binary herunterzuladen, die für Linux (Desktop) kompiliert ist. Diese Binaries erwarten die GNU C Library (glibc). Android (und damit Termux) verwendet aber Bionic libc. Deshalb stürzt die heruntergeladene Binary ab oder lässt sich gar nicht erst ausführen.
+- Du musst Gradle zwingen, den in Termux installierten Compiler zu nutzen, statt einen herunterzuladen.
+- Hier ist die Lösung in 3 Schritten:
+- 1. Protobuf in Termux installieren
+- Installiere den Compiler direkt über den Paketmanager von Termux.
+- pkg install protobuf
+-
+- Überprüfe danach, wo er liegt (meistens unter /data/data/...):
+- which protoc
+- Ausgabe merken, meistens: /data/data/com.termux/files/usr/bin/protoc
+-
+- 2. build.gradle.kts anpassen
+- Gehe in dein Modul (z. B. :core:core-datastore-proto) und bearbeite die build.gradle.kts.
+- Du musst eine Logik einbauen: "Wenn ich auf Termux bin, nimm den lokalen Pfad. Wenn ich am PC bin, lade das Artefakt herunter."
+- Füge diesen Block in deine protobuf-Konfiguration ein:
+-
+- import java.io.File
+// ... plugins und android block ...
+
+- protobuf {
+-     protoc {
+-         // Der Standard-Pfad für protoc in Termux
+-         val termuxProtocPath = "/data/data/com.termux/files/usr/bin/protoc"
+-         val termuxProtocFile = File(termuxProtocPath)
+- 
+-         if (termuxProtocFile.exists()) {
+-             // Nutze die lokale Installation auf dem Handy
+-             path = termuxProtocPath
+-         } else {
+-             // Fallback für deinen PC/Mac (lädt das Artefakt herunter)
+-             artifact = "com.google.protobuf:protoc:3.24.4" 
+-         }
+-     }
+-
+-     // WICHTIG: Die generierten Klassen (Lite vs Java)
+-     generateProtoTasks {
+-         all().forEach { task ->
+-             task.builtins {
+-                 create("java") {
+-                     option("lite")
+-                 }
+-                 // Falls du Kotlin generierst:
+-                 create("kotlin") {
+-                     option("lite")
+-                 }
+-             }
+-         }
+-     }
+- }
+
+- 3. Clean und Build
+- Führe nun den Build erneut in Termux aus:
+- ./gradlew clean :core:core-datastore-proto:generateDebugProto
+
+- Alternative: Falls du proot-distro nutzt
+- Falls du in Termux eine Linux-Distro (wie Ubuntu via proot-distro) nutzt, funktioniert der Pfad zu /data/data/... oft nicht direkt oder es gibt Berechtigungsprobleme.
+- In diesem Fall installiere protobuf-compiler innerhalb von Ubuntu (apt install protobuf-compiler) und setze den Pfad in der build.gradle.kts auf /usr/bin/protoc.
+- Hat das geklappt, oder gibt es noch Versionskonflikte zwischen der Termux-Version und der im Projekt erwarteten Version?

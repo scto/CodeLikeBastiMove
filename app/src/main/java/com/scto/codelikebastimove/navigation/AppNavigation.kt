@@ -25,12 +25,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+
 import com.scto.codelikebastimove.core.templates.api.Project
 import com.scto.codelikebastimove.feature.editor.EditorScreen
 import com.scto.codelikebastimove.feature.gallery.GalleryScreen
 import com.scto.codelikebastimove.feature.home.HomeScreen
 import com.scto.codelikebastimove.feature.settings.SettingsScreen
 import com.scto.codelikebastimove.feature.slideshow.SlideshowScreen
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

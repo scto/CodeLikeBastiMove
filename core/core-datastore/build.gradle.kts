@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.scto.codelikebastimove.core.datastore"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 29
@@ -25,8 +25,8 @@ android {
 dependencies {
     api(project(":core:core-datastore-proto"))
     
-    api("androidx.datastore:datastore:1.1.1")
-    api("androidx.datastore:datastore-preferences:1.1.1")
+    api("androidx.datastore:datastore:1.1.7")
+    api("androidx.datastore:datastore-preferences:1.1.7")
     
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")

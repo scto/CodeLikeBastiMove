@@ -3,11 +3,11 @@
 app-version-code = "11"
 app-version-name = "0.1.0-alpha-11"
 sdk-min = "29"
-sdk-target = "36"
+sdk-target = "35"
 sdk-compile = "36"
 
 # Plugins
-android-gradle = "8.13.0"
+android-gradle = "8.11.1"
 kotlin = "2.2.20"
 ksp = "2.2.20-2.0.3"
 kotlin-coroutines = "1.10.2"
@@ -17,7 +17,6 @@ plugin-crashlytics = "3.0.6"
 plugin-performance = "2.0.1"
 plugin-protobuf = "0.9.5"
 module-graph = "0.12.1"
-
 
 # Libs
 android-core-ktx = "1.17.0"
@@ -59,7 +58,6 @@ lottie = "6.6.9"
 desugaring = "2.1.5"
 
 [plugins]
-
 android-application = { id = "com.android.application", version.ref = "android-gradle" }
 android-library = { id = "com.android.library", version.ref = "android-gradle" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -74,7 +72,6 @@ google-protobuf = { id = "com.google.protobuf", version.ref = "plugin-protobuf" 
 module-graph = { id = "dev.iurysouza.modulegraph", version.ref = "module-graph" }
 
 [libraries]
-
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "android-core-ktx" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
@@ -144,7 +141,6 @@ firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-performance = { module = "com.google.firebase:firebase-perf" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
-
 
 [bundles]
 compose = [
