@@ -1,7 +1,7 @@
 # CodeLikeBastiMove
 
 ## Overview
-CodeLikeBastiMove is an Android mobile application built with Kotlin and Jetpack Compose. This app features a modern Material Design 3 navigation drawer with multiple screens (Home, Gallery, and Slideshow) demonstrating current Android development best practices with a modular architecture.
+CodeLikeBastiMove is an Android mobile application built with Kotlin and Jetpack Compose. This app features a modern Material Design 3 navigation drawer with multiple screens (Home, Gallery, Slideshow, and Settings) demonstrating current Android development best practices with a highly modular architecture.
 
 ## Project Type
 **Android Mobile Application** - This project builds an Android APK using Jetpack Compose for the UI layer with a multi-module Gradle structure.
@@ -13,43 +13,50 @@ CodeLikeBastiMove is an Android mobile application built with Kotlin and Jetpack
 - **Target SDK**: Android 34 (Android 14)
 - **Minimum SDK**: Android 29 (Android 10)
 - **Java Version**: Java 17 (OpenJDK 17.0.15)
-- **Modular Architecture**: Multi-module Gradle project
+- **Modular Architecture**: Multi-module Gradle project with feature modules
 
 ## Project Structure
 ```
 CodeLikeBastiMove/
-├── app/                              # Main application module
+├── app/                                    # Main application module
 │   ├── src/main/
 │   │   ├── java/com/scto/codelikebastimove/
 │   │   │   ├── MainActivity.kt
 │   │   │   ├── navigation/
 │   │   │   │   ├── AppNavigation.kt
 │   │   │   │   └── DrawerHeader.kt
-│   │   │   └── ui/
-│   │   │       └── theme/
-│   │   │           ├── Theme.kt
-│   │   │           └── Type.kt
+│   │   │   └── ui/theme/
+│   │   │       ├── Theme.kt
+│   │   │       └── Type.kt
 │   │   ├── res/
 │   │   └── AndroidManifest.xml
 │   └── build.gradle.kts
-├── features/                          # Features submodule (Android Library)
-│   ├── src/main/
-│   │   ├── java/com/scto/codelikebastimove/features/
-│   │   │   ├── home/
-│   │   │   │   ├── HomeScreen.kt
-│   │   │   │   └── HomeViewModel.kt
-│   │   │   ├── gallery/
-│   │   │   │   ├── GalleryScreen.kt
-│   │   │   │   └── GalleryViewModel.kt
-│   │   │   └── slideshow/
-│   │   │       ├── SlideshowScreen.kt
-│   │   │       └── SlideshowViewModel.kt
-│   │   └── AndroidManifest.xml
-│   └── build.gradle.kts
+├── features/                               # Features aggregator module
+│   ├── build.gradle.kts                    # Re-exports all feature modules via api()
+│   ├── feature-home/                       # Home feature module
+│   │   ├── src/main/java/.../feature/home/
+│   │   │   ├── HomeScreen.kt
+│   │   │   └── HomeViewModel.kt
+│   │   └── build.gradle.kts
+│   ├── feature-gallery/                    # Gallery feature module
+│   │   ├── src/main/java/.../feature/gallery/
+│   │   │   ├── GalleryScreen.kt
+│   │   │   └── GalleryViewModel.kt
+│   │   └── build.gradle.kts
+│   ├── feature-slideshow/                  # Slideshow feature module
+│   │   ├── src/main/java/.../feature/slideshow/
+│   │   │   ├── SlideshowScreen.kt
+│   │   │   └── SlideshowViewModel.kt
+│   │   └── build.gradle.kts
+│   └── feature-settings/                   # Settings feature module
+│       ├── src/main/java/.../feature/settings/
+│       │   ├── SettingsScreen.kt
+│       │   └── SettingsViewModel.kt
+│       └── build.gradle.kts
 ├── gradle/
 │   └── wrapper/
-├── build.gradle.kts                   # Root build file
-└── settings.gradle.kts                # Includes :app and :features modules
+├── build.gradle.kts                        # Root build file
+└── settings.gradle.kts                     # Includes all modules
 ```
 
 ## Module Structure
@@ -60,37 +67,42 @@ The main application module containing:
 - `navigation/` - Navigation drawer and screen routing
 - `ui/theme/` - Material Design 3 theming
 
-### features module (Android Library)
-A separate Gradle module containing feature screens:
-- `home/` - HomeScreen and HomeViewModel
-- `gallery/` - GalleryScreen and GalleryViewModel
-- `slideshow/` - SlideshowScreen and SlideshowViewModel
+### features module (Aggregator)
+A thin aggregator library that re-exports all feature modules via `api()` dependencies. The app module only needs to depend on `:features` to access all feature screens.
+
+### Feature Modules (Android Libraries)
+Each feature is a separate Gradle module:
+- **feature-home**: Home screen with HomeViewModel
+- **feature-gallery**: Gallery screen with GalleryViewModel
+- **feature-slideshow**: Slideshow screen with SlideshowViewModel
+- **feature-settings**: Settings screen with SettingsViewModel
 
 This modular approach allows for:
 - Better code organization and separation of concerns
-- Faster incremental builds
-- Easier testing of individual features
+- Faster incremental builds (only changed modules recompile)
+- Independent testing of features
 - Potential for dynamic feature delivery
+- Clear dependency boundaries between features
 
 ## Key Features
 - **Jetpack Compose UI**: Modern declarative UI framework
-- **Navigation Drawer**: Material Design 3 modal navigation drawer
+- **Navigation Drawer**: Material Design 3 modal navigation drawer with 4 screens
 - **MVVM Architecture**: Uses ViewModel with StateFlow for reactive UI
 - **Compose Navigation**: AndroidX Navigation Compose for screen navigation
 - **Material Design 3**: Latest Material You design language
-- **Multi-module Architecture**: Separated features into dedicated module
+- **Multi-module Architecture**: Separated features into dedicated modules
 
 ## Dependencies
 
 ### app module
 - Jetpack Compose BOM 2024.06.00
-- Compose Material 3
+- Compose Material 3 with icons-extended
 - Compose Navigation
 - Lifecycle ViewModel Compose
 - Kotlin Coroutines
 - features module (project dependency)
 
-### features module
+### Feature modules (each)
 - Jetpack Compose BOM 2024.06.00
 - Compose Material 3
 - Lifecycle ViewModel Compose
@@ -131,8 +143,14 @@ app/build/outputs/apk/debug/app-debug.apk
 
 ### Building Individual Modules
 ```bash
-# Build only the features module
+# Build all feature modules
 ./gradlew :features:assembleDebug
+
+# Build specific feature modules
+./gradlew :features:feature-home:assembleDebug
+./gradlew :features:feature-gallery:assembleDebug
+./gradlew :features:feature-slideshow:assembleDebug
+./gradlew :features:feature-settings:assembleDebug
 
 # Build only the app module
 ./gradlew :app:assembleDebug
@@ -151,27 +169,13 @@ Since this is an Android application, it needs to be run on:
 - ✅ Replaced Fragments with Compose Screens
 - ✅ Implemented Compose Navigation with Navigation Drawer
 - ✅ Created Material Design 3 theme
-- ✅ Created features submodule for Home, Gallery, and Slideshow screens
+- ✅ Created features aggregator module
+- ✅ Split features into 4 separate modules (home, gallery, slideshow, settings)
+- ✅ Added new Settings screen to navigation drawer
 - ✅ Successfully built modular Compose APK (~54MB)
 
-## Compose Migration Notes
-The project was converted from the traditional View-based UI (XML layouts + Fragments) to Jetpack Compose:
-
-### Before (View-based)
-- XML layouts for each screen
-- Fragment classes with View Binding
-- ViewModels with LiveData
-- Navigation Component with XML navigation graph
-
-### After (Compose with Modules)
-- Composable functions for each screen (in features module)
-- ViewModel with StateFlow
-- Compose Navigation with sealed classes for routes
-- Material Design 3 theming in Compose
-- Multi-module architecture
-
 ## Development Workflow
-1. Make changes to Kotlin/Compose source files
+1. Make changes to Kotlin/Compose source files in the appropriate feature module
 2. Run the workflow or `./gradlew assembleDebug` to build
 3. Install the APK on an Android device/emulator for testing
 
@@ -180,3 +184,4 @@ The project was converted from the traditional View-based UI (XML layouts + Frag
 - Run `./gradlew clean` before building if you encounter caching issues
 - Check that Kotlin version matches Compose Compiler Plugin version
 - For module-related issues, verify settings.gradle.kts includes all modules
+- If imports fail, ensure the features aggregator module uses `api()` instead of `implementation()`

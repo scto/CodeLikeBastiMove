@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Slideshow
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
@@ -20,9 +21,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.scto.codelikebastimove.features.gallery.GalleryScreen
-import com.scto.codelikebastimove.features.home.HomeScreen
-import com.scto.codelikebastimove.features.slideshow.SlideshowScreen
+import com.scto.codelikebastimove.feature.gallery.GalleryScreen
+import com.scto.codelikebastimove.feature.home.HomeScreen
+import com.scto.codelikebastimove.feature.settings.SettingsScreen
+import com.scto.codelikebastimove.feature.slideshow.SlideshowScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -30,9 +32,10 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object Home : Screen("home", "Home", Icons.Default.Home)
     object Gallery : Screen("gallery", "Gallery", Icons.Default.Image)
     object Slideshow : Screen("slideshow", "Slideshow", Icons.Default.Slideshow)
+    object Settings : Screen("settings", "Settings", Icons.Default.Settings)
 }
 
-val screens = listOf(Screen.Home, Screen.Gallery, Screen.Slideshow)
+val screens = listOf(Screen.Home, Screen.Gallery, Screen.Slideshow, Screen.Settings)
 
 @Composable
 fun AppNavigation(
@@ -52,6 +55,9 @@ fun AppNavigation(
         }
         composable(Screen.Slideshow.route) {
             SlideshowScreen()
+        }
+        composable(Screen.Settings.route) {
+            SettingsScreen()
         }
     }
 }

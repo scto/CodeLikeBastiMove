@@ -18,3 +18,7 @@ rootProject.name = "CodeLikeBastiMove"
 
 include(":app")
 include(":features")
+include(":features:feature-home")
+include(":features:feature-gallery")
+include(":features:feature-slideshow")
+include(":features:feature-settings")
