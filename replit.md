@@ -64,6 +64,14 @@ CodeLikeBastiMove/
 │   │   └── src/main/java/.../feature/git/
 │   │       ├── GitCommand.kt               # All Git commands definitions
 │   │       └── GitScreen.kt                # Git commands UI
+│   ├── feature-onboarding/                 # Onboarding module (4 pages)
+│   │   └── src/main/java/.../feature/onboarding/
+│   │       ├── OnboardingScreen.kt         # Main onboarding navigation
+│   │       ├── OnboardingViewModel.kt      # Onboarding data management
+│   │       ├── WelcomePage.kt              # Page 1: App intro
+│   │       ├── PermissionsPage.kt          # Page 2: Permission requests
+│   │       ├── InstallationOptionsPage.kt  # Page 3: SDK/Tools selection
+│   │       └── SummaryPage.kt              # Page 4: Configuration summary
 │   └── feature-editor/                     # Editor feature module
 │       └── src/main/java/.../feature/editor/
 │           ├── EditorScreen.kt             # Editor with BottomAppBar navigation
@@ -131,6 +139,14 @@ app/build/outputs/apk/debug/app-debug.apk
 ```
 
 ## Recent Changes (December 4, 2025)
+- ✅ **Onboarding Module** implemented with 4 pages:
+  - Page 1 (Welcome): App logo, name, description, and welcome message
+  - Page 2 (Permissions): File access, usage analytics, battery optimization permission cards
+  - Page 3 (Installation Options): OpenJDK version (17/22), Build Tools version (35.0.1/34.0.2/33.0.1), optional tools (git, git-lfs, ssh)
+  - Page 4 (Summary): Configuration overview with installation start button
+- ✅ Extended Proto DataStore schema with OnboardingConfigProto
+- ✅ UserPreferencesRepository extended with onboarding configuration methods
+- ✅ Onboarding shown on first app start, persisted via DataStore
 - ✅ Created feature-git module with all Git commands
 - ✅ Added GitCommand.kt with 50+ Git commands in 7 categories
 - ✅ Added GitScreen.kt with interactive expandable UI

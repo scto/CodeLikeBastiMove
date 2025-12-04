@@ -10,6 +10,19 @@ enum ThemeMode {
     THEME_MODE_FOLLOW_SYSTEM = 3;
 }
 
+enum OpenJdkVersion {
+    OPENJDK_VERSION_UNSPECIFIED = 0;
+    OPENJDK_17 = 1;
+    OPENJDK_22 = 2;
+}
+
+enum BuildToolsVersion {
+    BUILD_TOOLS_VERSION_UNSPECIFIED = 0;
+    BUILD_TOOLS_35_0_1 = 1;
+    BUILD_TOOLS_34_0_2 = 2;
+    BUILD_TOOLS_33_0_1 = 3;
+}
+
 message GitConfigProto {
     string user_name = 1;
     string user_email = 2;
@@ -22,9 +35,24 @@ message ClonedRepositoryProto {
     int64 cloned_at = 4;
 }
 
+message OnboardingConfigProto {
+    bool onboarding_completed = 1;
+    bool file_access_permission_granted = 2;
+    bool usage_analytics_permission_granted = 3;
+    bool battery_optimization_disabled = 4;
+    OpenJdkVersion selected_openjdk_version = 5;
+    BuildToolsVersion selected_build_tools_version = 6;
+    bool git_enabled = 7;
+    bool git_lfs_enabled = 8;
+    bool ssh_enabled = 9;
+    bool installation_started = 10;
+    bool installation_completed = 11;
+}
+
 message UserPreferencesProto {
     ThemeMode theme_mode = 1;
     bool dynamic_colors_enabled = 2;
     GitConfigProto git_config = 3;
     repeated ClonedRepositoryProto cloned_repositories = 4;
+    OnboardingConfigProto onboarding_config = 5;
 }

@@ -29,6 +29,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.scto.codelikebastimove.core.datastore.UserPreferences
 import com.scto.codelikebastimove.core.datastore.UserPreferencesRepository
+import com.scto.codelikebastimove.feature.onboarding.OnboardingScreen
 import com.scto.codelikebastimove.navigation.AppDrawer
 import com.scto.codelikebastimove.navigation.AppNavigation
 import com.scto.codelikebastimove.navigation.screens
@@ -53,7 +54,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    if (!userPreferences.onboardingConfig.onboardingCompleted) {
+                        OnboardingScreen(
+                            onOnboardingComplete = { }
+                        )
+                    } else {
+                        MainScreen()
+                    }
                 }
             }
         }
