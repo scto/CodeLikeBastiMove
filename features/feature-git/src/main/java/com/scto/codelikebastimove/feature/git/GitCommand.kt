@@ -361,8 +361,8 @@ sealed class GitCommand(
             Init, Clone, Add, Status, Diff, Commit, Notes, Restore, Reset, Rm, Mv,
             Branch, Checkout, Switch, Merge, Mergetool, Log, Stash, Tag, Worktree,
             Fetch, Pull, Push, Remote, Submodule,
-            Show, Shortlog, Describe, Bisect, Blame, Grep,
-            Apply, CherryPick, Rebase, Revert,
+            Show, Shortlog, Describe, Bisect, Blame, Grep, ShowBranch, Range, LsFiles, LsTree, CatFile, RevParse,
+            Apply, CherryPick, FormatPatch, Rebase, Revert,
             Config, Reflog, Gc, Clean, Fsck, Prune, Archive, Bundle
         )
         

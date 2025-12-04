@@ -306,7 +306,7 @@ private fun getCommandIcon(command: GitCommand): ImageVector {
         is GitCommand.Grep -> Icons.Default.Search
         is GitCommand.Apply -> Icons.Default.PlayArrow
         is GitCommand.CherryPick -> Icons.Default.ContentCopy
-        is GitCommand.DiffCommand -> Icons.Default.Compare
+        is GitCommand.FormatPatch -> Icons.Default.Description
         is GitCommand.Rebase -> Icons.Default.Timeline
         is GitCommand.Revert -> Icons.Default.Undo
         is GitCommand.Config -> Icons.Default.Settings
@@ -317,5 +317,11 @@ private fun getCommandIcon(command: GitCommand): ImageVector {
         is GitCommand.Prune -> Icons.Default.RemoveCircle
         is GitCommand.Archive -> Icons.Default.Archive
         is GitCommand.Bundle -> Icons.Default.Archive
+        is GitCommand.ShowBranch -> Icons.Default.CallSplit
+        is GitCommand.Range -> Icons.Default.Compare
+        is GitCommand.LsFiles -> Icons.Default.List
+        is GitCommand.LsTree -> Icons.Default.FolderOpen
+        is GitCommand.CatFile -> Icons.Default.Description
+        is GitCommand.RevParse -> Icons.Default.Code
     }
 }
