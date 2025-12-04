@@ -44,7 +44,10 @@ import com.scto.codelikebastimove.core.datastore.GitConfig
 import com.scto.codelikebastimove.core.datastore.GitCredentials
 import com.scto.codelikebastimove.core.datastore.GitCredentialsStore
 import com.scto.codelikebastimove.core.datastore.UserPreferencesRepository
+import com.scto.codelikebastimove.core.templates.api.GradleLanguage
 import com.scto.codelikebastimove.core.templates.api.Project
+import com.scto.codelikebastimove.core.templates.api.ProjectConfig
+import com.scto.codelikebastimove.core.templates.api.ProjectLanguage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -600,7 +603,16 @@ private suspend fun cloneRepository(
         val project = Project(
             name = repoName,
             path = targetDir.absolutePath,
-            packageName = "com.example.$repoName"
+            config = ProjectConfig(
+                projectName = repoName,
+                packageName = "com.cloned.$repoName",
+                minSdk = 29,
+                targetSdk = 34,
+                compileSdk = 34,
+                language = ProjectLanguage.KOTLIN,
+                gradleLanguage = GradleLanguage.KOTLIN_DSL
+            ),
+            files = emptyList()
         )
         
         Result.success(project)
