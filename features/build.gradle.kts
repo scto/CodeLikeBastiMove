@@ -29,4 +29,5 @@ dependencies {
     api(project(":features:feature-settings"))
     api(project(":features:feature-treeview"))
     api(project(":features:feature-editor"))
+    api(project(":features:feature-git"))
 }
