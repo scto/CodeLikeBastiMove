@@ -49,6 +49,7 @@ dependencies {
     api("androidx.lifecycle:lifecycle-runtime-compose:2.8.0")
 
     api(project(":features:feature-treeview"))
+    api(project(":features:feature-git"))
     api(project(":core:templates-api"))
 
     implementation("androidx.core:core-ktx:1.13.1")

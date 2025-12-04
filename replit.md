@@ -60,9 +60,13 @@ CodeLikeBastiMove/
 │   ├── feature-slideshow/                  # Slideshow feature module
 │   ├── feature-settings/                   # Settings feature module
 │   ├── feature-treeview/                   # TreeView component module
+│   ├── feature-git/                        # Git commands module
+│   │   └── src/main/java/.../feature/git/
+│   │       ├── GitCommand.kt               # All Git commands definitions
+│   │       └── GitScreen.kt                # Git commands UI
 │   └── feature-editor/                     # Editor feature module
 │       └── src/main/java/.../feature/editor/
-│           ├── EditorScreen.kt             # Slideable TreeView with tabs
+│           ├── EditorScreen.kt             # Editor with BottomAppBar navigation
 │           └── EditorViewModel.kt          # Multi-tab file management
 ├── gradle/
 │   └── wrapper/
@@ -102,6 +106,13 @@ Each template supports:
 - **Tab Management**: Open multiple files in tabs, switch between them
 - **Code Editor**: Monospace font with line numbers
 - **Animated Transitions**: Smooth expand/collapse animations
+- **BottomAppBar Navigation**: 6 navigation buttons (TreeView, Git, Settings, Asset Studio, Submodul Creator, Konsole)
+
+## Git Module Features
+- **Comprehensive Git Commands**: All Git commands organized by category
+- **Categories**: Setup, Basic Snapshotting, Branching, Sharing, Inspection, Patching, Administration
+- **Interactive UI**: Expandable command cards with usage examples
+- **Commands Include**: init, clone, add, status, diff, commit, branch, checkout, merge, fetch, pull, push, and many more
 
 ## Settings Screen
 1. **Design Section**: Theme mode selection (Hell/Dunkel/System folgen)
@@ -117,7 +128,14 @@ The APK will be generated at:
 app/build/outputs/apk/debug/app-debug.apk
 ```
 
-## Recent Changes (December 3, 2025)
+## Recent Changes (December 4, 2025)
+- ✅ Created feature-git module with all Git commands
+- ✅ Added GitCommand.kt with 40+ Git commands in 7 categories
+- ✅ Added GitScreen.kt with interactive expandable UI
+- ✅ Implemented BottomAppBar in EditorScreen with 6 navigation buttons
+- ✅ Added navigation between TreeView, Git, Settings, Asset Studio, Submodul Creator, Konsole panels
+
+## Previous Changes (December 3, 2025)
 - ✅ Implemented slideable TreeView with swipe gestures (AnimatedVisibility)
 - ✅ Added tab support for multiple open files in Editor
 - ✅ Added 3 new project templates (Bottom Navigation, Navigation Drawer, Tabbed Activity)

@@ -237,10 +237,10 @@ sealed class GitCommand(
         category = GitCommandCategory.PATCHING
     )
     
-    data object DiffCommand : GitCommand(
-        name = "git diff",
-        description = "Erzeugt einen Patch",
-        usage = "git diff [options]",
+    data object FormatPatch : GitCommand(
+        name = "git format-patch",
+        description = "Bereitet Patches fuer E-Mail-Versand vor",
+        usage = "git format-patch [options] [<since> | <revision-range>]",
         category = GitCommandCategory.PATCHING
     )
     
@@ -312,6 +312,48 @@ sealed class GitCommand(
         description = "Verschiebt Objekte und Referenzen per Archiv",
         usage = "git bundle [create | verify | list-heads | unbundle]",
         category = GitCommandCategory.ADMINISTRATION
+    )
+    
+    data object ShowBranch : GitCommand(
+        name = "git show-branch",
+        description = "Zeigt Branches und ihre Commits an",
+        usage = "git show-branch [options] [<rev>...]",
+        category = GitCommandCategory.INSPECTION
+    )
+    
+    data object Range : GitCommand(
+        name = "git range-diff",
+        description = "Vergleicht zwei Commit-Bereiche",
+        usage = "git range-diff [options] <base> <rev1> <rev2>",
+        category = GitCommandCategory.INSPECTION
+    )
+    
+    data object LsFiles : GitCommand(
+        name = "git ls-files",
+        description = "Zeigt Informationen ueber Dateien im Index und Arbeitsbaum an",
+        usage = "git ls-files [options] [<file>...]",
+        category = GitCommandCategory.INSPECTION
+    )
+    
+    data object LsTree : GitCommand(
+        name = "git ls-tree",
+        description = "Listet den Inhalt eines Baumobjekts auf",
+        usage = "git ls-tree [options] <tree-ish> [<path>...]",
+        category = GitCommandCategory.INSPECTION
+    )
+    
+    data object CatFile : GitCommand(
+        name = "git cat-file",
+        description = "Gibt Inhalt oder Typ und Groesse fuer Repository-Objekte aus",
+        usage = "git cat-file <type> <object>",
+        category = GitCommandCategory.INSPECTION
+    )
+    
+    data object RevParse : GitCommand(
+        name = "git rev-parse",
+        description = "Parst und formatiert Referenzen",
+        usage = "git rev-parse [options] <args>...",
+        category = GitCommandCategory.INSPECTION
     )
     
     companion object {
