@@ -84,6 +84,8 @@ CodeLikeBastiMove/
 - **Theme Management**: Light/Dark/Follow System theme switching with DataStore persistence
 - **Dynamic Colors**: Material You dynamic color support toggle
 - **5 Project Templates**: Create new Android projects with various architectures
+- **Git Clone Dialog**: Multi-step wizard for cloning repositories with credential management
+- **Secure Credential Storage**: EncryptedSharedPreferences for Git credentials
 - **Slideable TreeView**: Swipe left/right to show/hide project file tree
 - **Tabbed Code Editor**: Open and edit multiple files with tab management
 - **File TreeView**: Hierarchical file structure display with expand/collapse
@@ -130,10 +132,19 @@ app/build/outputs/apk/debug/app-debug.apk
 
 ## Recent Changes (December 4, 2025)
 - ✅ Created feature-git module with all Git commands
-- ✅ Added GitCommand.kt with 40+ Git commands in 7 categories
+- ✅ Added GitCommand.kt with 50+ Git commands in 7 categories
 - ✅ Added GitScreen.kt with interactive expandable UI
 - ✅ Implemented BottomAppBar in EditorScreen with 6 navigation buttons
 - ✅ Added navigation between TreeView, Git, Settings, Asset Studio, Submodul Creator, Konsole panels
+- ✅ **Git Clone Dialog** in HomeScreen with multi-step wizard:
+  - Git Config setup (Name, Email) stored in Proto DataStore
+  - Secure credentials storage (Username, Token) with EncryptedSharedPreferences
+  - Clone options: Repository URL, Branch selection, Submodule toggle
+  - Automatic `safe.directory` config after cloning
+- ✅ Extended Proto DataStore schema with GitConfigProto and ClonedRepositoryProto
+- ✅ Created GitCredentialsStore with AndroidX Security Crypto for secure credential storage
+- ✅ Improved EditorBottomBar: smaller icons (18dp), smaller fonts (9sp), scrollable, reduced height (56dp)
+- ✅ Reduced TreeView width from 280dp to 220dp
 
 ## Previous Changes (December 3, 2025)
 - ✅ Implemented slideable TreeView with swipe gestures (AnimatedVisibility)

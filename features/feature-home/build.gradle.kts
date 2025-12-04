@@ -50,6 +50,7 @@ dependencies {
 
     api(project(":core:templates-api"))
     api(project(":core:templates-impl"))
+    api(project(":core:core-datastore"))
 
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")

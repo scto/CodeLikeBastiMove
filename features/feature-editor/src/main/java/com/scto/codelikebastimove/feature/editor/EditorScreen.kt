@@ -8,8 +8,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -96,7 +98,7 @@ fun EditorScreen(
     var dragOffset by remember { mutableFloatStateOf(0f) }
     var selectedNavItem by remember { mutableStateOf(BottomNavItem.TREEVIEW) }
     val density = LocalDensity.current
-    val treeViewWidth = 280.dp
+    val treeViewWidth = 220.dp
     val swipeThreshold = 100f
     
     if (state.project == null) {
@@ -189,34 +191,43 @@ private fun EditorBottomBar(
 ) {
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.height(56.dp)
     ) {
-        BottomNavItem.entries.forEach { item ->
-            NavigationBarItem(
-                selected = selectedItem == item,
-                onClick = { onItemSelected(item) },
-                icon = {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            BottomNavItem.entries.forEach { item ->
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                        .clickable { onItemSelected(item) },
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Icon(
                         imageVector = item.icon,
                         contentDescription = item.title,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(18.dp),
+                        tint = if (selectedItem == item) 
+                            MaterialTheme.colorScheme.primary 
+                        else 
+                            MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                },
-                label = {
                     Text(
                         text = item.title,
                         style = MaterialTheme.typography.labelSmall,
-                        maxLines = 1
+                        fontSize = 9.sp,
+                        maxLines = 1,
+                        color = if (selectedItem == item) 
+                            MaterialTheme.colorScheme.primary 
+                        else 
+                            MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                },
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                    selectedTextColor = MaterialTheme.colorScheme.primary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    indicatorColor = MaterialTheme.colorScheme.primaryContainer
-                )
-            )
+                }
+            }
         }
     }
 }

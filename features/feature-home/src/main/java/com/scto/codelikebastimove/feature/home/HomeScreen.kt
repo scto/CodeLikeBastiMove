@@ -39,6 +39,7 @@ fun HomeScreen(
 ) {
     val context = LocalContext.current
     var showCreateProjectDialog by remember { mutableStateOf(false) }
+    var showGitCloneDialog by remember { mutableStateOf(false) }
     
     Column(
         modifier = Modifier
@@ -66,7 +67,7 @@ fun HomeScreen(
         HomeButton(
             icon = Icons.Default.CloudDownload,
             text = "Clone ein Repository",
-            onClick = { }
+            onClick = { showGitCloneDialog = true }
         )
         
         Spacer(modifier = Modifier.height(16.dp))
@@ -100,6 +101,17 @@ fun HomeScreen(
             onDismiss = { showCreateProjectDialog = false },
             onProjectCreated = { project ->
                 showCreateProjectDialog = false
+                onNavigateToEditor(project)
+            }
+        )
+    }
+    
+    if (showGitCloneDialog) {
+        GitCloneDialog(
+            context = context,
+            onDismiss = { showGitCloneDialog = false },
+            onCloneSuccess = { project ->
+                showGitCloneDialog = false
                 onNavigateToEditor(project)
             }
         )
