@@ -526,8 +526,10 @@ private suspend fun cloneRepository(
         
         onProgress("Bereite Klonen vor...")
         
-        val authenticatedUrl = if (url.startsWith("https://")) {
-            url.replace("https://", "https://$username:$password@")
+        val cloneUrl = if (username.isNotBlank() && password.isNotBlank() && url.startsWith("https://")) {
+            val encodedUsername = java.net.URLEncoder.encode(username, "UTF-8")
+            val encodedPassword = java.net.URLEncoder.encode(password, "UTF-8")
+            url.replace("https://", "https://$encodedUsername:$encodedPassword@")
         } else {
             url
         }
@@ -538,10 +540,11 @@ private suspend fun cloneRepository(
             add("--branch")
             add(branch)
             add("--single-branch")
+            add("--progress")
             if (cloneSubmodules) {
                 add("--recurse-submodules")
             }
-            add(authenticatedUrl)
+            add(cloneUrl)
             add(targetDir.absolutePath)
         }
         
@@ -551,18 +554,24 @@ private suspend fun cloneRepository(
             .redirectErrorStream(true)
             .directory(projectsDir)
         
+        processBuilder.environment()["GIT_TERMINAL_PROMPT"] = "0"
+        
         val process = processBuilder.start()
         val output = StringBuilder()
         
         process.inputStream.bufferedReader().use { reader ->
             var line: String?
             while (reader.readLine().also { line = it } != null) {
-                output.appendLine(line)
-                val progressLine = line ?: ""
-                if (progressLine.contains("Receiving objects:") ||
-                    progressLine.contains("Resolving deltas:") ||
-                    progressLine.contains("Cloning into")) {
-                    onProgress(progressLine.take(50) + if (progressLine.length > 50) "..." else "")
+                val sanitizedLine = (line ?: "")
+                    .replace(username, "***")
+                    .replace(password, "***")
+                output.appendLine(sanitizedLine)
+                
+                if (sanitizedLine.contains("Receiving objects:") ||
+                    sanitizedLine.contains("Resolving deltas:") ||
+                    sanitizedLine.contains("Cloning into")) {
+                    val displayLine = sanitizedLine.take(50) + if (sanitizedLine.length > 50) "..." else ""
+                    onProgress(displayLine)
                 }
             }
         }
@@ -570,10 +579,9 @@ private suspend fun cloneRepository(
         val exitCode = process.waitFor()
         
         if (exitCode != 0) {
-            val errorOutput = output.toString()
-                .replace(username, "***")
-                .replace(password, "***")
-            return@withContext Result.failure(Exception("Git clone fehlgeschlagen (Code: $exitCode): $errorOutput"))
+            return@withContext Result.failure(
+                Exception("Git clone fehlgeschlagen (Code: $exitCode)")
+            )
         }
         
         if (cloneSubmodules) {
