@@ -22,16 +22,16 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("implementation", project(":core:core-ui"))
                 add("implementation", project(":core:core-resources"))
                 
-                add("api", libs.findLibrary("androidx-core-ktx").get())
-                add("api", libs.findLibrary("coroutines-android").get())
+                add("api", libs.androidx.core.ktx)
+                add("api", libs.coroutines.android)
                 
-                add("api", platform(libs.findLibrary("compose-bom").get()))
-                add("api", libs.findBundle("compose").get())
-                add("api", libs.findBundle("lifecycle").get())
+                add("api", platform(libs.compose.bom))
+                add("api", libs.bundles.compose)
+                add("api", libs.bundles.lifecycle)
                 
-                add("api", libs.findLibrary("activity-compose").get())
+                add("api", libs.activity.compose)
                 
-                add("debugImplementation", libs.findLibrary("compose-ui-tooling").get())
+                add("debugImplementation", libs.compose.ui.tooling)
             }
         }
     }
