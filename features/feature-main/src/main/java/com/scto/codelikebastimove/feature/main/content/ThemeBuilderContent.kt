@@ -1209,7 +1209,11 @@ private fun BottomActionBar(
                         onDismissRequest = { onExportMenuToggle(false) }
                     ) {
                         DropdownMenuItem(
-                            text = { Text("Export as ZIP (Android)") },
+                            text = { Text("Export as ZIP (Jetpack Compose)") },
+                            onClick = { onExport("compose") }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Export as ZIP (Android XML)") },
                             onClick = { onExport("android") }
                         )
                         DropdownMenuItem(
@@ -1345,6 +1349,15 @@ private fun exportTheme(
         themeDir.mkdirs()
         
         when (format) {
+            "compose" -> {
+                val colorKt = generateComposeColorKt(themeName, colors)
+                val themeKt = generateComposeThemeKt(themeName)
+                val typeKt = generateComposeTypeKt(displayFont, bodyFont)
+                
+                File(themeDir, "Color.kt").writeText(colorKt)
+                File(themeDir, "Theme.kt").writeText(themeKt)
+                File(themeDir, "Type.kt").writeText(typeKt)
+            }
             "android" -> {
                 val colorsXml = generateAndroidColorsXml(colors)
                 val themeXml = generateAndroidThemeXml(themeName)
@@ -1535,4 +1548,319 @@ private fun generateThemeJson(themeName: String, colors: ThemeColors, displayFon
     "bodyFont": "$bodyFont"
   }
 }"""
+}
+
+private fun generateComposeColorKt(themeName: String, colors: ThemeColors): String {
+    val packageName = themeName.lowercase().replace(" ", "").replace("-", "")
+    return """package com.example.$packageName.ui.theme
+
+import androidx.compose.ui.graphics.Color
+
+// Light Theme Colors
+val md_theme_light_primary = Color(${colorToArgbHex(colors.primary)})
+val md_theme_light_onPrimary = Color(0xFFFFFFFF)
+val md_theme_light_primaryContainer = Color(${colorToArgbHex(colors.primaryContainer)})
+val md_theme_light_onPrimaryContainer = Color(0xFF1D1B20)
+val md_theme_light_secondary = Color(${colorToArgbHex(colors.secondary)})
+val md_theme_light_onSecondary = Color(0xFFFFFFFF)
+val md_theme_light_secondaryContainer = Color(${colorToArgbHex(colors.secondaryContainer)})
+val md_theme_light_onSecondaryContainer = Color(0xFF1D1B20)
+val md_theme_light_tertiary = Color(${colorToArgbHex(colors.tertiary)})
+val md_theme_light_onTertiary = Color(0xFFFFFFFF)
+val md_theme_light_tertiaryContainer = Color(${colorToArgbHex(colors.tertiaryContainer)})
+val md_theme_light_onTertiaryContainer = Color(0xFF1D1B20)
+val md_theme_light_error = Color(${colorToArgbHex(colors.error)})
+val md_theme_light_onError = Color(0xFFFFFFFF)
+val md_theme_light_errorContainer = Color(${colorToArgbHex(colors.errorContainer)})
+val md_theme_light_onErrorContainer = Color(0xFF410E0B)
+val md_theme_light_background = Color(${colorToArgbHex(colors.background)})
+val md_theme_light_onBackground = Color(0xFF1C1B1F)
+val md_theme_light_surface = Color(${colorToArgbHex(colors.surface)})
+val md_theme_light_onSurface = Color(0xFF1C1B1F)
+val md_theme_light_surfaceVariant = Color(${colorToArgbHex(colors.surfaceVariant)})
+val md_theme_light_onSurfaceVariant = Color(0xFF49454F)
+val md_theme_light_outline = Color(${colorToArgbHex(colors.outline)})
+val md_theme_light_outlineVariant = Color(0xFFCAC4D0)
+val md_theme_light_scrim = Color(0xFF000000)
+val md_theme_light_inverseSurface = Color(0xFF313033)
+val md_theme_light_inverseOnSurface = Color(0xFFF4EFF4)
+val md_theme_light_inversePrimary = Color(${colorToArgbHex(colors.primary.copy(alpha = 0.8f))})
+val md_theme_light_surfaceTint = Color(${colorToArgbHex(colors.primary)})
+
+// Dark Theme Colors
+val md_theme_dark_primary = Color(${colorToArgbHex(colors.primary.copy(red = minOf(colors.primary.red * 1.2f, 1f), green = minOf(colors.primary.green * 1.2f, 1f), blue = minOf(colors.primary.blue * 1.2f, 1f)))})
+val md_theme_dark_onPrimary = Color(0xFF1D1B20)
+val md_theme_dark_primaryContainer = Color(${colorToArgbHex(colors.primary.copy(alpha = 0.7f))})
+val md_theme_dark_onPrimaryContainer = Color(0xFFEADDFF)
+val md_theme_dark_secondary = Color(${colorToArgbHex(colors.secondary.copy(red = minOf(colors.secondary.red * 1.2f, 1f), green = minOf(colors.secondary.green * 1.2f, 1f), blue = minOf(colors.secondary.blue * 1.2f, 1f)))})
+val md_theme_dark_onSecondary = Color(0xFF1D1B20)
+val md_theme_dark_secondaryContainer = Color(${colorToArgbHex(colors.secondary.copy(alpha = 0.7f))})
+val md_theme_dark_onSecondaryContainer = Color(0xFFE8DEF8)
+val md_theme_dark_tertiary = Color(${colorToArgbHex(colors.tertiary.copy(red = minOf(colors.tertiary.red * 1.2f, 1f), green = minOf(colors.tertiary.green * 1.2f, 1f), blue = minOf(colors.tertiary.blue * 1.2f, 1f)))})
+val md_theme_dark_onTertiary = Color(0xFF1D1B20)
+val md_theme_dark_tertiaryContainer = Color(${colorToArgbHex(colors.tertiary.copy(alpha = 0.7f))})
+val md_theme_dark_onTertiaryContainer = Color(0xFFFFD8E4)
+val md_theme_dark_error = Color(0xFFF2B8B5)
+val md_theme_dark_onError = Color(0xFF601410)
+val md_theme_dark_errorContainer = Color(0xFF8C1D18)
+val md_theme_dark_onErrorContainer = Color(0xFFF9DEDC)
+val md_theme_dark_background = Color(0xFF1C1B1F)
+val md_theme_dark_onBackground = Color(0xFFE6E1E5)
+val md_theme_dark_surface = Color(0xFF1C1B1F)
+val md_theme_dark_onSurface = Color(0xFFE6E1E5)
+val md_theme_dark_surfaceVariant = Color(0xFF49454F)
+val md_theme_dark_onSurfaceVariant = Color(0xFFCAC4D0)
+val md_theme_dark_outline = Color(0xFF938F99)
+val md_theme_dark_outlineVariant = Color(0xFF49454F)
+val md_theme_dark_scrim = Color(0xFF000000)
+val md_theme_dark_inverseSurface = Color(0xFFE6E1E5)
+val md_theme_dark_inverseOnSurface = Color(0xFF313033)
+val md_theme_dark_inversePrimary = Color(${colorToArgbHex(colors.primary)})
+val md_theme_dark_surfaceTint = Color(${colorToArgbHex(colors.primary.copy(red = minOf(colors.primary.red * 1.2f, 1f), green = minOf(colors.primary.green * 1.2f, 1f), blue = minOf(colors.primary.blue * 1.2f, 1f)))})
+"""
+}
+
+private fun generateComposeThemeKt(themeName: String): String {
+    val packageName = themeName.lowercase().replace(" ", "").replace("-", "")
+    val safeName = themeName.replace(" ", "").replace("-", "")
+    
+    return """package com.example.$packageName.ui.theme
+
+import android.app.Activity
+import android.os.Build
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
+
+private val LightColorScheme = lightColorScheme(
+    primary = md_theme_light_primary,
+    onPrimary = md_theme_light_onPrimary,
+    primaryContainer = md_theme_light_primaryContainer,
+    onPrimaryContainer = md_theme_light_onPrimaryContainer,
+    secondary = md_theme_light_secondary,
+    onSecondary = md_theme_light_onSecondary,
+    secondaryContainer = md_theme_light_secondaryContainer,
+    onSecondaryContainer = md_theme_light_onSecondaryContainer,
+    tertiary = md_theme_light_tertiary,
+    onTertiary = md_theme_light_onTertiary,
+    tertiaryContainer = md_theme_light_tertiaryContainer,
+    onTertiaryContainer = md_theme_light_onTertiaryContainer,
+    error = md_theme_light_error,
+    onError = md_theme_light_onError,
+    errorContainer = md_theme_light_errorContainer,
+    onErrorContainer = md_theme_light_onErrorContainer,
+    background = md_theme_light_background,
+    onBackground = md_theme_light_onBackground,
+    surface = md_theme_light_surface,
+    onSurface = md_theme_light_onSurface,
+    surfaceVariant = md_theme_light_surfaceVariant,
+    onSurfaceVariant = md_theme_light_onSurfaceVariant,
+    outline = md_theme_light_outline,
+    outlineVariant = md_theme_light_outlineVariant,
+    scrim = md_theme_light_scrim,
+    inverseSurface = md_theme_light_inverseSurface,
+    inverseOnSurface = md_theme_light_inverseOnSurface,
+    inversePrimary = md_theme_light_inversePrimary,
+    surfaceTint = md_theme_light_surfaceTint
+)
+
+private val DarkColorScheme = darkColorScheme(
+    primary = md_theme_dark_primary,
+    onPrimary = md_theme_dark_onPrimary,
+    primaryContainer = md_theme_dark_primaryContainer,
+    onPrimaryContainer = md_theme_dark_onPrimaryContainer,
+    secondary = md_theme_dark_secondary,
+    onSecondary = md_theme_dark_onSecondary,
+    secondaryContainer = md_theme_dark_secondaryContainer,
+    onSecondaryContainer = md_theme_dark_onSecondaryContainer,
+    tertiary = md_theme_dark_tertiary,
+    onTertiary = md_theme_dark_onTertiary,
+    tertiaryContainer = md_theme_dark_tertiaryContainer,
+    onTertiaryContainer = md_theme_dark_onTertiaryContainer,
+    error = md_theme_dark_error,
+    onError = md_theme_dark_onError,
+    errorContainer = md_theme_dark_errorContainer,
+    onErrorContainer = md_theme_dark_onErrorContainer,
+    background = md_theme_dark_background,
+    onBackground = md_theme_dark_onBackground,
+    surface = md_theme_dark_surface,
+    onSurface = md_theme_dark_onSurface,
+    surfaceVariant = md_theme_dark_surfaceVariant,
+    onSurfaceVariant = md_theme_dark_onSurfaceVariant,
+    outline = md_theme_dark_outline,
+    outlineVariant = md_theme_dark_outlineVariant,
+    scrim = md_theme_dark_scrim,
+    inverseSurface = md_theme_dark_inverseSurface,
+    inverseOnSurface = md_theme_dark_inverseOnSurface,
+    inversePrimary = md_theme_dark_inversePrimary,
+    surfaceTint = md_theme_dark_surfaceTint
+)
+
+@Composable
+fun ${safeName}Theme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    dynamicColor: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    val colorScheme = when {
+        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            val context = LocalContext.current
+            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        }
+        darkTheme -> DarkColorScheme
+        else -> LightColorScheme
+    }
+    
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            window.statusBarColor = colorScheme.primary.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+        }
+    }
+
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = Typography,
+        content = content
+    )
+}
+"""
+}
+
+private fun generateComposeTypeKt(displayFont: String, bodyFont: String): String {
+    val displayFontFamily = if (displayFont == "-- System Default --") "FontFamily.Default" else "FontFamily.Default /* Replace with $displayFont */"
+    val bodyFontFamily = if (bodyFont == "-- System Default --") "FontFamily.Default" else "FontFamily.Default /* Replace with $bodyFont */"
+    
+    return """package com.example.theme.ui.theme
+
+import androidx.compose.material3.Typography
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+
+val Typography = Typography(
+    displayLarge = TextStyle(
+        fontFamily = $displayFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 57.sp,
+        lineHeight = 64.sp,
+        letterSpacing = (-0.25).sp
+    ),
+    displayMedium = TextStyle(
+        fontFamily = $displayFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 45.sp,
+        lineHeight = 52.sp,
+        letterSpacing = 0.sp
+    ),
+    displaySmall = TextStyle(
+        fontFamily = $displayFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 36.sp,
+        lineHeight = 44.sp,
+        letterSpacing = 0.sp
+    ),
+    headlineLarge = TextStyle(
+        fontFamily = $displayFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 32.sp,
+        lineHeight = 40.sp,
+        letterSpacing = 0.sp
+    ),
+    headlineMedium = TextStyle(
+        fontFamily = $displayFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 28.sp,
+        lineHeight = 36.sp,
+        letterSpacing = 0.sp
+    ),
+    headlineSmall = TextStyle(
+        fontFamily = $displayFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 24.sp,
+        lineHeight = 32.sp,
+        letterSpacing = 0.sp
+    ),
+    titleLarge = TextStyle(
+        fontFamily = $displayFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 22.sp,
+        lineHeight = 28.sp,
+        letterSpacing = 0.sp
+    ),
+    titleMedium = TextStyle(
+        fontFamily = $displayFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.15.sp
+    ),
+    titleSmall = TextStyle(
+        fontFamily = $displayFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.1.sp
+    ),
+    bodyLarge = TextStyle(
+        fontFamily = $bodyFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+    bodyMedium = TextStyle(
+        fontFamily = $bodyFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.25.sp
+    ),
+    bodySmall = TextStyle(
+        fontFamily = $bodyFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.4.sp
+    ),
+    labelLarge = TextStyle(
+        fontFamily = $bodyFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.1.sp
+    ),
+    labelMedium = TextStyle(
+        fontFamily = $bodyFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.5.sp
+    ),
+    labelSmall = TextStyle(
+        fontFamily = $bodyFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 11.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.5.sp
+    )
+)
+"""
+}
+
+private fun colorToArgbHex(color: Color): String {
+    val argb = color.toArgb()
+    return String.format("0x%08X", argb)
 }
