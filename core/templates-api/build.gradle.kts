@@ -7,6 +7,8 @@ android {
 }
 
 dependencies {
+    api(project(":core:core-resources"))
+    
     implementation(libs.androidx.core.ktx)
     implementation(libs.coroutines.core)
 }

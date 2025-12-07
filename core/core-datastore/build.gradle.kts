@@ -8,6 +8,7 @@ android {
 
 dependencies {
     api(project(":core:core-datastore-proto"))
+    api(project(":core:core-resources"))
     
     api(libs.data.store.core)
     api(libs.data.store.preferences)

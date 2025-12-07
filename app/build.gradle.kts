@@ -70,9 +70,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":features"))
-    implementation(project(":core:core-ui"))
-    implementation(project(":core:core-resources"))
+    api(project(":features"))
+    api(project(":core:core-ui"))
+    api(project(":core:core-resources"))
     implementation(project(":core:core-datastore"))
     implementation(project(":core:templates-api"))
     

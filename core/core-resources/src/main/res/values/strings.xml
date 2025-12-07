@@ -89,4 +89,103 @@
     <string name="content_description_more">More options</string>
     <string name="content_description_expand">Expand</string>
     <string name="content_description_collapse">Collapse</string>
+    
+    <string name="ide_workspace">IDE Workspace</string>
+    <string name="ide_settings">IDE Settings</string>
+    <string name="ide_config">IDE Config</string>
+    <string name="ide_documentation">Documentation</string>
+    
+    <string name="home_create_project">Create Project</string>
+    <string name="home_open_project">Open Project</string>
+    <string name="home_clone_repo">Clone Repo</string>
+    <string name="home_console">Console</string>
+    
+    <string name="drawer_files">Files</string>
+    <string name="drawer_build">Build</string>
+    <string name="drawer_module">Module</string>
+    <string name="drawer_assets">Assets</string>
+    <string name="drawer_terminal">Terminal</string>
+    
+    <string name="build_variants">Build Variants</string>
+    <string name="build_output">Build Output</string>
+    <string name="build_run">Run</string>
+    <string name="build_debug">Debug</string>
+    <string name="build_release">Release</string>
+    
+    <string name="asset_studio">Asset Studio</string>
+    <string name="asset_create_drawable">Create Drawable</string>
+    <string name="asset_create_icon">Create Icon</string>
+    <string name="asset_import_image">Import Image</string>
+    
+    <string name="sub_module_maker">Sub-Module Maker</string>
+    <string name="sub_module_name">Module Name</string>
+    <string name="sub_module_type">Module Type</string>
+    <string name="sub_module_language">Language</string>
+    <string name="sub_module_kotlin">Kotlin</string>
+    <string name="sub_module_java">Java</string>
+    
+    <string name="console_title">Console</string>
+    <string name="terminal_title">Terminal</string>
+    <string name="terminal_full">Full Terminal</string>
+    
+    <string name="ai_agent">AI Agent</string>
+    <string name="ai_model_select">Select Model</string>
+    <string name="ai_chat_hint">Type your message...</string>
+    
+    <string name="theme_builder">Theme Builder</string>
+    <string name="theme_preview">Preview</string>
+    <string name="theme_edit">Edit</string>
+    <string name="theme_export">Export</string>
+    <string name="theme_name">Theme Name</string>
+    <string name="theme_seed_color">Seed Color</string>
+    <string name="theme_dynamic_colors">Dynamic Colors</string>
+    <string name="theme_schema_style">Schema Style</string>
+    <string name="theme_color_scheme">Color Scheme</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_typography">Typography</string>
+    <string name="theme_display_font">Display Font</string>
+    <string name="theme_body_font">Body Font</string>
+    <string name="theme_platform">Platform</string>
+    
+    <string name="editor_cut">Cut</string>
+    <string name="editor_copy">Copy</string>
+    <string name="editor_paste">Paste</string>
+    <string name="editor_select_all">Select All</string>
+    <string name="editor_delete">Delete</string>
+    <string name="editor_format">Format Code</string>
+    <string name="editor_find">Find</string>
+    <string name="editor_find_replace">Find &amp; Replace</string>
+    <string name="editor_undo">Undo</string>
+    <string name="editor_redo">Redo</string>
+    
+    <string name="file_new">New</string>
+    <string name="file_new_file">New File</string>
+    <string name="file_new_folder">New Folder</string>
+    <string name="file_rename">Rename</string>
+    <string name="file_delete">Delete</string>
+    <string name="file_copy">Copy</string>
+    <string name="file_move">Move</string>
+    
+    <string name="view_android">Android</string>
+    <string name="view_project">Project</string>
+    <string name="view_packages">Packages</string>
+    
+    <string name="logcat_title">Logcat</string>
+    <string name="problems_title">Problems</string>
+    <string name="todo_title">TODO</string>
+    
+    <string name="welcome_title">Android Code Studio</string>
+    <string name="welcome_subtitle">Create or open a project to get started</string>
+    <string name="welcome_instructions_en">Open a file from the project tree to start editing</string>
+    <string name="welcome_instructions_de">Öffnen Sie eine Datei aus dem Projektbaum, um mit der Bearbeitung zu beginnen</string>
+    
+    <string name="recent_badge">Recent</string>
+    <string name="search_projects">Search projects...</string>
+    <string name="browse_folders">Browse Folders</string>
+    
+    <string name="export_compose">Jetpack Compose</string>
+    <string name="export_android_xml">Android XML</string>
+    <string name="export_web_css">Web/CSS</string>
+    <string name="export_json">JSON</string>
 </resources>

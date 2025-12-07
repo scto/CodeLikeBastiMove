@@ -7,6 +7,9 @@ android {
 }
 
 dependencies {
+    api(project(":core:core-ui"))
+    api(project(":core:core-resources"))
+    
     api(project(":features:feature-home"))
     api(project(":features:feature-gallery"))
     api(project(":features:feature-slideshow"))

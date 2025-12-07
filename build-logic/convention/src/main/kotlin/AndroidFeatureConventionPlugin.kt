@@ -19,8 +19,8 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                add("implementation", project(":core:core-ui"))
-                add("implementation", project(":core:core-resources"))
+                add("api", project(":core:core-ui"))
+                add("api", project(":core:core-resources"))
                 
                 add("api", libs.androidx.core.ktx)
                 add("api", libs.coroutines.android)

@@ -34,8 +34,17 @@ CodeLikeBastiMove is an Android mobile application developed with Kotlin and Jet
   - Seed color selector with custom color picker
   - **Dynamic Color toggle** for Android 12+ wallpaper-based colors
   - **Schema Style selector** with 9 options: Tonal Spot, Neutral, Vibrant, Expressive, Fidelity, Content, Monochromatic, Rainbow, Fruit Salad
-  - Export as ZIP functionality (Android XML, Web CSS, JSON formats)
+  - Export as ZIP functionality with 4 formats: **Jetpack Compose** (Color.kt, Theme.kt, Type.kt), Android XML, Web/CSS, JSON
   - FileProvider configured for secure file sharing
+- **Module Dependencies Refactored:**
+  - core-ui and core-resources now exposed via `api` for transitive access across all modules
+  - All feature modules automatically get core-ui and core-resources through convention plugin
+  - core-datastore, templates-api, and templates-impl now include core-resources
+  - features aggregation module explicitly includes core-ui and core-resources
+- **Enhanced core-resources:**
+  - Complete Material 3 color palette (light and dark themes) in colors.xml
+  - Comprehensive string resources for IDE functionality (80+ new strings)
+  - Full dimension resources for spacing, corners, icons, and layout
 
 ## User Preferences
 I prefer iterative development and clear, concise explanations. Ask before making major architectural changes or significant modifications to existing features. I value well-documented code and a logical, modular structure.
