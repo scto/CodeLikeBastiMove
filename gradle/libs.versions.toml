@@ -1,7 +1,7 @@
 [versions]
 # App
-app-version-code = "11"
-app-version-name = "0.1.0-alpha-11"
+app-version-code = "100"
+app-version-name = "0.0.1"
 sdk-min = "29"
 sdk-target = "35"
 sdk-compile = "36"
@@ -57,9 +57,10 @@ robolectric = "4.16"
 # 3rd party libs
 lottie = "6.6.9"
 desugaring = "2.1.5"
-treeview = "1.0.2"
+
 # Sonstige
 jgit = "6.9.0.20240305-r"
+treeview = "1.0.2"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle" }
@@ -87,11 +88,11 @@ coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle" }
 gradle-api = { module = "com.android.tools.build:gradle-api", version.ref = "android-gradle" }
-data-store = { module = "androidx.datastore:datastore-preferences", version.ref = "data-store" }
 data-store-core = { module = "androidx.datastore:datastore", version.ref = "data-store" }
+data-store-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "data-store" }
 security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines-android" }
 protobuf-kotlin = { module = "com.google.protobuf:protobuf-kotlin-lite", version.ref = "protobuf" }
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines-android" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines-android" }
 workmanager = { module = "androidx.work:work-runtime-ktx", version.ref = "workmanager" }
 desugaring = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugaring" }
@@ -102,13 +103,13 @@ splash-screen = { module = "androidx.core:core-splashscreen", version.ref = "spl
 # Compose
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 compose-ui-animation = { group = "androidx.compose.animation", name = "animation" }
+compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "material-icons-extended" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 compose-ui-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-ui-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "material-icons-extended" }
 compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
 
 # test libraries
@@ -157,13 +158,13 @@ treeview = { module = "com.github.AfigAliyev:TreeView", version.ref = "treeview"
 [bundles]
 compose = [
     "compose-ui",
-    "compose-ui-graphics",
     "compose-ui-animation",
-    "compose-ui-preview",
+    "compose-ui-graphics",
+    "material-icons-extended"
     "compose-material3",
     "activity-compose",
-    "compose-ui-util",
-    "material-icons-extended"
+    "compose-ui-preview",
+    "compose-ui-util"
 ]
 
 compose-debug = [
