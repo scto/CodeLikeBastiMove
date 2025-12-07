@@ -3,8 +3,9 @@ package com.scto.codelikebastimove.feature.main.content
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,19 +19,32 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.ContentPaste
+import androidx.compose.material.icons.filled.CreateNewFolder
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.DriveFileRenameOutline
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.FolderOpen
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.NoteAdd
 import androidx.compose.material.icons.outlined.AccountTree
+import androidx.compose.material.icons.outlined.Class
+import androidx.compose.material.icons.outlined.Code
+import androidx.compose.material.icons.outlined.DataObject
 import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.Extension
 import androidx.compose.material.icons.outlined.FolderOpen
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,8 +52,10 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -49,11 +65,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.PopupProperties
 
 enum class ProjectViewMode(
     val title: String,
@@ -77,12 +96,193 @@ enum class ProjectViewMode(
     )
 }
 
+enum class FileOperation {
+    NONE,
+    COPY,
+    CUT
+}
+
+enum class NewFileTemplate(
+    val title: String,
+    val icon: ImageVector,
+    val extension: String,
+    val templateContent: String
+) {
+    KOTLIN_CLASS(
+        title = "Kotlin Class",
+        icon = Icons.Outlined.Class,
+        extension = ".kt",
+        templateContent = """
+package {{PACKAGE}}
+
+class {{NAME}} {
+    
+}
+""".trimIndent()
+    ),
+    KOTLIN_INTERFACE(
+        title = "Kotlin Interface",
+        icon = Icons.Outlined.Extension,
+        extension = ".kt",
+        templateContent = """
+package {{PACKAGE}}
+
+interface {{NAME}} {
+    
+}
+""".trimIndent()
+    ),
+    KOTLIN_OBJECT(
+        title = "Kotlin Object",
+        icon = Icons.Outlined.DataObject,
+        extension = ".kt",
+        templateContent = """
+package {{PACKAGE}}
+
+object {{NAME}} {
+    
+}
+""".trimIndent()
+    ),
+    KOTLIN_DATA_CLASS(
+        title = "Kotlin Data Class",
+        icon = Icons.Outlined.Class,
+        extension = ".kt",
+        templateContent = """
+package {{PACKAGE}}
+
+data class {{NAME}}(
+    val id: String
+)
+""".trimIndent()
+    ),
+    KOTLIN_SEALED_CLASS(
+        title = "Kotlin Sealed Class",
+        icon = Icons.Outlined.Class,
+        extension = ".kt",
+        templateContent = """
+package {{PACKAGE}}
+
+sealed class {{NAME}} {
+    
+}
+""".trimIndent()
+    ),
+    KOTLIN_ENUM(
+        title = "Kotlin Enum",
+        icon = Icons.Outlined.Class,
+        extension = ".kt",
+        templateContent = """
+package {{PACKAGE}}
+
+enum class {{NAME}} {
+    
+}
+""".trimIndent()
+    ),
+    KOTLIN_ANNOTATION(
+        title = "Kotlin Annotation",
+        icon = Icons.Outlined.Code,
+        extension = ".kt",
+        templateContent = """
+package {{PACKAGE}}
+
+annotation class {{NAME}}
+""".trimIndent()
+    ),
+    JAVA_CLASS(
+        title = "Java Class",
+        icon = Icons.Outlined.Class,
+        extension = ".java",
+        templateContent = """
+package {{PACKAGE}};
+
+public class {{NAME}} {
+    
+}
+""".trimIndent()
+    ),
+    JAVA_INTERFACE(
+        title = "Java Interface",
+        icon = Icons.Outlined.Extension,
+        extension = ".java",
+        templateContent = """
+package {{PACKAGE}};
+
+public interface {{NAME}} {
+    
+}
+""".trimIndent()
+    ),
+    JAVA_ENUM(
+        title = "Java Enum",
+        icon = Icons.Outlined.Class,
+        extension = ".java",
+        templateContent = """
+package {{PACKAGE}};
+
+public enum {{NAME}} {
+    
+}
+""".trimIndent()
+    ),
+    JAVA_ANNOTATION(
+        title = "Java Annotation",
+        icon = Icons.Outlined.Code,
+        extension = ".java",
+        templateContent = """
+package {{PACKAGE}};
+
+public @interface {{NAME}} {
+    
+}
+""".trimIndent()
+    ),
+    XML_LAYOUT(
+        title = "XML Layout",
+        icon = Icons.Outlined.Description,
+        extension = ".xml",
+        templateContent = """
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+""".trimIndent()
+    ),
+    XML_VALUES(
+        title = "XML Values",
+        icon = Icons.Outlined.Description,
+        extension = ".xml",
+        templateContent = """
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+</resources>
+""".trimIndent()
+    ),
+    EMPTY_FILE(
+        title = "Empty File",
+        icon = Icons.Outlined.Description,
+        extension = "",
+        templateContent = ""
+    )
+}
+
 data class FileTreeItem(
     val name: String,
     val path: String,
     val isDirectory: Boolean,
     val children: List<FileTreeItem> = emptyList(),
     val level: Int = 0
+)
+
+data class ClipboardItem(
+    val item: FileTreeItem,
+    val operation: FileOperation
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -93,6 +293,14 @@ fun ProjectContent(
 ) {
     var currentViewMode by remember { mutableStateOf(ProjectViewMode.ANDROID) }
     var showViewModeMenu by remember { mutableStateOf(false) }
+    var clipboard by remember { mutableStateOf<ClipboardItem?>(null) }
+    
+    var showNewFileDialog by remember { mutableStateOf(false) }
+    var showNewFolderDialog by remember { mutableStateOf(false) }
+    var showRenameDialog by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var selectedItem by remember { mutableStateOf<FileTreeItem?>(null) }
+    var parentForNewItem by remember { mutableStateOf<FileTreeItem?>(null) }
     
     val projectTree = remember(currentViewMode) {
         when (currentViewMode) {
@@ -107,7 +315,10 @@ fun ProjectContent(
             title = {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable { showViewModeMenu = true }
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(4.dp))
+                        .combinedClickable(onClick = { showViewModeMenu = true })
+                        .padding(4.dp)
                 ) {
                     Icon(
                         imageVector = currentViewMode.icon,
@@ -201,11 +412,373 @@ fun ProjectContent(
             items(projectTree) { item ->
                 FileTreeItemRow(
                     item = item,
-                    onItemClick = { onFileClick(it) }
+                    clipboard = clipboard,
+                    onItemClick = { onFileClick(it) },
+                    onCopy = { clipboard = ClipboardItem(it, FileOperation.COPY) },
+                    onCut = { clipboard = ClipboardItem(it, FileOperation.CUT) },
+                    onPaste = { targetItem ->
+                        clipboard?.let { clip ->
+                            // Handle paste logic
+                            clipboard = null
+                        }
+                    },
+                    onRename = {
+                        selectedItem = it
+                        showRenameDialog = true
+                    },
+                    onDelete = {
+                        selectedItem = it
+                        showDeleteDialog = true
+                    },
+                    onNewFile = {
+                        parentForNewItem = it
+                        showNewFileDialog = true
+                    },
+                    onNewFolder = {
+                        parentForNewItem = it
+                        showNewFolderDialog = true
+                    }
                 )
             }
         }
     }
+    
+    if (showNewFileDialog) {
+        NewFileDialog(
+            parentPath = parentForNewItem?.path ?: "",
+            onDismiss = { showNewFileDialog = false },
+            onCreate = { template, name ->
+                // Handle file creation
+                showNewFileDialog = false
+            }
+        )
+    }
+    
+    if (showNewFolderDialog) {
+        NewFolderDialog(
+            onDismiss = { showNewFolderDialog = false },
+            onCreate = { folderName ->
+                // Handle folder creation
+                showNewFolderDialog = false
+            }
+        )
+    }
+    
+    if (showRenameDialog && selectedItem != null) {
+        RenameDialog(
+            currentName = selectedItem!!.name,
+            onDismiss = { 
+                showRenameDialog = false
+                selectedItem = null
+            },
+            onRename = { newName ->
+                // Handle rename
+                showRenameDialog = false
+                selectedItem = null
+            }
+        )
+    }
+    
+    if (showDeleteDialog && selectedItem != null) {
+        DeleteConfirmDialog(
+            itemName = selectedItem!!.name,
+            isDirectory = selectedItem!!.isDirectory,
+            onDismiss = { 
+                showDeleteDialog = false
+                selectedItem = null
+            },
+            onConfirm = {
+                // Handle delete
+                showDeleteDialog = false
+                selectedItem = null
+            }
+        )
+    }
+}
+
+@Composable
+private fun NewFileDialog(
+    parentPath: String,
+    onDismiss: () -> Unit,
+    onCreate: (NewFileTemplate, String) -> Unit
+) {
+    var selectedTemplate by remember { mutableStateOf<NewFileTemplate?>(null) }
+    var fileName by remember { mutableStateOf("") }
+    var showTemplateList by remember { mutableStateOf(true) }
+    
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(if (showTemplateList) "New File" else "Enter Name")
+        },
+        text = {
+            if (showTemplateList) {
+                LazyColumn(
+                    modifier = Modifier.height(400.dp)
+                ) {
+                    item {
+                        Text(
+                            text = "Kotlin",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                    }
+                    items(listOf(
+                        NewFileTemplate.KOTLIN_CLASS,
+                        NewFileTemplate.KOTLIN_INTERFACE,
+                        NewFileTemplate.KOTLIN_OBJECT,
+                        NewFileTemplate.KOTLIN_DATA_CLASS,
+                        NewFileTemplate.KOTLIN_SEALED_CLASS,
+                        NewFileTemplate.KOTLIN_ENUM,
+                        NewFileTemplate.KOTLIN_ANNOTATION
+                    )) { template ->
+                        TemplateItem(
+                            template = template,
+                            onClick = {
+                                selectedTemplate = template
+                                showTemplateList = false
+                            }
+                        )
+                    }
+                    
+                    item {
+                        Text(
+                            text = "Java",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                    }
+                    items(listOf(
+                        NewFileTemplate.JAVA_CLASS,
+                        NewFileTemplate.JAVA_INTERFACE,
+                        NewFileTemplate.JAVA_ENUM,
+                        NewFileTemplate.JAVA_ANNOTATION
+                    )) { template ->
+                        TemplateItem(
+                            template = template,
+                            onClick = {
+                                selectedTemplate = template
+                                showTemplateList = false
+                            }
+                        )
+                    }
+                    
+                    item {
+                        Text(
+                            text = "XML",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                    }
+                    items(listOf(
+                        NewFileTemplate.XML_LAYOUT,
+                        NewFileTemplate.XML_VALUES
+                    )) { template ->
+                        TemplateItem(
+                            template = template,
+                            onClick = {
+                                selectedTemplate = template
+                                showTemplateList = false
+                            }
+                        )
+                    }
+                    
+                    item {
+                        Text(
+                            text = "Other",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                    }
+                    item {
+                        TemplateItem(
+                            template = NewFileTemplate.EMPTY_FILE,
+                            onClick = {
+                                selectedTemplate = NewFileTemplate.EMPTY_FILE
+                                showTemplateList = false
+                            }
+                        )
+                    }
+                }
+            } else {
+                Column {
+                    Text(
+                        text = selectedTemplate?.title ?: "",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    OutlinedTextField(
+                        value = fileName,
+                        onValueChange = { fileName = it },
+                        label = { Text("Name") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            if (!showTemplateList) {
+                TextButton(
+                    onClick = {
+                        selectedTemplate?.let { onCreate(it, fileName) }
+                    },
+                    enabled = fileName.isNotBlank()
+                ) {
+                    Text("Create")
+                }
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = {
+                if (showTemplateList) {
+                    onDismiss()
+                } else {
+                    showTemplateList = true
+                    fileName = ""
+                }
+            }) {
+                Text(if (showTemplateList) "Cancel" else "Back")
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun TemplateItem(
+    template: NewFileTemplate,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .combinedClickable(onClick = onClick)
+            .padding(vertical = 10.dp, horizontal = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Icon(
+            imageVector = template.icon,
+            contentDescription = null,
+            modifier = Modifier.size(24.dp),
+            tint = when {
+                template.extension == ".kt" -> Color(0xFF7F52FF)
+                template.extension == ".java" -> Color(0xFFE76F00)
+                template.extension == ".xml" -> Color(0xFFE44D26)
+                else -> MaterialTheme.colorScheme.onSurface
+            }
+        )
+        Text(
+            text = template.title,
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
+}
+
+@Composable
+private fun NewFolderDialog(
+    onDismiss: () -> Unit,
+    onCreate: (String) -> Unit
+) {
+    var folderName by remember { mutableStateOf("") }
+    
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("New Folder") },
+        text = {
+            OutlinedTextField(
+                value = folderName,
+                onValueChange = { folderName = it },
+                label = { Text("Folder name") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
+        confirmButton = {
+            TextButton(
+                onClick = { onCreate(folderName) },
+                enabled = folderName.isNotBlank()
+            ) {
+                Text("Create")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
+}
+
+@Composable
+private fun RenameDialog(
+    currentName: String,
+    onDismiss: () -> Unit,
+    onRename: (String) -> Unit
+) {
+    var newName by remember { mutableStateOf(currentName) }
+    
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Rename") },
+        text = {
+            OutlinedTextField(
+                value = newName,
+                onValueChange = { newName = it },
+                label = { Text("New name") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
+        confirmButton = {
+            TextButton(
+                onClick = { onRename(newName) },
+                enabled = newName.isNotBlank() && newName != currentName
+            ) {
+                Text("Rename")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
+}
+
+@Composable
+private fun DeleteConfirmDialog(
+    itemName: String,
+    isDirectory: Boolean,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Delete ${if (isDirectory) "Folder" else "File"}") },
+        text = {
+            Text(
+                "Are you sure you want to delete \"$itemName\"?" +
+                if (isDirectory) "\n\nThis will delete all contents inside the folder." else ""
+            )
+        },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text("Delete", color = MaterialTheme.colorScheme.error)
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
 }
 
 @Composable
@@ -240,60 +813,168 @@ private fun ProjectNameHeader(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun FileTreeItemRow(
     item: FileTreeItem,
+    clipboard: ClipboardItem?,
     onItemClick: (FileTreeItem) -> Unit,
+    onCopy: (FileTreeItem) -> Unit,
+    onCut: (FileTreeItem) -> Unit,
+    onPaste: (FileTreeItem) -> Unit,
+    onRename: (FileTreeItem) -> Unit,
+    onDelete: (FileTreeItem) -> Unit,
+    onNewFile: (FileTreeItem) -> Unit,
+    onNewFolder: (FileTreeItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var isExpanded by remember { mutableStateOf(item.level < 2) }
+    var showContextMenu by remember { mutableStateOf(false) }
     
     Column(modifier = modifier) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    if (item.isDirectory) {
-                        isExpanded = !isExpanded
-                    } else {
-                        onItemClick(item)
-                    }
+        Box {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .combinedClickable(
+                        onClick = {
+                            if (item.isDirectory) {
+                                isExpanded = !isExpanded
+                            } else {
+                                onItemClick(item)
+                            }
+                        },
+                        onLongClick = { showContextMenu = true }
+                    )
+                    .padding(
+                        start = (12 + item.level * 16).dp,
+                        end = 12.dp,
+                        top = 6.dp,
+                        bottom = 6.dp
+                    ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (item.isDirectory) {
+                    Icon(
+                        imageVector = if (isExpanded) Icons.Default.ExpandMore else Icons.Default.ChevronRight,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                } else {
+                    Spacer(modifier = Modifier.width(16.dp))
                 }
-                .padding(
-                    start = (12 + item.level * 16).dp,
-                    end = 12.dp,
-                    top = 6.dp,
-                    bottom = 6.dp
-                ),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            if (item.isDirectory) {
+                
+                Spacer(modifier = Modifier.width(4.dp))
+                
                 Icon(
-                    imageVector = if (isExpanded) Icons.Default.ExpandMore else Icons.Default.ChevronRight,
+                    imageVector = getFileIcon(item),
                     contentDescription = null,
-                    modifier = Modifier.size(16.dp),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    modifier = Modifier.size(18.dp),
+                    tint = getFileIconColor(item)
                 )
-            } else {
-                Spacer(modifier = Modifier.width(16.dp))
+                
+                Spacer(modifier = Modifier.width(8.dp))
+                
+                Text(
+                    text = item.name,
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
             }
             
-            Spacer(modifier = Modifier.width(4.dp))
-            
-            Icon(
-                imageVector = getFileIcon(item),
-                contentDescription = null,
-                modifier = Modifier.size(18.dp),
-                tint = getFileIconColor(item)
-            )
-            
-            Spacer(modifier = Modifier.width(8.dp))
-            
-            Text(
-                text = item.name,
-                fontSize = 13.sp,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            DropdownMenu(
+                expanded = showContextMenu,
+                onDismissRequest = { showContextMenu = false },
+                offset = DpOffset((12 + item.level * 16).dp, 0.dp)
+            ) {
+                if (item.isDirectory) {
+                    DropdownMenuItem(
+                        text = { Text("New File") },
+                        onClick = {
+                            showContextMenu = false
+                            onNewFile(item)
+                        },
+                        leadingIcon = {
+                            Icon(Icons.Default.NoteAdd, contentDescription = null)
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text("New Folder") },
+                        onClick = {
+                            showContextMenu = false
+                            onNewFolder(item)
+                        },
+                        leadingIcon = {
+                            Icon(Icons.Default.CreateNewFolder, contentDescription = null)
+                        }
+                    )
+                    HorizontalDivider()
+                }
+                
+                DropdownMenuItem(
+                    text = { Text("Copy") },
+                    onClick = {
+                        showContextMenu = false
+                        onCopy(item)
+                    },
+                    leadingIcon = {
+                        Icon(Icons.Default.ContentCopy, contentDescription = null)
+                    }
+                )
+                
+                DropdownMenuItem(
+                    text = { Text("Cut") },
+                    onClick = {
+                        showContextMenu = false
+                        onCut(item)
+                    },
+                    leadingIcon = {
+                        Icon(Icons.Default.ContentCopy, contentDescription = null)
+                    }
+                )
+                
+                if (item.isDirectory && clipboard != null) {
+                    DropdownMenuItem(
+                        text = { Text("Paste") },
+                        onClick = {
+                            showContextMenu = false
+                            onPaste(item)
+                        },
+                        leadingIcon = {
+                            Icon(Icons.Default.ContentPaste, contentDescription = null)
+                        }
+                    )
+                }
+                
+                HorizontalDivider()
+                
+                DropdownMenuItem(
+                    text = { Text("Rename") },
+                    onClick = {
+                        showContextMenu = false
+                        onRename(item)
+                    },
+                    leadingIcon = {
+                        Icon(Icons.Default.DriveFileRenameOutline, contentDescription = null)
+                    }
+                )
+                
+                DropdownMenuItem(
+                    text = { Text("Delete") },
+                    onClick = {
+                        showContextMenu = false
+                        onDelete(item)
+                    },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.Delete, 
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    }
+                )
+            }
         }
         
         if (item.isDirectory) {
@@ -306,7 +987,15 @@ private fun FileTreeItemRow(
                     item.children.forEach { child ->
                         FileTreeItemRow(
                             item = child,
-                            onItemClick = onItemClick
+                            clipboard = clipboard,
+                            onItemClick = onItemClick,
+                            onCopy = onCopy,
+                            onCut = onCut,
+                            onPaste = onPaste,
+                            onRename = onRename,
+                            onDelete = onDelete,
+                            onNewFile = onNewFile,
+                            onNewFolder = onNewFolder
                         )
                     }
                 }
