@@ -10,7 +10,7 @@ dependencies {
     api(project(":core:core-datastore-proto"))
     
     api(libs.data.store.core)
-    api(libs.data.store)
+    api(libs.data.store.preferences)
     api(libs.security.crypto)
     
     implementation(libs.androidx.core.ktx)
