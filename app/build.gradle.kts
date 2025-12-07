@@ -1,3 +1,4 @@
+import com.android.build.gradle.AppExtension
 import java.util.Properties
 import java.io.FileInputStream
 

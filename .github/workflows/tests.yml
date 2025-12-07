@@ -1,31 +1,39 @@
-name: Run Tests
+name: Tests CI
 
 on:
-
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
+  build:
 
-  create-service-json:
-    uses: ./.github/workflows/create-service-json.yml
-    secrets: inherit
+    runs-on: ubuntu-latest
 
-  run-tests:
-    uses: ./.github/workflows/run-tests.yml
-    needs: create-service-json
-    secrets: inherit
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  # It allow to remove artifacts created to use between workflows (google service json, bundles, etc)
-  remove-artifacts:
-    uses: ./.github/workflows/clean-up-artifacts.yml
-    needs: run-tests
-    # Run this job even if "needs" job is failed
-    if: success() || failure()
-    secrets: inherit
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4.1.0
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Give permission to executable
+        run: chmod +x gradlew
+
+      - name: Run tests
+        uses: gradle/gradle-build-action@v3.1.0
+        with:
+          gradle-version: current
+          arguments: test --continue
+
+
+      - name: Run tests
+        run: ./gradlew test --continue
+
+      - name: Upload test reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: '**/build/reports/tests/*'
