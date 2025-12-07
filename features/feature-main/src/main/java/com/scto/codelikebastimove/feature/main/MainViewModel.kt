@@ -1,6 +1,7 @@
 package com.scto.codelikebastimove.feature.main
 
 import androidx.lifecycle.ViewModel
+import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -10,6 +11,29 @@ class MainViewModel : ViewModel() {
     
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
+    
+    fun onNavigate(destination: MainDestination) {
+        _uiState.update { it.copy(currentDestination = destination) }
+    }
+    
+    fun onOpenProject(projectName: String) {
+        _uiState.update { 
+            it.copy(
+                projectName = projectName,
+                isProjectOpen = true,
+                currentDestination = MainDestination.IDE
+            )
+        }
+    }
+    
+    fun onCloseProject() {
+        _uiState.update {
+            it.copy(
+                isProjectOpen = false,
+                currentDestination = MainDestination.Home
+            )
+        }
+    }
     
     fun onContentTypeChanged(contentType: MainContentType) {
         _uiState.update { it.copy(currentContent = contentType) }
