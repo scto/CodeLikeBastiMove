@@ -7,14 +7,39 @@ CodeLikeBastiMove is an Android mobile application built with Kotlin and Jetpack
 **Android Mobile Application** - This project builds an Android APK using Jetpack Compose for the UI layer with a multi-module Gradle structure.
 
 ## Architecture
-- **Language**: Kotlin 2.0.0
+- **Language**: Kotlin 2.2.20
 - **UI Framework**: Jetpack Compose with Material Design 3
-- **Build System**: Gradle 8.14.3 with Kotlin DSL
-- **Target SDK**: Android 34 (Android 14)
+- **Build System**: Gradle 8.14.3 with Kotlin DSL and Convention Plugins
+- **Compile SDK**: Android 36
+- **Target SDK**: Android 35
 - **Minimum SDK**: Android 29 (Android 10)
 - **Java Version**: Java 17 (OpenJDK 17.0.15)
 - **Modular Architecture**: Multi-module Gradle project with feature and core modules
 - **Data Persistence**: Proto DataStore for user preferences
+- **Build Logic**: Custom convention plugins for consistent module configuration
+
+## Build Logic (Convention Plugins)
+The project uses a `build-logic` included build with custom Gradle convention plugins:
+
+### Available Plugins
+- `codelikebastimove.android.application` - For the main app module
+- `codelikebastimove.android.application.compose` - Adds Compose support to app module
+- `codelikebastimove.android.library` - For library modules (core/*)
+- `codelikebastimove.android.library.compose` - Adds Compose support to library modules
+- `codelikebastimove.android.feature` - For feature modules (features/*) - includes library, compose, and common dependencies
+
+### SDK Configuration
+All SDK versions are centralized in `gradle/libs.versions.toml`:
+- `sdk-compile = "36"`
+- `sdk-target = "35"`
+- `sdk-min = "29"`
+
+### Convention Plugin Benefits
+- Consistent SDK versions across all modules
+- Shared Kotlin and Java configuration
+- Centralized Compose setup with packaging configurations
+- Common dependencies for feature modules (Compose, Lifecycle, Coroutines, Activity-Compose)
+- Dependencies exposed as `api()` for proper transitive access
 
 ## Project Structure
 ```
@@ -32,6 +57,19 @@ CodeLikeBastiMove/
 │   │   ├── res/
 │   │   └── AndroidManifest.xml
 │   └── build.gradle.kts
+├── build-logic/                            # Convention plugins
+│   ├── settings.gradle.kts
+│   └── convention/
+│       ├── build.gradle.kts
+│       └── src/main/kotlin/
+│           ├── AndroidApplicationConventionPlugin.kt
+│           ├── AndroidApplicationComposeConventionPlugin.kt
+│           ├── AndroidLibraryConventionPlugin.kt
+│           ├── AndroidLibraryComposeConventionPlugin.kt
+│           ├── AndroidFeatureConventionPlugin.kt
+│           ├── KotlinAndroid.kt
+│           ├── AndroidCompose.kt
+│           └── ProjectExtensions.kt
 ├── core/                                   # Core modules
 │   ├── core-datastore/                     # DataStore repository module
 │   ├── core-datastore-proto/               # Proto DataStore schema module
@@ -77,7 +115,8 @@ CodeLikeBastiMove/
 │           ├── EditorScreen.kt             # Editor with BottomAppBar navigation
 │           └── EditorViewModel.kt          # Multi-tab file management
 ├── gradle/
-│   └── wrapper/
+│   ├── wrapper/
+│   └── libs.versions.toml                  # Version catalog
 ├── build.gradle.kts
 └── settings.gradle.kts
 ```
@@ -137,6 +176,15 @@ The APK will be generated at:
 ```
 app/build/outputs/apk/debug/app-debug.apk
 ```
+
+## Recent Changes (December 7, 2025)
+- ✅ **Build-Logic Module** created with convention plugins:
+  - AndroidApplicationConventionPlugin for app module
+  - AndroidLibraryConventionPlugin for library modules
+  - AndroidFeatureConventionPlugin for feature modules with full dependencies
+  - SDK versions centralized via version catalog (CompileSDK 36, TargetSDK 35, MinSDK 29)
+  - All modules migrated to use convention plugins
+  - Fixed feature-onboarding activity-compose dependency via convention plugin
 
 ## Recent Changes (December 4, 2025)
 - ✅ **Onboarding Module** implemented with 4 pages:

@@ -32,6 +32,7 @@ material3 = "1.4.0"
 material-icons-extended = "1.7.8"
 koin = "4.1.1"
 data-store = "1.1.7"
+security-crypto = "1.1.0-alpha06"
 protobuf = "4.26.1" # keep 4.26.1 version , otherwise there is a duplicated classes in Firebase Firestore
 koin-compose = "4.1.1"
 coroutines-android = "1.10.2"
@@ -84,6 +85,9 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle" }
 gradle-api = { module = "com.android.tools.build:gradle-api", version.ref = "android-gradle" }
 data-store = { module = "androidx.datastore:datastore-preferences", version.ref = "data-store" }
+data-store-core = { module = "androidx.datastore:datastore", version.ref = "data-store" }
+security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines-android" }
 protobuf-kotlin = { module = "com.google.protobuf:protobuf-kotlin-lite", version.ref = "protobuf" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines-android" }
 workmanager = { module = "androidx.work:work-runtime-ktx", version.ref = "workmanager" }
