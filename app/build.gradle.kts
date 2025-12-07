@@ -54,6 +54,10 @@ android {
         }
     }
 
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+    }
+
     buildTypes {
         release {
             if (hasValidSigningProps) {
@@ -80,6 +84,8 @@ dependencies {
     implementation(libs.navigation)
     implementation(libs.androidx.core.ktx)
     implementation(libs.coroutines.android)
+
+    coreLibraryDesugaring(libs.desugaring)
     
     debugImplementation(libs.bundles.compose.debug)
 }
