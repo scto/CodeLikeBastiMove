@@ -16,7 +16,12 @@ CodeLikeBastiMove is an Android mobile application developed with Kotlin and Jet
 - **Console Screen:** Termux-style terminal with keyboard shortcuts bar
 - **IDE Workspace Screen:** Project editor with hamburger menu, file tree drawer, bottom sheet for build output
 - **Welcome State:** Empty editor displays "Android Code Studio" with bilingual instructions (English/German)
-- **File Tree Drawer:** Navigation drawer with project file structure (.acside, .git, .github, .gradle, .kotlin, app, attached_assets, build, build-logic, core, features, gradle)
+- **Tabbed Drawer Navigation:** Left swipeable drawer now contains 5 tabs:
+  - **Files Tab:** Project file tree with expand/collapse
+  - **Build Tab:** Build Variants with module and variant selection
+  - **Module Tab:** Sub-Module Maker with name, language (Kotlin/Java), and type selection
+  - **Assets Tab:** Asset Studio with quick actions (Create Drawable, Icon, Import Image)
+  - **Terminal Tab:** Embedded terminal with "Full Terminal" button to open BottomSheet
 - **Editor Improvements:** Long-press context menu with Cut, Copy, Paste, Select All, Delete, Format Code, Find, Find & Replace, Undo, Redo
 - **Project View Improvements:** Three view modes (Android, Project, Packages) with file operations context menu
 

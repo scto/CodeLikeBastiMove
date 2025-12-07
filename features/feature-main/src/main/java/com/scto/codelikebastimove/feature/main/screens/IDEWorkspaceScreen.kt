@@ -79,10 +79,10 @@ fun IDEWorkspaceScreen(
                     onFileClick = { file ->
                         scope.launch { drawerState.close() }
                     },
-                    onNavigateToAssetStudio = { onNavigate(MainDestination.AssetStudio) },
-                    onNavigateToAIAgent = { onNavigate(MainDestination.AIAgent) },
-                    onNavigateToBuildVariants = { onNavigate(MainDestination.BuildVariants) },
-                    onNavigateToSubModuleMaker = { onNavigate(MainDestination.SubModuleMaker) }
+                    onOpenTerminalSheet = {
+                        onBottomSheetContentChanged(BottomSheetContentType.TERMINAL)
+                        scope.launch { drawerState.close() }
+                    }
                 )
             }
         },
