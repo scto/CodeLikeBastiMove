@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CodeLikeBastiMove</string>
+    
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    
+    <string name="nav_header_title">Code on the Go</string>
+    <string name="nav_header_subtitle">info@appdevforall.org</string>
+    <string name="nav_header_desc">Navigation header</string>
+    
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_editor">Editor</string>
+    
+    <string name="action_settings">Settings</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_close">Close</string>
+    <string name="action_ok">OK</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_create">Create</string>
+    <string name="action_add">Add</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_search">Search</string>
+    <string name="action_share">Share</string>
+    <string name="action_copy">Copy</string>
+    
+    <string name="label_loading">Loading...</string>
+    <string name="label_error">Error</string>
+    <string name="label_success">Success</string>
+    <string name="label_warning">Warning</string>
+    <string name="label_info">Info</string>
+    <string name="label_empty">No items</string>
+    <string name="label_retry">Retry</string>
+    
+    <string name="settings_theme_title">Design</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_system">Follow System</string>
+    <string name="settings_dynamic_colors">Dynamic Colors</string>
+    <string name="settings_dynamic_colors_desc">Use Material You colors from wallpaper</string>
+    
+    <string name="onboarding_welcome_title">Welcome</string>
+    <string name="onboarding_permissions_title">Permissions</string>
+    <string name="onboarding_installation_title">Installation Options</string>
+    <string name="onboarding_summary_title">Summary</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_previous">Previous</string>
+    <string name="onboarding_finish">Finish</string>
+    <string name="onboarding_skip">Skip</string>
+    
+    <string name="git_title">Git Commands</string>
+    <string name="git_clone">Clone</string>
+    <string name="git_commit">Commit</string>
+    <string name="git_push">Push</string>
+    <string name="git_pull">Pull</string>
+    <string name="git_branch">Branch</string>
+    <string name="git_merge">Merge</string>
+    <string name="git_status">Status</string>
+    
+    <string name="editor_title">Editor</string>
+    <string name="editor_new_file">New File</string>
+    <string name="editor_open_file">Open File</string>
+    <string name="editor_save_file">Save File</string>
+    <string name="editor_close_file">Close File</string>
+    <string name="editor_untitled">Untitled</string>
+    
+    <string name="project_create_new">Create New Project</string>
+    <string name="project_name">Project Name</string>
+    <string name="project_package">Package Name</string>
+    <string name="project_min_sdk">Minimum SDK</string>
+    <string name="project_language">Language</string>
+    <string name="project_gradle_language">Gradle Language</string>
+    
+    <string name="template_empty_activity">Empty Activity</string>
+    <string name="template_empty_compose">Empty Compose Activity</string>
+    <string name="template_bottom_navigation">Bottom Navigation</string>
+    <string name="template_navigation_drawer">Navigation Drawer</string>
+    <string name="template_tabbed">Tabbed Activity</string>
+    
+    <string name="content_description_menu">Menu</string>
+    <string name="content_description_back">Back</string>
+    <string name="content_description_close">Close</string>
+    <string name="content_description_more">More options</string>
+    <string name="content_description_expand">Expand</string>
+    <string name="content_description_collapse">Collapse</string>
+</resources>

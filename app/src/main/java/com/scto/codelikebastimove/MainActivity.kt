@@ -5,8 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -25,16 +23,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.scto.codelikebastimove.core.datastore.UserPreferences
 import com.scto.codelikebastimove.core.datastore.UserPreferencesRepository
+import com.scto.codelikebastimove.core.ui.theme.AppIcons
+import com.scto.codelikebastimove.core.ui.theme.CodeLikeBastiMoveTheme
+import com.scto.codelikebastimove.core.ui.theme.ThemeMode
 import com.scto.codelikebastimove.feature.onboarding.OnboardingScreen
 import com.scto.codelikebastimove.navigation.AppDrawer
 import com.scto.codelikebastimove.navigation.AppNavigation
 import com.scto.codelikebastimove.navigation.screens
-import com.scto.codelikebastimove.ui.theme.CodeLikeBastiMoveTheme
 import kotlinx.coroutines.launch
+import com.scto.codelikebastimove.core.datastore.ThemeMode as DataStoreThemeMode
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,8 +48,14 @@ class MainActivity : ComponentActivity() {
                 initial = UserPreferences()
             )
             
+            val themeMode = when (userPreferences.themeMode) {
+                DataStoreThemeMode.LIGHT -> ThemeMode.LIGHT
+                DataStoreThemeMode.DARK -> ThemeMode.DARK
+                DataStoreThemeMode.FOLLOW_SYSTEM -> ThemeMode.FOLLOW_SYSTEM
+            }
+            
             CodeLikeBastiMoveTheme(
-                themeMode = userPreferences.themeMode,
+                themeMode = themeMode,
                 dynamicColor = userPreferences.dynamicColorsEnabled
             ) {
                 Surface(
@@ -94,8 +102,8 @@ fun MainScreen() {
                             }
                         }) {
                             Icon(
-                                imageVector = Icons.Default.Menu,
-                                contentDescription = "Open navigation drawer"
+                                imageVector = AppIcons.Menu,
+                                contentDescription = stringResource(com.scto.codelikebastimove.core.resources.R.string.navigation_drawer_open)
                             )
                         }
                     },

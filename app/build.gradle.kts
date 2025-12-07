@@ -66,6 +66,8 @@ android {
 
 dependencies {
     implementation(project(":features"))
+    implementation(project(":core:core-ui"))
+    implementation(project(":core:core-resources"))
     implementation(project(":core:core-datastore"))
     implementation(project(":core:templates-api"))
     
