@@ -26,7 +26,7 @@ The project uses a `build-logic` included build with custom Gradle convention pl
 - `codelikebastimove.android.application.compose` - Adds Compose support to app module
 - `codelikebastimove.android.library` - For library modules (core/*)
 - `codelikebastimove.android.library.compose` - Adds Compose support to library modules
-- `codelikebastimove.android.feature` - For feature modules (features/*) - includes library, compose, and common dependencies
+- `codelikebastimove.android.feature` - For feature modules (features/*) - includes library, compose, core-ui, core-resources
 
 ### SDK Configuration
 All SDK versions are centralized in `gradle/libs.versions.toml`:
@@ -39,7 +39,7 @@ All SDK versions are centralized in `gradle/libs.versions.toml`:
 - Shared Kotlin and Java configuration
 - Centralized Compose setup with packaging configurations
 - Common dependencies for feature modules (Compose, Lifecycle, Coroutines, Activity-Compose)
-- Dependencies exposed as `api()` for proper transitive access
+- Automatic core-ui and core-resources integration for feature modules
 
 ## Project Structure
 ```
@@ -48,12 +48,9 @@ CodeLikeBastiMove/
 │   ├── src/main/
 │   │   ├── java/com/scto/codelikebastimove/
 │   │   │   ├── MainActivity.kt
-│   │   │   ├── navigation/
-│   │   │   │   ├── AppNavigation.kt
-│   │   │   │   └── DrawerHeader.kt
-│   │   │   └── ui/theme/
-│   │   │       ├── Theme.kt
-│   │   │       └── Type.kt
+│   │   │   └── navigation/
+│   │   │       ├── AppNavigation.kt
+│   │   │       └── DrawerHeader.kt
 │   │   ├── res/
 │   │   └── AndroidManifest.xml
 │   └── build.gradle.kts
@@ -71,6 +68,19 @@ CodeLikeBastiMove/
 │           ├── AndroidCompose.kt
 │           └── ProjectExtensions.kt
 ├── core/                                   # Core modules
+│   ├── core-ui/                            # Centralized Material3 theming
+│   │   └── src/main/java/.../core/ui/theme/
+│   │       ├── Theme.kt                    # Main theme composable
+│   │       ├── ThemeMode.kt                # ThemeMode enum (LIGHT, DARK, FOLLOW_SYSTEM)
+│   │       ├── Colors.kt                   # Light/Dark color schemes
+│   │       ├── Typography.kt               # App typography
+│   │       ├── Icons.kt                    # AppIcons object
+│   │       └── Gradients.kt                # Gradient brushes
+│   ├── core-resources/                     # Centralized resources
+│   │   └── src/main/res/values/
+│   │       ├── strings.xml                 # App strings
+│   │       ├── dimens.xml                  # Dimensions
+│   │       └── colors.xml                  # Color definitions
 │   ├── core-datastore/                     # DataStore repository module
 │   ├── core-datastore-proto/               # Proto DataStore schema module
 │   ├── templates-api/                      # Project templates API module
@@ -128,6 +138,8 @@ CodeLikeBastiMove/
 - **Compose Navigation**: AndroidX Navigation Compose for screen navigation
 - **Material Design 3**: Latest Material You design language
 - **Multi-module Architecture**: Separated features and core modules
+- **Centralized Theming**: core-ui module with Material3 theme, colors, typography, icons
+- **Centralized Resources**: core-resources module for shared strings, dimensions, colors
 - **Theme Management**: Light/Dark/Follow System theme switching with DataStore persistence
 - **Dynamic Colors**: Material You dynamic color support toggle
 - **5 Project Templates**: Create new Android projects with various architectures
@@ -178,6 +190,20 @@ app/build/outputs/apk/debug/app-debug.apk
 ```
 
 ## Recent Changes (December 7, 2025)
+- ✅ **core-ui Module** created with centralized Material3 theming:
+  - Theme.kt with CodeLikeBastiMoveTheme composable
+  - ThemeMode.kt enum (LIGHT, DARK, FOLLOW_SYSTEM)
+  - Colors.kt with Light/Dark color schemes
+  - Typography.kt with app typography
+  - Icons.kt with AppIcons object
+  - Gradients.kt with gradient brushes
+- ✅ **core-resources Module** created with centralized resources:
+  - strings.xml with app-wide strings
+  - dimens.xml with dimension values
+  - colors.xml with color definitions
+- ✅ **AndroidFeatureConventionPlugin** updated to include core-ui and core-resources
+- ✅ **MainActivity** updated to import theme from core-ui
+- ✅ Old theme files removed from app/src/main/java/.../ui/theme/
 - ✅ **Build-Logic Module** created with convention plugins:
   - AndroidApplicationConventionPlugin for app module
   - AndroidLibraryConventionPlugin for library modules
@@ -186,40 +212,19 @@ app/build/outputs/apk/debug/app-debug.apk
   - All modules migrated to use convention plugins
   - Fixed feature-onboarding activity-compose dependency via convention plugin
 
-## Recent Changes (December 4, 2025)
-- ✅ **Onboarding Module** implemented with 4 pages:
-  - Page 1 (Welcome): App logo, name, description, and welcome message
-  - Page 2 (Permissions): File access, usage analytics, battery optimization permission cards
-  - Page 3 (Installation Options): OpenJDK version (17/22), Build Tools version (35.0.1/34.0.2/33.0.1), optional tools (git, git-lfs, ssh)
-  - Page 4 (Summary): Configuration overview with installation start button
+## Previous Changes (December 4, 2025)
+- ✅ **Onboarding Module** implemented with 4 pages
 - ✅ Extended Proto DataStore schema with OnboardingConfigProto
-- ✅ UserPreferencesRepository extended with onboarding configuration methods
-- ✅ Onboarding shown on first app start, persisted via DataStore
 - ✅ Created feature-git module with all Git commands
-- ✅ Added GitCommand.kt with 50+ Git commands in 7 categories
-- ✅ Added GitScreen.kt with interactive expandable UI
 - ✅ Implemented BottomAppBar in EditorScreen with 6 navigation buttons
-- ✅ Added navigation between TreeView, Git, Settings, Asset Studio, Submodul Creator, Konsole panels
-- ✅ **Git Clone Dialog** in HomeScreen with multi-step wizard:
-  - Git Config setup (Name, Email) stored in Proto DataStore
-  - Secure credentials storage (Username, Token) with EncryptedSharedPreferences
-  - Clone options: Repository URL, Branch selection, Submodule toggle
-  - Automatic `safe.directory` config after cloning
-- ✅ Extended Proto DataStore schema with GitConfigProto and ClonedRepositoryProto
-- ✅ Created GitCredentialsStore with AndroidX Security Crypto for secure credential storage
-- ✅ Improved EditorBottomBar: smaller icons (18dp), smaller fonts (9sp), scrollable, reduced height (56dp)
-- ✅ Reduced TreeView width from 280dp to 220dp
-
-## Previous Changes (December 3, 2025)
-- ✅ Implemented slideable TreeView with swipe gestures (AnimatedVisibility)
-- ✅ Added tab support for multiple open files in Editor
-- ✅ Added 3 new project templates (Bottom Navigation, Navigation Drawer, Tabbed Activity)
-- ✅ Fixed settings.gradle.kts syntax for Kotlin DSL templates
-- ✅ ProjectManagerImpl now provides all 5 templates
-- ✅ Successfully built modular Compose APK (~55MB)
+- ✅ **Git Clone Dialog** in HomeScreen with multi-step wizard
 
 ## Troubleshooting
 - If build fails, ensure ANDROID_HOME and JAVA_HOME are set correctly
 - Run `./gradlew clean` before building if you encounter caching issues
 - For module-related issues, verify settings.gradle.kts includes all modules
 - If imports fail, ensure the features aggregator module uses `api()` instead of `implementation()`
+
+## Design Decisions
+- **ThemeMode duplication**: ThemeMode enum exists in both core-ui and core-datastore to avoid circular dependencies. MainActivity maps between them.
+- **Convention plugin dependencies**: Feature modules get core-ui and core-resources via `implementation()` to prevent resource leakage while maintaining proper encapsulation.
