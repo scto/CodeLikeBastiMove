@@ -288,16 +288,20 @@ private fun CodeEditorArea(
                     DropdownMenuItem(
                         text = { Text("Cut") },
                         onClick = {
-                            val selectedText = textFieldValue.getSelectedText()
-                            if (selectedText.isNotEmpty()) {
-                                clipboardManager.setText(AnnotatedString(selectedText.toString()))
+                            val selection = textFieldValue.selection
+                            if (!selection.collapsed) {
+                                val selectedText = textFieldValue.text.substring(
+                                    selection.start,
+                                    selection.end
+                                )
+                                clipboardManager.setText(AnnotatedString(selectedText))
                                 val newText = textFieldValue.text.removeRange(
-                                    textFieldValue.selection.start,
-                                    textFieldValue.selection.end
+                                    selection.start,
+                                    selection.end
                                 )
                                 textFieldValue = TextFieldValue(
                                     text = newText,
-                                    selection = TextRange(textFieldValue.selection.start)
+                                    selection = TextRange(selection.start)
                                 )
                                 onContentChange(newText)
                             }
@@ -311,9 +315,13 @@ private fun CodeEditorArea(
                     DropdownMenuItem(
                         text = { Text("Copy") },
                         onClick = {
-                            val selectedText = textFieldValue.getSelectedText()
-                            if (selectedText.isNotEmpty()) {
-                                clipboardManager.setText(AnnotatedString(selectedText.toString()))
+                            val selection = textFieldValue.selection
+                            if (!selection.collapsed) {
+                                val selectedText = textFieldValue.text.substring(
+                                    selection.start,
+                                    selection.end
+                                )
+                                clipboardManager.setText(AnnotatedString(selectedText))
                             }
                             showContextMenu = false
                         },
