@@ -25,6 +25,23 @@ enum class BuildToolsVersion(val displayName: String) {
     BUILD_TOOLS_33_0_1("33.0.1")
 }
 
+enum class ProjectTemplateType(val displayName: String) {
+    EMPTY_ACTIVITY("Empty Activity"),
+    EMPTY_COMPOSE("Empty Compose Activity"),
+    BOTTOM_NAVIGATION("Bottom Navigation"),
+    NAVIGATION_DRAWER("Navigation Drawer"),
+    TABBED("Tabbed Activity")
+}
+
+data class StoredProject(
+    val name: String,
+    val path: String,
+    val packageName: String,
+    val templateType: ProjectTemplateType,
+    val createdAt: Long,
+    val lastOpenedAt: Long
+)
+
 data class OnboardingConfig(
     val onboardingCompleted: Boolean = false,
     val fileAccessPermissionGranted: Boolean = false,
@@ -44,5 +61,8 @@ data class UserPreferences(
     val dynamicColorsEnabled: Boolean = true,
     val gitConfig: GitConfig = GitConfig(),
     val clonedRepositories: List<ClonedRepository> = emptyList(),
-    val onboardingConfig: OnboardingConfig = OnboardingConfig()
+    val onboardingConfig: OnboardingConfig = OnboardingConfig(),
+    val rootDirectory: String = "",
+    val projects: List<StoredProject> = emptyList(),
+    val currentProjectPath: String = ""
 )

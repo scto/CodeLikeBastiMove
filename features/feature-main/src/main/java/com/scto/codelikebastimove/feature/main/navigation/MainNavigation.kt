@@ -15,7 +15,9 @@ sealed class MainDestination(
     val title: String
 ) {
     data object Home : MainDestination("home", "Home")
-    data object OpenProject : MainDestination("open_project", "Open Project")
+    data object CreateProject : MainDestination("create_project", "Projekt erstellen")
+    data object OpenProject : MainDestination("open_project", "Projekt öffnen")
+    data object CloneRepository : MainDestination("clone_repository", "Repository klonen")
     data object IDE : MainDestination("ide", "IDE")
     data object Settings : MainDestination("settings", "IDE-Einstellungen")
     data object AssetStudio : MainDestination("asset_studio", "Asset Studio")
@@ -37,7 +39,7 @@ val homeActions = listOf(
     HomeAction(
         title = "Projekt erstellen",
         icon = Icons.Default.Add,
-        onClick = { }
+        destination = MainDestination.CreateProject
     ),
     HomeAction(
         title = "Vorhandenes Projekt öffnen",
@@ -47,7 +49,7 @@ val homeActions = listOf(
     HomeAction(
         title = "Repository klonen",
         icon = Icons.Outlined.CloudDownload,
-        onClick = { }
+        destination = MainDestination.CloneRepository
     ),
     HomeAction(
         title = "Konsole",

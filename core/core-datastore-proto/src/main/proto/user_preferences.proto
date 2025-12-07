@@ -23,6 +23,15 @@ enum BuildToolsVersion {
     BUILD_TOOLS_33_0_1 = 3;
 }
 
+enum ProjectTemplateType {
+    PROJECT_TEMPLATE_UNSPECIFIED = 0;
+    PROJECT_TEMPLATE_EMPTY_ACTIVITY = 1;
+    PROJECT_TEMPLATE_EMPTY_COMPOSE = 2;
+    PROJECT_TEMPLATE_BOTTOM_NAVIGATION = 3;
+    PROJECT_TEMPLATE_NAVIGATION_DRAWER = 4;
+    PROJECT_TEMPLATE_TABBED = 5;
+}
+
 message GitConfigProto {
     string user_name = 1;
     string user_email = 2;
@@ -33,6 +42,15 @@ message ClonedRepositoryProto {
     string url = 2;
     string branch = 3;
     int64 cloned_at = 4;
+}
+
+message ProjectProto {
+    string name = 1;
+    string path = 2;
+    string package_name = 3;
+    ProjectTemplateType template_type = 4;
+    int64 created_at = 5;
+    int64 last_opened_at = 6;
 }
 
 message OnboardingConfigProto {
@@ -55,4 +73,7 @@ message UserPreferencesProto {
     GitConfigProto git_config = 3;
     repeated ClonedRepositoryProto cloned_repositories = 4;
     OnboardingConfigProto onboarding_config = 5;
+    string root_directory = 6;
+    repeated ProjectProto projects = 7;
+    string current_project_path = 8;
 }

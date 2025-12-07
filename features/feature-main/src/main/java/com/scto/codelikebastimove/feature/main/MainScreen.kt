@@ -1,5 +1,6 @@
 package com.scto.codelikebastimove.feature.main
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -15,7 +16,9 @@ import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 import com.scto.codelikebastimove.feature.main.screens.AIAgentScreen
 import com.scto.codelikebastimove.feature.main.screens.AssetStudioScreen
 import com.scto.codelikebastimove.feature.main.screens.BuildVariantsScreen
+import com.scto.codelikebastimove.feature.main.screens.CloneRepositoryScreen
 import com.scto.codelikebastimove.feature.main.screens.ConsoleScreen
+import com.scto.codelikebastimove.feature.main.screens.CreateProjectScreen
 import com.scto.codelikebastimove.feature.main.screens.HomeScreen
 import com.scto.codelikebastimove.feature.main.screens.IDESettingsScreen
 import com.scto.codelikebastimove.feature.main.screens.IDEWorkspaceScreen
@@ -25,9 +28,16 @@ import com.scto.codelikebastimove.feature.main.screens.SubModuleMakerScreen
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel = viewModel()
+    viewModel: MainViewModel = viewModel(),
+    onExitApp: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    
+    BackHandler(enabled = uiState.currentDestination != MainDestination.Home) {
+        if (!viewModel.onBackPressed()) {
+            onExitApp()
+        }
+    }
     
     AnimatedContent(
         targetState = uiState.currentDestination,
@@ -47,21 +57,49 @@ fun MainScreen(
             MainDestination.Home -> {
                 HomeScreen(
                     onNavigate = { viewModel.onNavigate(it) },
-                    onCreateProject = { },
+                    onCreateProject = { 
+                        viewModel.onNavigate(MainDestination.CreateProject)
+                    },
                     onOpenProject = { 
                         viewModel.onNavigate(MainDestination.OpenProject)
                     },
-                    onCloneRepository = { }
+                    onCloneRepository = { 
+                        viewModel.onNavigate(MainDestination.CloneRepository)
+                    }
+                )
+            }
+            
+            MainDestination.CreateProject -> {
+                CreateProjectScreen(
+                    onBackClick = { viewModel.onBackPressed() },
+                    onCreateProject = { name, packageName, templateType, minSdk, useKotlin, useKotlinDsl ->
+                        viewModel.createProject(name, packageName, templateType, minSdk, useKotlin, useKotlinDsl)
+                    }
                 )
             }
             
             MainDestination.OpenProject -> {
                 OpenProjectScreen(
-                    onBackClick = { viewModel.onNavigate(MainDestination.Home) },
+                    projects = uiState.projects,
+                    onBackClick = { viewModel.onBackPressed() },
                     onProjectSelected = { project ->
-                        viewModel.onOpenProject(project.name)
+                        viewModel.onOpenProject(project.path, project.name)
+                    },
+                    onProjectDelete = { project ->
+                        viewModel.deleteProject(project.path)
                     },
                     onBrowseFolder = { }
+                )
+            }
+            
+            MainDestination.CloneRepository -> {
+                CloneRepositoryScreen(
+                    onBackClick = { viewModel.onBackPressed() },
+                    onClone = { url, branch, shallowClone, singleBranch ->
+                        viewModel.cloneRepository(url, branch, shallowClone, singleBranch)
+                    },
+                    isLoading = uiState.isLoading,
+                    cloneProgress = uiState.cloneProgress
                 )
             }
             
@@ -81,26 +119,14 @@ fun MainScreen(
             
             MainDestination.Settings -> {
                 IDESettingsScreen(
-                    onBackClick = { 
-                        if (uiState.isProjectOpen) {
-                            viewModel.onNavigate(MainDestination.IDE)
-                        } else {
-                            viewModel.onNavigate(MainDestination.Home)
-                        }
-                    },
+                    onBackClick = { viewModel.onBackPressed() },
                     onNavigateToAIAgent = { viewModel.onNavigate(MainDestination.AIAgent) }
                 )
             }
             
             MainDestination.AssetStudio -> {
                 AssetStudioScreen(
-                    onBackClick = { 
-                        if (uiState.isProjectOpen) {
-                            viewModel.onNavigate(MainDestination.IDE)
-                        } else {
-                            viewModel.onNavigate(MainDestination.Home)
-                        }
-                    },
+                    onBackClick = { viewModel.onBackPressed() },
                     onLaunchStudio = { },
                     onCreateDrawable = { },
                     onCreateIcon = { },
@@ -110,25 +136,19 @@ fun MainScreen(
             
             MainDestination.AIAgent -> {
                 AIAgentScreen(
-                    onBackClick = { 
-                        viewModel.onNavigate(MainDestination.Settings)
-                    }
+                    onBackClick = { viewModel.onBackPressed() }
                 )
             }
             
             MainDestination.BuildVariants -> {
                 BuildVariantsScreen(
-                    onBackClick = { 
-                        viewModel.onNavigate(MainDestination.IDE)
-                    }
+                    onBackClick = { viewModel.onBackPressed() }
                 )
             }
             
             MainDestination.SubModuleMaker -> {
                 SubModuleMakerScreen(
-                    onBackClick = { 
-                        viewModel.onNavigate(MainDestination.IDE)
-                    },
+                    onBackClick = { viewModel.onBackPressed() },
                     onCreateModule = { name, language ->
                         viewModel.onNavigate(MainDestination.IDE)
                     }
@@ -137,16 +157,16 @@ fun MainScreen(
             
             MainDestination.Console -> {
                 ConsoleScreen(
-                    onBackClick = { viewModel.onNavigate(MainDestination.Home) }
+                    onBackClick = { viewModel.onBackPressed() }
                 )
             }
             
             MainDestination.Documentation -> {
                 HomeScreen(
                     onNavigate = { viewModel.onNavigate(it) },
-                    onCreateProject = { },
-                    onOpenProject = { viewModel.onOpenProject("New Project") },
-                    onCloneRepository = { }
+                    onCreateProject = { viewModel.onNavigate(MainDestination.CreateProject) },
+                    onOpenProject = { viewModel.onNavigate(MainDestination.OpenProject) },
+                    onCloneRepository = { viewModel.onNavigate(MainDestination.CloneRepository) }
                 )
             }
         }

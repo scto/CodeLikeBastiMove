@@ -1,5 +1,6 @@
 package com.scto.codelikebastimove.feature.main
 
+import com.scto.codelikebastimove.core.datastore.StoredProject
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 
 data class MainUiState(
@@ -8,10 +9,15 @@ data class MainUiState(
     val isNavigationSheetOpen: Boolean = false,
     val isBottomSheetExpanded: Boolean = false,
     val projectName: String = "Untitled Project",
+    val projectPath: String = "",
     val hasUnsavedChanges: Boolean = false,
     val isLoading: Boolean = false,
     val bottomSheetContent: BottomSheetContentType = BottomSheetContentType.TERMINAL,
-    val isProjectOpen: Boolean = false
+    val isProjectOpen: Boolean = false,
+    val rootDirectory: String = "",
+    val projects: List<StoredProject> = emptyList(),
+    val errorMessage: String? = null,
+    val cloneProgress: String = ""
 )
 
 enum class BottomSheetContentType(val title: String) {

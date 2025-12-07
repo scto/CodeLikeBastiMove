@@ -4,6 +4,12 @@
 CodeLikeBastiMove is an Android mobile application developed with Kotlin and Jetpack Compose, showcasing modern Android development best practices through a highly modular architecture. The app provides a Material Design 3 experience with a comprehensive set of features including advanced navigation, theme management, a robust project template system for creating new Android projects, and an integrated development environment (IDE)-like interface inspired by AndroidIDE. Its purpose is to demonstrate a well-structured, maintainable, and scalable Android application.
 
 ## Recent Changes (2025-12-07)
+- **Navigation Stack & Back Handling:** MainViewModel now maintains a navigation stack for proper Android back button behavior. Back swipe navigates within the app, only closing when on Home screen.
+- **CLBM Root Directory:** App creates a CLBM folder in external storage (or app files fallback) on first start, stored in DataStore preferences.
+- **CreateProjectScreen:** Full project creation wizard with template selection (5 templates), project name, package name, minimum SDK dropdown, Kotlin/Java toggle, and Kotlin DSL toggle.
+- **CloneRepositoryScreen:** Git repository cloning UI with URL, branch, shallow clone, and single branch options.
+- **Real Project List:** OpenProjectScreen now displays projects from DataStore with search, "Recent" badges, delete button, and last-opened timestamp.
+- **Project CRUD in ViewModel:** createProject(), onOpenProject(), deleteProject() methods with DataStore persistence.
 - **AndroidIDE-Style Redesign:** Completely redesigned the UI to match Android Code Studio/AndroidIDE's interface
 - **New Home Screen:** Landing page with logo, action buttons (Create Project, Open Project, Clone Repo, Console, Settings, IDE Config, Documentation)
 - **Open Project Screen:** ACS-style project picker with search bar, recent projects list with "Recent" badges, and folder browser button

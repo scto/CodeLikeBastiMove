@@ -7,10 +7,12 @@ import androidx.datastore.dataStore
 import com.scto.codelikebastimove.core.datastore.proto.ClonedRepositoryProto
 import com.scto.codelikebastimove.core.datastore.proto.GitConfigProto
 import com.scto.codelikebastimove.core.datastore.proto.OnboardingConfigProto
+import com.scto.codelikebastimove.core.datastore.proto.ProjectProto
 import com.scto.codelikebastimove.core.datastore.proto.UserPreferencesProto
 import com.scto.codelikebastimove.core.datastore.proto.ThemeMode as ProtoThemeMode
 import com.scto.codelikebastimove.core.datastore.proto.OpenJdkVersion as ProtoOpenJdkVersion
 import com.scto.codelikebastimove.core.datastore.proto.BuildToolsVersion as ProtoBuildToolsVersion
+import com.scto.codelikebastimove.core.datastore.proto.ProjectTemplateType as ProtoProjectTemplateType
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -29,7 +31,10 @@ class UserPreferencesRepository(private val context: Context) {
             dynamicColorsEnabled = proto.dynamicColorsEnabled,
             gitConfig = proto.gitConfig.toGitConfig(),
             clonedRepositories = proto.clonedRepositoriesList.map { it.toClonedRepository() },
-            onboardingConfig = proto.onboardingConfig.toOnboardingConfig()
+            onboardingConfig = proto.onboardingConfig.toOnboardingConfig(),
+            rootDirectory = proto.rootDirectory,
+            projects = proto.projectsList.map { it.toStoredProject() },
+            currentProjectPath = proto.currentProjectPath
         )
     }
 
@@ -318,5 +323,107 @@ class UserPreferencesRepository(private val context: Context) {
         BuildToolsVersion.BUILD_TOOLS_35_0_1 -> ProtoBuildToolsVersion.BUILD_TOOLS_35_0_1
         BuildToolsVersion.BUILD_TOOLS_34_0_2 -> ProtoBuildToolsVersion.BUILD_TOOLS_34_0_2
         BuildToolsVersion.BUILD_TOOLS_33_0_1 -> ProtoBuildToolsVersion.BUILD_TOOLS_33_0_1
+    }
+
+    private fun ProjectProto.toStoredProject(): StoredProject {
+        return StoredProject(
+            name = name,
+            path = path,
+            packageName = packageName,
+            templateType = templateType.toProjectTemplateType(),
+            createdAt = createdAt,
+            lastOpenedAt = lastOpenedAt
+        )
+    }
+
+    private fun ProtoProjectTemplateType.toProjectTemplateType(): ProjectTemplateType = when (this) {
+        ProtoProjectTemplateType.PROJECT_TEMPLATE_EMPTY_ACTIVITY -> ProjectTemplateType.EMPTY_ACTIVITY
+        ProtoProjectTemplateType.PROJECT_TEMPLATE_EMPTY_COMPOSE -> ProjectTemplateType.EMPTY_COMPOSE
+        ProtoProjectTemplateType.PROJECT_TEMPLATE_BOTTOM_NAVIGATION -> ProjectTemplateType.BOTTOM_NAVIGATION
+        ProtoProjectTemplateType.PROJECT_TEMPLATE_NAVIGATION_DRAWER -> ProjectTemplateType.NAVIGATION_DRAWER
+        ProtoProjectTemplateType.PROJECT_TEMPLATE_TABBED -> ProjectTemplateType.TABBED
+        ProtoProjectTemplateType.PROJECT_TEMPLATE_UNSPECIFIED, ProtoProjectTemplateType.UNRECOGNIZED -> ProjectTemplateType.EMPTY_ACTIVITY
+    }
+
+    private fun ProjectTemplateType.toProtoProjectTemplateType(): ProtoProjectTemplateType = when (this) {
+        ProjectTemplateType.EMPTY_ACTIVITY -> ProtoProjectTemplateType.PROJECT_TEMPLATE_EMPTY_ACTIVITY
+        ProjectTemplateType.EMPTY_COMPOSE -> ProtoProjectTemplateType.PROJECT_TEMPLATE_EMPTY_COMPOSE
+        ProjectTemplateType.BOTTOM_NAVIGATION -> ProtoProjectTemplateType.PROJECT_TEMPLATE_BOTTOM_NAVIGATION
+        ProjectTemplateType.NAVIGATION_DRAWER -> ProtoProjectTemplateType.PROJECT_TEMPLATE_NAVIGATION_DRAWER
+        ProjectTemplateType.TABBED -> ProtoProjectTemplateType.PROJECT_TEMPLATE_TABBED
+    }
+
+    val rootDirectory: Flow<String> = context.userPreferencesStore.data.map { proto ->
+        proto.rootDirectory
+    }
+
+    val projects: Flow<List<StoredProject>> = context.userPreferencesStore.data.map { proto ->
+        proto.projectsList.map { it.toStoredProject() }
+    }
+
+    suspend fun getRootDirectoryOnce(): String {
+        return rootDirectory.first()
+    }
+
+    suspend fun getProjectsOnce(): List<StoredProject> {
+        return projects.first()
+    }
+
+    suspend fun setRootDirectory(path: String) {
+        context.userPreferencesStore.updateData { currentPrefs ->
+            currentPrefs.toBuilder()
+                .setRootDirectory(path)
+                .build()
+        }
+    }
+
+    suspend fun addProject(project: StoredProject) {
+        context.userPreferencesStore.updateData { currentPrefs ->
+            val projectProto = ProjectProto.newBuilder()
+                .setName(project.name)
+                .setPath(project.path)
+                .setPackageName(project.packageName)
+                .setTemplateType(project.templateType.toProtoProjectTemplateType())
+                .setCreatedAt(project.createdAt)
+                .setLastOpenedAt(project.lastOpenedAt)
+                .build()
+            currentPrefs.toBuilder()
+                .addProjects(projectProto)
+                .build()
+        }
+    }
+
+    suspend fun updateProjectLastOpened(path: String, timestamp: Long) {
+        context.userPreferencesStore.updateData { currentPrefs ->
+            val updatedProjects = currentPrefs.projectsList.map { project ->
+                if (project.path == path) {
+                    project.toBuilder().setLastOpenedAt(timestamp).build()
+                } else {
+                    project
+                }
+            }
+            currentPrefs.toBuilder()
+                .clearProjects()
+                .addAllProjects(updatedProjects)
+                .build()
+        }
+    }
+
+    suspend fun removeProject(path: String) {
+        context.userPreferencesStore.updateData { currentPrefs ->
+            val updatedProjects = currentPrefs.projectsList.filter { it.path != path }
+            currentPrefs.toBuilder()
+                .clearProjects()
+                .addAllProjects(updatedProjects)
+                .build()
+        }
+    }
+
+    suspend fun setCurrentProjectPath(path: String) {
+        context.userPreferencesStore.updateData { currentPrefs ->
+            currentPrefs.toBuilder()
+                .setCurrentProjectPath(path)
+                .build()
+        }
     }
 }
