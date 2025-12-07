@@ -15,4 +15,5 @@ dependencies {
     api(project(":features:feature-editor"))
     api(project(":features:feature-git"))
     api(project(":features:feature-onboarding"))
+    api(project(":features:feature-main"))
 }

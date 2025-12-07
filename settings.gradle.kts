@@ -35,4 +35,5 @@ include(":features:feature-onboarding")
 include(":features:feature-settings")
 include(":features:feature-slideshow")
 include(":features:feature-treeview")
+include(":features:feature-main")
 
