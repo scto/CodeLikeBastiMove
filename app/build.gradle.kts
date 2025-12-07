@@ -73,9 +73,11 @@ dependencies {
     
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
+    
     implementation(libs.bundles.lifecycle)
     
-    implementation(libs.activity.compose)
+    //implementation(libs.activity.compose)
+    
     implementation(libs.navigation)
     implementation(libs.androidx.core.ktx)
     implementation(libs.coroutines.android)
