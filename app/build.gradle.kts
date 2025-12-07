@@ -44,9 +44,9 @@ android {
 
     defaultConfig {
         applicationId = "com.scto.codelikebastimove"
-        targetSdk = 35
-        versionCode = 11
-        versionName = "0.1.0-alpha-11"
+        targetSdk = libs.versions.sdk.target.get().toInt()
+        versionCode = libs.versions.app.version.code.get().toInt()
+        versionName = libs.versions.app.version.name.get()
         
         vectorDrawables { 
             useSupportLibrary = true
@@ -73,11 +73,9 @@ dependencies {
     
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
-    
     implementation(libs.bundles.lifecycle)
     
-    //implementation(libs.activity.compose)
-    
+    implementation(libs.activity.compose)
     implementation(libs.navigation)
     implementation(libs.androidx.core.ktx)
     implementation(libs.coroutines.android)

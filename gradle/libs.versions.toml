@@ -140,7 +140,7 @@ koin-test-junit = { module = "io.insert-koin:koin-test-junit4", version.ref = "k
 
 room = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-room-ktx = { module = "androidx.room:room-ktx", version = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 
 # Firebase
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
@@ -160,11 +160,11 @@ compose = [
     "compose-ui",
     "compose-ui-animation",
     "compose-ui-graphics",
-    "material-icons-extended"
-    "compose-material3",
-    "activity-compose",
     "compose-ui-preview",
-    "compose-ui-util"
+    "compose-ui-util",
+    "compose-material3",
+    "material-icons-extended",
+    "activity-compose"
 ]
 
 compose-debug = [
