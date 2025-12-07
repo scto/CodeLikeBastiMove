@@ -32,6 +32,8 @@ CodeLikeBastiMove is an Android mobile application developed with Kotlin and Jet
   - Font selection dropdowns (Display/Body)
   - Platform selector (Android, Windows, Web, Linux)
   - Seed color selector with custom color picker
+  - **Dynamic Color toggle** for Android 12+ wallpaper-based colors
+  - **Schema Style selector** with 9 options: Tonal Spot, Neutral, Vibrant, Expressive, Fidelity, Content, Monochromatic, Rainbow, Fruit Salad
   - Export as ZIP functionality (Android XML, Web CSS, JSON formats)
   - FileProvider configured for secure file sharing
 

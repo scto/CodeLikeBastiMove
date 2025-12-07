@@ -62,6 +62,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.Switch
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -122,6 +123,10 @@ fun ThemeBuilderContent(
     var bodyFont by remember { mutableStateOf("-- System Default --") }
     var themeName by remember { mutableStateOf("material-theme") }
     
+    var dynamicColorEnabled by remember { mutableStateOf(false) }
+    var selectedScheme by remember { mutableStateOf("Tonal Spot") }
+    val schemeOptions = listOf("Tonal Spot", "Neutral", "Vibrant", "Expressive", "Fidelity", "Content", "Monochromatic", "Rainbow", "Fruit Salad")
+    
     var showExportMenu by remember { mutableStateOf(false) }
     
     Column(modifier = modifier.fillMaxSize()) {
@@ -170,6 +175,22 @@ fun ThemeBuilderContent(
                             selectedPlatform = selectedPlatform,
                             platforms = platforms,
                             onPlatformSelected = { selectedPlatform = it }
+                        )
+                    }
+                    
+                    item {
+                        DynamicColorSection(
+                            dynamicColorEnabled = dynamicColorEnabled,
+                            onDynamicColorChange = { dynamicColorEnabled = it }
+                        )
+                    }
+                    
+                    item {
+                        SchemeSelector(
+                            selectedScheme = selectedScheme,
+                            schemeOptions = schemeOptions,
+                            onSchemeSelected = { selectedScheme = it },
+                            enabled = !dynamicColorEnabled
                         )
                     }
                     
@@ -524,6 +545,162 @@ private fun ThemeHeader(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun DynamicColorSection(
+    dynamicColorEnabled: Boolean,
+    onDynamicColorChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "Dynamic Color",
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Medium
+                )
+                Text(
+                    text = "Use colors from your wallpaper (Android 12+)",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            
+            Switch(
+                checked = dynamicColorEnabled,
+                onCheckedChange = onDynamicColorChange
+            )
+        }
+    }
+}
+
+@Composable
+private fun SchemeSelector(
+    selectedScheme: String,
+    schemeOptions: List<String>,
+    onSchemeSelected: (String) -> Unit,
+    enabled: Boolean,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Color Scheme Style",
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Medium,
+                    color = if (enabled) MaterialTheme.colorScheme.onSurface 
+                           else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                )
+                
+                if (!enabled) {
+                    Text(
+                        text = "(Disabled with Dynamic Color)",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                schemeOptions.forEach { scheme ->
+                    val isSelected = selectedScheme == scheme
+                    FilterChip(
+                        selected = isSelected,
+                        onClick = { if (enabled) onSchemeSelected(scheme) },
+                        enabled = enabled,
+                        label = { 
+                            Text(
+                                text = scheme,
+                                fontSize = 11.sp,
+                                maxLines = 1
+                            ) 
+                        },
+                        leadingIcon = if (isSelected) {
+                            { Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(14.dp)) }
+                        } else null,
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = getSchemeColor(scheme),
+                            selectedLabelColor = Color.White
+                        ),
+                        modifier = Modifier.height(32.dp)
+                    )
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            Text(
+                text = getSchemeDescription(selectedScheme),
+                style = MaterialTheme.typography.bodySmall,
+                color = if (enabled) MaterialTheme.colorScheme.onSurfaceVariant 
+                       else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+            )
+        }
+    }
+}
+
+private fun getSchemeColor(scheme: String): Color {
+    return when (scheme) {
+        "Tonal Spot" -> Color(0xFF6750A4)
+        "Neutral" -> Color(0xFF79747E)
+        "Vibrant" -> Color(0xFFE91E63)
+        "Expressive" -> Color(0xFFFF5722)
+        "Fidelity" -> Color(0xFF4CAF50)
+        "Content" -> Color(0xFF2196F3)
+        "Monochromatic" -> Color(0xFF424242)
+        "Rainbow" -> Color(0xFF9C27B0)
+        "Fruit Salad" -> Color(0xFFFF9800)
+        else -> Color(0xFF6750A4)
+    }
+}
+
+private fun getSchemeDescription(scheme: String): String {
+    return when (scheme) {
+        "Tonal Spot" -> "Default Material You scheme with balanced tonal colors"
+        "Neutral" -> "Muted colors with minimal saturation for subtle themes"
+        "Vibrant" -> "High saturation colors for bold, energetic themes"
+        "Expressive" -> "Playful colors with varied hues for creative themes"
+        "Fidelity" -> "Colors stay close to the source for brand accuracy"
+        "Content" -> "Optimized for content-heavy apps with readable contrast"
+        "Monochromatic" -> "Single hue with varying lightness for minimal themes"
+        "Rainbow" -> "Full spectrum of colors for colorful, diverse themes"
+        "Fruit Salad" -> "Warm, fruity colors for playful, organic themes"
+        else -> "Select a color scheme style"
     }
 }
 
