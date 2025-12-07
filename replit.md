@@ -24,7 +24,16 @@ CodeLikeBastiMove is an Android mobile application developed with Kotlin and Jet
   - **Terminal Tab:** Embedded terminal with "Full Terminal" button to open BottomSheet
 - **Editor Improvements:** Long-press context menu with Cut, Copy, Paste, Select All, Delete, Format Code, Find, Find & Replace, Undo, Redo
 - **Project View Improvements:** Three view modes (Android, Project, Packages) with file operations context menu
-- **Theme Builder:** Full Material Theme Builder with Preview/Edit tabs, color scheme grids (Light/Dark), tonal palettes (Primary, Secondary, Tertiary, Neutral), font selection (Display/Body), platform selector (Android, Windows, Web, Linux), and export functionality
+- **Theme Builder:** Full Material Theme Builder with:
+  - Preview/Edit tabs with page navigation (1 of 2, 2 of 2)
+  - Interactive color picker dialog with HSL sliders and hex input
+  - Clickable color scheme grids (Light/Dark) for editing colors
+  - Tonal palettes (Primary, Secondary, Tertiary, Neutral, Neutral Variant)
+  - Font selection dropdowns (Display/Body)
+  - Platform selector (Android, Windows, Web, Linux)
+  - Seed color selector with custom color picker
+  - Export as ZIP functionality (Android XML, Web CSS, JSON formats)
+  - FileProvider configured for secure file sharing
 
 ## User Preferences
 I prefer iterative development and clear, concise explanations. Ask before making major architectural changes or significant modifications to existing features. I value well-documented code and a logical, modular structure.
