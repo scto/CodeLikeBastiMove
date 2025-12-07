@@ -4,8 +4,9 @@
 CodeLikeBastiMove is an Android mobile application developed with Kotlin and Jetpack Compose, showcasing modern Android development best practices through a highly modular architecture. The app provides a Material Design 3 experience with a comprehensive set of features including advanced navigation, theme management, a robust project template system for creating new Android projects, and an integrated development environment (IDE)-like interface inspired by AndroidIDE. Its purpose is to demonstrate a well-structured, maintainable, and scalable Android application.
 
 ## Recent Changes (2025-12-07)
-- **AndroidIDE-Style Redesign:** Completely redesigned the UI to match AndroidIDE's interface
+- **AndroidIDE-Style Redesign:** Completely redesigned the UI to match Android Code Studio/AndroidIDE's interface
 - **New Home Screen:** Landing page with logo, action buttons (Create Project, Open Project, Clone Repo, Console, Settings, IDE Config, Documentation)
+- **Open Project Screen:** ACS-style project picker with search bar, recent projects list with "Recent" badges, and folder browser button
 - **Navigation System:** Implemented sealed class MainDestination for type-safe screen navigation with ViewModel state management
 - **IDE Settings Screen:** Categorized settings (Konfigurieren, Datenschutz, Entwickleroptionen, Über)
 - **AI Agent Screen:** Model selector dropdown (GPT-5, GPT-4, Claude-3, Gemini) with chat input
@@ -14,9 +15,10 @@ CodeLikeBastiMove is an Android mobile application developed with Kotlin and Jet
 - **Sub-Module Maker Screen:** Create sub-modules with Kotlin/Java language selection
 - **Console Screen:** Termux-style terminal with keyboard shortcuts bar
 - **IDE Workspace Screen:** Project editor with hamburger menu, file tree drawer, bottom sheet for build output
-- **File Tree Drawer:** Navigation drawer with project file structure and quick access to Asset Studio, AI Agent, Build Variants, Sub-Module Maker
+- **Welcome State:** Empty editor displays "Android Code Studio" with bilingual instructions (English/German)
+- **File Tree Drawer:** Navigation drawer with project file structure (.acside, .git, .github, .gradle, .kotlin, app, attached_assets, build, build-logic, core, features, gradle)
 - **Editor Improvements:** Long-press context menu with Cut, Copy, Paste, Select All, Delete, Format Code, Find, Find & Replace, Undo, Redo
-- **Project View Improvements:** Three view modes (Android, Project, Packages) with file operations context menu (New File, New Folder, Copy, Cut, Paste, Rename, Delete) and Kotlin/Java/XML templates
+- **Project View Improvements:** Three view modes (Android, Project, Packages) with file operations context menu
 
 ## User Preferences
 I prefer iterative development and clear, concise explanations. Ask before making major architectural changes or significant modifications to existing features. I value well-documented code and a logical, modular structure.

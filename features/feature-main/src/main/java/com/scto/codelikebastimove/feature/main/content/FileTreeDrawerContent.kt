@@ -264,19 +264,19 @@ private fun createDrawerFileTree(projectName: String): List<FileTreeItem> {
             isDirectory = true,
             level = 0,
             children = listOf(
+                FileTreeItem(".acside", ".acside", true, level = 1),
                 FileTreeItem(".git", ".git", true, level = 1),
                 FileTreeItem(".github", ".github", true, level = 1),
+                FileTreeItem(".gradle", ".gradle", true, level = 1),
+                FileTreeItem(".kotlin", ".kotlin", true, level = 1),
                 FileTreeItem("app", "app", true, level = 1),
+                FileTreeItem("attached_assets", "attached_assets", true, level = 1),
+                FileTreeItem("build", "build", true, level = 1),
                 FileTreeItem("build-logic", "build-logic", true, level = 1),
                 FileTreeItem("core", "core", true, level = 1),
                 FileTreeItem("features", "features", true, level = 1),
                 FileTreeItem("gradle", "gradle", true, level = 1),
-                FileTreeItem(".gitignore", ".gitignore", false, level = 1),
-                FileTreeItem(".replit", ".replit", false, level = 1),
-                FileTreeItem("build.gradle.kts", "build.gradle.kts", false, level = 1),
-                FileTreeItem("generated-icon.png", "generated-icon.png", false, level = 1),
-                FileTreeItem("gradle.properties", "gradle.properties", false, level = 1),
-                FileTreeItem("gradlew", "gradlew", false, level = 1)
+                FileTreeItem(".gitignore", ".gitignore", false, level = 1)
             )
         )
     )

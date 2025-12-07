@@ -19,6 +19,7 @@ import com.scto.codelikebastimove.feature.main.screens.ConsoleScreen
 import com.scto.codelikebastimove.feature.main.screens.HomeScreen
 import com.scto.codelikebastimove.feature.main.screens.IDESettingsScreen
 import com.scto.codelikebastimove.feature.main.screens.IDEWorkspaceScreen
+import com.scto.codelikebastimove.feature.main.screens.OpenProjectScreen
 import com.scto.codelikebastimove.feature.main.screens.SubModuleMakerScreen
 
 @Composable
@@ -48,9 +49,19 @@ fun MainScreen(
                     onNavigate = { viewModel.onNavigate(it) },
                     onCreateProject = { },
                     onOpenProject = { 
-                        viewModel.onOpenProject("Android Code St...")
+                        viewModel.onNavigate(MainDestination.OpenProject)
                     },
                     onCloneRepository = { }
+                )
+            }
+            
+            MainDestination.OpenProject -> {
+                OpenProjectScreen(
+                    onBackClick = { viewModel.onNavigate(MainDestination.Home) },
+                    onProjectSelected = { project ->
+                        viewModel.onOpenProject(project.name)
+                    },
+                    onBrowseFolder = { }
                 )
             }
             
