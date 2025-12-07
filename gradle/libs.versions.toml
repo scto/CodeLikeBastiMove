@@ -8,7 +8,7 @@ sdk-compile = "36"
 
 # Plugins
 android-gradle = "8.11.1"
-kotlin = "2.2.20"
+kotlin = "2.2.21"
 ksp = "2.2.20-2.0.3"
 kotlin-coroutines = "1.10.2"
 kotlin-serialization = "1.4.1"
