@@ -1,4 +1,3 @@
-import com.android.build.gradle.AppExtension
 import java.util.Properties
 import java.io.FileInputStream
 
@@ -45,9 +44,9 @@ android {
 
     defaultConfig {
         applicationId = "com.scto.codelikebastimove"
-        targetSdk = libs.versions.sdk.target.get().toInt()
-        versionCode = libs.versions.app.version.code.get().toInt()
-        versionName = libs.versions.app.version.name.get()
+        targetSdk = 35
+        versionCode = 11
+        versionName = "0.1.0-alpha-11"
         
         vectorDrawables { 
             useSupportLibrary = true
