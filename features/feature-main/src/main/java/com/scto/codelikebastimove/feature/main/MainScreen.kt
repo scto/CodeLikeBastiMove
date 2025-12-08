@@ -173,7 +173,7 @@ fun MainScreen(
             
             MainDestination.LayoutDesigner -> {
                 DesignerScreen(
-                    projectName = uiState.openProject?.name ?: "New Layout",
+                    projectName = uiState.projectName,
                     onBackClick = { viewModel.onBackPressed() }
                 )
             }

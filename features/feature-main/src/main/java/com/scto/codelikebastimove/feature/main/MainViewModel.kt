@@ -7,7 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.scto.codelikebastimove.core.datastore.ProjectTemplateType
 import com.scto.codelikebastimove.core.datastore.StoredProject
 import com.scto.codelikebastimove.core.datastore.UserPreferencesRepository
+import com.scto.codelikebastimove.core.templates.api.GradleLanguage
 import com.scto.codelikebastimove.core.templates.api.ProjectConfig
+import com.scto.codelikebastimove.core.templates.api.ProjectLanguage
 import com.scto.codelikebastimove.core.templates.api.ProjectManager
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -165,9 +167,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val config = ProjectConfig(
                 projectName = name,
                 packageName = packageName,
-                minimumSdk = minSdk,
-                useKotlin = useKotlin,
-                useKotlinDsl = useKotlinDsl
+                minSdk = minSdk,
+                language = if (useKotlin) ProjectLanguage.KOTLIN else ProjectLanguage.JAVA,
+                gradleLanguage = if (useKotlinDsl) GradleLanguage.KOTLIN_DSL else GradleLanguage.GROOVY
             )
             
             val result = projectManager?.createProject(template, config, rootDir)
