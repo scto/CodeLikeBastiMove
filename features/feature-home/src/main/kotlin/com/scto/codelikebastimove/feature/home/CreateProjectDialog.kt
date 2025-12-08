@@ -54,6 +54,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun CreateProjectDialog(
     context: Context,
+    rootDirectory: String,
     onDismiss: () -> Unit,
     onProjectCreated: (Project) -> Unit
 ) {
@@ -303,7 +304,7 @@ fun CreateProjectDialog(
                             gradleLanguage = selectedGradleLanguage
                         )
                         
-                        val outputPath = context.filesDir.absolutePath + "/projects"
+                        val outputPath = if (rootDirectory.isNotBlank()) rootDirectory else context.filesDir.absolutePath + "/projects"
                         
                         val result = projectManager.createProject(
                             template = selectedTemplate!!,

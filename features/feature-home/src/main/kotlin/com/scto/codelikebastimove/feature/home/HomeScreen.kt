@@ -34,6 +34,7 @@ import com.scto.codelikebastimove.core.templates.api.Project
 
 @Composable
 fun HomeScreen(
+    rootDirectory: String = "",
     onNavigateToSettings: () -> Unit = {},
     onNavigateToEditor: (Project) -> Unit = {}
 ) {
@@ -98,6 +99,7 @@ fun HomeScreen(
     if (showCreateProjectDialog) {
         CreateProjectDialog(
             context = context,
+            rootDirectory = rootDirectory,
             onDismiss = { showCreateProjectDialog = false },
             onProjectCreated = { project ->
                 showCreateProjectDialog = false

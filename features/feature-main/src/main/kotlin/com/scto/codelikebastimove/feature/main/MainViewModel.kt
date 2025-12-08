@@ -188,6 +188,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     lastOpenedAt = System.currentTimeMillis()
                 )
                 repository.addProject(storedProject)
+                refreshDirectoryContents()
                 
                 _uiState.update { 
                     it.copy(
@@ -209,6 +210,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             repository.removeProject(projectPath)
             try {
                 File(projectPath).deleteRecursively()
+                refreshDirectoryContents()
             } catch (e: Exception) {
             }
         }
