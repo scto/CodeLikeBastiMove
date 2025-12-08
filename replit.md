@@ -19,6 +19,13 @@ CodeLikeBastiMove is an Android mobile application developed with Kotlin and Jet
   - **ExplorerViewModel:** File system state management with navigation history, selection, sorting
   - **FileItem:** Data model for files with project detection, size display, and metadata
   - **Features:** Navigate up/back/forward, sort by name/date/size, filter by type/projects, show/hide hidden files, project badges
+- **feature-slidingpanel Module:** IDE-style sliding panel container
+  - **SlidingPanelScreen:** Main container with NavigationRail and animated content switching
+  - **SlidingPanelNavigationType:** Enum defining panel items (FileTree, Build, Assets, Theme) and external items (Layout, Terminal, Settings)
+  - **FileTreeContainer:** Three-section file view with Module/Project/Files tabs, opened files list with modification markers, git changed files
+  - **BuildVariantsContainer:** Module list with Debug/Release selector and apply button
+  - **AssetStudioContainer:** Quick actions for drawables, icons, imports, and Vector Asset Studio
+  - **ThemeBuilderContainer:** Seed color selection, dynamic colors toggle, color preview, export options
 - **Vector Asset Studio System:** Comprehensive icon management and AVD creation tool
   - **Icon Repository System:** Interface-based providers for Material Icons, Feather Icons with extensible architecture
   - **Icon Browser:** Grid/List view toggle, search, category filtering, multi-select support
@@ -116,7 +123,7 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 - **Onboarding:** A multi-page onboarding flow to guide users through initial setup with permissions (File Access, Usage Stats, Battery Optimization).
 
 **System Design Choices:**
-- **Modular Architecture:** Core modules (`core-ui`, `core-resources`, `core-datastore`, `templates-api`, `templates-impl`) and feature modules (`feature-home`, `feature-settings`, `feature-editor`, `feature-git`, `feature-onboarding`, `feature-main`, `feature-treeview`, `feature-designer`, `feature-explorer`) are used for clear separation of concerns and improved maintainability.
+- **Modular Architecture:** Core modules (`core-ui`, `core-resources`, `core-datastore`, `templates-api`, `templates-impl`) and feature modules (`feature-home`, `feature-settings`, `feature-editor`, `feature-git`, `feature-onboarding`, `feature-main`, `feature-treeview`, `feature-designer`, `feature-explorer`, `feature-slidingpanel`) are used for clear separation of concerns and improved maintainability.
 - **Convention Plugins:** Custom Gradle convention plugins (`codelikebastimove.android.application`, `codelikebastimove.android.library`, `codelikebastimove.android.feature`, etc.) centralize build logic, SDK versions, and common dependencies, ensuring consistency across modules.
 - **Centralized Resources:** Dedicated `core-resources` module for shared strings, dimensions, and colors.
 - **Screen Organization:** New `screens` package in feature-main for destination screens (HomeScreen, IDESettingsScreen, AIAgentScreen, AssetStudioScreen, BuildVariantsScreen, SubModuleMakerScreen, ConsoleScreen, IDEWorkspaceScreen).
