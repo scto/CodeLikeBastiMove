@@ -3,6 +3,7 @@ package com.scto.codelikebastimove.feature.main.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Book
+import androidx.compose.material.icons.filled.DesignServices
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Terminal
@@ -26,6 +27,7 @@ sealed class MainDestination(
     data object SubModuleMaker : MainDestination("sub_module_maker", "Sub-Module Maker")
     data object Console : MainDestination("console", "Konsole")
     data object Documentation : MainDestination("documentation", "Dokumentation")
+    data object LayoutDesigner : MainDestination("layout_designer", "Layout Designer")
 }
 
 data class HomeAction(
@@ -70,5 +72,10 @@ val homeActions = listOf(
         title = "Dokumentation",
         icon = Icons.Default.Book,
         destination = MainDestination.Documentation
+    ),
+    HomeAction(
+        title = "Layout Designer",
+        icon = Icons.Default.DesignServices,
+        destination = MainDestination.LayoutDesigner
     )
 )

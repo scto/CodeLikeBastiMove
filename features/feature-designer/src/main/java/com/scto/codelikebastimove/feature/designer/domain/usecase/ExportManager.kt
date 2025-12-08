@@ -1,19 +1,84 @@
 package com.scto.codelikebastimove.feature.designer.domain.usecase
 
+import android.content.Context
+import android.net.Uri
+import androidx.documentfile.provider.DocumentFile
 import com.scto.codelikebastimove.feature.designer.data.model.BlockTree
 import com.scto.codelikebastimove.feature.designer.data.model.ComponentDefinition
 import com.scto.codelikebastimove.feature.designer.data.model.ExportConfig
 import com.scto.codelikebastimove.feature.designer.data.model.ExportResult
-import com.scto.codelikebastimove.feature.designer.data.model.SourceBinding
 import com.scto.codelikebastimove.feature.designer.data.model.ThemeDescriptor
-import com.scto.codelikebastimove.feature.designer.data.model.ThemeTarget
-import com.scto.codelikebastimove.feature.designer.data.model.ValidationResult
 import com.scto.codelikebastimove.feature.designer.domain.codegen.CodeEmitter
-import java.io.File
+import java.io.OutputStream
 
 class ExportManager(
     private val codeEmitter: CodeEmitter = CodeEmitter()
 ) {
+    
+    fun exportToUri(
+        context: Context,
+        uri: Uri,
+        content: String
+    ): Boolean {
+        return try {
+            context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+                outputStream.write(content.toByteArray())
+                outputStream.flush()
+            }
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+    
+    fun exportToDirectory(
+        context: Context,
+        directoryUri: Uri,
+        fileName: String,
+        content: String
+    ): ExportResult {
+        return try {
+            val directory = DocumentFile.fromTreeUri(context, directoryUri)
+            if (directory == null || !directory.canWrite()) {
+                return ExportResult(
+                    success = false,
+                    generatedCode = content,
+                    filePath = null,
+                    errors = listOf("Cannot write to selected directory")
+                )
+            }
+            
+            val existingFile = directory.findFile(fileName)
+            val file = existingFile ?: directory.createFile("text/x-kotlin", fileName)
+            
+            if (file == null) {
+                return ExportResult(
+                    success = false,
+                    generatedCode = content,
+                    filePath = null,
+                    errors = listOf("Failed to create file: $fileName")
+                )
+            }
+            
+            context.contentResolver.openOutputStream(file.uri)?.use { outputStream ->
+                outputStream.write(content.toByteArray())
+                outputStream.flush()
+            }
+            
+            ExportResult(
+                success = true,
+                generatedCode = content,
+                filePath = file.uri.toString()
+            )
+        } catch (e: Exception) {
+            ExportResult(
+                success = false,
+                generatedCode = content,
+                filePath = null,
+                errors = listOf("Export failed: ${e.message}")
+            )
+        }
+    }
     
     fun prepareExport(
         blockTree: BlockTree,

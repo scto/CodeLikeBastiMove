@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Code
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Error
@@ -67,7 +68,11 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.scto.codelikebastimove.feature.designer.data.model.BlockType
 import com.scto.codelikebastimove.feature.designer.data.model.ExportConfig
@@ -87,6 +92,20 @@ fun DesignerScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+    val localContext = LocalContext.current
+    
+    val directoryPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocumentTree()
+    ) { uri: Uri? ->
+        uri?.let { 
+            localContext.contentResolver.takePersistableUriPermission(
+                it,
+                android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            )
+            viewModel.setExportDirectoryUri(it)
+        }
+    }
     
     LaunchedEffect(Unit) {
         if (uiState.currentProject == null) {
@@ -208,15 +227,22 @@ fun DesignerScreen(
         }
     }
     
+    val context = LocalContext.current
+    
     if (uiState.showCodeDialog) {
         CodePreviewDialog(
             code = uiState.generatedCode,
             validation = uiState.validation,
-            onDismiss = { viewModel.hideCodeDialog() },
+            onDismiss = { 
+                viewModel.hideCodeDialog()
+                viewModel.resetCopyState()
+            },
             onExport = { 
                 viewModel.hideCodeDialog()
                 viewModel.showExportDialog()
-            }
+            },
+            onCopyToClipboard = { viewModel.copyCodeToClipboard(context) },
+            isCopied = uiState.codeCopiedToClipboard
         )
     }
     
@@ -228,10 +254,11 @@ fun DesignerScreen(
             exportSuccess = uiState.exportSuccess,
             exportMessage = uiState.exportMessage,
             selectedTheme = uiState.selectedTheme,
+            exportDirectoryUri = uiState.exportDirectoryUri,
             onConfigChanged = { viewModel.updateExportConfig(it) },
-            onExport = { viewModel.performExport() },
+            onExport = { viewModel.performExportWithUri(context) },
             onDismiss = { viewModel.hideExportDialog() },
-            onPickPath = onFilePicker
+            onPickDirectory = { directoryPickerLauncher.launch(null) }
         )
     }
     
@@ -250,21 +277,31 @@ private fun CodePreviewDialog(
     code: String,
     validation: com.scto.codelikebastimove.feature.designer.data.model.ValidationResult?,
     onDismiss: () -> Unit,
-    onExport: () -> Unit
+    onExport: () -> Unit,
+    onCopyToClipboard: () -> Unit = {},
+    isCopied: Boolean = false
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Icon(
                     imageVector = Icons.Default.Code,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary
                 )
-                Text("Generated Code")
+                Text("Generated Code", modifier = Modifier.weight(1f))
+                IconButton(onClick = onCopyToClipboard) {
+                    Icon(
+                        imageVector = if (isCopied) Icons.Default.Check else Icons.Default.ContentCopy,
+                        contentDescription = "Copy to Clipboard",
+                        tint = if (isCopied) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         },
         text = {
@@ -361,10 +398,11 @@ private fun ExportDialog(
     exportSuccess: Boolean?,
     exportMessage: String,
     selectedTheme: com.scto.codelikebastimove.feature.designer.data.model.ThemeDescriptor?,
+    exportDirectoryUri: Uri?,
     onConfigChanged: (ExportConfig) -> Unit,
     onExport: () -> Unit,
     onDismiss: () -> Unit,
-    onPickPath: ((String) -> Unit)?
+    onPickDirectory: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     
@@ -408,24 +446,54 @@ private fun ExportDialog(
                         fontWeight = FontWeight.Medium
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        OutlinedTextField(
-                            value = exportConfig.exportPath,
-                            onValueChange = { 
-                                onConfigChanged(exportConfig.copy(exportPath = it))
-                            },
-                            label = { Text("Path") },
-                            placeholder = { Text("e.g., app/src/main/java/com/example/ui") },
-                            modifier = Modifier.weight(1f),
-                            singleLine = true
-                        )
-                        IconButton(
-                            onClick = { onPickPath?.invoke("export") }
+                    
+                    if (exportDirectoryUri != null) {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+                            )
                         ) {
-                            Icon(Icons.Default.Folder, contentDescription = "Browse")
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(12.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Folder,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = "Directory selected",
+                                        style = MaterialTheme.typography.labelMedium,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                    Text(
+                                        text = exportDirectoryUri.lastPathSegment ?: exportDirectoryUri.toString(),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                TextButton(onClick = onPickDirectory) {
+                                    Text("Change")
+                                }
+                            }
+                        }
+                    } else {
+                        OutlinedButton(
+                            onClick = onPickDirectory,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Folder,
+                                contentDescription = null,
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            Text("Select Export Directory")
                         }
                     }
                 }
@@ -676,7 +744,9 @@ private fun ExportDialog(
                 Button(
                     onClick = onExport,
                     modifier = Modifier.weight(1f),
-                    enabled = !isExporting && (exportPreview?.validation?.isValid ?: true)
+                    enabled = !isExporting && 
+                              exportDirectoryUri != null && 
+                              (exportPreview?.validation?.isValid ?: true)
                 ) {
                     if (isExporting) {
                         CircularProgressIndicator(
@@ -690,7 +760,7 @@ private fun ExportDialog(
                             modifier = Modifier.padding(end = 8.dp)
                         )
                     }
-                    Text("Export")
+                    Text(if (exportDirectoryUri == null) "Select Directory First" else "Export")
                 }
             }
             

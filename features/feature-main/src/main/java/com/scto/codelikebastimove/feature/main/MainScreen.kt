@@ -24,6 +24,7 @@ import com.scto.codelikebastimove.feature.main.screens.IDESettingsScreen
 import com.scto.codelikebastimove.feature.main.screens.IDEWorkspaceScreen
 import com.scto.codelikebastimove.feature.main.screens.OpenProjectScreen
 import com.scto.codelikebastimove.feature.main.screens.SubModuleMakerScreen
+import com.scto.codelikebastimove.feature.designer.ui.screen.DesignerScreen
 
 @Composable
 fun MainScreen(
@@ -167,6 +168,13 @@ fun MainScreen(
                     onCreateProject = { viewModel.onNavigate(MainDestination.CreateProject) },
                     onOpenProject = { viewModel.onNavigate(MainDestination.OpenProject) },
                     onCloneRepository = { viewModel.onNavigate(MainDestination.CloneRepository) }
+                )
+            }
+            
+            MainDestination.LayoutDesigner -> {
+                DesignerScreen(
+                    projectName = uiState.openProject?.name ?: "New Layout",
+                    onBackClick = { viewModel.onBackPressed() }
                 )
             }
         }

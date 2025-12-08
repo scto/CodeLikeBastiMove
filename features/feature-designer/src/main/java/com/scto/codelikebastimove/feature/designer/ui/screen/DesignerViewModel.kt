@@ -22,6 +22,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.net.Uri
 import java.util.UUID
 
 data class DesignerUiState(
@@ -44,7 +48,9 @@ data class DesignerUiState(
     val exportConfig: ExportConfig = ExportConfig(exportPath = ""),
     val isExporting: Boolean = false,
     val exportSuccess: Boolean? = null,
-    val exportMessage: String = ""
+    val exportMessage: String = "",
+    val exportDirectoryUri: Uri? = null,
+    val codeCopiedToClipboard: Boolean = false
 )
 
 class DesignerViewModel : ViewModel() {
@@ -364,5 +370,116 @@ class DesignerViewModel : ViewModel() {
             description = description
         )
         repository.saveTheme(savedTheme)
+    }
+    
+    fun setExportDirectoryUri(uri: Uri) {
+        _uiState.update { 
+            it.copy(
+                exportDirectoryUri = uri,
+                exportConfig = it.exportConfig.copy(exportPath = uri.toString())
+            )
+        }
+        prepareExport()
+    }
+    
+    fun copyCodeToClipboard(context: Context) {
+        val code = _uiState.value.generatedCode
+        if (code.isEmpty()) {
+            generateCode()
+        }
+        
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Generated Compose Code", _uiState.value.generatedCode)
+        clipboard.setPrimaryClip(clip)
+        
+        _uiState.update { it.copy(codeCopiedToClipboard = true) }
+    }
+    
+    fun resetCopyState() {
+        _uiState.update { it.copy(codeCopiedToClipboard = false) }
+    }
+    
+    fun performExportWithUri(context: Context) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isExporting = true) }
+            
+            val state = _uiState.value
+            val directoryUri = state.exportDirectoryUri
+            
+            if (directoryUri == null) {
+                _uiState.update {
+                    it.copy(
+                        isExporting = false,
+                        exportSuccess = false,
+                        exportMessage = "Please select an export directory first"
+                    )
+                }
+                return@launch
+            }
+            
+            val blockTree = BlockTree(
+                name = state.currentProject?.name ?: "GeneratedLayout",
+                rootBlocks = state.blocks
+            )
+            
+            val generatedCode = codeEmitter.generateCode(
+                blockTree = blockTree,
+                config = state.exportConfig,
+                themeDescriptor = state.selectedTheme
+            )
+            
+            val validation = codeEmitter.validateCode(generatedCode.code)
+            if (!validation.isValid) {
+                _uiState.update {
+                    it.copy(
+                        isExporting = false,
+                        exportSuccess = false,
+                        exportMessage = "Validation failed: ${validation.errors.firstOrNull()?.message ?: "Unknown error"}"
+                    )
+                }
+                return@launch
+            }
+            
+            val packageDeclaration = extractPackageFromPath(state.exportConfig.exportPath)
+            val fullCode = buildString {
+                if (packageDeclaration.isNotEmpty()) {
+                    appendLine("package $packageDeclaration")
+                    appendLine()
+                }
+                generatedCode.imports.sorted().distinct().forEach { import ->
+                    appendLine("import $import")
+                }
+                appendLine()
+                append(generatedCode.code)
+            }
+            
+            val fileName = "${generatedCode.functionName}.kt"
+            val result = exportManager.exportToDirectory(context, directoryUri, fileName, fullCode)
+            
+            _uiState.update {
+                it.copy(
+                    isExporting = false,
+                    exportSuccess = result.success,
+                    exportMessage = if (result.success) {
+                        "Successfully exported to $fileName"
+                    } else {
+                        result.errors.firstOrNull() ?: "Export failed"
+                    },
+                    generatedCode = fullCode
+                )
+            }
+        }
+    }
+    
+    private fun extractPackageFromPath(path: String): String {
+        val srcMainJava = "src/main/java/"
+        val srcMainKotlin = "src/main/kotlin/"
+        val normalizedPath = path.replace("\\", "/")
+        
+        return when {
+            normalizedPath.contains(srcMainJava) -> normalizedPath.substringAfter(srcMainJava)
+            normalizedPath.contains(srcMainKotlin) -> normalizedPath.substringAfter(srcMainKotlin)
+            else -> ""
+        }.replace("/", ".").trimEnd('.')
     }
 }
