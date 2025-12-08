@@ -36,6 +36,7 @@ import com.scto.codelikebastimove.core.datastore.OnboardingConfig
 @Composable
 fun SummaryPage(
     onboardingConfig: OnboardingConfig,
+    canComplete: Boolean = true,
     onStartInstallation: () -> Unit,
     onBackClick: () -> Unit
 ) {
@@ -160,11 +161,30 @@ fun SummaryPage(
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            if (!canComplete) {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.errorContainer
+                    )
+                ) {
+                    Text(
+                        text = "Bitte erteilen Sie die Berechtigung für den Dateizugriff, um fortzufahren.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onErrorContainer,
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
             Button(
                 onClick = onStartInstallation,
                 modifier = Modifier.fillMaxWidth(),
+                enabled = canComplete,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant
                 )
             ) {
                 Icon(
@@ -172,7 +192,7 @@ fun SummaryPage(
                     contentDescription = null
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Installation starten")
+                Text(text = if (canComplete) "Installation starten" else "Berechtigung erforderlich")
             }
         }
 

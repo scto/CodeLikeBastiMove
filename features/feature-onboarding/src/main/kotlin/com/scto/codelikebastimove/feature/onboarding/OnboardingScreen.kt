@@ -45,10 +45,13 @@ fun OnboardingScreen(
             )
             3 -> SummaryPage(
                 onboardingConfig = onboardingConfig,
+                canComplete = onboardingConfig.fileAccessPermissionGranted,
                 onStartInstallation = {
-                    viewModel.startInstallation()
-                    viewModel.completeOnboarding()
-                    onOnboardingComplete()
+                    if (onboardingConfig.fileAccessPermissionGranted) {
+                        viewModel.startInstallation()
+                        viewModel.completeOnboarding()
+                        onOnboardingComplete()
+                    }
                 },
                 onBackClick = { viewModel.previousPage() }
             )
