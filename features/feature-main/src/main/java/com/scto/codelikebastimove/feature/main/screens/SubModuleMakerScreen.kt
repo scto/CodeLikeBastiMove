@@ -32,7 +32,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
 
 enum class ProgrammingLanguage(val displayName: String) {
     KOTLIN("Kotlin"),
@@ -61,8 +61,8 @@ fun SubModuleMakerScreen(
     
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Sub-Module Maker") },
+            AdaptiveTopAppBar(
+                title = "Sub-Module Maker",
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(

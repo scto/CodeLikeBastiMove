@@ -26,7 +26,6 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
 
 data class BuildVariant(
     val moduleName: String,
@@ -59,8 +59,8 @@ fun BuildVariantsScreen(
     
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Build Varianten") },
+            AdaptiveTopAppBar(
+                title = "Build Varianten",
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(

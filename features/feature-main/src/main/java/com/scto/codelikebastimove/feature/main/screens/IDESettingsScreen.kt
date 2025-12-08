@@ -32,7 +32,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -40,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
 
 data class SettingsCategory(
     val title: String,
@@ -126,8 +126,8 @@ fun IDESettingsScreen(
     
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("IDE-Einstellungen") },
+            AdaptiveTopAppBar(
+                title = "IDE-Einstellungen",
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(

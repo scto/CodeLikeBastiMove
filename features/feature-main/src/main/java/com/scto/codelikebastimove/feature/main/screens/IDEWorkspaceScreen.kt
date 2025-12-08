@@ -28,7 +28,6 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberDrawerState
@@ -51,6 +50,7 @@ import com.scto.codelikebastimove.feature.main.content.LayoutDesignerContent
 import com.scto.codelikebastimove.feature.main.content.ProjectContent
 import com.scto.codelikebastimove.feature.main.content.ThemeBuilderContent
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
+import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -159,14 +159,8 @@ private fun IDETopAppBar(
     onMoreClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    TopAppBar(
-        title = {
-            Text(
-                text = projectName,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        },
+    AdaptiveTopAppBar(
+        title = projectName,
         navigationIcon = {
             IconButton(onClick = onMenuClick) {
                 Icon(

@@ -32,7 +32,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
 
 data class AIModel(
     val id: String,
@@ -73,8 +73,8 @@ fun AIAgentScreen(
     
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("AI Agent") },
+            AdaptiveTopAppBar(
+                title = "AI Agent",
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(

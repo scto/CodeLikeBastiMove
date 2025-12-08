@@ -29,7 +29,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,6 +43,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,8 +72,8 @@ tiMove ${'$'}
     
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Konsole") },
+            AdaptiveTopAppBar(
+                title = "Konsole",
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
