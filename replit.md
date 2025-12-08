@@ -13,6 +13,7 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 - **Material Design 3:** Utilizes the latest Material You design language with dynamic colors for a modern, adaptive aesthetic.
 - **AndroidIDE-Inspired Interface:** Features a home screen with action cards, an IDE workspace with drawer navigation, bottom sheet panels, and a NavigationRail for content switching.
 - **Theming:** Centralized theme management (colors, typography, icons, gradients) supporting light/dark schemes and dynamic colors.
+- **Branding:** Custom "CLBM" launcher icon with cyan-to-purple gradient background matching the app's theme identity.
 - **Navigation:** Type-safe screen navigation using sealed classes and AnimatedContent transitions.
 - **IDE Workspace:** Includes a TopAppBar, NavigationRail for feature switching (Editor, Project, Git, Assets, Theme, Layout), and a BottomSheetBar for development panels (Terminal, Build Output, Logcat, Problems, TODO).
 
