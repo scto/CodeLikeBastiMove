@@ -3,6 +3,14 @@
 ## Overview
 CodeLikeBastiMove is an Android mobile application developed with Kotlin and Jetpack Compose, showcasing modern Android development best practices through a highly modular architecture. The app provides a Material Design 3 experience with a comprehensive set of features including advanced navigation, theme management, a robust project template system for creating new Android projects, and an integrated development environment (IDE)-like interface inspired by AndroidIDE. Its purpose is to demonstrate a well-structured, maintainable, and scalable Android application.
 
+## Recent Changes (2025-12-08)
+- **CLBM Branding Redesign:** Updated app branding from "Android Code Studio" / "ACS" to "Code Like Basti Move" / "CLBM"
+  - New stylish logo with cyan-to-purple gradient (0xFF00D9FF → 0xFF00B4D8 → 0xFF7C3AED → 0xFFA855F7)
+  - "CLBM" text with ExtraBold weight and letter spacing for modern look
+  - Updated across HomeScreen, OpenProjectScreen, CreateProjectScreen, EditorContent, and strings.xml
+- **Feature Designer Fixes:** Fixed compilation errors in designer module (ValidationResult imports, ThemeDescriptor parameters, type references)
+- **Scoped Storage Support:** Implemented Android 10+ scoped storage using DocumentFile and Storage Access Framework
+
 ## Recent Changes (2025-12-07)
 - **Navigation Stack & Back Handling:** MainViewModel now maintains a navigation stack for proper Android back button behavior. Back swipe navigates within the app, only closing when on Home screen.
 - **CLBM Root Directory:** App creates a CLBM folder in external storage (or app files fallback) on first start, stored in DataStore preferences.
@@ -12,7 +20,7 @@ CodeLikeBastiMove is an Android mobile application developed with Kotlin and Jet
 - **Project CRUD in ViewModel:** createProject(), onOpenProject(), deleteProject() methods with DataStore persistence.
 - **AndroidIDE-Style Redesign:** Completely redesigned the UI to match Android Code Studio/AndroidIDE's interface
 - **New Home Screen:** Landing page with logo, action buttons (Create Project, Open Project, Clone Repo, Console, Settings, IDE Config, Documentation)
-- **Open Project Screen:** ACS-style project picker with search bar, recent projects list with "Recent" badges, and folder browser button
+- **Open Project Screen:** CLBM-style project picker with search bar, recent projects list with "Recent" badges, and folder browser button
 - **Navigation System:** Implemented sealed class MainDestination for type-safe screen navigation with ViewModel state management
 - **IDE Settings Screen:** Categorized settings (Konfigurieren, Datenschutz, Entwickleroptionen, Über)
 - **AI Agent Screen:** Model selector dropdown (GPT-5, GPT-4, Claude-3, Gemini) with chat input
@@ -21,7 +29,7 @@ CodeLikeBastiMove is an Android mobile application developed with Kotlin and Jet
 - **Sub-Module Maker Screen:** Create sub-modules with Kotlin/Java language selection
 - **Console Screen:** Termux-style terminal with keyboard shortcuts bar
 - **IDE Workspace Screen:** Project editor with hamburger menu, file tree drawer, bottom sheet for build output
-- **Welcome State:** Empty editor displays "Android Code Studio" with bilingual instructions (English/German)
+- **Welcome State:** Empty editor displays "Code Like Basti Move" with bilingual instructions (English/German)
 - **Tabbed Drawer Navigation:** Left swipeable drawer now contains 5 tabs:
   - **Files Tab:** Project file tree with expand/collapse
   - **Build Tab:** Build Variants with module and variant selection

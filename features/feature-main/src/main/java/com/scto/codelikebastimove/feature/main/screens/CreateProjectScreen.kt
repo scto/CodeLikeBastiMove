@@ -101,24 +101,25 @@ fun CreateProjectScreen(
                 Box(
                     modifier = Modifier
                         .size(64.dp)
-                        .clip(RoundedCornerShape(12.dp))
+                        .clip(RoundedCornerShape(14.dp))
                         .background(
                             Brush.linearGradient(
                                 colors = listOf(
-                                    Color(0xFFE91E63),
-                                    Color(0xFF9C27B0),
-                                    Color(0xFF3F51B5),
-                                    Color(0xFF00BCD4)
+                                    Color(0xFF00D9FF),
+                                    Color(0xFF00B4D8),
+                                    Color(0xFF7C3AED),
+                                    Color(0xFFA855F7)
                                 )
                             )
                         ),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "ACS",
+                        text = "CLBM",
                         color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 16.sp,
+                        letterSpacing = 1.sp
                     )
                 }
             }

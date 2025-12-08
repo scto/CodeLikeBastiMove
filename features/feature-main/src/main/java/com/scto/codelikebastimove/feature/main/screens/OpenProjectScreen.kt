@@ -109,7 +109,7 @@ fun OpenProjectScreen(
                 .padding(bottom = 24.dp)
         ) {
             Text(
-                text = "Android Code Studio",
+                text = "Code Like Basti Move",
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Medium
@@ -126,15 +126,14 @@ fun OpenProjectScreen(
             Box(
                 modifier = Modifier
                     .size(80.dp)
-                    .clip(RoundedCornerShape(16.dp))
+                    .clip(RoundedCornerShape(18.dp))
                     .background(
                         Brush.linearGradient(
                             colors = listOf(
-                                Color(0xFFE91E63),
-                                Color(0xFF9C27B0),
-                                Color(0xFF3F51B5),
-                                Color(0xFF00BCD4),
-                                Color(0xFF4CAF50)
+                                Color(0xFF00D9FF),
+                                Color(0xFF00B4D8),
+                                Color(0xFF7C3AED),
+                                Color(0xFFA855F7)
                             )
                         )
                     ),
@@ -142,15 +141,17 @@ fun OpenProjectScreen(
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = "ACS",
+                        text = "CLBM",
                         color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 18.sp,
+                        letterSpacing = 1.sp
                     )
                     Text(
                         text = "</>",
                         color = Color.White,
-                        fontSize = 14.sp
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold
                     )
                 }
             }

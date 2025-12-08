@@ -63,7 +63,7 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(32.dp))
         
         Text(
-            text = "Android Code Studio",
+            text = "Code Like Basti Move",
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground
@@ -160,15 +160,15 @@ private fun AppLogo(
 ) {
     Box(
         modifier = modifier
-            .size(100.dp)
-            .clip(RoundedCornerShape(20.dp))
+            .size(120.dp)
+            .clip(RoundedCornerShape(24.dp))
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(
-                        Color(0xFF667EEA),
-                        Color(0xFF764BA2),
-                        Color(0xFFE91E63),
-                        Color(0xFFFF5722)
+                        Color(0xFF00D9FF),
+                        Color(0xFF00B4D8),
+                        Color(0xFF7C3AED),
+                        Color(0xFFA855F7)
                     )
                 )
             ),
@@ -178,15 +178,16 @@ private fun AppLogo(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "ACS",
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
+                text = "CLBM",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = Color.White,
+                letterSpacing = 2.sp
             )
             Text(
                 text = "</>",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
                 color = Color.White.copy(alpha = 0.9f)
             )
         }

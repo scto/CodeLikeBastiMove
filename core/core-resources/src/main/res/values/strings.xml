@@ -175,7 +175,7 @@
     <string name="problems_title">Problems</string>
     <string name="todo_title">TODO</string>
     
-    <string name="welcome_title">Android Code Studio</string>
+    <string name="welcome_title">Code Like Basti Move</string>
     <string name="welcome_subtitle">Create or open a project to get started</string>
     <string name="welcome_instructions_en">Open a file from the project tree to start editing</string>
     <string name="welcome_instructions_de">Öffnen Sie eine Datei aus dem Projektbaum, um mit der Bearbeitung zu beginnen</string>
