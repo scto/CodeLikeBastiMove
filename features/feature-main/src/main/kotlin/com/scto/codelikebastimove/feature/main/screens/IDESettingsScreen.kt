@@ -231,13 +231,16 @@ fun IDESettingsScreen(
             onDismissRequest = { showResetOnboardingDialog = false },
             title = { Text("Onboarding zurücksetzen?") },
             text = { 
-                Text("Der Einrichtungsassistent wird beim nächsten Start der App angezeigt. Alle Berechtigungen bleiben erhalten.")
+                Text("Der Einrichtungsassistent wird beim nächsten Start der App angezeigt. Berechtigungen werden erneut geprüft.")
             },
             confirmButton = {
                 TextButton(
                     onClick = {
                         scope.launch {
                             userPreferencesRepository.setOnboardingCompleted(false)
+                            userPreferencesRepository.setFileAccessPermissionGranted(false)
+                            userPreferencesRepository.setInstallationStarted(false)
+                            userPreferencesRepository.setInstallationCompleted(false)
                         }
                         showResetOnboardingDialog = false
                     }
