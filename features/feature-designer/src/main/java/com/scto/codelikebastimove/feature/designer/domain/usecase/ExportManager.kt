@@ -8,8 +8,8 @@ import com.scto.codelikebastimove.feature.designer.data.model.ComponentDefinitio
 import com.scto.codelikebastimove.feature.designer.data.model.ExportConfig
 import com.scto.codelikebastimove.feature.designer.data.model.ExportResult
 import com.scto.codelikebastimove.feature.designer.data.model.ThemeDescriptor
+import com.scto.codelikebastimove.feature.designer.data.model.ValidationResult
 import com.scto.codelikebastimove.feature.designer.domain.codegen.CodeEmitter
-import java.io.OutputStream
 
 class ExportManager(
     private val codeEmitter: CodeEmitter = CodeEmitter()

@@ -24,13 +24,15 @@ class DesignerRepository {
     
     fun createProject(
         name: String,
-        sourceBinding: SourceBinding? = null
+        sourceBinding: SourceBinding? = null,
+        themeDescriptor: ThemeDescriptor? = null
     ): DesignerProject {
         val project = DesignerProject(
             id = UUID.randomUUID().toString(),
             name = name,
             sourceBinding = sourceBinding,
-            blockTree = BlockTree(name = name)
+            blockTree = BlockTree(name = name),
+            themeDescriptor = themeDescriptor
         )
         _projects.value = _projects.value + project
         return project

@@ -76,6 +76,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.scto.codelikebastimove.feature.designer.data.model.BlockType
 import com.scto.codelikebastimove.feature.designer.data.model.ExportConfig
+import com.scto.codelikebastimove.feature.designer.data.model.ThemeDescriptor
+import com.scto.codelikebastimove.feature.designer.data.model.ValidationError
+import com.scto.codelikebastimove.feature.designer.data.model.ValidationResult
+import com.scto.codelikebastimove.feature.designer.domain.usecase.ExportPreview
 import com.scto.codelikebastimove.feature.designer.ui.canvas.BlockCanvas
 import com.scto.codelikebastimove.feature.designer.ui.inspector.PropertyInspector
 import com.scto.codelikebastimove.feature.designer.ui.palette.PalettePanel
@@ -275,7 +279,7 @@ fun DesignerScreen(
 @Composable
 private fun CodePreviewDialog(
     code: String,
-    validation: com.scto.codelikebastimove.feature.designer.data.model.ValidationResult?,
+    validation: ValidationResult?,
     onDismiss: () -> Unit,
     onExport: () -> Unit,
     onCopyToClipboard: () -> Unit = {},
@@ -392,12 +396,12 @@ private fun CodePreviewDialog(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ExportDialog(
-    exportPreview: com.scto.codelikebastimove.feature.designer.domain.usecase.ExportPreview?,
+    exportPreview: ExportPreview?,
     exportConfig: ExportConfig,
     isExporting: Boolean,
     exportSuccess: Boolean?,
     exportMessage: String,
-    selectedTheme: com.scto.codelikebastimove.feature.designer.data.model.ThemeDescriptor?,
+    selectedTheme: ThemeDescriptor?,
     exportDirectoryUri: Uri?,
     onConfigChanged: (ExportConfig) -> Unit,
     onExport: () -> Unit,
@@ -771,9 +775,9 @@ private fun ExportDialog(
 
 @Composable
 private fun ThemeSelectorDialog(
-    themes: List<com.scto.codelikebastimove.feature.designer.data.model.ThemeDescriptor>,
-    selectedTheme: com.scto.codelikebastimove.feature.designer.data.model.ThemeDescriptor?,
-    onThemeSelected: (com.scto.codelikebastimove.feature.designer.data.model.ThemeDescriptor?) -> Unit,
+    themes: List<ThemeDescriptor>,
+    selectedTheme: ThemeDescriptor?,
+    onThemeSelected: (ThemeDescriptor?) -> Unit,
     onDismiss: () -> Unit
 ) {
     AlertDialog(
