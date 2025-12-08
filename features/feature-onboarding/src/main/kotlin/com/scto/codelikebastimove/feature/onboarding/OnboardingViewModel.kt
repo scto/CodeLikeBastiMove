@@ -1,6 +1,7 @@
 package com.scto.codelikebastimove.feature.onboarding
 
 import android.app.Application
+import android.os.Environment
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.scto.codelikebastimove.core.datastore.BuildToolsVersion
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.io.File
 
 class OnboardingViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -100,8 +102,34 @@ class OnboardingViewModel(application: Application) : AndroidViewModel(applicati
 
     fun completeOnboarding() {
         viewModelScope.launch {
+            createClbmProjectsDirectory()
             userPreferencesRepository.setOnboardingCompleted(true)
             userPreferencesRepository.setInstallationCompleted(true)
         }
+    }
+    
+    private suspend fun createClbmProjectsDirectory() {
+        val existingDir = userPreferencesRepository.getRootDirectoryOnce()
+        if (existingDir.isNotBlank() && File(existingDir).exists()) {
+            return
+        }
+        
+        val clbmDir = try {
+            val externalStorage = Environment.getExternalStorageDirectory()
+            val clbmProjectsDir = File(externalStorage, "CLBMProjects")
+            if (!clbmProjectsDir.exists()) {
+                clbmProjectsDir.mkdirs()
+            }
+            clbmProjectsDir.absolutePath
+        } catch (e: Exception) {
+            val filesDir = getApplication<Application>().filesDir
+            val clbmProjectsDir = File(filesDir, "CLBMProjects")
+            if (!clbmProjectsDir.exists()) {
+                clbmProjectsDir.mkdirs()
+            }
+            clbmProjectsDir.absolutePath
+        }
+        
+        userPreferencesRepository.setRootDirectory(clbmDir)
     }
 }

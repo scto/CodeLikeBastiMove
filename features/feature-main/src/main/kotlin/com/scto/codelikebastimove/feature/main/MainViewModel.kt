@@ -267,4 +267,43 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun clearError() {
         _uiState.update { it.copy(errorMessage = null) }
     }
+    
+    fun createFolder(folderName: String) {
+        viewModelScope.launch {
+            val rootDir = _uiState.value.rootDirectory
+            if (rootDir.isBlank()) {
+                _uiState.update { it.copy(errorMessage = "Root directory not set") }
+                return@launch
+            }
+            
+            try {
+                val newFolder = File(rootDir, folderName)
+                if (!newFolder.exists()) {
+                    newFolder.mkdirs()
+                }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(errorMessage = "Failed to create folder: ${e.message}") }
+            }
+        }
+    }
+    
+    fun getDirectoryContents(): List<File> {
+        val rootDir = _uiState.value.rootDirectory
+        if (rootDir.isBlank()) return emptyList()
+        
+        val dir = File(rootDir)
+        if (!dir.exists() || !dir.isDirectory) return emptyList()
+        
+        return dir.listFiles()?.toList()?.sortedWith(
+            compareBy<File> { !it.isDirectory }.thenBy { it.name.lowercase() }
+        ) ?: emptyList()
+    }
+    
+    fun isProjectDirectory(file: File): Boolean {
+        if (!file.isDirectory) return false
+        return File(file, "build.gradle.kts").exists() ||
+               File(file, "build.gradle").exists() ||
+               File(file, "settings.gradle.kts").exists() ||
+               File(file, "settings.gradle").exists()
+    }
 }
