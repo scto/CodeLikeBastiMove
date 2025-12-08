@@ -63,19 +63,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private fun createClbmDirectory(): String? {
         return try {
             val externalStorage = Environment.getExternalStorageDirectory()
-            val clbmDir = File(externalStorage, "CLBM")
-            if (!clbmDir.exists()) {
-                clbmDir.mkdirs()
+            val clbmProjectsDir = File(externalStorage, "CLBMProjects")
+            if (!clbmProjectsDir.exists()) {
+                clbmProjectsDir.mkdirs()
             }
-            clbmDir.absolutePath
+            clbmProjectsDir.absolutePath
         } catch (e: Exception) {
             val context = getApplication<Application>()
             val filesDir = context.filesDir
-            val clbmDir = File(filesDir, "CLBM")
-            if (!clbmDir.exists()) {
-                clbmDir.mkdirs()
+            val clbmProjectsDir = File(filesDir, "CLBMProjects")
+            if (!clbmProjectsDir.exists()) {
+                clbmProjectsDir.mkdirs()
             }
-            clbmDir.absolutePath
+            clbmProjectsDir.absolutePath
         }
     }
     

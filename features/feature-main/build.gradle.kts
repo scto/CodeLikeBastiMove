@@ -14,4 +14,5 @@ dependencies {
     api(project(":features:feature-git"))
     api(project(":features:feature-treeview"))
     api(project(":features:feature-designer"))
+    api(project(":features:feature-explorer"))
 }

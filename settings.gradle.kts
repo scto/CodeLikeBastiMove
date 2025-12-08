@@ -37,4 +37,5 @@ include(":features:feature-slideshow")
 include(":features:feature-treeview")
 include(":features:feature-main")
 include(":features:feature-designer")
+include(":features:feature-explorer")
 
