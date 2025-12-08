@@ -12,4 +12,10 @@
     <external-files-path
         name="external_files"
         path="/" />
+    <external-path
+        name="external_storage"
+        path="." />
+    <external-path
+        name="clbm_projects"
+        path="CLBMProjects" />
 </paths>

@@ -145,11 +145,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         useKotlinDsl: Boolean = true
     ) {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
+            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+            
+            if (projectManager == null) {
+                _uiState.update { it.copy(isLoading = false, errorMessage = "Project manager not initialized") }
+                return@launch
+            }
             
             val rootDir = _uiState.value.rootDirectory
             if (rootDir.isBlank()) {
-                _uiState.update { it.copy(isLoading = false, errorMessage = "Root directory not set") }
+                _uiState.update { it.copy(isLoading = false, errorMessage = "Root directory not set. Please complete onboarding first.") }
+                return@launch
+            }
+            
+            val rootDirFile = File(rootDir)
+            if (!rootDirFile.exists()) {
+                rootDirFile.mkdirs()
+            }
+            
+            if (!rootDirFile.canWrite()) {
+                _uiState.update { it.copy(isLoading = false, errorMessage = "Cannot write to project directory. Check storage permissions.") }
                 return@launch
             }
             

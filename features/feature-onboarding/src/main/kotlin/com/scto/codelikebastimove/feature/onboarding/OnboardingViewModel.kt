@@ -1,7 +1,9 @@
 package com.scto.codelikebastimove.feature.onboarding
 
 import android.app.Application
+import android.os.Build
 import android.os.Environment
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.scto.codelikebastimove.core.datastore.BuildToolsVersion
@@ -111,25 +113,63 @@ class OnboardingViewModel(application: Application) : AndroidViewModel(applicati
     private suspend fun createClbmProjectsDirectory() {
         val existingDir = userPreferencesRepository.getRootDirectoryOnce()
         if (existingDir.isNotBlank() && File(existingDir).exists()) {
+            Log.d(TAG, "CLBMProjects directory already exists at: $existingDir")
             return
         }
         
-        val clbmDir = try {
-            val externalStorage = Environment.getExternalStorageDirectory()
-            val clbmProjectsDir = File(externalStorage, "CLBMProjects")
-            if (!clbmProjectsDir.exists()) {
-                clbmProjectsDir.mkdirs()
+        val clbmDir = if (hasExternalStoragePermission()) {
+            try {
+                val externalStorage = Environment.getExternalStorageDirectory()
+                val clbmProjectsDir = File(externalStorage, "CLBMProjects")
+                Log.d(TAG, "Attempting to create CLBMProjects at: ${clbmProjectsDir.absolutePath}")
+                
+                if (!clbmProjectsDir.exists()) {
+                    val created = clbmProjectsDir.mkdirs()
+                    Log.d(TAG, "Directory creation result: $created")
+                    if (!created) {
+                        throw Exception("Failed to create directory")
+                    }
+                }
+                
+                if (clbmProjectsDir.canWrite()) {
+                    Log.d(TAG, "CLBMProjects created successfully at external storage")
+                    clbmProjectsDir.absolutePath
+                } else {
+                    Log.w(TAG, "Cannot write to external storage, falling back to internal")
+                    createInternalDirectory()
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to create external directory: ${e.message}", e)
+                createInternalDirectory()
             }
-            clbmProjectsDir.absolutePath
-        } catch (e: Exception) {
-            val filesDir = getApplication<Application>().filesDir
-            val clbmProjectsDir = File(filesDir, "CLBMProjects")
-            if (!clbmProjectsDir.exists()) {
-                clbmProjectsDir.mkdirs()
-            }
-            clbmProjectsDir.absolutePath
+        } else {
+            Log.d(TAG, "No external storage permission, using internal storage")
+            createInternalDirectory()
         }
         
+        Log.d(TAG, "Final CLBMProjects directory: $clbmDir")
         userPreferencesRepository.setRootDirectory(clbmDir)
+    }
+    
+    private fun hasExternalStoragePermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Environment.isExternalStorageManager()
+        } else {
+            true
+        }
+    }
+    
+    private fun createInternalDirectory(): String {
+        val filesDir = getApplication<Application>().filesDir
+        val clbmProjectsDir = File(filesDir, "CLBMProjects")
+        if (!clbmProjectsDir.exists()) {
+            clbmProjectsDir.mkdirs()
+        }
+        Log.d(TAG, "Created CLBMProjects at internal storage: ${clbmProjectsDir.absolutePath}")
+        return clbmProjectsDir.absolutePath
+    }
+    
+    companion object {
+        private const val TAG = "OnboardingViewModel"
     }
 }
