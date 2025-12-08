@@ -4,6 +4,15 @@
 CodeLikeBastiMove is an Android mobile application developed with Kotlin and Jetpack Compose, showcasing modern Android development best practices through a highly modular architecture. The app provides a Material Design 3 experience with a comprehensive set of features including advanced navigation, theme management, a robust project template system for creating new Android projects, and an integrated development environment (IDE)-like interface inspired by AndroidIDE. Its purpose is to demonstrate a well-structured, maintainable, and scalable Android application.
 
 ## Recent Changes (2025-12-08)
+- **Onboarding & Permission Gating Overhaul:**
+  - **Live Permission Checking:** MainActivity and OnboardingScreen now use `Environment.isExternalStorageManager()` for real-time permission verification
+  - **Permission Sync on Resume:** Both screens sync actual permission state to DataStore on every lifecycle RESUMED event
+  - **Gated Onboarding Completion:** SummaryPage disables "Installation starten" button until file access permission is actually granted
+  - **Warning Message:** Shows clear warning when permission is missing on summary page
+  - **Settings Theme Controls:** IDESettingsScreen now has functional theme mode selection (Light/Dark/System) with dialog
+  - **Dynamic Colors Toggle:** Functional toggle for Material You dynamic colors bound to DataStore
+  - **Reset Onboarding:** Settings option to reset onboarding, which clears all flags and forces re-running setup
+  - **Self-Healing Flow:** If permission is revoked externally, app automatically detects and routes back to onboarding
 - **Vector Asset Studio System:** Comprehensive icon management and AVD creation tool
   - **Icon Repository System:** Interface-based providers for Material Icons, Feather Icons with extensible architecture
   - **Icon Browser:** Grid/List view toggle, search, category filtering, multi-select support
