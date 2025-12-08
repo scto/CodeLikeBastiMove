@@ -13,6 +13,12 @@ CodeLikeBastiMove is an Android mobile application developed with Kotlin and Jet
   - **Dynamic Colors Toggle:** Functional toggle for Material You dynamic colors bound to DataStore
   - **Reset Onboarding:** Settings option to reset onboarding, which clears all flags and forces re-running setup
   - **Self-Healing Flow:** If permission is revoked externally, app automatically detects and routes back to onboarding
+- **CLBMProjects Directory:** Changed root directory from "CLBM" to "CLBMProjects" in standard Android external storage (alongside Download, DCIM, Music, Documents)
+- **feature-explorer Module:** New submodule for file system browsing and project selection
+  - **ExplorerScreen:** Full file browser with navigation, sorting, and filtering
+  - **ExplorerViewModel:** File system state management with navigation history, selection, sorting
+  - **FileItem:** Data model for files with project detection, size display, and metadata
+  - **Features:** Navigate up/back/forward, sort by name/date/size, filter by type/projects, show/hide hidden files, project badges
 - **Vector Asset Studio System:** Comprehensive icon management and AVD creation tool
   - **Icon Repository System:** Interface-based providers for Material Icons, Feather Icons with extensible architecture
   - **Icon Browser:** Grid/List view toggle, search, category filtering, multi-select support

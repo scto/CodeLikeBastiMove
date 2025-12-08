@@ -141,9 +141,9 @@ class ExplorerViewModel(application: Application) : AndroidViewModel(application
     fun navigateBack(): Boolean {
         val state = _uiState.value
         if (state.historyIndex > 0) {
-            val previousPath = state.navigationHistory[state.historyIndex - 1]
-            _uiState.update { it.copy(historyIndex = it.historyIndex - 1) }
-            navigateToWithoutHistory(previousPath)
+            val newIndex = state.historyIndex - 1
+            val previousPath = state.navigationHistory[newIndex]
+            loadDirectoryWithHistoryIndex(previousPath, newIndex)
             return true
         }
         return false
@@ -152,12 +152,30 @@ class ExplorerViewModel(application: Application) : AndroidViewModel(application
     fun navigateForward(): Boolean {
         val state = _uiState.value
         if (state.historyIndex < state.navigationHistory.size - 1) {
-            val nextPath = state.navigationHistory[state.historyIndex + 1]
-            _uiState.update { it.copy(historyIndex = it.historyIndex + 1) }
-            navigateToWithoutHistory(nextPath)
+            val newIndex = state.historyIndex + 1
+            val nextPath = state.navigationHistory[newIndex]
+            loadDirectoryWithHistoryIndex(nextPath, newIndex)
             return true
         }
         return false
+    }
+    
+    private fun loadDirectoryWithHistoryIndex(path: String, newHistoryIndex: Int) {
+        val dir = File(path)
+        if (!dir.exists() || !dir.isDirectory) return
+        
+        viewModelScope.launch {
+            val files = loadFiles(dir)
+            _uiState.update { 
+                it.copy(
+                    currentPath = path,
+                    files = files,
+                    selectedFiles = emptySet(),
+                    historyIndex = newHistoryIndex,
+                    errorMessage = null
+                )
+            }
+        }
     }
     
     private fun navigateToWithoutHistory(path: String) {

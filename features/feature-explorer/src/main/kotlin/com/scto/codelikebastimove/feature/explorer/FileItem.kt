@@ -13,10 +13,15 @@ data class FileItem(
     val isHidden: Boolean = file.isHidden
 ) {
     val isAndroidProject: Boolean
-        get() = isDirectory && File(file, "build.gradle.kts").exists() || File(file, "build.gradle").exists()
+        get() = isDirectory && (File(file, "build.gradle.kts").exists() || File(file, "build.gradle").exists())
     
     val isGradleProject: Boolean
-        get() = isDirectory && (File(file, "settings.gradle.kts").exists() || File(file, "settings.gradle").exists())
+        get() = isDirectory && (
+            File(file, "settings.gradle.kts").exists() || 
+            File(file, "settings.gradle").exists() ||
+            File(file, "build.gradle.kts").exists() ||
+            File(file, "build.gradle").exists()
+        )
     
     val displaySize: String
         get() = when {
