@@ -4,6 +4,17 @@
 CodeLikeBastiMove is an Android mobile application developed with Kotlin and Jetpack Compose, showcasing modern Android development best practices through a highly modular architecture. The app provides a Material Design 3 experience with a comprehensive set of features including advanced navigation, theme management, a robust project template system for creating new Android projects, and an integrated development environment (IDE)-like interface inspired by AndroidIDE. Its purpose is to demonstrate a well-structured, maintainable, and scalable Android application.
 
 ## Recent Changes (2025-12-08)
+- **Vector Asset Studio System:** Comprehensive icon management and AVD creation tool
+  - **Icon Repository System:** Interface-based providers for Material Icons, Feather Icons with extensible architecture
+  - **Icon Browser:** Grid/List view toggle, search, category filtering, multi-select support
+  - **Provider Switching:** Dropdown to switch between icon providers (Material Icons, Feather Icons)
+  - **SVG to AVD Converter:** Convert SVG files to Android Vector Drawable format with path parsing
+  - **AVD Editor:** Visual editor with path listing, color preview, zoom controls, path management
+  - **Export Options:** Export to AVD XML, SVG, or Jetpack Compose ImageVector code
+  - **Create Tab:** Quick templates (Circle, Square, Triangle, Star, Heart) and empty AVD creation
+  - **Convert Tab:** SVG import dialog and export format selection
+  - New navigation destinations: MainDestination.VectorAssetStudio
+  - Home screen actions updated with Asset Studio and Vector Asset Studio quick links
 - **CLBM Branding Redesign:** Updated app branding from "Android Code Studio" / "ACS" to "Code Like Basti Move" / "CLBM"
   - New stylish logo with cyan-to-purple gradient (0xFF00D9FF → 0xFF00B4D8 → 0xFF7C3AED → 0xFFA855F7)
   - "CLBM" text with ExtraBold weight and letter spacing for modern look
