@@ -116,7 +116,7 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 - **Onboarding:** A multi-page onboarding flow to guide users through initial setup with permissions (File Access, Usage Stats, Battery Optimization).
 
 **System Design Choices:**
-- **Modular Architecture:** Core modules (`core-ui`, `core-resources`, `core-datastore`, `templates-api`, `templates-impl`) and feature modules (`feature-home`, `feature-gallery`, `feature-slideshow`, `feature-settings`, `feature-editor`, `feature-git`, `feature-onboarding`, `feature-main`, `feature-treeview`) are used for clear separation of concerns and improved maintainability.
+- **Modular Architecture:** Core modules (`core-ui`, `core-resources`, `core-datastore`, `templates-api`, `templates-impl`) and feature modules (`feature-home`, `feature-settings`, `feature-editor`, `feature-git`, `feature-onboarding`, `feature-main`, `feature-treeview`, `feature-designer`, `feature-explorer`) are used for clear separation of concerns and improved maintainability.
 - **Convention Plugins:** Custom Gradle convention plugins (`codelikebastimove.android.application`, `codelikebastimove.android.library`, `codelikebastimove.android.feature`, etc.) centralize build logic, SDK versions, and common dependencies, ensuring consistency across modules.
 - **Centralized Resources:** Dedicated `core-resources` module for shared strings, dimensions, and colors.
 - **Screen Organization:** New `screens` package in feature-main for destination screens (HomeScreen, IDESettingsScreen, AIAgentScreen, AssetStudioScreen, BuildVariantsScreen, SubModuleMakerScreen, ConsoleScreen, IDEWorkspaceScreen).
