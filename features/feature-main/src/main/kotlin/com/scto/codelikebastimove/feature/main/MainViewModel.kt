@@ -1,9 +1,9 @@
 package com.scto.codelikebastimove.feature.main
 
 import android.app.Application
-import android.os.Environment
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.scto.codelikebastimove.core.datastore.DirectoryItem
 import com.scto.codelikebastimove.core.datastore.ProjectTemplateType
 import com.scto.codelikebastimove.core.datastore.StoredProject
 import com.scto.codelikebastimove.core.datastore.UserPreferencesRepository
@@ -40,18 +40,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private fun initializeApp() {
         viewModelScope.launch {
             val existingRootDir = repository.getRootDirectoryOnce()
-            if (existingRootDir.isBlank()) {
-                val clbmDir = createClbmDirectory()
-                if (clbmDir != null) {
-                    repository.setRootDirectory(clbmDir)
-                    _uiState.update { it.copy(rootDirectory = clbmDir) }
-                }
-            } else {
+            if (existingRootDir.isNotBlank()) {
                 val dir = File(existingRootDir)
                 if (!dir.exists()) {
                     dir.mkdirs()
                 }
                 _uiState.update { it.copy(rootDirectory = existingRootDir) }
+                refreshDirectoryContents()
             }
             
             repository.projects.collect { projects ->
@@ -60,23 +55,32 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
     
-    private fun createClbmDirectory(): String? {
-        return try {
-            val externalStorage = Environment.getExternalStorageDirectory()
-            val clbmProjectsDir = File(externalStorage, "CLBMProjects")
-            if (!clbmProjectsDir.exists()) {
-                clbmProjectsDir.mkdirs()
-            }
-            clbmProjectsDir.absolutePath
-        } catch (e: Exception) {
-            val context = getApplication<Application>()
-            val filesDir = context.filesDir
-            val clbmProjectsDir = File(filesDir, "CLBMProjects")
-            if (!clbmProjectsDir.exists()) {
-                clbmProjectsDir.mkdirs()
-            }
-            clbmProjectsDir.absolutePath
+    fun refreshDirectoryContents() {
+        val rootDir = _uiState.value.rootDirectory
+        if (rootDir.isBlank()) return
+        
+        val dir = File(rootDir)
+        if (!dir.exists() || !dir.isDirectory) {
+            _uiState.update { it.copy(directoryContents = emptyList()) }
+            return
         }
+        
+        val items = dir.listFiles()?.map { file ->
+            DirectoryItem(
+                name = file.name,
+                path = file.absolutePath,
+                isDirectory = file.isDirectory,
+                isProject = isProjectDirectory(file),
+                lastModified = file.lastModified(),
+                size = if (file.isFile) file.length() else 0
+            )
+        }?.sortedWith(
+            compareBy<DirectoryItem> { !it.isDirectory }
+                .thenBy { !it.isProject }
+                .thenBy { it.name.lowercase() }
+        ) ?: emptyList()
+        
+        _uiState.update { it.copy(directoryContents = items) }
     }
     
     fun onNavigate(destination: MainDestination) {
@@ -281,6 +285,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 if (!newFolder.exists()) {
                     newFolder.mkdirs()
                 }
+                refreshDirectoryContents()
             } catch (e: Exception) {
                 _uiState.update { it.copy(errorMessage = "Failed to create folder: ${e.message}") }
             }

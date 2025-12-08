@@ -1,5 +1,6 @@
 package com.scto.codelikebastimove.feature.main
 
+import com.scto.codelikebastimove.core.datastore.DirectoryItem
 import com.scto.codelikebastimove.core.datastore.StoredProject
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 
@@ -16,6 +17,7 @@ data class MainUiState(
     val isProjectOpen: Boolean = false,
     val rootDirectory: String = "",
     val projects: List<StoredProject> = emptyList(),
+    val directoryContents: List<DirectoryItem> = emptyList(),
     val errorMessage: String? = null,
     val cloneProgress: String = ""
 )

@@ -1,7 +1,6 @@
 package com.scto.codelikebastimove.feature.slidingpanel.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,12 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.CreateNewFolder
+import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
@@ -52,26 +51,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
-data class ProjectItem(
-    val name: String,
-    val path: String,
-    val lastModified: Long,
-    val isProject: Boolean
-)
+import com.scto.codelikebastimove.core.datastore.DirectoryItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProjectExplorerBottomSheet(
     isVisible: Boolean,
     rootDirectory: String,
-    projects: List<ProjectItem>,
+    directoryContents: List<DirectoryItem>,
     onDismiss: () -> Unit,
-    onProjectClick: (path: String, name: String) -> Unit,
+    onItemClick: (path: String, name: String, isDirectory: Boolean) -> Unit,
     onCreateFolder: (name: String) -> Unit,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     modifier: Modifier = Modifier
@@ -80,11 +72,11 @@ fun ProjectExplorerBottomSheet(
     var showCreateFolderDialog by remember { mutableStateOf(false) }
     var newFolderName by remember { mutableStateOf("") }
     
-    val filteredProjects = remember(projects, searchQuery) {
+    val filteredItems = remember(directoryContents, searchQuery) {
         if (searchQuery.isBlank()) {
-            projects
+            directoryContents
         } else {
-            projects.filter { it.name.contains(searchQuery, ignoreCase = true) }
+            directoryContents.filter { it.name.contains(searchQuery, ignoreCase = true) }
         }
     }
     
@@ -199,7 +191,7 @@ fun ProjectExplorerBottomSheet(
                 HorizontalDivider()
                 
                 Text(
-                    text = rootDirectory,
+                    text = rootDirectory.ifBlank { "CLBMProjects" },
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
@@ -207,7 +199,7 @@ fun ProjectExplorerBottomSheet(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
                 
-                if (filteredProjects.isEmpty()) {
+                if (filteredItems.isEmpty()) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -245,10 +237,10 @@ fun ProjectExplorerBottomSheet(
                         contentPadding = PaddingValues(16.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        items(filteredProjects, key = { it.path }) { project ->
-                            ProjectItemCard(
-                                project = project,
-                                onClick = { onProjectClick(project.path, project.name) }
+                        items(filteredItems, key = { it.path }) { item ->
+                            DirectoryItemCard(
+                                item = item,
+                                onClick = { onItemClick(item.path, item.name, item.isDirectory) }
                             )
                         }
                     }
@@ -259,11 +251,29 @@ fun ProjectExplorerBottomSheet(
 }
 
 @Composable
-private fun ProjectItemCard(
-    project: ProjectItem,
+private fun DirectoryItemCard(
+    item: DirectoryItem,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val icon = when {
+        item.isProject -> Icons.Default.Android
+        item.isDirectory -> Icons.Default.Folder
+        else -> Icons.Default.Description
+    }
+    
+    val iconColor = when {
+        item.isProject -> Color(0xFF3DDC84)
+        item.isDirectory -> MaterialTheme.colorScheme.primary
+        else -> MaterialTheme.colorScheme.onSurfaceVariant
+    }
+    
+    val bgColor = when {
+        item.isProject -> Color(0xFF3DDC84).copy(alpha = 0.2f)
+        item.isDirectory -> MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+        else -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+    }
+    
     Card(
         onClick = onClick,
         colors = CardDefaults.cardColors(
@@ -282,18 +292,13 @@ private fun ProjectItemCard(
                 modifier = Modifier
                     .size(48.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(
-                        if (project.isProject) 
-                            Color(0xFF3DDC84).copy(alpha = 0.2f) 
-                        else 
-                            MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-                    ),
+                    .background(bgColor),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = if (project.isProject) Icons.Default.Android else Icons.Default.Folder,
+                    imageVector = icon,
                     contentDescription = null,
-                    tint = if (project.isProject) Color(0xFF3DDC84) else MaterialTheme.colorScheme.primary
+                    tint = iconColor
                 )
             }
             
@@ -301,7 +306,7 @@ private fun ProjectItemCard(
             
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = project.name,
+                    text = item.name,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Medium,
                     maxLines = 1,
@@ -310,14 +315,26 @@ private fun ProjectItemCard(
                 
                 Spacer(modifier = Modifier.height(4.dp))
                 
-                Text(
-                    text = formatDate(project.lastModified),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = formatDate(item.lastModified),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    if (!item.isDirectory && item.size > 0) {
+                        Text(
+                            text = formatSize(item.size),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
             }
             
-            if (project.isProject) {
+            if (item.isProject) {
                 Card(
                     colors = CardDefaults.cardColors(
                         containerColor = Color(0xFF3DDC84).copy(alpha = 0.2f)
@@ -337,6 +354,16 @@ private fun ProjectItemCard(
 }
 
 private fun formatDate(timestamp: Long): String {
+    if (timestamp == 0L) return ""
     val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
     return dateFormat.format(Date(timestamp))
+}
+
+private fun formatSize(size: Long): String {
+    return when {
+        size < 1024 -> "$size B"
+        size < 1024 * 1024 -> "${size / 1024} KB"
+        size < 1024 * 1024 * 1024 -> "${size / (1024 * 1024)} MB"
+        else -> "${size / (1024 * 1024 * 1024)} GB"
+    }
 }
