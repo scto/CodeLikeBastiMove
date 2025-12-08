@@ -3,8 +3,10 @@ package com.scto.codelikebastimove.feature.main.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Book
+import androidx.compose.material.icons.filled.Brush
 import androidx.compose.material.icons.filled.DesignServices
 import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Terminal
 import androidx.compose.material.icons.filled.Tune
@@ -28,6 +30,7 @@ sealed class MainDestination(
     data object Console : MainDestination("console", "Konsole")
     data object Documentation : MainDestination("documentation", "Dokumentation")
     data object LayoutDesigner : MainDestination("layout_designer", "Layout Designer")
+    data object VectorAssetStudio : MainDestination("vector_asset_studio", "Vector Asset Studio")
 }
 
 data class HomeAction(
@@ -77,5 +80,15 @@ val homeActions = listOf(
         title = "Layout Designer",
         icon = Icons.Default.DesignServices,
         destination = MainDestination.LayoutDesigner
+    ),
+    HomeAction(
+        title = "Asset Studio",
+        icon = Icons.Default.Brush,
+        destination = MainDestination.AssetStudio
+    ),
+    HomeAction(
+        title = "Vector Asset Studio",
+        icon = Icons.Default.Image,
+        destination = MainDestination.VectorAssetStudio
     )
 )

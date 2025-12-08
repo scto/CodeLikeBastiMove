@@ -25,6 +25,7 @@ import com.scto.codelikebastimove.feature.main.screens.IDEWorkspaceScreen
 import com.scto.codelikebastimove.feature.main.screens.OpenProjectScreen
 import com.scto.codelikebastimove.feature.main.screens.SubModuleMakerScreen
 import com.scto.codelikebastimove.feature.designer.ui.screen.DesignerScreen
+import com.scto.codelikebastimove.feature.main.assetstudio.VectorAssetStudioScreen
 
 @Composable
 fun MainScreen(
@@ -128,10 +129,10 @@ fun MainScreen(
             MainDestination.AssetStudio -> {
                 AssetStudioScreen(
                     onBackClick = { viewModel.onBackPressed() },
-                    onLaunchStudio = { },
-                    onCreateDrawable = { },
-                    onCreateIcon = { },
-                    onImportImage = { }
+                    onLaunchStudio = { viewModel.onNavigate(MainDestination.VectorAssetStudio) },
+                    onCreateDrawable = { viewModel.onNavigate(MainDestination.VectorAssetStudio) },
+                    onCreateIcon = { viewModel.onNavigate(MainDestination.VectorAssetStudio) },
+                    onImportImage = { viewModel.onNavigate(MainDestination.VectorAssetStudio) }
                 )
             }
             
@@ -174,6 +175,12 @@ fun MainScreen(
             MainDestination.LayoutDesigner -> {
                 DesignerScreen(
                     projectName = uiState.projectName,
+                    onBackClick = { viewModel.onBackPressed() }
+                )
+            }
+            
+            MainDestination.VectorAssetStudio -> {
+                VectorAssetStudioScreen(
                     onBackClick = { viewModel.onBackPressed() }
                 )
             }
