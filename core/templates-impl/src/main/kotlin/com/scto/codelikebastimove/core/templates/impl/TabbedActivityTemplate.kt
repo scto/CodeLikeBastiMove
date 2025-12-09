@@ -1,13 +1,32 @@
 package com.scto.codelikebastimove.core.templates.impl
 
+import com.scto.codelikebastimove.core.datastore.ProjectTemplateType
+import com.scto.codelikebastimove.core.datastore.VersionCatalog
+import com.scto.codelikebastimove.core.datastore.VersionCatalogEntry
+import com.scto.codelikebastimove.core.datastore.VersionCatalogLibrary
 import com.scto.codelikebastimove.core.templates.api.GradleLanguage
 import com.scto.codelikebastimove.core.templates.api.ProjectConfig
 import com.scto.codelikebastimove.core.templates.api.ProjectFile
-import com.scto.codelikebastimove.core.templates.api.ProjectTemplate
 
-class TabbedActivityTemplate : ProjectTemplate {
+class TabbedActivityTemplate : BaseVersionCatalogTemplate() {
     override val name: String = "Tabbed Activity"
     override val description: String = "Creates a project with ViewPager2 and TabLayout"
+    override val templateId: String = "tabbed-activity"
+    override val templateVersion: String = "1.0.0"
+    override val templateType: ProjectTemplateType = ProjectTemplateType.TABBED
+    override val features: List<String> = listOf("ViewPager2", "TabLayout", "ViewBinding", "LiveData", "ViewModel")
+
+    override fun getVersionCatalog(): VersionCatalog {
+        val base = createBaseViewVersionCatalog()
+        return base.copy(
+            versions = base.versions + listOf(
+                VersionCatalogEntry("viewpager2", "1.1.0")
+            ),
+            libraries = base.libraries + listOf(
+                VersionCatalogLibrary("androidx-viewpager2", "androidx.viewpager2", "viewpager2", "viewpager2")
+            )
+        )
+    }
 
     override fun generateProject(config: ProjectConfig): List<ProjectFile> {
         val files = mutableListOf<ProjectFile>()
@@ -16,11 +35,24 @@ class TabbedActivityTemplate : ProjectTemplate {
         files.add(ProjectFile("app/src/main/java/$packagePath/ui/main", "", isDirectory = true))
         files.add(ProjectFile("app/src/main/res/layout", "", isDirectory = true))
         files.add(ProjectFile("app/src/main/res/values", "", isDirectory = true))
-        files.add(ProjectFile("gradle/wrapper", "", isDirectory = true))
+        files.add(ProjectFile("app/src/main/res/drawable", "", isDirectory = true))
 
-        files.add(generateSettingsGradle(config))
-        files.add(generateRootBuildGradle(config))
-        files.add(generateAppBuildGradle(config))
+        files.addAll(generateGradleWrapper(config))
+        files.add(generateVersionCatalogToml(config))
+
+        when (config.gradleLanguage) {
+            GradleLanguage.KOTLIN_DSL -> {
+                files.add(generateSettingsGradleKts(config))
+                files.add(generateRootBuildGradleKtsView(config))
+                files.add(generateAppBuildGradleKts(config))
+            }
+            GradleLanguage.GROOVY -> {
+                files.add(generateSettingsGradleGroovy(config))
+                files.add(generateRootBuildGradleGroovyView(config))
+                files.add(generateAppBuildGradleGroovy(config))
+            }
+        }
+
         files.add(generateAndroidManifest(config))
         files.add(generateMainActivity(config))
         files.add(generateActivityMainLayout(config))
@@ -33,83 +65,37 @@ class TabbedActivityTemplate : ProjectTemplate {
         files.add(generateThemesXml(config))
         files.add(generateDimensXml(config))
         files.add(generateGradleProperties(config))
-        files.add(generateGradleWrapperProperties(config))
         files.add(generateGitignore(config))
+        files.add(generateProguardRules(config))
 
         return files
     }
 
-    private fun generateSettingsGradle(config: ProjectConfig): ProjectFile {
-        val content = when (config.gradleLanguage) {
-            GradleLanguage.KOTLIN_DSL -> """
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "${config.projectName}"
-include(":app")
-""".trimIndent()
-            GradleLanguage.GROOVY -> """
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-
-dependencyResolutionManagement {
-    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "${config.projectName}"
-include ':app'
-""".trimIndent()
-        }
-        return ProjectFile("settings.${config.gradleLanguage.extension}", content)
-    }
-
-    private fun generateRootBuildGradle(config: ProjectConfig): ProjectFile {
-        val content = when (config.gradleLanguage) {
-            GradleLanguage.KOTLIN_DSL -> """
+    private fun generateRootBuildGradleKtsView(config: ProjectConfig): ProjectFile {
+        val content = """
 plugins {
-    id("com.android.application") version "8.2.0" apply false
-    id("org.jetbrains.kotlin.android") version "1.9.0" apply false
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
 }
 """.trimIndent()
-            GradleLanguage.GROOVY -> """
-plugins {
-    id 'com.android.application' version '8.2.0' apply false
-    id 'org.jetbrains.kotlin.android' version '1.9.0' apply false
-}
-""".trimIndent()
-        }
-        return ProjectFile("build.${config.gradleLanguage.extension}", content)
+        return ProjectFile("build.gradle.kts", content)
     }
 
-    private fun generateAppBuildGradle(config: ProjectConfig): ProjectFile {
-        val content = when (config.gradleLanguage) {
-            GradleLanguage.KOTLIN_DSL -> """
+    private fun generateRootBuildGradleGroovyView(config: ProjectConfig): ProjectFile {
+        val content = """
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    alias libs.plugins.android.application apply false
+    alias libs.plugins.kotlin.android apply false
+}
+""".trimIndent()
+        return ProjectFile("build.gradle", content)
+    }
+
+    private fun generateAppBuildGradleKts(config: ProjectConfig): ProjectFile {
+        val content = """
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -122,6 +108,8 @@ android {
         targetSdk = ${config.targetSdk}
         versionCode = 1
         versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -146,19 +134,23 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation("androidx.viewpager2:viewpager2:1.0.0")
+    implementation(libs.bundles.android.core)
+    implementation(libs.bundles.lifecycle)
+    implementation(libs.androidx.viewpager2)
+    
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }
 """.trimIndent()
-            GradleLanguage.GROOVY -> """
+        return ProjectFile("app/build.gradle.kts", content)
+    }
+
+    private fun generateAppBuildGradleGroovy(config: ProjectConfig): ProjectFile {
+        val content = """
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    alias libs.plugins.android.application
+    alias libs.plugins.kotlin.android
 }
 
 android {
@@ -171,6 +163,8 @@ android {
         targetSdk ${config.targetSdk}
         versionCode 1
         versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -195,21 +189,20 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.11.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.7.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0'
-    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    implementation libs.bundles.android.core
+    implementation libs.bundles.lifecycle
+    implementation libs.androidx.viewpager2
+    
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
 }
 """.trimIndent()
-        }
-        return ProjectFile("app/build.${config.gradleLanguage.extension}", content)
+        return ProjectFile("app/build.gradle", content)
     }
 
     private fun generateAndroidManifest(config: ProjectConfig): ProjectFile {
-        val themeName = config.projectName.replace(" ", "")
+        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
         val content = """
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
@@ -225,7 +218,7 @@ dependencies {
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.${themeName}.NoActionBar">
+            android:theme="@style/Theme.$themeName.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -285,7 +278,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun generateActivityMainLayout(config: ProjectConfig): ProjectFile {
-        val themeName = config.projectName.replace(" ", "")
+        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
         val content = """
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -381,7 +374,7 @@ class PlaceholderFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        pageViewModel = ViewModelProvider(this).get(PageViewModel::class.java).apply {
+        pageViewModel = ViewModelProvider(this)[PageViewModel::class.java].apply {
             setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
         }
     }
@@ -429,13 +422,13 @@ package ${config.packageName}.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 
 class PageViewModel : ViewModel() {
 
     private val _index = MutableLiveData<Int>()
-    val text: LiveData<String> = Transformations.map(_index) {
+    val text: LiveData<String> = _index.map {
         "Hello world from section: ${'$'}it"
     }
 
@@ -505,10 +498,11 @@ class PageViewModel : ViewModel() {
     }
 
     private fun generateThemesXml(config: ProjectConfig): ProjectFile {
-        val themeName = config.projectName.replace(" ", "")
+        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
         val content = """
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.$themeName" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.$themeName" parent="Theme.Material3.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -518,14 +512,14 @@ class PageViewModel : ViewModel() {
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
     </style>
 
-    <style name="Theme.${themeName}.NoActionBar">
+    <style name="Theme.$themeName.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.${themeName}.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.$themeName.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.${themeName}.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.$themeName.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
 """.trimIndent()
         return ProjectFile("app/src/main/res/values/themes.xml", content)
@@ -541,42 +535,5 @@ class PageViewModel : ViewModel() {
 </resources>
 """.trimIndent()
         return ProjectFile("app/src/main/res/values/dimens.xml", content)
-    }
-
-    private fun generateGradleProperties(config: ProjectConfig): ProjectFile {
-        val content = """
-org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
-android.useAndroidX=true
-kotlin.code.style=official
-android.nonTransitiveRClass=true
-""".trimIndent()
-        return ProjectFile("gradle.properties", content)
-    }
-
-    private fun generateGradleWrapperProperties(config: ProjectConfig): ProjectFile {
-        val content = """
-distributionBase=GRADLE_USER_HOME
-distributionPath=wrapper/dists
-distributionUrl=https\://services.gradle.org/distributions/gradle-8.2-bin.zip
-zipStoreBase=GRADLE_USER_HOME
-zipStorePath=wrapper/dists
-""".trimIndent()
-        return ProjectFile("gradle/wrapper/gradle-wrapper.properties", content)
-    }
-
-    private fun generateGitignore(config: ProjectConfig): ProjectFile {
-        val content = """
-*.iml
-.gradle
-/local.properties
-/.idea
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
-""".trimIndent()
-        return ProjectFile(".gitignore", content)
     }
 }

@@ -594,7 +594,7 @@ local.properties
                     VersionCatalogEntry("appcompat", "1.7.0"),
                     VersionCatalogEntry("material", "1.12.0"),
                     VersionCatalogEntry("constraintlayout", "2.2.0"),
-                    VersionCatalogEntry("lifecycleRuntimeKtx", "2.8.7"),
+                    VersionCatalogEntry("lifecycle", "2.8.7"),
                     VersionCatalogEntry("junit", "4.13.2"),
                     VersionCatalogEntry("junitVersion", "1.2.1"),
                     VersionCatalogEntry("espressoCore", "3.6.1")
@@ -604,7 +604,9 @@ local.properties
                     VersionCatalogLibrary("androidx-appcompat", "androidx.appcompat", "appcompat", "appcompat"),
                     VersionCatalogLibrary("material", "com.google.android.material", "material", "material"),
                     VersionCatalogLibrary("androidx-constraintlayout", "androidx.constraintlayout", "constraintlayout", "constraintlayout"),
-                    VersionCatalogLibrary("androidx-lifecycle-runtime-ktx", "androidx.lifecycle", "lifecycle-runtime-ktx", "lifecycleRuntimeKtx"),
+                    VersionCatalogLibrary("androidx-lifecycle-runtime-ktx", "androidx.lifecycle", "lifecycle-runtime-ktx", "lifecycle"),
+                    VersionCatalogLibrary("androidx-lifecycle-livedata-ktx", "androidx.lifecycle", "lifecycle-livedata-ktx", "lifecycle"),
+                    VersionCatalogLibrary("androidx-lifecycle-viewmodel-ktx", "androidx.lifecycle", "lifecycle-viewmodel-ktx", "lifecycle"),
                     VersionCatalogLibrary("junit", "junit", "junit", "junit"),
                     VersionCatalogLibrary("androidx-junit", "androidx.test.ext", "junit", "junitVersion"),
                     VersionCatalogLibrary("androidx-espresso-core", "androidx.test.espresso", "espresso-core", "espressoCore")
@@ -614,7 +616,8 @@ local.properties
                     VersionCatalogPlugin("kotlin-android", "org.jetbrains.kotlin.android", "kotlin")
                 ),
                 bundles = listOf(
-                    VersionCatalogBundle("android-core", listOf("androidx-core-ktx", "androidx-appcompat", "material", "androidx-constraintlayout"))
+                    VersionCatalogBundle("android-core", listOf("androidx-core-ktx", "androidx-appcompat", "material", "androidx-constraintlayout")),
+                    VersionCatalogBundle("lifecycle", listOf("androidx-lifecycle-livedata-ktx", "androidx-lifecycle-viewmodel-ktx", "androidx-lifecycle-runtime-ktx"))
                 )
             )
         }

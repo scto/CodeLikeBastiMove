@@ -1,13 +1,39 @@
 package com.scto.codelikebastimove.core.templates.impl
 
+import com.scto.codelikebastimove.core.datastore.ProjectTemplateType
+import com.scto.codelikebastimove.core.datastore.VersionCatalog
+import com.scto.codelikebastimove.core.datastore.VersionCatalogBundle
+import com.scto.codelikebastimove.core.datastore.VersionCatalogEntry
+import com.scto.codelikebastimove.core.datastore.VersionCatalogLibrary
 import com.scto.codelikebastimove.core.templates.api.GradleLanguage
 import com.scto.codelikebastimove.core.templates.api.ProjectConfig
 import com.scto.codelikebastimove.core.templates.api.ProjectFile
-import com.scto.codelikebastimove.core.templates.api.ProjectTemplate
 
-class NavigationDrawerTemplate : ProjectTemplate {
+class NavigationDrawerTemplate : BaseVersionCatalogTemplate() {
     override val name: String = "Navigation Drawer Activity"
     override val description: String = "Creates a project with a Navigation Drawer"
+    override val templateId: String = "navigation-drawer"
+    override val templateVersion: String = "1.0.0"
+    override val templateType: ProjectTemplateType = ProjectTemplateType.NAVIGATION_DRAWER
+    override val features: List<String> = listOf("Navigation Drawer", "Navigation Component", "ViewBinding", "LiveData", "ViewModel", "FAB")
+
+    override fun getVersionCatalog(): VersionCatalog {
+        val base = createBaseViewVersionCatalog()
+        return base.copy(
+            versions = base.versions + listOf(
+                VersionCatalogEntry("navigation", "2.8.5"),
+                VersionCatalogEntry("drawerlayout", "1.2.0")
+            ),
+            libraries = base.libraries + listOf(
+                VersionCatalogLibrary("androidx-navigation-fragment-ktx", "androidx.navigation", "navigation-fragment-ktx", "navigation"),
+                VersionCatalogLibrary("androidx-navigation-ui-ktx", "androidx.navigation", "navigation-ui-ktx", "navigation"),
+                VersionCatalogLibrary("androidx-drawerlayout", "androidx.drawerlayout", "drawerlayout", "drawerlayout")
+            ),
+            bundles = base.bundles + listOf(
+                VersionCatalogBundle("navigation", listOf("androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx"))
+            )
+        )
+    }
 
     override fun generateProject(config: ProjectConfig): List<ProjectFile> {
         val files = mutableListOf<ProjectFile>()
@@ -20,11 +46,24 @@ class NavigationDrawerTemplate : ProjectTemplate {
         files.add(ProjectFile("app/src/main/res/navigation", "", isDirectory = true))
         files.add(ProjectFile("app/src/main/res/menu", "", isDirectory = true))
         files.add(ProjectFile("app/src/main/res/values", "", isDirectory = true))
-        files.add(ProjectFile("gradle/wrapper", "", isDirectory = true))
+        files.add(ProjectFile("app/src/main/res/drawable", "", isDirectory = true))
 
-        files.add(generateSettingsGradle(config))
-        files.add(generateRootBuildGradle(config))
-        files.add(generateAppBuildGradle(config))
+        files.addAll(generateGradleWrapper(config))
+        files.add(generateVersionCatalogToml(config))
+
+        when (config.gradleLanguage) {
+            GradleLanguage.KOTLIN_DSL -> {
+                files.add(generateSettingsGradleKts(config))
+                files.add(generateRootBuildGradleKtsView(config))
+                files.add(generateAppBuildGradleKts(config))
+            }
+            GradleLanguage.GROOVY -> {
+                files.add(generateSettingsGradleGroovy(config))
+                files.add(generateRootBuildGradleGroovyView(config))
+                files.add(generateAppBuildGradleGroovy(config))
+            }
+        }
+
         files.add(generateAndroidManifest(config))
         files.add(generateMainActivity(config))
         files.add(generateActivityMainLayout(config))
@@ -41,89 +80,44 @@ class NavigationDrawerTemplate : ProjectTemplate {
         files.add(generateSlideshowViewModel(config))
         files.add(generateFragmentSlideshowLayout(config))
         files.add(generateDrawerMenu(config))
+        files.add(generateMainMenu(config))
         files.add(generateMobileNavigation(config))
         files.add(generateStringsXml(config))
         files.add(generateColorsXml(config))
         files.add(generateThemesXml(config))
         files.add(generateDimensXml(config))
         files.add(generateGradleProperties(config))
-        files.add(generateGradleWrapperProperties(config))
         files.add(generateGitignore(config))
+        files.add(generateProguardRules(config))
 
         return files
     }
 
-    private fun generateSettingsGradle(config: ProjectConfig): ProjectFile {
-        val content = when (config.gradleLanguage) {
-            GradleLanguage.KOTLIN_DSL -> """
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "${config.projectName}"
-include(":app")
-""".trimIndent()
-            GradleLanguage.GROOVY -> """
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-
-dependencyResolutionManagement {
-    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "${config.projectName}"
-include ':app'
-""".trimIndent()
-        }
-        return ProjectFile("settings.${config.gradleLanguage.extension}", content)
-    }
-
-    private fun generateRootBuildGradle(config: ProjectConfig): ProjectFile {
-        val content = when (config.gradleLanguage) {
-            GradleLanguage.KOTLIN_DSL -> """
+    private fun generateRootBuildGradleKtsView(config: ProjectConfig): ProjectFile {
+        val content = """
 plugins {
-    id("com.android.application") version "8.2.0" apply false
-    id("org.jetbrains.kotlin.android") version "1.9.0" apply false
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
 }
 """.trimIndent()
-            GradleLanguage.GROOVY -> """
-plugins {
-    id 'com.android.application' version '8.2.0' apply false
-    id 'org.jetbrains.kotlin.android' version '1.9.0' apply false
-}
-""".trimIndent()
-        }
-        return ProjectFile("build.${config.gradleLanguage.extension}", content)
+        return ProjectFile("build.gradle.kts", content)
     }
 
-    private fun generateAppBuildGradle(config: ProjectConfig): ProjectFile {
-        val content = when (config.gradleLanguage) {
-            GradleLanguage.KOTLIN_DSL -> """
+    private fun generateRootBuildGradleGroovyView(config: ProjectConfig): ProjectFile {
+        val content = """
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    alias libs.plugins.android.application apply false
+    alias libs.plugins.kotlin.android apply false
+}
+""".trimIndent()
+        return ProjectFile("build.gradle", content)
+    }
+
+    private fun generateAppBuildGradleKts(config: ProjectConfig): ProjectFile {
+        val content = """
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -136,6 +130,8 @@ android {
         targetSdk = ${config.targetSdk}
         versionCode = 1
         versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -160,21 +156,24 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-    implementation("androidx.drawerlayout:drawerlayout:1.2.0")
+    implementation(libs.bundles.android.core)
+    implementation(libs.bundles.lifecycle)
+    implementation(libs.bundles.navigation)
+    implementation(libs.androidx.drawerlayout)
+    
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }
 """.trimIndent()
-            GradleLanguage.GROOVY -> """
+        return ProjectFile("app/build.gradle.kts", content)
+    }
+
+    private fun generateAppBuildGradleGroovy(config: ProjectConfig): ProjectFile {
+        val content = """
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    alias libs.plugins.android.application
+    alias libs.plugins.kotlin.android
 }
 
 android {
@@ -187,6 +186,8 @@ android {
         targetSdk ${config.targetSdk}
         versionCode 1
         versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -211,23 +212,21 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.11.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.7.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.7'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.7.7'
-    implementation 'androidx.drawerlayout:drawerlayout:1.2.0'
+    implementation libs.bundles.android.core
+    implementation libs.bundles.lifecycle
+    implementation libs.bundles.navigation
+    implementation libs.androidx.drawerlayout
+    
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
 }
 """.trimIndent()
-        }
-        return ProjectFile("app/build.${config.gradleLanguage.extension}", content)
+        return ProjectFile("app/build.gradle", content)
     }
 
     private fun generateAndroidManifest(config: ProjectConfig): ProjectFile {
-        val themeName = config.projectName.replace(" ", "")
+        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
         val content = """
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
@@ -243,7 +242,7 @@ dependencies {
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.${themeName}.NoActionBar">
+            android:theme="@style/Theme.$themeName.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -350,6 +349,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun generateAppBarMain(config: ProjectConfig): ProjectFile {
+        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
         val content = """
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -362,14 +362,14 @@ class MainActivity : AppCompatActivity() {
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.${config.projectName.replace(" ", "")}.AppBarOverlay">
+        android:theme="@style/Theme.$themeName.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.${config.projectName.replace(" ", "")}.PopupOverlay" />
+            app:popupTheme="@style/Theme.$themeName.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -416,7 +416,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun generateNavHeader(config: ProjectConfig): ProjectFile {
-        val themeName = config.projectName.replace(" ", "")
         val content = """
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -482,7 +481,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -575,7 +574,7 @@ class GalleryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val galleryViewModel = ViewModelProvider(this).get(GalleryViewModel::class.java)
+        val galleryViewModel = ViewModelProvider(this)[GalleryViewModel::class.java]
 
         _binding = FragmentGalleryBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -668,7 +667,7 @@ class SlideshowFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val slideshowViewModel = ViewModelProvider(this).get(SlideshowViewModel::class.java)
+        val slideshowViewModel = ViewModelProvider(this)[SlideshowViewModel::class.java]
 
         _binding = FragmentSlideshowBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -747,21 +746,35 @@ class SlideshowViewModel : ViewModel() {
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@android:drawable/ic_menu_today"
             android:title="@string/menu_home" />
         <item
             android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@android:drawable/ic_menu_gallery"
             android:title="@string/menu_gallery" />
         <item
             android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@android:drawable/ic_menu_slideshow"
             android:title="@string/menu_slideshow" />
     </group>
-
 </menu>
 """.trimIndent()
         return ProjectFile("app/src/main/res/menu/activity_main_drawer.xml", content)
+    }
+
+    private fun generateMainMenu(config: ProjectConfig): ProjectFile {
+        val content = """
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+</menu>
+""".trimIndent()
+        return ProjectFile("app/src/main/res/menu/main.xml", content)
     }
 
     private fun generateMobileNavigation(config: ProjectConfig): ProjectFile {
@@ -799,13 +812,13 @@ class SlideshowViewModel : ViewModel() {
         val content = """
 <resources>
     <string name="app_name">${config.projectName}</string>
-    <string name="nav_header_title">${config.projectName}</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
 </resources>
 """.trimIndent()
         return ProjectFile("app/src/main/res/values/strings.xml", content)
@@ -828,10 +841,11 @@ class SlideshowViewModel : ViewModel() {
     }
 
     private fun generateThemesXml(config: ProjectConfig): ProjectFile {
-        val themeName = config.projectName.replace(" ", "")
+        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
         val content = """
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.$themeName" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.$themeName" parent="Theme.Material3.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -841,14 +855,14 @@ class SlideshowViewModel : ViewModel() {
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
     </style>
 
-    <style name="Theme.${themeName}.NoActionBar">
+    <style name="Theme.$themeName.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.${themeName}.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.$themeName.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.${themeName}.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.$themeName.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
 """.trimIndent()
         return ProjectFile("app/src/main/res/values/themes.xml", content)
@@ -865,42 +879,5 @@ class SlideshowViewModel : ViewModel() {
 </resources>
 """.trimIndent()
         return ProjectFile("app/src/main/res/values/dimens.xml", content)
-    }
-
-    private fun generateGradleProperties(config: ProjectConfig): ProjectFile {
-        val content = """
-org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
-android.useAndroidX=true
-kotlin.code.style=official
-android.nonTransitiveRClass=true
-""".trimIndent()
-        return ProjectFile("gradle.properties", content)
-    }
-
-    private fun generateGradleWrapperProperties(config: ProjectConfig): ProjectFile {
-        val content = """
-distributionBase=GRADLE_USER_HOME
-distributionPath=wrapper/dists
-distributionUrl=https\://services.gradle.org/distributions/gradle-8.2-bin.zip
-zipStoreBase=GRADLE_USER_HOME
-zipStorePath=wrapper/dists
-""".trimIndent()
-        return ProjectFile("gradle/wrapper/gradle-wrapper.properties", content)
-    }
-
-    private fun generateGitignore(config: ProjectConfig): ProjectFile {
-        val content = """
-*.iml
-.gradle
-/local.properties
-/.idea
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
-""".trimIndent()
-        return ProjectFile(".gitignore", content)
     }
 }

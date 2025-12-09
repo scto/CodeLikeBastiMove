@@ -22,18 +22,14 @@ class BottomNavigationTemplate : BaseVersionCatalogTemplate() {
         val base = createBaseViewVersionCatalog()
         return base.copy(
             versions = base.versions + listOf(
-                VersionCatalogEntry("navigation", "2.8.5"),
-                VersionCatalogEntry("lifecycleLivedata", "2.8.7")
+                VersionCatalogEntry("navigation", "2.8.5")
             ),
             libraries = base.libraries + listOf(
                 VersionCatalogLibrary("androidx-navigation-fragment-ktx", "androidx.navigation", "navigation-fragment-ktx", "navigation"),
-                VersionCatalogLibrary("androidx-navigation-ui-ktx", "androidx.navigation", "navigation-ui-ktx", "navigation"),
-                VersionCatalogLibrary("androidx-lifecycle-livedata-ktx", "androidx.lifecycle", "lifecycle-livedata-ktx", "lifecycleLivedata"),
-                VersionCatalogLibrary("androidx-lifecycle-viewmodel-ktx", "androidx.lifecycle", "lifecycle-viewmodel-ktx", "lifecycleLivedata")
+                VersionCatalogLibrary("androidx-navigation-ui-ktx", "androidx.navigation", "navigation-ui-ktx", "navigation")
             ),
             bundles = base.bundles + listOf(
-                VersionCatalogBundle("navigation", listOf("androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx")),
-                VersionCatalogBundle("lifecycle", listOf("androidx-lifecycle-livedata-ktx", "androidx-lifecycle-viewmodel-ktx", "androidx-lifecycle-runtime-ktx"))
+                VersionCatalogBundle("navigation", listOf("androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx"))
             )
         )
     }
