@@ -177,6 +177,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     ProjectTemplateType.BOTTOM_NAVIGATION -> it.name == "Bottom Navigation"
                     ProjectTemplateType.NAVIGATION_DRAWER -> it.name == "Navigation Drawer"
                     ProjectTemplateType.TABBED -> it.name == "Tabbed Activity"
+                    // Handle new template types
+                    ProjectTemplateType.MULTI_MODULE -> it.name == "Multi-Module Project"
+                    ProjectTemplateType.MVVM_CLEAN -> it.name == "MVVM Clean Architecture"
+                    ProjectTemplateType.WEAR_OS -> it.name == "Wear OS Activity"
+                    ProjectTemplateType.RESPONSIVE_FOLDABLE -> it.name == "Responsive Activity"
                 }
             }
             

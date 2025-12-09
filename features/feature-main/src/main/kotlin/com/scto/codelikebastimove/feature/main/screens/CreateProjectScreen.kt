@@ -331,5 +331,9 @@ private fun getTemplateDescription(template: ProjectTemplateType): String {
         ProjectTemplateType.BOTTOM_NAVIGATION -> "Activity mit Bottom Navigation Bar"
         ProjectTemplateType.NAVIGATION_DRAWER -> "Activity mit Navigation Drawer"
         ProjectTemplateType.TABBED -> "Activity mit Tabs und ViewPager"
+        ProjectTemplateType.MULTI_MODULE -> "Skalierbare Multi-Modul Architektur"
+        ProjectTemplateType.MVVM_CLEAN -> "Clean Architecture mit MVVM Pattern"
+        ProjectTemplateType.WEAR_OS -> "App für Wear OS Smartwatches"
+        ProjectTemplateType.RESPONSIVE_FOLDABLE -> "Optimiert für Tablets und Foldables"
     }
 }

@@ -1,7 +1,7 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/CodeLikeBastiMove/features/build.gradle.kts",
+      "file": "/storage/emulated/0/AndroidIDEProjects/CodeLikeBastiMove/app/build.gradle.kts",
       "selection": {
         "end": {
           "column": 0,
@@ -16,5 +16,5 @@
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/CodeLikeBastiMove/features/build.gradle.kts"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/CodeLikeBastiMove/app/build.gradle.kts"
 }
