@@ -64,5 +64,7 @@ data class UserPreferences(
     val onboardingConfig: OnboardingConfig = OnboardingConfig(),
     val rootDirectory: String = "",
     val projects: List<StoredProject> = emptyList(),
-    val currentProjectPath: String = ""
+    val currentProjectPath: String = "",
+    val loggingEnabled: Boolean = true,
+    val loggingInitialized: Boolean = false
 )

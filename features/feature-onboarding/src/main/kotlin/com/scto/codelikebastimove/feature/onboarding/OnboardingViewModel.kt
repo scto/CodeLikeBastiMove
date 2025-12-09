@@ -3,8 +3,8 @@ package com.scto.codelikebastimove.feature.onboarding
 import android.app.Application
 import android.os.Build
 import android.os.Environment
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import com.scto.codelikebastimove.core.logger.CLBMLogger
 import androidx.lifecycle.viewModelScope
 import com.scto.codelikebastimove.core.datastore.BuildToolsVersion
 import com.scto.codelikebastimove.core.datastore.OnboardingConfig
@@ -113,7 +113,7 @@ class OnboardingViewModel(application: Application) : AndroidViewModel(applicati
     private suspend fun createClbmProjectsDirectory() {
         val existingDir = userPreferencesRepository.getRootDirectoryOnce()
         if (existingDir.isNotBlank() && File(existingDir).exists()) {
-            Log.d(TAG, "CLBMProjects directory already exists at: $existingDir")
+            CLBMLogger.d(TAG, "CLBMProjects directory already exists at: $existingDir")
             return
         }
         
@@ -121,33 +121,33 @@ class OnboardingViewModel(application: Application) : AndroidViewModel(applicati
             try {
                 val externalStorage = Environment.getExternalStorageDirectory()
                 val clbmProjectsDir = File(externalStorage, "CLBMProjects")
-                Log.d(TAG, "Attempting to create CLBMProjects at: ${clbmProjectsDir.absolutePath}")
+                CLBMLogger.d(TAG, "Attempting to create CLBMProjects at: ${clbmProjectsDir.absolutePath}")
                 
                 if (!clbmProjectsDir.exists()) {
                     val created = clbmProjectsDir.mkdirs()
-                    Log.d(TAG, "Directory creation result: $created")
+                    CLBMLogger.d(TAG, "Directory creation result: $created")
                     if (!created) {
                         throw Exception("Failed to create directory")
                     }
                 }
                 
                 if (clbmProjectsDir.canWrite()) {
-                    Log.d(TAG, "CLBMProjects created successfully at external storage")
+                    CLBMLogger.d(TAG, "CLBMProjects created successfully at external storage")
                     clbmProjectsDir.absolutePath
                 } else {
-                    Log.w(TAG, "Cannot write to external storage, falling back to internal")
+                    CLBMLogger.w(TAG, "Cannot write to external storage, falling back to internal")
                     createInternalDirectory()
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Failed to create external directory: ${e.message}", e)
+                CLBMLogger.e(TAG, "Failed to create external directory: ${e.message}", e)
                 createInternalDirectory()
             }
         } else {
-            Log.d(TAG, "No external storage permission, using internal storage")
+            CLBMLogger.d(TAG, "No external storage permission, using internal storage")
             createInternalDirectory()
         }
         
-        Log.d(TAG, "Final CLBMProjects directory: $clbmDir")
+        CLBMLogger.d(TAG, "Final CLBMProjects directory: $clbmDir")
         userPreferencesRepository.setRootDirectory(clbmDir)
     }
     
@@ -165,7 +165,7 @@ class OnboardingViewModel(application: Application) : AndroidViewModel(applicati
         if (!clbmProjectsDir.exists()) {
             clbmProjectsDir.mkdirs()
         }
-        Log.d(TAG, "Created CLBMProjects at internal storage: ${clbmProjectsDir.absolutePath}")
+        CLBMLogger.d(TAG, "Created CLBMProjects at internal storage: ${clbmProjectsDir.absolutePath}")
         return clbmProjectsDir.absolutePath
     }
     

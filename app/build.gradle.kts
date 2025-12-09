@@ -73,6 +73,7 @@ dependencies {
     api(project(":features"))
     api(project(":core:core-ui"))
     api(project(":core:core-resources"))
+    api(project(":core:core-logger"))
     implementation(project(":core:core-datastore"))
     implementation(project(":core:templates-api"))
     

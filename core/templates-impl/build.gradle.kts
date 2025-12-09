@@ -7,6 +7,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:core-logger"))
     api(project(":core:templates-api"))
     api(project(":core:core-resources"))
     

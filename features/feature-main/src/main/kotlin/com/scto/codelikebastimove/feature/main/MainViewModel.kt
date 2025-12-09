@@ -1,8 +1,8 @@
 package com.scto.codelikebastimove.feature.main
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import com.scto.codelikebastimove.core.logger.CLBMLogger
 import androidx.lifecycle.viewModelScope
 import com.scto.codelikebastimove.core.datastore.DirectoryItem
 import com.scto.codelikebastimove.core.datastore.ProjectTemplateType
@@ -144,13 +144,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     ) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
-            Log.d(TAG, "Creating project: $name with template: $templateType")
+            CLBMLogger.d(TAG, "Creating project: $name with template: $templateType")
             
             val rootDir = _uiState.value.rootDirectory
-            Log.d(TAG, "Root directory: $rootDir")
+            CLBMLogger.d(TAG, "Root directory: $rootDir")
             
             if (rootDir.isBlank()) {
-                Log.e(TAG, "Root directory is blank")
+                CLBMLogger.e(TAG, "Root directory is blank")
                 _uiState.update { it.copy(isLoading = false, errorMessage = "Root directory not set. Please complete onboarding first.") }
                 return@launch
             }
@@ -158,17 +158,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val rootDirFile = File(rootDir)
             if (!rootDirFile.exists()) {
                 val created = rootDirFile.mkdirs()
-                Log.d(TAG, "Created root directory: $created")
+                CLBMLogger.d(TAG, "Created root directory: $created")
             }
             
             if (!rootDirFile.canWrite()) {
-                Log.e(TAG, "Cannot write to root directory: $rootDir")
+                CLBMLogger.e(TAG, "Cannot write to root directory: $rootDir")
                 _uiState.update { it.copy(isLoading = false, errorMessage = "Cannot write to project directory. Check storage permissions.") }
                 return@launch
             }
             
             val templates = projectManager.getAvailableTemplates()
-            Log.d(TAG, "Available templates: ${templates.map { it.name }}")
+            CLBMLogger.d(TAG, "Available templates: ${templates.map { it.name }}")
             
             val template = templates.find {
                 when (templateType) {
@@ -181,12 +181,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
             
             if (template == null) {
-                Log.e(TAG, "Template not found for type: $templateType")
+                CLBMLogger.e(TAG, "Template not found for type: $templateType")
                 _uiState.update { it.copy(isLoading = false, errorMessage = "Template not found") }
                 return@launch
             }
             
-            Log.d(TAG, "Using template: ${template.name}")
+            CLBMLogger.d(TAG, "Using template: ${template.name}")
             
             val config = ProjectConfig(
                 projectName = name,
@@ -196,11 +196,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 gradleLanguage = if (useKotlinDsl) GradleLanguage.KOTLIN_DSL else GradleLanguage.GROOVY
             )
             
-            Log.d(TAG, "Creating project with config: $config")
+            CLBMLogger.d(TAG, "Creating project with config: $config")
             val result = projectManager.createProject(template, config, rootDir)
             
             result.onSuccess { project ->
-                Log.d(TAG, "Project created successfully: ${project.path}")
+                CLBMLogger.d(TAG, "Project created successfully: ${project.path}")
                 val storedProject = StoredProject(
                     name = name,
                     path = project.path,
@@ -222,7 +222,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     )
                 }
             }.onFailure { error ->
-                Log.e(TAG, "Failed to create project: ${error.message}", error)
+                CLBMLogger.e(TAG, "Failed to create project: ${error.message}", error)
                 _uiState.update { it.copy(isLoading = false, errorMessage = error.message) }
             }
         }
@@ -234,13 +234,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             try {
                 val deleted = File(projectPath).deleteRecursively()
                 if (deleted) {
-                    Log.d(TAG, "Project deleted successfully: $projectPath")
+                    CLBMLogger.d(TAG, "Project deleted successfully: $projectPath")
                 } else {
-                    Log.w(TAG, "Project deletion may have been incomplete: $projectPath")
+                    CLBMLogger.w(TAG, "Project deletion may have been incomplete: $projectPath")
                 }
                 refreshDirectoryContents()
             } catch (e: Exception) {
-                Log.e(TAG, "Failed to delete project: ${e.message}", e)
+                CLBMLogger.e(TAG, "Failed to delete project: ${e.message}", e)
                 _uiState.update { it.copy(errorMessage = "Failed to delete project: ${e.message}") }
             }
         }

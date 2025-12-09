@@ -7,6 +7,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:core-logger"))
     api(project(":core:core-datastore-proto"))
     api(project(":core:core-resources"))
     

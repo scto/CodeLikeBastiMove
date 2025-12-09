@@ -105,7 +105,7 @@ fun IDESettingsScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
+                    containerColor = MaterialTheme.colorScheme.surface
                 )
             )
         },
@@ -187,6 +187,18 @@ fun IDESettingsScreen(
             HorizontalDivider()
             
             SettingsCategoryHeader(title = "Entwickleroptionen")
+            
+            ToggleSettingRow(
+                title = "Debug-Logging",
+                description = "Aktiviert detailliertes Logging für Debugging-Zwecke",
+                icon = Icons.Default.BugReport,
+                isEnabled = userPreferences.loggingEnabled,
+                onToggle = {
+                    scope.launch {
+                        userPreferencesRepository.setLoggingEnabled(!userPreferences.loggingEnabled)
+                    }
+                }
+            )
             
             SettingsItemRow(
                 title = "Entwickleroptionen",

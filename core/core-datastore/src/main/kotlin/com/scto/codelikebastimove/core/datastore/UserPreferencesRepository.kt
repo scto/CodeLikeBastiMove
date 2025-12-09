@@ -34,8 +34,38 @@ class UserPreferencesRepository(private val context: Context) {
             onboardingConfig = proto.onboardingConfig.toOnboardingConfig(),
             rootDirectory = proto.rootDirectory,
             projects = proto.projectsList.map { it.toStoredProject() },
-            currentProjectPath = proto.currentProjectPath
+            currentProjectPath = proto.currentProjectPath,
+            loggingEnabled = proto.loggingEnabled,
+            loggingInitialized = proto.loggingInitialized
         )
+    }
+    
+    val loggingEnabled: Flow<Boolean> = context.userPreferencesStore.data.map { proto ->
+        proto.loggingEnabled
+    }
+    
+    suspend fun getLoggingEnabledOnce(): Boolean {
+        return loggingEnabled.first()
+    }
+    
+    suspend fun setLoggingEnabled(enabled: Boolean) {
+        context.userPreferencesStore.updateData { currentPrefs ->
+            currentPrefs.toBuilder()
+                .setLoggingEnabled(enabled)
+                .setLoggingInitialized(true)
+                .build()
+        }
+    }
+    
+    suspend fun isLoggingInitialized(): Boolean {
+        return context.userPreferencesStore.data.first().loggingInitialized
+    }
+    
+    suspend fun initializeLoggingIfNeeded(defaultEnabled: Boolean) {
+        val isInitialized = isLoggingInitialized()
+        if (!isInitialized) {
+            setLoggingEnabled(defaultEnabled)
+        }
     }
 
     val onboardingConfig: Flow<OnboardingConfig> = context.userPreferencesStore.data.map { proto ->

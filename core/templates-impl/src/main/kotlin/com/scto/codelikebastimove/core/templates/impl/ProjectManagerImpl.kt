@@ -1,7 +1,7 @@
 package com.scto.codelikebastimove.core.templates.impl
 
 import android.content.Context
-import android.util.Log
+import com.scto.codelikebastimove.core.logger.CLBMLogger
 import com.scto.codelikebastimove.core.templates.api.Project
 import com.scto.codelikebastimove.core.templates.api.ProjectConfig
 import com.scto.codelikebastimove.core.templates.api.ProjectManager
@@ -28,39 +28,39 @@ class ProjectManagerImpl(private val context: Context) : ProjectManager {
         outputPath: String
     ): Result<Project> = withContext(Dispatchers.IO) {
         try {
-            Log.d(TAG, "Creating project: ${config.projectName} at $outputPath")
+            CLBMLogger.d(TAG, "Creating project: ${config.projectName} at $outputPath")
             
             val outputDir = File(outputPath)
             if (!outputDir.exists()) {
                 val created = outputDir.mkdirs()
-                Log.d(TAG, "Output directory created: $created")
+                CLBMLogger.d(TAG, "Output directory created: $created")
             }
             
             if (!outputDir.canWrite()) {
                 val error = "Cannot write to output directory: $outputPath"
-                Log.e(TAG, error)
+                CLBMLogger.e(TAG, error)
                 return@withContext Result.failure(Exception(error))
             }
             
             val projectDir = File(outputPath, config.projectName)
-            Log.d(TAG, "Project directory: ${projectDir.absolutePath}")
+            CLBMLogger.d(TAG, "Project directory: ${projectDir.absolutePath}")
             
             if (projectDir.exists()) {
-                Log.d(TAG, "Deleting existing project directory")
+                CLBMLogger.d(TAG, "Deleting existing project directory")
                 projectDir.deleteRecursively()
             }
             
             val dirCreated = projectDir.mkdirs()
-            Log.d(TAG, "Project directory created: $dirCreated")
+            CLBMLogger.d(TAG, "Project directory created: $dirCreated")
             
             if (!dirCreated && !projectDir.exists()) {
                 val error = "Failed to create project directory: ${projectDir.absolutePath}"
-                Log.e(TAG, error)
+                CLBMLogger.e(TAG, error)
                 return@withContext Result.failure(Exception(error))
             }
 
             val files = template.generateProject(config)
-            Log.d(TAG, "Generated ${files.size} files from template")
+            CLBMLogger.d(TAG, "Generated ${files.size} files from template")
             
             var filesCreated = 0
             for (file in files) {
@@ -73,7 +73,7 @@ class ProjectManagerImpl(private val context: Context) : ProjectManager {
                     filesCreated++
                 }
             }
-            Log.d(TAG, "Created $filesCreated files")
+            CLBMLogger.d(TAG, "Created $filesCreated files")
 
             val project = Project(
                 name = config.projectName,
@@ -82,10 +82,10 @@ class ProjectManagerImpl(private val context: Context) : ProjectManager {
                 files = files
             )
 
-            Log.d(TAG, "Project created successfully: ${project.path}")
+            CLBMLogger.d(TAG, "Project created successfully: ${project.path}")
             Result.success(project)
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to create project: ${e.message}", e)
+            CLBMLogger.e(TAG, "Failed to create project: ${e.message}", e)
             Result.failure(e)
         }
     }

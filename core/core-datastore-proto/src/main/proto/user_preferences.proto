@@ -76,4 +76,6 @@ message UserPreferencesProto {
     string root_directory = 6;
     repeated ProjectProto projects = 7;
     string current_project_path = 8;
+    bool logging_enabled = 9;
+    bool logging_initialized = 10;
 }
