@@ -33,9 +33,10 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 - **Scoped Storage:** Implemented Android 10+ scoped storage using DocumentFile and Storage Access Framework.
 
 **System Design Choices:**
-- **Modular Architecture:** Core modules (`core-ui`, `core-resources`, `core-datastore`, `templates-api`, `templates-impl`) and distinct feature modules for clear separation of concerns and maintainability.
+- **Modular Architecture:** Core modules (`core-ui`, `core-resources`, `core-datastore`, `core-logger`, `templates-api`, `templates-impl`) and distinct feature modules for clear separation of concerns and maintainability.
 - **Convention Plugins:** Custom Gradle plugins centralize build logic, SDK versions, and common dependencies across modules.
 - **Centralized Resources:** `core-resources` module for shared strings, dimensions, and Material 3 color palettes.
+- **Centralized Logging:** `core-logger` module provides CLBMLogger facade that wraps android.util.Log with runtime-toggleable logging controlled via Settings and persisted in DataStore. Logging defaults to BuildConfig.LOGGING_DEFAULT_ENABLED (true for debug, false for release builds) and uses a `loggingInitialized` guard to properly seed defaults for both fresh installs and upgrades.
 
 ## External Dependencies
 - **Proto DataStore:** User preferences and settings.
