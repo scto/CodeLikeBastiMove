@@ -1,6 +1,7 @@
 package com.scto.codelikebastimove.feature.main
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.scto.codelikebastimove.core.datastore.DirectoryItem
@@ -224,9 +225,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             repository.removeProject(projectPath)
             try {
-                File(projectPath).deleteRecursively()
+                val deleted = File(projectPath).deleteRecursively()
+                if (deleted) {
+                    Log.d(TAG, "Project deleted successfully: $projectPath")
+                } else {
+                    Log.w(TAG, "Project deletion may have been incomplete: $projectPath")
+                }
                 refreshDirectoryContents()
             } catch (e: Exception) {
+                Log.e(TAG, "Failed to delete project: ${e.message}", e)
+                _uiState.update { it.copy(errorMessage = "Failed to delete project: ${e.message}") }
             }
         }
     }
@@ -327,5 +335,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                File(file, "build.gradle").exists() ||
                File(file, "settings.gradle.kts").exists() ||
                File(file, "settings.gradle").exists()
+    }
+    
+    companion object {
+        private const val TAG = "MainViewModel"
     }
 }
