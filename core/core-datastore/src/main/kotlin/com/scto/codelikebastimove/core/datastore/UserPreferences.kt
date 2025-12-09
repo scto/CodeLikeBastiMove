@@ -30,8 +30,110 @@ enum class ProjectTemplateType(val displayName: String) {
     EMPTY_COMPOSE("Empty Compose Activity"),
     BOTTOM_NAVIGATION("Bottom Navigation"),
     NAVIGATION_DRAWER("Navigation Drawer"),
-    TABBED("Tabbed Activity")
+    TABBED("Tabbed Activity"),
+    MULTI_MODULE("Multi-Module Project"),
+    MVVM_CLEAN("MVVM Clean Architecture"),
+    WEAR_OS("Wear OS App"),
+    RESPONSIVE_FOLDABLE("Responsive/Foldable")
 }
+
+data class VersionCatalogEntry(
+    val name: String,
+    val version: String
+)
+
+data class VersionCatalogLibrary(
+    val alias: String,
+    val group: String,
+    val name: String,
+    val versionRef: String
+)
+
+data class VersionCatalogPlugin(
+    val alias: String,
+    val id: String,
+    val versionRef: String
+)
+
+data class VersionCatalogBundle(
+    val alias: String,
+    val libraries: List<String>
+)
+
+data class VersionCatalog(
+    val versions: List<VersionCatalogEntry> = emptyList(),
+    val libraries: List<VersionCatalogLibrary> = emptyList(),
+    val plugins: List<VersionCatalogPlugin> = emptyList(),
+    val bundles: List<VersionCatalogBundle> = emptyList()
+) {
+    fun toTomlContent(): String {
+        val sb = StringBuilder()
+        
+        if (versions.isNotEmpty()) {
+            sb.appendLine("[versions]")
+            versions.forEach { sb.appendLine("${it.name} = \"${it.version}\"") }
+            sb.appendLine()
+        }
+        
+        if (libraries.isNotEmpty()) {
+            sb.appendLine("[libraries]")
+            libraries.forEach { 
+                sb.appendLine("${it.alias} = { group = \"${it.group}\", name = \"${it.name}\", version.ref = \"${it.versionRef}\" }")
+            }
+            sb.appendLine()
+        }
+        
+        if (plugins.isNotEmpty()) {
+            sb.appendLine("[plugins]")
+            plugins.forEach { 
+                sb.appendLine("${it.alias} = { id = \"${it.id}\", version.ref = \"${it.versionRef}\" }")
+            }
+            sb.appendLine()
+        }
+        
+        if (bundles.isNotEmpty()) {
+            sb.appendLine("[bundles]")
+            bundles.forEach { 
+                val libs = it.libraries.joinToString(", ") { lib -> "\"$lib\"" }
+                sb.appendLine("${it.alias} = [$libs]")
+            }
+        }
+        
+        return sb.toString().trimEnd()
+    }
+}
+
+data class GradleInfo(
+    val gradleVersion: String = "8.10.2",
+    val distributionUrl: String = "https://services.gradle.org/distributions/gradle-8.10.2-bin.zip",
+    val agpVersion: String = "8.7.3",
+    val kotlinVersion: String = "2.1.0",
+    val composeBomVersion: String = "2024.12.01",
+    val usesVersionCatalog: Boolean = true
+)
+
+data class TemplateInfo(
+    val id: String,
+    val name: String,
+    val description: String,
+    val version: String,
+    val lastUpdated: Long,
+    val templateType: ProjectTemplateType,
+    val gradleInfo: GradleInfo = GradleInfo(),
+    val versionCatalog: VersionCatalog = VersionCatalog(),
+    val supportedLanguages: List<String> = listOf("Kotlin"),
+    val features: List<String> = emptyList(),
+    val minSdk: Int = 24,
+    val targetSdk: Int = 35,
+    val compileSdk: Int = 35
+)
+
+data class TemplateRegistry(
+    val totalTemplateCount: Int = 0,
+    val registryLastUpdated: Long = 0L,
+    val registryVersion: String = "1.0.0",
+    val templates: List<TemplateInfo> = emptyList()
+)
 
 data class StoredProject(
     val name: String,

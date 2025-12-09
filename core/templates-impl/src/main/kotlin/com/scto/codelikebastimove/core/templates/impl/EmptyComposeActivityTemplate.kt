@@ -1,14 +1,20 @@
 package com.scto.codelikebastimove.core.templates.impl
 
+import com.scto.codelikebastimove.core.datastore.ProjectTemplateType
+import com.scto.codelikebastimove.core.datastore.VersionCatalog
 import com.scto.codelikebastimove.core.templates.api.GradleLanguage
 import com.scto.codelikebastimove.core.templates.api.ProjectConfig
 import com.scto.codelikebastimove.core.templates.api.ProjectFile
-import com.scto.codelikebastimove.core.templates.api.ProjectLanguage
-import com.scto.codelikebastimove.core.templates.api.ProjectTemplate
 
-class EmptyComposeActivityTemplate : ProjectTemplate {
+class EmptyComposeActivityTemplate : BaseVersionCatalogTemplate() {
     override val name: String = "Empty Compose Activity"
     override val description: String = "Creates a new project with Jetpack Compose"
+    override val templateId: String = "empty-compose-activity"
+    override val templateVersion: String = "1.0.0"
+    override val templateType: ProjectTemplateType = ProjectTemplateType.EMPTY_COMPOSE
+    override val features: List<String> = listOf("Jetpack Compose", "Material 3", "Dynamic Colors")
+
+    override fun getVersionCatalog(): VersionCatalog = createBaseComposeVersionCatalog()
 
     override fun generateProject(config: ProjectConfig): List<ProjectFile> {
         val files = mutableListOf<ProjectFile>()
@@ -18,11 +24,23 @@ class EmptyComposeActivityTemplate : ProjectTemplate {
         files.add(ProjectFile("app/src/main/java/$packagePath/ui/theme", "", isDirectory = true))
         files.add(ProjectFile("app/src/main/res/values", "", isDirectory = true))
         files.add(ProjectFile("app/src/main/res/drawable", "", isDirectory = true))
-        files.add(ProjectFile("gradle/wrapper", "", isDirectory = true))
 
-        files.add(generateSettingsGradle(config))
-        files.add(generateRootBuildGradle(config))
-        files.add(generateAppBuildGradle(config))
+        files.addAll(generateGradleWrapper(config))
+        files.add(generateVersionCatalogToml(config))
+
+        when (config.gradleLanguage) {
+            GradleLanguage.KOTLIN_DSL -> {
+                files.add(generateSettingsGradleKts(config))
+                files.add(generateRootBuildGradleKts(config))
+                files.add(generateAppBuildGradleKts(config))
+            }
+            GradleLanguage.GROOVY -> {
+                files.add(generateSettingsGradleGroovy(config))
+                files.add(generateRootBuildGradleGroovy(config))
+                files.add(generateAppBuildGradleGroovy(config))
+            }
+        }
+
         files.add(generateAndroidManifest(config))
         files.add(generateMainActivity(config))
         files.add(generateThemeKt(config))
@@ -32,87 +50,18 @@ class EmptyComposeActivityTemplate : ProjectTemplate {
         files.add(generateColorsXml(config))
         files.add(generateThemesXml(config))
         files.add(generateGradleProperties(config))
-        files.add(generateGradleWrapperProperties(config))
         files.add(generateGitignore(config))
+        files.add(generateProguardRules(config))
 
         return files
     }
 
-    private fun generateSettingsGradle(config: ProjectConfig): ProjectFile {
-        val content = when (config.gradleLanguage) {
-            GradleLanguage.KOTLIN_DSL -> """
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "${config.projectName}"
-include(":app")
-""".trimIndent()
-            GradleLanguage.GROOVY -> """
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "${config.projectName}"
-include ':app'
-""".trimIndent()
-        }
-        val extension = config.gradleLanguage.extension
-        return ProjectFile("settings.$extension", content)
-    }
-
-    private fun generateRootBuildGradle(config: ProjectConfig): ProjectFile {
-        val content = when (config.gradleLanguage) {
-            GradleLanguage.KOTLIN_DSL -> """
+    private fun generateAppBuildGradleKts(config: ProjectConfig): ProjectFile {
+        val content = """
 plugins {
-    id("com.android.application") version "8.2.0" apply false
-    id("org.jetbrains.kotlin.android") version "2.0.0" apply false
-    id("org.jetbrains.kotlin.plugin.compose") version "2.0.0" apply false
-}
-""".trimIndent()
-            GradleLanguage.GROOVY -> """
-plugins {
-    id 'com.android.application' version '8.2.0' apply false
-    id 'org.jetbrains.kotlin.android' version '2.0.0' apply false
-    id 'org.jetbrains.kotlin.plugin.compose' version '2.0.0' apply false
-}
-""".trimIndent()
-        }
-        val extension = config.gradleLanguage.extension
-        return ProjectFile("build.$extension", content)
-    }
-
-    private fun generateAppBuildGradle(config: ProjectConfig): ProjectFile {
-        val content = when (config.gradleLanguage) {
-            GradleLanguage.KOTLIN_DSL -> """
-plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -125,6 +74,8 @@ android {
         targetSdk = ${config.targetSdk}
         versionCode = 1
         versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -149,24 +100,29 @@ android {
 }
 
 dependencies {
-    val composeBom = platform("androidx.compose:compose-bom:2024.06.00")
-    implementation(composeBom)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.bundles.compose)
     
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.activity:activity-compose:1.9.0")
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    
-    debugImplementation("androidx.compose.ui:ui-tooling")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.bundles.compose.debug)
 }
 """.trimIndent()
-            GradleLanguage.GROOVY -> """
+        return ProjectFile("app/build.gradle.kts", content)
+    }
+
+    private fun generateAppBuildGradleGroovy(config: ProjectConfig): ProjectFile {
+        val content = """
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id 'org.jetbrains.kotlin.plugin.compose'
+    alias libs.plugins.android.application
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.kotlin.compose
 }
 
 android {
@@ -179,6 +135,8 @@ android {
         targetSdk ${config.targetSdk}
         versionCode 1
         versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -203,26 +161,25 @@ android {
 }
 
 dependencies {
-    def composeBom = platform('androidx.compose:compose-bom:2024.06.00')
-    implementation composeBom
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.lifecycle.runtime.ktx
+    implementation libs.androidx.activity.compose
+    implementation platform(libs.androidx.compose.bom)
+    implementation libs.bundles.compose
     
-    implementation 'androidx.core:core-ktx:1.13.1'
-    implementation 'androidx.activity:activity-compose:1.9.0'
-    implementation 'androidx.compose.ui:ui'
-    implementation 'androidx.compose.ui:ui-graphics'
-    implementation 'androidx.compose.ui:ui-tooling-preview'
-    implementation 'androidx.compose.material3:material3'
-    
-    debugImplementation 'androidx.compose.ui:ui-tooling'
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
+    androidTestImplementation platform(libs.androidx.compose.bom)
+    androidTestImplementation libs.androidx.ui.test.junit4
+    debugImplementation libs.bundles.compose.debug
 }
 """.trimIndent()
-        }
-        val extension = config.gradleLanguage.extension
-        return ProjectFile("app/build.$extension", content)
+        return ProjectFile("app/build.gradle", content)
     }
 
     private fun generateAndroidManifest(config: ProjectConfig): ProjectFile {
-        val themeName = config.projectName.replace(" ", "")
+        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
         val content = """
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
@@ -252,16 +209,17 @@ dependencies {
 
     private fun generateMainActivity(config: ProjectConfig): ProjectFile {
         val packagePath = config.packageName.replace(".", "/")
-        val themeName = config.projectName.replace(" ", "")
+        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
         val content = """
 package ${config.packageName}
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -271,13 +229,14 @@ import ${config.packageName}.ui.theme.${themeName}Theme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             ${themeName}Theme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    Greeting(
+                        name = "Android",
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
             }
         }
@@ -305,7 +264,7 @@ fun GreetingPreview() {
 
     private fun generateThemeKt(config: ProjectConfig): ProjectFile {
         val packagePath = config.packageName.replace(".", "/")
-        val themeName = config.projectName.replace(" ", "")
+        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
         val content = """
 package ${config.packageName}.ui.theme
 
@@ -424,7 +383,7 @@ val Typography = Typography(
     }
 
     private fun generateThemesXml(config: ProjectConfig): ProjectFile {
-        val themeName = config.projectName.replace(" ", "")
+        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
         val content = """
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
@@ -432,42 +391,5 @@ val Typography = Typography(
 </resources>
 """.trimIndent()
         return ProjectFile("app/src/main/res/values/themes.xml", content)
-    }
-
-    private fun generateGradleProperties(config: ProjectConfig): ProjectFile {
-        val content = """
-org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
-android.useAndroidX=true
-kotlin.code.style=official
-android.nonTransitiveRClass=true
-""".trimIndent()
-        return ProjectFile("gradle.properties", content)
-    }
-
-    private fun generateGradleWrapperProperties(config: ProjectConfig): ProjectFile {
-        val content = """
-distributionBase=GRADLE_USER_HOME
-distributionPath=wrapper/dists
-distributionUrl=https\://services.gradle.org/distributions/gradle-8.2-bin.zip
-zipStoreBase=GRADLE_USER_HOME
-zipStorePath=wrapper/dists
-""".trimIndent()
-        return ProjectFile("gradle/wrapper/gradle-wrapper.properties", content)
-    }
-
-    private fun generateGitignore(config: ProjectConfig): ProjectFile {
-        val content = """
-*.iml
-.gradle
-/local.properties
-/.idea
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
-""".trimIndent()
-        return ProjectFile(".gitignore", content)
     }
 }

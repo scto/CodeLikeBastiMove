@@ -30,6 +30,72 @@ enum ProjectTemplateType {
     PROJECT_TEMPLATE_BOTTOM_NAVIGATION = 3;
     PROJECT_TEMPLATE_NAVIGATION_DRAWER = 4;
     PROJECT_TEMPLATE_TABBED = 5;
+    PROJECT_TEMPLATE_MULTI_MODULE = 6;
+    PROJECT_TEMPLATE_MVVM_CLEAN = 7;
+    PROJECT_TEMPLATE_WEAR_OS = 8;
+    PROJECT_TEMPLATE_RESPONSIVE_FOLDABLE = 9;
+}
+
+message VersionCatalogEntryProto {
+    string name = 1;
+    string version = 2;
+}
+
+message VersionCatalogLibraryProto {
+    string alias = 1;
+    string group = 2;
+    string name = 3;
+    string version_ref = 4;
+}
+
+message VersionCatalogPluginProto {
+    string alias = 1;
+    string id = 2;
+    string version_ref = 3;
+}
+
+message VersionCatalogBundleProto {
+    string alias = 1;
+    repeated string libraries = 2;
+}
+
+message VersionCatalogProto {
+    repeated VersionCatalogEntryProto versions = 1;
+    repeated VersionCatalogLibraryProto libraries = 2;
+    repeated VersionCatalogPluginProto plugins = 3;
+    repeated VersionCatalogBundleProto bundles = 4;
+}
+
+message GradleInfoProto {
+    string gradle_version = 1;
+    string distribution_url = 2;
+    string agp_version = 3;
+    string kotlin_version = 4;
+    string compose_bom_version = 5;
+    bool uses_version_catalog = 6;
+}
+
+message TemplateInfoProto {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    string version = 4;
+    int64 last_updated = 5;
+    ProjectTemplateType template_type = 6;
+    GradleInfoProto gradle_info = 7;
+    VersionCatalogProto version_catalog = 8;
+    repeated string supported_languages = 9;
+    repeated string features = 10;
+    int32 min_sdk = 11;
+    int32 target_sdk = 12;
+    int32 compile_sdk = 13;
+}
+
+message TemplateRegistryProto {
+    int32 total_template_count = 1;
+    int64 registry_last_updated = 2;
+    string registry_version = 3;
+    repeated TemplateInfoProto templates = 4;
 }
 
 message GitConfigProto {
@@ -78,4 +144,5 @@ message UserPreferencesProto {
     string current_project_path = 8;
     bool logging_enabled = 9;
     bool logging_initialized = 10;
+    TemplateRegistryProto template_registry = 11;
 }

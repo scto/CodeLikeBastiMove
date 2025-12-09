@@ -6,9 +6,17 @@ import androidx.datastore.dataStore
 
 import com.scto.codelikebastimove.core.datastore.proto.ClonedRepositoryProto
 import com.scto.codelikebastimove.core.datastore.proto.GitConfigProto
+import com.scto.codelikebastimove.core.datastore.proto.GradleInfoProto
 import com.scto.codelikebastimove.core.datastore.proto.OnboardingConfigProto
 import com.scto.codelikebastimove.core.datastore.proto.ProjectProto
+import com.scto.codelikebastimove.core.datastore.proto.TemplateInfoProto
+import com.scto.codelikebastimove.core.datastore.proto.TemplateRegistryProto
 import com.scto.codelikebastimove.core.datastore.proto.UserPreferencesProto
+import com.scto.codelikebastimove.core.datastore.proto.VersionCatalogBundleProto
+import com.scto.codelikebastimove.core.datastore.proto.VersionCatalogEntryProto
+import com.scto.codelikebastimove.core.datastore.proto.VersionCatalogLibraryProto
+import com.scto.codelikebastimove.core.datastore.proto.VersionCatalogPluginProto
+import com.scto.codelikebastimove.core.datastore.proto.VersionCatalogProto
 import com.scto.codelikebastimove.core.datastore.proto.ThemeMode as ProtoThemeMode
 import com.scto.codelikebastimove.core.datastore.proto.OpenJdkVersion as ProtoOpenJdkVersion
 import com.scto.codelikebastimove.core.datastore.proto.BuildToolsVersion as ProtoBuildToolsVersion
@@ -372,6 +380,10 @@ class UserPreferencesRepository(private val context: Context) {
         ProtoProjectTemplateType.PROJECT_TEMPLATE_BOTTOM_NAVIGATION -> ProjectTemplateType.BOTTOM_NAVIGATION
         ProtoProjectTemplateType.PROJECT_TEMPLATE_NAVIGATION_DRAWER -> ProjectTemplateType.NAVIGATION_DRAWER
         ProtoProjectTemplateType.PROJECT_TEMPLATE_TABBED -> ProjectTemplateType.TABBED
+        ProtoProjectTemplateType.PROJECT_TEMPLATE_MULTI_MODULE -> ProjectTemplateType.MULTI_MODULE
+        ProtoProjectTemplateType.PROJECT_TEMPLATE_MVVM_CLEAN -> ProjectTemplateType.MVVM_CLEAN
+        ProtoProjectTemplateType.PROJECT_TEMPLATE_WEAR_OS -> ProjectTemplateType.WEAR_OS
+        ProtoProjectTemplateType.PROJECT_TEMPLATE_RESPONSIVE_FOLDABLE -> ProjectTemplateType.RESPONSIVE_FOLDABLE
         ProtoProjectTemplateType.PROJECT_TEMPLATE_UNSPECIFIED, ProtoProjectTemplateType.UNRECOGNIZED -> ProjectTemplateType.EMPTY_ACTIVITY
     }
 
@@ -381,6 +393,139 @@ class UserPreferencesRepository(private val context: Context) {
         ProjectTemplateType.BOTTOM_NAVIGATION -> ProtoProjectTemplateType.PROJECT_TEMPLATE_BOTTOM_NAVIGATION
         ProjectTemplateType.NAVIGATION_DRAWER -> ProtoProjectTemplateType.PROJECT_TEMPLATE_NAVIGATION_DRAWER
         ProjectTemplateType.TABBED -> ProtoProjectTemplateType.PROJECT_TEMPLATE_TABBED
+        ProjectTemplateType.MULTI_MODULE -> ProtoProjectTemplateType.PROJECT_TEMPLATE_MULTI_MODULE
+        ProjectTemplateType.MVVM_CLEAN -> ProtoProjectTemplateType.PROJECT_TEMPLATE_MVVM_CLEAN
+        ProjectTemplateType.WEAR_OS -> ProtoProjectTemplateType.PROJECT_TEMPLATE_WEAR_OS
+        ProjectTemplateType.RESPONSIVE_FOLDABLE -> ProtoProjectTemplateType.PROJECT_TEMPLATE_RESPONSIVE_FOLDABLE
+    }
+
+    private fun TemplateRegistryProto?.toTemplateRegistry(): TemplateRegistry {
+        return if (this == null) {
+            TemplateRegistry()
+        } else {
+            TemplateRegistry(
+                totalTemplateCount = totalTemplateCount,
+                registryLastUpdated = registryLastUpdated,
+                registryVersion = registryVersion,
+                templates = templatesList.map { it.toTemplateInfo() }
+            )
+        }
+    }
+
+    private fun TemplateInfoProto.toTemplateInfo(): TemplateInfo {
+        return TemplateInfo(
+            id = id,
+            name = name,
+            description = description,
+            version = version,
+            lastUpdated = lastUpdated,
+            templateType = templateType.toProjectTemplateType(),
+            gradleInfo = gradleInfo.toGradleInfo(),
+            versionCatalog = versionCatalog.toVersionCatalog(),
+            supportedLanguages = supportedLanguagesList.toList(),
+            features = featuresList.toList(),
+            minSdk = minSdk,
+            targetSdk = targetSdk,
+            compileSdk = compileSdk
+        )
+    }
+
+    private fun GradleInfoProto?.toGradleInfo(): GradleInfo {
+        return if (this == null) {
+            GradleInfo()
+        } else {
+            GradleInfo(
+                gradleVersion = gradleVersion,
+                distributionUrl = distributionUrl,
+                agpVersion = agpVersion,
+                kotlinVersion = kotlinVersion,
+                composeBomVersion = composeBomVersion,
+                usesVersionCatalog = usesVersionCatalog
+            )
+        }
+    }
+
+    private fun VersionCatalogProto?.toVersionCatalog(): VersionCatalog {
+        return if (this == null) {
+            VersionCatalog()
+        } else {
+            VersionCatalog(
+                versions = versionsList.map { VersionCatalogEntry(it.name, it.version) },
+                libraries = librariesList.map { VersionCatalogLibrary(it.alias, it.group, it.name, it.versionRef) },
+                plugins = pluginsList.map { VersionCatalogPlugin(it.alias, it.id, it.versionRef) },
+                bundles = bundlesList.map { VersionCatalogBundle(it.alias, it.librariesList.toList()) }
+            )
+        }
+    }
+
+    private fun TemplateRegistry.toProto(): TemplateRegistryProto {
+        return TemplateRegistryProto.newBuilder()
+            .setTotalTemplateCount(totalTemplateCount)
+            .setRegistryLastUpdated(registryLastUpdated)
+            .setRegistryVersion(registryVersion)
+            .addAllTemplates(templates.map { it.toProto() })
+            .build()
+    }
+
+    private fun TemplateInfo.toProto(): TemplateInfoProto {
+        return TemplateInfoProto.newBuilder()
+            .setId(id)
+            .setName(name)
+            .setDescription(description)
+            .setVersion(version)
+            .setLastUpdated(lastUpdated)
+            .setTemplateType(templateType.toProtoProjectTemplateType())
+            .setGradleInfo(gradleInfo.toProto())
+            .setVersionCatalog(versionCatalog.toProto())
+            .addAllSupportedLanguages(supportedLanguages)
+            .addAllFeatures(features)
+            .setMinSdk(minSdk)
+            .setTargetSdk(targetSdk)
+            .setCompileSdk(compileSdk)
+            .build()
+    }
+
+    private fun GradleInfo.toProto(): GradleInfoProto {
+        return GradleInfoProto.newBuilder()
+            .setGradleVersion(gradleVersion)
+            .setDistributionUrl(distributionUrl)
+            .setAgpVersion(agpVersion)
+            .setKotlinVersion(kotlinVersion)
+            .setComposeBomVersion(composeBomVersion)
+            .setUsesVersionCatalog(usesVersionCatalog)
+            .build()
+    }
+
+    private fun VersionCatalog.toProto(): VersionCatalogProto {
+        return VersionCatalogProto.newBuilder()
+            .addAllVersions(versions.map { 
+                VersionCatalogEntryProto.newBuilder()
+                    .setName(it.name)
+                    .setVersion(it.version)
+                    .build()
+            })
+            .addAllLibraries(libraries.map {
+                VersionCatalogLibraryProto.newBuilder()
+                    .setAlias(it.alias)
+                    .setGroup(it.group)
+                    .setName(it.name)
+                    .setVersionRef(it.versionRef)
+                    .build()
+            })
+            .addAllPlugins(plugins.map {
+                VersionCatalogPluginProto.newBuilder()
+                    .setAlias(it.alias)
+                    .setId(it.id)
+                    .setVersionRef(it.versionRef)
+                    .build()
+            })
+            .addAllBundles(bundles.map {
+                VersionCatalogBundleProto.newBuilder()
+                    .setAlias(it.alias)
+                    .addAllLibraries(it.libraries)
+                    .build()
+            })
+            .build()
     }
 
     val rootDirectory: Flow<String> = context.userPreferencesStore.data.map { proto ->
@@ -455,5 +600,58 @@ class UserPreferencesRepository(private val context: Context) {
                 .setCurrentProjectPath(path)
                 .build()
         }
+    }
+
+    val templateRegistry: Flow<TemplateRegistry> = context.userPreferencesStore.data.map { proto ->
+        proto.templateRegistry.toTemplateRegistry()
+    }
+
+    suspend fun getTemplateRegistryOnce(): TemplateRegistry {
+        return templateRegistry.first()
+    }
+
+    suspend fun updateTemplateRegistry(registry: TemplateRegistry) {
+        context.userPreferencesStore.updateData { currentPrefs ->
+            currentPrefs.toBuilder()
+                .setTemplateRegistry(registry.toProto())
+                .build()
+        }
+    }
+
+    suspend fun addTemplateInfo(templateInfo: TemplateInfo) {
+        context.userPreferencesStore.updateData { currentPrefs ->
+            val currentRegistry = currentPrefs.templateRegistry.toTemplateRegistry()
+            val updatedTemplates = currentRegistry.templates.toMutableList().apply {
+                removeAll { it.id == templateInfo.id }
+                add(templateInfo)
+            }
+            val updatedRegistry = currentRegistry.copy(
+                totalTemplateCount = updatedTemplates.size,
+                registryLastUpdated = System.currentTimeMillis(),
+                templates = updatedTemplates
+            )
+            currentPrefs.toBuilder()
+                .setTemplateRegistry(updatedRegistry.toProto())
+                .build()
+        }
+    }
+
+    suspend fun removeTemplateInfo(templateId: String) {
+        context.userPreferencesStore.updateData { currentPrefs ->
+            val currentRegistry = currentPrefs.templateRegistry.toTemplateRegistry()
+            val updatedTemplates = currentRegistry.templates.filter { it.id != templateId }
+            val updatedRegistry = currentRegistry.copy(
+                totalTemplateCount = updatedTemplates.size,
+                registryLastUpdated = System.currentTimeMillis(),
+                templates = updatedTemplates
+            )
+            currentPrefs.toBuilder()
+                .setTemplateRegistry(updatedRegistry.toProto())
+                .build()
+        }
+    }
+
+    suspend fun getTemplateInfo(templateId: String): TemplateInfo? {
+        return getTemplateRegistryOnce().templates.find { it.id == templateId }
     }
 }
