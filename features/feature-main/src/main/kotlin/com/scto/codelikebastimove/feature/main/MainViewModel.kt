@@ -12,6 +12,7 @@ import com.scto.codelikebastimove.core.templates.api.GradleLanguage
 import com.scto.codelikebastimove.core.templates.api.ProjectConfig
 import com.scto.codelikebastimove.core.templates.api.ProjectLanguage
 import com.scto.codelikebastimove.core.templates.api.ProjectManager
+import com.scto.codelikebastimove.core.templates.impl.ProjectManagerImpl
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +24,7 @@ import java.io.File
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     
     private val repository = UserPreferencesRepository(application)
-    private var projectManager: ProjectManager? = null
+    private val projectManager: ProjectManager = ProjectManagerImpl(application)
     
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
@@ -32,10 +33,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     
     init {
         initializeApp()
-    }
-    
-    fun setProjectManager(manager: ProjectManager) {
-        projectManager = manager
     }
     
     private fun initializeApp() {
@@ -147,29 +144,33 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     ) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
-            
-            if (projectManager == null) {
-                _uiState.update { it.copy(isLoading = false, errorMessage = "Project manager not initialized") }
-                return@launch
-            }
+            Log.d(TAG, "Creating project: $name with template: $templateType")
             
             val rootDir = _uiState.value.rootDirectory
+            Log.d(TAG, "Root directory: $rootDir")
+            
             if (rootDir.isBlank()) {
+                Log.e(TAG, "Root directory is blank")
                 _uiState.update { it.copy(isLoading = false, errorMessage = "Root directory not set. Please complete onboarding first.") }
                 return@launch
             }
             
             val rootDirFile = File(rootDir)
             if (!rootDirFile.exists()) {
-                rootDirFile.mkdirs()
+                val created = rootDirFile.mkdirs()
+                Log.d(TAG, "Created root directory: $created")
             }
             
             if (!rootDirFile.canWrite()) {
+                Log.e(TAG, "Cannot write to root directory: $rootDir")
                 _uiState.update { it.copy(isLoading = false, errorMessage = "Cannot write to project directory. Check storage permissions.") }
                 return@launch
             }
             
-            val template = projectManager?.getAvailableTemplates()?.find {
+            val templates = projectManager.getAvailableTemplates()
+            Log.d(TAG, "Available templates: ${templates.map { it.name }}")
+            
+            val template = templates.find {
                 when (templateType) {
                     ProjectTemplateType.EMPTY_ACTIVITY -> it.name == "Empty Activity"
                     ProjectTemplateType.EMPTY_COMPOSE -> it.name == "Empty Compose Activity"
@@ -180,9 +181,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
             
             if (template == null) {
+                Log.e(TAG, "Template not found for type: $templateType")
                 _uiState.update { it.copy(isLoading = false, errorMessage = "Template not found") }
                 return@launch
             }
+            
+            Log.d(TAG, "Using template: ${template.name}")
             
             val config = ProjectConfig(
                 projectName = name,
@@ -192,9 +196,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 gradleLanguage = if (useKotlinDsl) GradleLanguage.KOTLIN_DSL else GradleLanguage.GROOVY
             )
             
-            val result = projectManager?.createProject(template, config, rootDir)
+            Log.d(TAG, "Creating project with config: $config")
+            val result = projectManager.createProject(template, config, rootDir)
             
-            result?.onSuccess { project ->
+            result.onSuccess { project ->
+                Log.d(TAG, "Project created successfully: ${project.path}")
                 val storedProject = StoredProject(
                     name = name,
                     path = project.path,
@@ -215,7 +221,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         currentDestination = MainDestination.IDE
                     )
                 }
-            }?.onFailure { error ->
+            }.onFailure { error ->
+                Log.e(TAG, "Failed to create project: ${error.message}", error)
                 _uiState.update { it.copy(isLoading = false, errorMessage = error.message) }
             }
         }

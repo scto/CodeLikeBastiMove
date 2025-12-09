@@ -9,6 +9,7 @@ android {
 dependencies {
     api(project(":core:core-datastore"))
     api(project(":core:templates-api"))
+    implementation(project(":core:templates-impl"))
     
     api(project(":features:feature-editor"))
     api(project(":features:feature-git"))
