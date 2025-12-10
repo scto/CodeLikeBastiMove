@@ -2,8 +2,9 @@ package com.scto.codelikebastimove.feature.main
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.scto.codelikebastimove.core.logger.CLBMLogger
 import androidx.lifecycle.viewModelScope
+
+import com.scto.codelikebastimove.core.logger.CLBMLogger
 import com.scto.codelikebastimove.core.datastore.DirectoryItem
 import com.scto.codelikebastimove.core.datastore.ProjectTemplateType
 import com.scto.codelikebastimove.core.datastore.StoredProject
@@ -14,9 +15,13 @@ import com.scto.codelikebastimove.core.templates.api.ProjectLanguage
 import com.scto.codelikebastimove.core.templates.api.ProjectManager
 import com.scto.codelikebastimove.core.templates.impl.ProjectManagerImpl
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
+
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.File
@@ -28,6 +33,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
+ 
+     // NEU: Mappt das aktuelle Projekt auf dessen Pfad, damit die UI ihn beobachten kann
+    val currentProjectPath: StateFlow<String?> = projectManager.currentProject
+        .map { project -> project?.path }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = null
+        )
+
+    fun updateContentType(contentType: MainContentType) {
+        _uiState.value = _uiState.value.copy(currentContentType = contentType)
+    }
     
     private val navigationStack = mutableListOf<MainDestination>()
     
