@@ -12,6 +12,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        gradlePluginPortal()
+        // NEU: JitPack Repository hinzufügen, um die TreeView-Bibliothek zu laden
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
