@@ -14,7 +14,7 @@ kotlin-coroutines = "1.10.2"
 kotlin-serialization = "1.4.1"
 google-services = "4.4.3"
 plugin-crashlytics = "3.0.6"
-plugin-performance = "2.0.1"
+plugin-performance = "2.0.2"
 plugin-protobuf = "0.9.5"
 module-graph = "0.12.1"
 
