@@ -34,6 +34,7 @@ fun MainScreen(
     onExitApp: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val projectRootPath by viewModel.currentProjectPath.collectAsState()
     
     BackHandler(enabled = uiState.currentDestination != MainDestination.Home) {
         if (!viewModel.onBackPressed()) {
