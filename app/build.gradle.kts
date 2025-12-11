@@ -5,6 +5,7 @@ import java.io.FileInputStream
 plugins {
     id("codelikebastimove.android.application")
     id("codelikebastimove.android.application.compose")
+    id("codelikebastimove.android.koin")
 }
 
 val keystorePropsFile = rootProject.file("release.properties")
