@@ -1,4 +1,3 @@
-import com.scto.codelikebastimove.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
@@ -7,8 +6,8 @@ class AndroidKoinConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             dependencies {
-                "implementation"(libs.findLibrary("koin.android").get())
-                "implementation"(libs.findLibrary("koin.compose").get())
+                add("implementation", libs.koin.android)
+                add("implementation", libs.koin.compose)
             }
         }
     }
