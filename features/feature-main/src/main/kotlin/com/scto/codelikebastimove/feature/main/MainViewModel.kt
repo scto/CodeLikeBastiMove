@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -34,7 +35,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
  
-     // NEU: Mappt das aktuelle Projekt auf dessen Pfad, damit die UI ihn beobachten kann
+    // Wir behalten dies als Backup, aber die UI sollte primär uiState.projectPath nutzen,
+    // da dieser direkt aus dem Datastore wiederhergestellt wird.
     val currentProjectPath: StateFlow<String?> = projectManager.currentProject
         .map { project -> project?.path }
         .stateIn(
@@ -47,6 +49,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _uiState.value = _uiState.value.copy(currentContentType = contentType)
     }
     
+    // NEU: Update Funktion für den Projekt-Ansichtsmodus
+    fun updateProjectViewMode(mode: ProjectViewMode) {
+        _uiState.update { it.copy(projectViewType = mode) }
+    }
+    
     private val navigationStack = mutableListOf<MainDestination>()
     
     init {
@@ -55,6 +62,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     
     private fun initializeApp() {
         viewModelScope.launch {
+            // 1. Root Directory laden
             val existingRootDir = repository.getRootDirectoryOnce()
             if (existingRootDir.isNotBlank()) {
                 val dir = File(existingRootDir)
@@ -65,8 +73,44 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 refreshDirectoryContents()
             }
             
-            repository.projects.collect { projects ->
-                _uiState.update { it.copy(projects = projects) }
+            // 2. Projekte laden
+            // Wir starten eine separate Coroutine für den Flow Collector, damit initializeApp weiterläuft
+            launch {
+                repository.projects.collect { projects ->
+                    _uiState.update { it.copy(projects = projects) }
+                }
+            }
+
+            // 3. WICHTIG: Zuletzt geöffnetes Projekt aus Datastore wiederherstellen
+            try {
+                // Wir holen die Preferences einmalig, um den Startzustand zu setzen
+                val prefs = repository.userPreferences.first()
+                val lastPath = prefs.currentProjectPath // Annahme: Dieses Feld existiert in UserPreferences
+                
+                if (!lastPath.isNullOrBlank()) {
+                    val projectFile = File(lastPath)
+                    if (projectFile.exists()) {
+                        CLBMLogger.d(TAG, "Restoring last opened project: $lastPath")
+                        
+                        // Wir öffnen das Projekt direkt im State, ohne Navigation Stack Manipulation
+                        _uiState.update { 
+                            it.copy(
+                                projectName = projectFile.name,
+                                projectPath = lastPath,
+                                isProjectOpen = true,
+                                // Wenn wir ein Projekt wiederherstellen, gehen wir direkt zur IDE
+                                currentDestination = MainDestination.IDE
+                            )
+                        }
+                        // Optional: ProjectManager informieren, falls nötig
+                        // projectManager.open(projectFile) 
+                    } else {
+                        // Pfad existiert nicht mehr, bereinigen
+                        repository.setCurrentProjectPath("")
+                    }
+                }
+            } catch (e: Exception) {
+                CLBMLogger.e(TAG, "Failed to restore last opened project", e)
             }
         }
     }
@@ -125,6 +169,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun onOpenProject(projectPath: String, projectName: String) {
         viewModelScope.launch {
             repository.updateProjectLastOpened(projectPath, System.currentTimeMillis())
+            // Hier wird der Datastore aktualisiert
             repository.setCurrentProjectPath(projectPath)
         }
         navigationStack.add(_uiState.value.currentDestination)
@@ -140,6 +185,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     
     fun onCloseProject() {
         viewModelScope.launch {
+            // Datastore bereinigen
             repository.setCurrentProjectPath("")
         }
         navigationStack.clear()
@@ -165,29 +211,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             CLBMLogger.d(TAG, "Creating project: $name with template: $templateType")
             
             val rootDir = _uiState.value.rootDirectory
-            CLBMLogger.d(TAG, "Root directory: $rootDir")
             
             if (rootDir.isBlank()) {
-                CLBMLogger.e(TAG, "Root directory is blank")
                 _uiState.update { it.copy(isLoading = false, errorMessage = "Root directory not set. Please complete onboarding first.") }
                 return@launch
             }
             
             val rootDirFile = File(rootDir)
             if (!rootDirFile.exists()) {
-                val created = rootDirFile.mkdirs()
-                CLBMLogger.d(TAG, "Created root directory: $created")
+                rootDirFile.mkdirs()
             }
             
             if (!rootDirFile.canWrite()) {
-                CLBMLogger.e(TAG, "Cannot write to root directory: $rootDir")
                 _uiState.update { it.copy(isLoading = false, errorMessage = "Cannot write to project directory. Check storage permissions.") }
                 return@launch
             }
             
             val templates = projectManager.getAvailableTemplates()
-            CLBMLogger.d(TAG, "Available templates: ${templates.map { it.name }}")
-            
             val template = templates.find {
                 when (templateType) {
                     ProjectTemplateType.EMPTY_ACTIVITY -> it.name == "Empty Activity"
@@ -195,7 +235,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     ProjectTemplateType.BOTTOM_NAVIGATION -> it.name == "Bottom Navigation"
                     ProjectTemplateType.NAVIGATION_DRAWER -> it.name == "Navigation Drawer"
                     ProjectTemplateType.TABBED -> it.name == "Tabbed Activity"
-                    // Handle new template types
                     ProjectTemplateType.MULTI_MODULE -> it.name == "Multi-Module Project"
                     ProjectTemplateType.MVVM_CLEAN -> it.name == "MVVM Clean Architecture"
                     ProjectTemplateType.WEAR_OS -> it.name == "Wear OS Activity"
@@ -204,12 +243,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
             
             if (template == null) {
-                CLBMLogger.e(TAG, "Template not found for type: $templateType")
                 _uiState.update { it.copy(isLoading = false, errorMessage = "Template not found") }
                 return@launch
             }
-            
-            CLBMLogger.d(TAG, "Using template: ${template.name}")
             
             val config = ProjectConfig(
                 projectName = name,
@@ -219,11 +255,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 gradleLanguage = if (useKotlinDsl) GradleLanguage.KOTLIN_DSL else GradleLanguage.GROOVY
             )
             
-            CLBMLogger.d(TAG, "Creating project with config: $config")
             val result = projectManager.createProject(template, config, rootDir)
             
             result.onSuccess { project ->
-                CLBMLogger.d(TAG, "Project created successfully: ${project.path}")
                 val storedProject = StoredProject(
                     name = name,
                     path = project.path,
@@ -235,6 +269,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 repository.addProject(storedProject)
                 refreshDirectoryContents()
                 
+                // Nach Erstellung auch als "Aktuell" im Datastore speichern
+                repository.setCurrentProjectPath(project.path)
+
                 _uiState.update { 
                     it.copy(
                         isLoading = false,
@@ -258,8 +295,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val deleted = File(projectPath).deleteRecursively()
                 if (deleted) {
                     CLBMLogger.d(TAG, "Project deleted successfully: $projectPath")
-                } else {
-                    CLBMLogger.w(TAG, "Project deletion may have been incomplete: $projectPath")
                 }
                 refreshDirectoryContents()
             } catch (e: Exception) {
@@ -280,8 +315,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
             
             val repoName = url.substringAfterLast("/").removeSuffix(".git")
-            val targetDir = File(rootDir, repoName)
             
+            // Dummy implementation for clone simulation
             _uiState.update { it.copy(isLoading = false, cloneProgress = "") }
         }
     }
@@ -327,6 +362,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _uiState.update { it.copy(errorMessage = null) }
     }
     
+    fun openFile(path: String) {
+        // Logik zum Öffnen einer Datei im Editor
+        // Dies würde idealerweise EditorContent state aktualisieren
+        CLBMLogger.d(TAG, "Opening file: $path")
+    }
+
     fun createFolder(folderName: String) {
         viewModelScope.launch {
             val rootDir = _uiState.value.rootDirectory
@@ -345,18 +386,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 _uiState.update { it.copy(errorMessage = "Failed to create folder: ${e.message}") }
             }
         }
-    }
-    
-    fun getDirectoryContents(): List<File> {
-        val rootDir = _uiState.value.rootDirectory
-        if (rootDir.isBlank()) return emptyList()
-        
-        val dir = File(rootDir)
-        if (!dir.exists() || !dir.isDirectory) return emptyList()
-        
-        return dir.listFiles()?.toList()?.sortedWith(
-            compareBy<File> { !it.isDirectory }.thenBy { it.name.lowercase() }
-        ) ?: emptyList()
     }
     
     fun isProjectDirectory(file: File): Boolean {
