@@ -49,5 +49,9 @@ gradlePlugin {
             id = "codelikebastimove.android.feature"
             implementationClass = "AndroidFeatureConventionPlugin"
         }
+        register("androidKoin") {
+            id = "codelikebastimove.android.koin"
+            implementationClass = "AndroidKoinConventionPlugin"
+        }
     }
 }
