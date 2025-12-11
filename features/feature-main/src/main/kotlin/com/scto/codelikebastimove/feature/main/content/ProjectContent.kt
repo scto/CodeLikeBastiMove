@@ -3,22 +3,19 @@ package com.scto.codelikebastimove.feature.main.content
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Folder
-import androidx.compose.material.icons.filled.InsertDriveFile
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 import com.scto.codelikebastimove.core.templates.api.TreeNode
 import com.scto.codelikebastimove.feature.explorer.FileItem
 import com.scto.codelikebastimove.feature.main.MainViewModel
+import com.scto.codelikebastimove.feature.main.ProjectViewMode
 import com.scto.codelikebastimove.feature.treeview.TreeView
 import java.io.File
 
@@ -27,15 +24,17 @@ fun ProjectContent(
     viewModel: MainViewModel,
     modifier: Modifier = Modifier,
 ) {
-    // Annahme: MainViewModel stellt das aktuelle Projektverzeichnis bereit.
-    // Falls das ViewModel anders aufgebaut ist, muss dieser Aufruf angepasst werden.
-    // Hier nutzen wir einen State, der das Root-Verzeichnis repräsentiert.
-    val projectRootPath by viewModel.currentProjectPath.collectAsState()
-    val projectRoot = remember(projectRootPath) {
-        if (projectRootPath != null) File(projectRootPath!!) else null
+    val uiState by viewModel.uiState.collectAsState()
+    
+    // WICHTIG: Wir holen den Pfad jetzt direkt aus dem UI State, der aus dem Datastore wiederhergestellt wurde.
+    // Das behebt das Problem, dass der Pfad verloren geht oder im ProjectManager noch nicht gesetzt ist.
+    val projectPath = uiState.projectPath
+    val projectRoot = remember(projectPath) {
+        if (projectPath.isNotBlank()) File(projectPath) else null
     }
 
-    var selectedViewType by remember { mutableStateOf(ProjectViewType.ANDROID) }
+    // ViewType wird jetzt auch im ViewModel/State verwaltet
+    val selectedViewType = uiState.projectViewType
     var isDropdownExpanded by remember { mutableStateOf(false) }
 
     // Berechne den Baum basierend auf der Auswahl neu, wenn sich das Root oder der Typ ändert
@@ -44,9 +43,9 @@ fun ProjectContent(
             emptyList()
         } else {
             when (selectedViewType) {
-                ProjectViewType.ANDROID -> createAndroidViewTree(projectRoot)
-                ProjectViewType.PROJECT -> createProjectViewTree(projectRoot)
-                ProjectViewType.PACKAGES -> createPackagesViewTree(projectRoot)
+                ProjectViewMode.ANDROID -> createAndroidViewTree(projectRoot)
+                ProjectViewMode.PROJECT -> createProjectViewTree(projectRoot)
+                ProjectViewMode.PACKAGES -> createPackagesViewTree(projectRoot)
             }
         }
     }
@@ -75,11 +74,11 @@ fun ProjectContent(
                 expanded = isDropdownExpanded,
                 onDismissRequest = { isDropdownExpanded = false }
             ) {
-                ProjectViewType.entries.forEach { type ->
+                ProjectViewMode.entries.forEach { type ->
                     DropdownMenuItem(
                         text = { Text(type.displayName) },
                         onClick = {
-                            selectedViewType = type
+                            viewModel.updateProjectViewMode(type)
                             isDropdownExpanded = false
                         }
                     )
@@ -87,15 +86,27 @@ fun ProjectContent(
             }
         }
 
-        Divider()
+        HorizontalDivider()
 
         if (treeNodes.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Kein Projekt geöffnet", style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "Kein Projekt geöffnet oder Ordner leer", 
+                        style = MaterialTheme.typography.bodyMedium, 
+                        color = Color.Gray
+                    )
+                    if (projectPath.isNotBlank()) {
+                        Text(
+                            text = "Pfad: $projectPath",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = Color.Gray.copy(alpha = 0.7f)
+                        )
+                    }
+                }
             }
         } else {
             // Zeige den generierten Baum an
-            // Hinweis: Hier wird angenommen, dass TreeView eine Liste von TreeNode<FileItem> akzeptiert
             TreeView(
                 nodes = treeNodes,
                 onNodeClick = { node ->
@@ -107,12 +118,6 @@ fun ProjectContent(
             )
         }
     }
-}
-
-enum class ProjectViewType(val displayName: String) {
-    ANDROID("Android"),
-    PROJECT("Projekt"),
-    PACKAGES("Pakete")
 }
 
 // --------------------------------------------------------------------------------
