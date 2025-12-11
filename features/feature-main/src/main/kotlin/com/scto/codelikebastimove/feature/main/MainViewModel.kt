@@ -35,10 +35,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
  
-    // Wir behalten dies als Backup, aber die UI sollte primär uiState.projectPath nutzen,
-    // da dieser direkt aus dem Datastore wiederhergestellt wird.
-    val currentProjectPath: StateFlow<String?> = projectManager.currentProject
-        .map { project -> project?.path }
+    // Fixed: Derived from uiState instead of projectManager to avoid dependency on missing property
+    val currentProjectPath: StateFlow<String?> = _uiState
+        .map { state -> state.projectPath.ifBlank { null } }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -46,7 +45,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         )
 
     fun updateContentType(contentType: MainContentType) {
-        _uiState.value = _uiState.value.copy(currentContentType = contentType)
+        // Fixed: Parameter name corrected to 'currentContent'
+        _uiState.value = _uiState.value.copy(currentContent = contentType)
     }
     
     // NEU: Update Funktion für den Projekt-Ansichtsmodus
@@ -102,8 +102,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                                 currentDestination = MainDestination.IDE
                             )
                         }
-                        // Optional: ProjectManager informieren, falls nötig
-                        // projectManager.open(projectFile) 
                     } else {
                         // Pfad existiert nicht mehr, bereinigen
                         repository.setCurrentProjectPath("")

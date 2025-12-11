@@ -20,7 +20,10 @@ data class MainUiState(
     val cloneProgress: String = "",
     val bottomSheetContent: BottomSheetContentType = BottomSheetContentType.TERMINAL,
     // NEU: Speichert den Ansichtsmodus des Projekt-Explorers (z.B. Android vs Projekt)
-    val projectViewType: ProjectViewMode = ProjectViewMode.ANDROID
+    val projectViewType: ProjectViewMode = ProjectViewMode.ANDROID,
+    // Added missing fields to fix compilation errors
+    val isLoading: Boolean = false,
+    val hasUnsavedChanges: Boolean = false
 )
 
 enum class BottomSheetContentType(val title: String) {
