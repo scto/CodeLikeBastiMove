@@ -109,7 +109,7 @@ fun MainScreen(
             MainDestination.IDE -> {
                 IDEWorkspaceScreen(
                     projectName = uiState.projectName,
-                    projectPath = uiState.projectPath, // Pfad übergeben
+                    projectPath = uiState.projectPath,
                     currentContent = uiState.currentContent,
                     isBottomSheetExpanded = uiState.isBottomSheetExpanded,
                     bottomSheetContent = uiState.bottomSheetContent,
@@ -145,7 +145,9 @@ fun MainScreen(
             }
             
             MainDestination.BuildVariants -> {
+                // Hier wurde der projectPath hinzugefügt
                 BuildVariantsScreen(
+                    projectPath = uiState.projectPath,
                     onBackClick = { viewModel.onBackPressed() }
                 )
             }
