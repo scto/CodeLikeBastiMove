@@ -53,6 +53,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun IDEWorkspaceScreen(
     projectName: String,
+    projectPath: String, // Neuer Parameter für den Pfad
     currentContent: MainContentType,
     isBottomSheetExpanded: Boolean,
     bottomSheetContent: BottomSheetContentType,
@@ -72,8 +73,10 @@ fun IDEWorkspaceScreen(
             ModalDrawerSheet {
                 FileTreeDrawerContent(
                     projectName = projectName,
+                    projectPath = projectPath, // Pfad an den Drawer weitergeben
                     onFileClick = { file ->
-                        // Handle file click
+                        // Handle file click logic here or pass up
+                        // For example: viewModel.openFile(file.path)
                         scope.launch { drawerState.close() }
                     },
                     onOpenTerminalSheet = {
@@ -128,18 +131,7 @@ fun IDEWorkspaceScreen(
                         when (contentType) {
                             MainContentType.EDITOR -> EditorContent()
                             MainContentType.PROJECT -> ProjectContent(
-                                // Assuming we need to pass viewModel or logic here in future, 
-                                // but ProjectContent signature requires MainViewModel in other file.
-                                // We need to fix ProjectContent signature usage if MainViewModel is not available here.
-                                // However, IDEWorkspaceScreen usually gets the viewModel from MainScreen or passes it down.
-                                // In the provided ProjectContent.kt I just generated, it takes viewModel.
-                                // But IDEWorkspaceScreen arguments do not include viewModel.
-                                // I will check MainScreen.kt usage. MainScreen calls IDEWorkspaceScreen.
-                                // If I can't change MainScreen, I have to inject viewModel here.
-                                // Since I can't edit MainScreen (not requested), I assume ViewModel is obtained via hilt/koin or similar
-                                // or passed as param.
-                                // The user provided MainScreen.kt and it does NOT pass viewModel to IDEWorkspaceScreen.
-                                // So IDEWorkspaceScreen must obtain it.
+                                // ViewModel sollte idealerweise injected oder übergeben werden
                                 viewModel = androidx.lifecycle.viewmodel.compose.viewModel()
                             )
                             MainContentType.GIT -> GitContent()

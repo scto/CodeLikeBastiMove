@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.Brush
@@ -45,14 +44,15 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField // Added import
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -69,9 +69,11 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.io.File
 
-// Exposed data class for use in other screens (e.g. IDEWorkspaceScreen)
+// Erweiterte Datenklasse für die echte Dateistruktur
 data class FileTreeItem(
+    val file: File?, // File kann null sein für virtuelle Ordner, aber hier meistens gesetzt
     val name: String,
     val path: String,
     val isDirectory: Boolean,
@@ -90,6 +92,7 @@ enum class DrawerTab(val title: String, val icon: ImageVector) {
 @Composable
 fun FileTreeDrawerContent(
     projectName: String,
+    projectPath: String, // Pfad zum Projektverzeichnis
     onFileClick: (FileTreeItem) -> Unit,
     onOpenTerminalSheet: () -> Unit = {},
     modifier: Modifier = Modifier
@@ -100,7 +103,7 @@ fun FileTreeDrawerContent(
     Column(
         modifier = modifier.fillMaxHeight()
     ) {
-        DrawerHeader(title = "Dateipfad")
+        DrawerHeader(title = projectName) // Zeige Projektnamen als Header
         
         ScrollableTabRow(
             selectedTabIndex = selectedTab,
@@ -141,7 +144,7 @@ fun FileTreeDrawerContent(
             when (tabs[tabIndex]) {
                 DrawerTab.FILES -> {
                     FileTreeTabContent(
-                        projectName = projectName,
+                        projectPath = projectPath,
                         onFileClick = onFileClick
                     )
                 }
@@ -185,22 +188,44 @@ private fun DrawerHeader(
 
 @Composable
 private fun FileTreeTabContent(
-    projectName: String,
+    projectPath: String,
     onFileClick: (FileTreeItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val projectTree = remember { createDrawerFileTree(projectName) }
+    // Echte Dateistruktur basierend auf dem Pfad erstellen
+    val projectTree = remember(projectPath) { 
+        if (projectPath.isNotBlank()) {
+            val rootFile = File(projectPath)
+            createRealFileTree(rootFile)
+        } else {
+            emptyList()
+        }
+    }
     
-    LazyColumn(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface)
-    ) {
-        items(projectTree) { item ->
-            DrawerFileTreeItemRow(
-                item = item,
-                onItemClick = onFileClick
+    if (projectTree.isEmpty()) {
+        Column(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Kein Projekt geöffnet",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+        }
+    } else {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface)
+        ) {
+            items(projectTree) { item ->
+                DrawerFileTreeItemRow(
+                    item = item,
+                    onItemClick = onFileClick
+                )
+            }
         }
     }
 }
@@ -579,7 +604,7 @@ private fun DrawerFileTreeItemRow(
     onItemClick: (FileTreeItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var isExpanded by remember { mutableStateOf(item.level < 1) }
+    var isExpanded by remember { mutableStateOf(false) }
     
     Column(modifier = modifier) {
         Row(
@@ -671,28 +696,29 @@ private fun getDrawerFileIconColor(item: FileTreeItem): Color {
     }
 }
 
-private fun createDrawerFileTree(projectName: String): List<FileTreeItem> {
-    return listOf(
+// Rekursive Funktion zum Erstellen des Dateibaums
+private fun createRealFileTree(root: File, startLevel: Int = 0): List<FileTreeItem> {
+    if (!root.exists() || !root.isDirectory) return emptyList()
+
+    val files = root.listFiles() ?: return emptyList()
+    
+    // Sortieren: Ordner zuerst, dann Dateien (alphabetisch)
+    val sortedFiles = files.sortedWith(compareBy({ !it.isDirectory }, { it.name.lowercase() }))
+
+    return sortedFiles.map { file ->
+        val children = if (file.isDirectory) {
+            createRealFileTree(file, startLevel + 1)
+        } else {
+            emptyList()
+        }
+
         FileTreeItem(
-            name = projectName,
-            path = projectName,
-            isDirectory = true,
-            level = 0,
-            children = listOf(
-                FileTreeItem(".acside", ".acside", true, level = 1),
-                FileTreeItem(".git", ".git", true, level = 1),
-                FileTreeItem(".github", ".github", true, level = 1),
-                FileTreeItem(".gradle", ".gradle", true, level = 1),
-                FileTreeItem(".kotlin", ".kotlin", true, level = 1),
-                FileTreeItem("app", "app", true, level = 1),
-                FileTreeItem("attached_assets", "attached_assets", true, level = 1),
-                FileTreeItem("build", "build", true, level = 1),
-                FileTreeItem("build-logic", "build-logic", true, level = 1),
-                FileTreeItem("core", "core", true, level = 1),
-                FileTreeItem("features", "features", true, level = 1),
-                FileTreeItem("gradle", "gradle", true, level = 1),
-                FileTreeItem(".gitignore", ".gitignore", false, level = 1)
-            )
+            file = file,
+            name = file.name,
+            path = file.absolutePath,
+            isDirectory = file.isDirectory,
+            level = startLevel,
+            children = children
         )
-    )
+    }
 }

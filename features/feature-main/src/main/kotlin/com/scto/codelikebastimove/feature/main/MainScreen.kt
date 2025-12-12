@@ -109,6 +109,7 @@ fun MainScreen(
             MainDestination.IDE -> {
                 IDEWorkspaceScreen(
                     projectName = uiState.projectName,
+                    projectPath = uiState.projectPath, // Pfad übergeben
                     currentContent = uiState.currentContent,
                     isBottomSheetExpanded = uiState.isBottomSheetExpanded,
                     bottomSheetContent = uiState.bottomSheetContent,
