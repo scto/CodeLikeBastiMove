@@ -1,31 +1,22 @@
 # Android Mobile IDE App entirely built with Jetpack Compose (in development)
 
 ![Run Unit Tests](https://github.com/scto/CodeLikeBastiMove/actions/workflows/tests.yml/badge.svg)
-[![CodeFactor](https://www.codefactor.io/repository/github/mobiledevpro/closetalk.app/badge)](https://www.codefactor.io/repository/github/mobiledevpro/closetalk.app)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mobiledevpro_Jetpack-Compose-ChatApp-Template&metric=alert_status)](https://sonarcloud.io/dashboard?id=mobiledevpro_Jetpack-Compose-ChatApp-Template)
+[![CodeFactor](https://www.codefactor.io/repository/github/scto/codelikebastimove/badge)](https://www.codefactor.io/repository/github/scto/codelikebastimove)
 
 [![Kotlin Version](https://img.shields.io/badge/Kotlin-2.2.0-blue.svg?style=flat-square)](http://kotlinlang.org/)
 [![Compose Bom](https://img.shields.io/badge/Compose%20Bom-2025.07.00-blue.svg?style=flat-square)]([http://kotlinlang.org/](https://developer.android.com/jetpack/compose/bom/bom-mapping))
 [![Gradle Plugin](https://img.shields.io/badge/Gradle-8.11.1-blue.svg?style=flat-square)](https://developer.android.com/build/releases/gradle-plugin)
 [![API](https://img.shields.io/badge/Min%20SDK-29%20[Android%2010]-blue.svg?style=flat-square)](https://github.com/AndroidSDKSources/android-sdk-sources-list)
-[![Target SDK](https://img.shields.io/badge/Target%20SDK-36%20[Android%2016]-blue.svg?style=flat-square)](https://developer.android.com/about/versions/13)
+[![Target SDK](https://img.shields.io/badge/Target%20SDK-35%20[Android%2016]-blue.svg?style=flat-square)](https://developer.android.com/about/versions/13)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](http://www.apache.org/licenses/LICENSE-2.0)
 [![Android Studio](https://img.shields.io/badge/Android%20Studio%20Narwhal-2025.1.2-orange.svg?style=flat-square)](https://developer.android.com/studio/preview)
 
-![GitHub last commit](https://img.shields.io/github/last-commit/mobiledevpro/closetalk.app?color=red&style=flat-square)
-
-### Try demo:
-[<img src="https://github.com/mobiledevpro/closetalk.app/assets/5750211/56e09ffa-faa5-4ad1-8ad8-4ee35957870b" width="250" alt="Demo"/>](https://play.google.com/store/apps/details?id=com.mobiledevpro.closetalk.app&utm_source=landing)
+![GitHub last commit](https://img.shields.io/github/last-commit/scto/codelikebastimove?color=red&style=flat-square)
 
 ##
-![closetalk_github_social_preview](https://github.com/mobiledevpro/closetalk.app/assets/5750211/343f1ab5-54e4-41c2-a554-af0526aee382)
+![codelikebastimove_github_social_preview](https://github.com/scto/codelikebastimove/assets/5750211/343f1ab5-54e4-41c2-a554-af0526aee382)
 
 [![Youtube](https://img.shields.io/badge/-youtube-red?logo=youtube&message=Youtube&style=for-the-badge&label=Watch+on)](https://www.youtube.com/playlist?list=PL9IBbMupfHWrW419OtGlzc7cBEMNqyLa4)
-
-
-## Apps built from this template: 
-- [Screenshot Maker - NeonFrame](https://play.google.com/store/apps/details?id=com.mobiledevpro.neonframe.app) - Make eye-catching screenshots you share on Twitter, Instagram, and others.
-- [Habit Tracker](https://www.instagram.com/stories/highlights/18330975238092077/) - Coming...
 
 
 ## Tech. stack
@@ -38,7 +29,7 @@
 * [Koin](https://insert-koin.io/docs/reference/koin-android/compose) for dependency injection
 * [Coil](https://coil-kt.github.io/coil/compose/) for image loading
 * MVI + modularization with a clean architecture
-* GitHub Actions [Complete Guide](https://www.patreon.com/mobiledevpro/shop/power-of-github-actions-complete-guide-943321)
+* GitHub Actions [Complete Guide](https://www.patreon.com/scto/shop/power-of-github-actions-complete-guide-943321)
 
 
 ## Speed up Gradle build time
@@ -86,12 +77,12 @@ adb logcat -v time -s FA FA-SVC
 ```
 
 
-## UI testing with [Maestro](https://maestro.mobile.dev/):
+## UI testing with [Maestro](https://maestro.sc.to/):
 
-* Install Maestro: run in terminal ```curl -Ls "https://get.maestro.mobile.dev" | bash```
+* Install Maestro: run in terminal ```curl -Ls "https://get.maestro.sc.to" | bash```
 * Install the app on emulator (doesn't work with physical device)
-* Run the flow: run in terminal ```maestro test -c maestro/people-profile-flow.yaml```
-* [Sample config](maestro/people-profile-flow.yaml)
+* Run the flow: run in terminal ```maestro test -c maestro/festure-main-flow.yaml```
+* [Sample config](maestro/feature-main-flow.yaml)
 
 ## Module Graph
 
@@ -105,25 +96,25 @@ adb logcat -v time -s FA FA-SVC
 
 graph LR
   subgraph :core
-    :core:navigation["navigation"]
-    :core:ui["ui"]
-    :core:di["di"]
-    :core:domain["domain"]
-    :core:coroutines["coroutines"]
-    :core:util["util"]
-    :core:analytics["analytics"]
-    :core:database["database"]
+    :core:core-datastore["core-datastore"]
+    :core:core-datastore-proto["core-datastore-proto"]
+    :core:core:logger["core-logger"]
+    :core:core-resources["core-resources"]
+    :core:core-ui["core-ui"]
+    :core:templates-api["templates-api"]
+    :core:templates-impl["templates-impl"]
   end
-  subgraph :feature
-    :feature:home["home"]
-    :feature:onboarding["onboarding"]
-    :feature:subscription["subscription"]
-    :feature:chat_list["chat_list"]
-    :feature:people["people"]
-    :feature:user_profile["user_profile"]
-    :feature:people_list["people_list"]
-    :feature:people_core["people_core"]
-    :feature:people_profile["people_profile"]
+  subgraph :features
+     :features:feature-designer["feature-designee"] 
+    :features:feature-editor["feature-editor"]
+    :features:feature-explorer["feature-explorer"]
+    :features:feature-git["feature-git"]
+    :features:feature-home["feature-home"]
+    :features:feature-main["feature-main"]
+
+    :features:feature-onboarding["feature-onboarding"]
+    :features:feature-settings["feature-settings"]
+    :features:feature-treeview["feature-treeview"]
   end
   :core:navigation --> :core:ui
   :core:navigation --> :core:di
@@ -198,22 +189,15 @@ moduleGraphConfig {
 ##
 ## Author:
 
-<a href="https://github.com/dmitriy-chernysh" target="_blank">
+<a href="https://github.com/scto" target="_blank">
   <img src="https://s.gravatar.com/avatar/72c649d298a8f0f088fd0850e19b9147?s=400" width="70" align="left">
 </a>
 
-**Dmitri Chernysh**
-
-[![Instagram](https://img.shields.io/badge/-instagram-E4405F?logo=instagram&message=Tech+insights+on&label=Tech+insights+on&logoColor=white&style=for-the-badge)](https://www.instagram.com/mobiledevpro/)
-[![Youtube](https://img.shields.io/badge/-youtube-red?logo=youtube&message=Youtube&label=Watch+on&style=for-the-badge)](https://www.youtube.com/@mobiledevpro?sub_confirmation=1&utm_source=github_main_profile)
-[![Patreon](https://img.shields.io/badge/-patreon-f2a09b?logo=patreon&logoColor=white&label=Join+on&style=for-the-badge)](https://patreon.com/mobiledevpro)
-[![Linkedin](https://img.shields.io/badge/-linkedin-0A66C2?logo=linkedin&logoColor=white&label=Follow+on&style=for-the-badge)](https://www.linkedin.com/in/dmitriychernysh/)
-[![Upwork](https://img.shields.io/badge/-upwork-14a800?logo=Upwork&logoColor=white&label=Work+with+me+on&style=for-the-badge)](https://www.upwork.com/freelancers/dmitrich)
-
+**Thomas Schmid**
 
 ## License:
 
-Copyright 2025 Dmitri Chernysh
+Copyright 2025 Thomas Schmid
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -230,8 +214,8 @@ limitations under the License.
 ## Thanks for the support
 **Stargazers**
 
-[![Stargazers repo roster for @mobiledevpro/closetalk.app](http://reporoster.com/stars/dark/mobiledevpro/closetalk.app)](https://github.com/mobiledevpro/closetalk.app/stargazers)
+[![Stargazers repo roster for @scto/codelikebastimove](http://reporoster.com/stars/dark/scto/codelikebastimove)](https://github.com/scto/codelikebastimove/stargazers)
 
 **Forkers**
 
-[![Forkers repo roster for @mobiledevpro/closetalk.app](http://reporoster.com/forks/dark/mobiledevpro/closetalk.app)](https://github.com/mobiledevpro/closetalk.app/network/members)
+[![Forkers repo roster for @scto/codelikebastimove](http://reporoster.com/forks/dark/scto/codelikebastimove)](https://github.com/scto/codelikebastimove/network/members)
