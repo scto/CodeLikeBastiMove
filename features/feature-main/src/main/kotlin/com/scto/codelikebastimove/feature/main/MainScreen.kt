@@ -153,7 +153,8 @@ fun MainScreen(
             MainDestination.SubModuleMaker -> {
                 SubModuleMakerScreen(
                     onBackClick = { viewModel.onBackPressed() },
-                    onCreateModule = { name, language ->
+                    onCreateModule = { modulePath, packageName, language, type ->
+                        viewModel.createSubModule(modulePath, packageName, language, type)
                         viewModel.onNavigate(MainDestination.IDE)
                     }
                 )

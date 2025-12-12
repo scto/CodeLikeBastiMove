@@ -15,6 +15,8 @@ import com.scto.codelikebastimove.core.templates.api.ProjectLanguage
 import com.scto.codelikebastimove.core.templates.api.ProjectManager
 import com.scto.codelikebastimove.core.templates.impl.ProjectManagerImpl
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
+import com.scto.codelikebastimove.feature.main.screens.ModuleType
+import com.scto.codelikebastimove.feature.main.screens.ProgrammingLanguage
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -380,6 +382,154 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 _uiState.update { it.copy(isLoading = false, errorMessage = error.message) }
             }
         }
+    }
+
+    /**
+     * Erstellt ein Sub-Modul basierend auf der Gradle-Notation (z.B. :core:ui).
+     * @param modulePath Der Pfad im Gradle-Format (z.B. :features:login)
+     * @param packageName Der Paketname für das neue Modul (optional)
+     * @param language Die Programmiersprache (Kotlin/Java)
+     * @param type Der Modultyp (Library, Feature, Core) für die build.gradle Konfiguration
+     */
+    fun createSubModule(
+        modulePath: String,
+        packageName: String,
+        language: ProgrammingLanguage,
+        type: ModuleType
+    ) {
+        val currentProjectPath = _uiState.value.projectPath
+        if (currentProjectPath.isBlank()) {
+            _uiState.update { it.copy(errorMessage = "Kein Projekt geöffnet") }
+            return
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.update { it.copy(isLoading = true) }
+            
+            try {
+                // 1. Gradle Pfad normalisieren und Ordnerstruktur ableiten
+                // :features:login -> features/login
+                val gradlePath = if (modulePath.startsWith(":")) modulePath else ":$modulePath"
+                val relativePath = gradlePath.trimStart(':').replace(':', File.separatorChar)
+                
+                val projectDir = File(currentProjectPath)
+                val moduleDir = File(projectDir, relativePath)
+                
+                if (moduleDir.exists()) {
+                    _uiState.update { it.copy(isLoading = false, errorMessage = "Modul existiert bereits: $gradlePath") }
+                    return@launch
+                }
+                
+                if (!moduleDir.mkdirs()) {
+                    _uiState.update { it.copy(isLoading = false, errorMessage = "Konnte Ordner nicht erstellen: ${moduleDir.path}") }
+                    return@launch
+                }
+
+                // 2. build.gradle.kts erstellen
+                val finalPackageName = if (packageName.isNotBlank()) {
+                    packageName
+                } else {
+                    // Fallback: Versuche einen Paketnamen aus dem Pfad zu generieren
+                    "com.example.${relativePath.replace(File.separatorChar, '.')}"
+                }
+
+                val buildFile = File(moduleDir, "build.gradle.kts")
+                buildFile.writeText(generateModuleBuildGradle(finalPackageName, type))
+                
+                // .gitignore erstellen
+                File(moduleDir, ".gitignore").writeText("/build\n")
+                
+                // proguard-rules.pro erstellen
+                File(moduleDir, "consumer-rules.pro").createNewFile()
+                File(moduleDir, "proguard-rules.pro").createNewFile()
+
+                // 3. Ordnerstruktur für Source Code erstellen
+                val srcDir = if (language == ProgrammingLanguage.KOTLIN) "src/main/kotlin" else "src/main/java"
+                val packagePath = finalPackageName.replace('.', File.separatorChar)
+                val codeDir = File(moduleDir, "$srcDir/$packagePath")
+                codeDir.mkdirs()
+                
+                // AndroidManifest.xml erstellen (notwendig für Android Libraries)
+                val manifestDir = File(moduleDir, "src/main")
+                manifestDir.mkdirs()
+                val manifestFile = File(manifestDir, "AndroidManifest.xml")
+                manifestFile.writeText("""
+                    <?xml version="1.0" encoding="utf-8"?>
+                    <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+                    </manifest>
+                """.trimIndent())
+
+                // 4. Modul in settings.gradle.kts (oder settings.gradle) registrieren
+                val settingsKts = File(projectDir, "settings.gradle.kts")
+                val settingsGroovy = File(projectDir, "settings.gradle")
+                
+                if (settingsKts.exists()) {
+                    val content = settingsKts.readText()
+                    if (!content.contains("include(\"$gradlePath\")")) {
+                        settingsKts.appendText("\ninclude(\"$gradlePath\")\n")
+                    }
+                } else if (settingsGroovy.exists()) {
+                    val content = settingsGroovy.readText()
+                    if (!content.contains("include '$gradlePath'") && !content.contains("include \"$gradlePath\"")) {
+                        settingsGroovy.appendText("\ninclude '$gradlePath'\n")
+                    }
+                }
+
+                _uiState.update { it.copy(isLoading = false, errorMessage = null) }
+                // Optional: Force refresh of file tree
+                
+            } catch (e: Exception) {
+                CLBMLogger.e(TAG, "Error creating submodule", e)
+                _uiState.update { it.copy(isLoading = false, errorMessage = "Fehler beim Erstellen des Moduls: ${e.message}") }
+            }
+        }
+    }
+
+    private fun generateModuleBuildGradle(packageName: String, type: ModuleType): String {
+        return """
+            plugins {
+                id("com.android.library")
+                id("org.jetbrains.kotlin.android")
+            }
+
+            android {
+                namespace = "$packageName"
+                compileSdk = 34
+
+                defaultConfig {
+                    minSdk = 24
+                    
+                    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+                    consumerProguardFiles("consumer-rules.pro")
+                }
+
+                buildTypes {
+                    release {
+                        isMinifyEnabled = false
+                        proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+                    }
+                }
+                
+                compileOptions {
+                    sourceCompatibility = JavaVersion.VERSION_1_8
+                    targetCompatibility = JavaVersion.VERSION_1_8
+                }
+                
+                kotlinOptions {
+                    jvmTarget = "1.8"
+                }
+            }
+
+            dependencies {
+                implementation("androidx.core:core-ktx:1.12.0")
+                implementation("androidx.appcompat:appcompat:1.6.1")
+                implementation("com.google.android.material:material:1.11.0")
+                
+                testImplementation("junit:junit:4.13.2")
+                androidTestImplementation("androidx.test.ext:junit:1.1.5")
+                androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+            }
+        """.trimIndent()
     }
     
     fun deleteProject(projectPath: String) {
