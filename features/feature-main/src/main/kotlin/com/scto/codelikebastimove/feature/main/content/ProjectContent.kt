@@ -28,9 +28,8 @@ import androidx.compose.ui.unit.sp
 import com.scto.codelikebastimove.feature.main.MainViewModel
 import java.io.File
 
-// Local data structures to ensure self-containment and fix compilation errors
 data class ProjectFileItem(
-    val file: File?, // Null for virtual folders
+    val file: File?,
     val name: String,
     val isDirectory: Boolean,
     val path: String,
@@ -51,7 +50,6 @@ fun ProjectContent(
     var selectedViewType by remember { mutableStateOf(ProjectViewType.ANDROID) }
     var isDropdownExpanded by remember { mutableStateOf(false) }
 
-    // Rebuild tree when root or view type changes
     val treeItems = remember(projectRoot, selectedViewType) {
         if (projectRoot == null || !projectRoot.exists()) {
             emptyList()
@@ -69,7 +67,6 @@ fun ProjectContent(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface)
     ) {
-        // Header with view selection
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -82,7 +79,7 @@ fun ProjectContent(
                 style = MaterialTheme.typography.titleSmall,
                 modifier = Modifier.weight(1f)
             )
-            Icon(Icons.Default.ArrowDropDown, contentDescription = "Change View")
+            Icon(Icons.Default.ArrowDropDown, contentDescription = "Ansicht ändern")
 
             DropdownMenu(
                 expanded = isDropdownExpanded,
@@ -104,7 +101,7 @@ fun ProjectContent(
 
         if (treeItems.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("No project opened", style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
+                Text("Kein Projekt geöffnet", style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
             }
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -113,8 +110,7 @@ fun ProjectContent(
                         item = item,
                         onItemClick = { clickedItem ->
                             if (!clickedItem.isDirectory) {
-                                // Assume viewModel has this method, or we handle it otherwise
-                                // viewModel.openFile(clickedItem.path)
+                                viewModel.openFile(clickedItem.path)
                             }
                         }
                     )
@@ -126,8 +122,8 @@ fun ProjectContent(
 
 enum class ProjectViewType(val displayName: String) {
     ANDROID("Android"),
-    PROJECT("Project"),
-    PACKAGES("Packages")
+    PROJECT("Projekt"),
+    PACKAGES("Pakete")
 }
 
 @Composable
@@ -225,17 +221,12 @@ private fun getFileIconColor(item: ProjectFileItem): Color {
     }
 }
 
-// --------------------------------------------------------------------------------
-// Tree Generation Functions
-// --------------------------------------------------------------------------------
-
 private fun createAndroidViewTree(root: File): List<ProjectFileItem> {
     val nodes = mutableListOf<ProjectFileItem>()
     val appDir = File(root, "app")
 
     val appChildren = mutableListOf<ProjectFileItem>()
 
-    // Manifests
     val manifestFile = File(appDir, "src/main/AndroidManifest.xml")
     if (manifestFile.exists()) {
         val manifestItem = ProjectFileItem(
@@ -257,7 +248,6 @@ private fun createAndroidViewTree(root: File): List<ProjectFileItem> {
         appChildren.add(manifestItem)
     }
 
-    // Java/Kotlin
     val javaSrc = File(appDir, "src/main/java")
     val kotlinSrc = File(appDir, "src/main/kotlin")
     val codeChildren = mutableListOf<ProjectFileItem>()
@@ -282,12 +272,8 @@ private fun createAndroidViewTree(root: File): List<ProjectFileItem> {
         )
     }
 
-    // Res
     val resDir = File(appDir, "src/main/res")
     if (resDir.exists()) {
-        val resNodes = createProjectViewTree(resDir, 1) // level will be adjusted in recursion if needed, but strict map uses +1
-        // We use createProjectViewTree but need to shift levels.
-        // Simplified: just call it starting at level 2
         val children = createProjectViewTree(resDir, 2)
         
         if (children.isNotEmpty()) {
@@ -317,7 +303,6 @@ private fun createAndroidViewTree(root: File): List<ProjectFileItem> {
         )
     }
 
-    // Gradle Scripts
     val gradleFiles = root.listFiles { file ->
         file.name.endsWith(".gradle") ||
         file.name.endsWith(".gradle.kts") ||
@@ -395,7 +380,6 @@ private fun createPackagesViewTree(root: File, startLevel: Int = 0): List<Projec
 
     for (file in sortedFiles) {
         if (file.isDirectory) {
-            // Flattening logic
             val flattenedNode = tryFlattenPackage(file, startLevel)
             nodes.add(flattenedNode)
         } else {
@@ -418,17 +402,14 @@ private fun tryFlattenPackage(dir: File, level: Int): ProjectFileItem {
     
     if (children != null && children.size == 1 && children[0].isDirectory) {
         val childDir = children[0]
-        val childNode = tryFlattenPackage(childDir, level) // keep level same for flattened node visually?
-        // Usually flattened packages are one line "com.example.app".
-        // Here we just combine the name and keep the children of the child.
+        val childNode = tryFlattenPackage(childDir, level) 
         
         return childNode.copy(
             name = "${dir.name}.${childNode.name}",
-            file = childNode.file, // Point to deep file or dir?
-            level = level // Maintain current level
+            file = childNode.file,
+            level = level 
         )
     } else {
-        // Stop flattening
         val normalChildren = createPackagesViewTree(dir, level + 1)
         return ProjectFileItem(
             file = dir,

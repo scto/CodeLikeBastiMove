@@ -2,14 +2,12 @@ package com.scto.codelikebastimove.feature.main.content
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,10 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -36,6 +32,7 @@ import androidx.compose.material.icons.filled.FormatAlignLeft
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SelectAll
 import androidx.compose.material.icons.outlined.Code
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -48,14 +45,13 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerInput
@@ -69,59 +65,45 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-data class EditorTab(
-    val fileName: String,
-    val filePath: String,
-    val hasChanges: Boolean = false,
-    val content: String = ""
-)
+import com.scto.codelikebastimove.feature.main.EditorFile
+import com.scto.codelikebastimove.feature.main.MainViewModel
 
 @Composable
 fun EditorContent(
+    viewModel: MainViewModel,
     modifier: Modifier = Modifier
 ) {
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
-    
-    val tabs = remember {
-        mutableStateOf(listOf(
-            EditorTab("MainActivity.kt", "app/src/main/java/.../MainActivity.kt", content = sampleKotlinCode),
-            EditorTab("build.gradle.kts", "app/build.gradle.kts", hasChanges = true, content = sampleGradleCode),
-            EditorTab("Theme.kt", "core/ui/theme/Theme.kt", content = sampleThemeCode)
-        ))
-    }
+    val uiState by viewModel.uiState.collectAsState()
+    val openFiles = uiState.openFiles
+    val activeIndex = uiState.activeFileIndex
     
     Column(modifier = modifier.fillMaxSize()) {
-        if (tabs.value.isNotEmpty()) {
+        if (openFiles.isNotEmpty()) {
             EditorTabRow(
-                tabs = tabs.value,
-                selectedIndex = selectedTabIndex,
-                onTabSelected = { selectedTabIndex = it },
-                onTabClose = { index ->
-                    val newTabs = tabs.value.toMutableList()
-                    newTabs.removeAt(index)
-                    tabs.value = newTabs
-                    if (selectedTabIndex >= newTabs.size) {
-                        selectedTabIndex = (newTabs.size - 1).coerceAtLeast(0)
-                    }
-                }
+                files = openFiles,
+                selectedIndex = activeIndex,
+                onTabSelected = { viewModel.selectFile(it) },
+                onTabClose = { viewModel.closeFile(it) }
             )
             
-            CodeEditorArea(
-                content = tabs.value.getOrNull(selectedTabIndex)?.content ?: "",
-                onContentChange = { newContent ->
-                    val newTabs = tabs.value.toMutableList()
-                    val currentTab = newTabs.getOrNull(selectedTabIndex)
-                    if (currentTab != null) {
-                        newTabs[selectedTabIndex] = currentTab.copy(
-                            content = newContent,
-                            hasChanges = true
-                        )
-                        tabs.value = newTabs
-                    }
-                },
-                modifier = Modifier.fillMaxSize()
-            )
+            if (uiState.isLoading) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                val activeFile = openFiles.getOrNull(activeIndex)
+                if (activeFile != null) {
+                    CodeEditorArea(
+                        content = activeFile.content,
+                        onContentChange = { newContent ->
+                            viewModel.updateFileContent(newContent)
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    EmptyEditorState(modifier = Modifier.fillMaxSize())
+                }
+            }
         } else {
             EmptyEditorState(modifier = Modifier.fillMaxSize())
         }
@@ -130,7 +112,7 @@ fun EditorContent(
 
 @Composable
 private fun EditorTabRow(
-    tabs: List<EditorTab>,
+    files: List<EditorFile>,
     selectedIndex: Int,
     onTabSelected: (Int) -> Unit,
     onTabClose: (Int) -> Unit,
@@ -147,7 +129,7 @@ private fun EditorTabRow(
             contentColor = MaterialTheme.colorScheme.onSurface,
             divider = { }
         ) {
-            tabs.forEachIndexed { index, tab ->
+            files.forEachIndexed { index, file ->
                 Tab(
                     selected = selectedIndex == index,
                     onClick = { onTabSelected(index) },
@@ -159,10 +141,10 @@ private fun EditorTabRow(
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Text(
-                            text = tab.fileName + if (tab.hasChanges) " •" else "",
+                            text = file.name + if (file.isModified) " •" else "",
                             fontSize = 12.sp,
                             fontWeight = if (selectedIndex == index) FontWeight.Medium else FontWeight.Normal,
-                            color = if (tab.hasChanges) MaterialTheme.colorScheme.primary 
+                            color = if (file.isModified) MaterialTheme.colorScheme.primary 
                                    else MaterialTheme.colorScheme.onSurface
                         )
                         
@@ -172,7 +154,7 @@ private fun EditorTabRow(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Close,
-                                contentDescription = "Close tab",
+                                contentDescription = "Tab schließen",
                                 modifier = Modifier.size(12.dp),
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -194,6 +176,12 @@ private fun CodeEditorArea(
     var textFieldValue by remember(content) {
         mutableStateOf(TextFieldValue(text = content))
     }
+    
+    // Einfache Synchronisation, um Cursor-Sprünge zu minimieren, aber Updates zuzulassen
+    if (textFieldValue.text != content) {
+        textFieldValue = textFieldValue.copy(text = content)
+    }
+
     var showContextMenu by remember { mutableStateOf(false) }
     var contextMenuOffset by remember { mutableStateOf(Offset.Zero) }
     val clipboardManager = LocalClipboardManager.current
@@ -271,7 +259,7 @@ private fun CodeEditorArea(
                     )
                 ) {
                     DropdownMenuItem(
-                        text = { Text("Select All") },
+                        text = { Text("Alles auswählen") },
                         onClick = {
                             textFieldValue = textFieldValue.copy(
                                 selection = TextRange(0, textFieldValue.text.length)
@@ -286,34 +274,7 @@ private fun CodeEditorArea(
                     HorizontalDivider()
                     
                     DropdownMenuItem(
-                        text = { Text("Cut") },
-                        onClick = {
-                            val selection = textFieldValue.selection
-                            if (!selection.collapsed) {
-                                val selectedText = textFieldValue.text.substring(
-                                    selection.start,
-                                    selection.end
-                                )
-                                clipboardManager.setText(AnnotatedString(selectedText))
-                                val newText = textFieldValue.text.removeRange(
-                                    selection.start,
-                                    selection.end
-                                )
-                                textFieldValue = TextFieldValue(
-                                    text = newText,
-                                    selection = TextRange(selection.start)
-                                )
-                                onContentChange(newText)
-                            }
-                            showContextMenu = false
-                        },
-                        leadingIcon = {
-                            Icon(Icons.Default.ContentCut, contentDescription = null)
-                        }
-                    )
-                    
-                    DropdownMenuItem(
-                        text = { Text("Copy") },
+                        text = { Text("Kopieren") },
                         onClick = {
                             val selection = textFieldValue.selection
                             if (!selection.collapsed) {
@@ -331,7 +292,7 @@ private fun CodeEditorArea(
                     )
                     
                     DropdownMenuItem(
-                        text = { Text("Paste") },
+                        text = { Text("Einfügen") },
                         onClick = {
                             val clipboardText = clipboardManager.getText()?.text ?: ""
                             val newText = StringBuilder(textFieldValue.text).apply {
@@ -357,125 +318,10 @@ private fun CodeEditorArea(
                             Icon(Icons.Default.ContentPaste, contentDescription = null)
                         }
                     )
-                    
-                    DropdownMenuItem(
-                        text = { Text("Delete") },
-                        onClick = {
-                            if (!textFieldValue.selection.collapsed) {
-                                val newText = textFieldValue.text.removeRange(
-                                    textFieldValue.selection.start,
-                                    textFieldValue.selection.end
-                                )
-                                textFieldValue = TextFieldValue(
-                                    text = newText,
-                                    selection = TextRange(textFieldValue.selection.start)
-                                )
-                                onContentChange(newText)
-                            }
-                            showContextMenu = false
-                        },
-                        leadingIcon = {
-                            Icon(
-                                Icons.Default.Delete, 
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.error
-                            )
-                        }
-                    )
-                    
-                    HorizontalDivider()
-                    
-                    DropdownMenuItem(
-                        text = { Text("Format Code") },
-                        onClick = {
-                            val formattedCode = formatCode(textFieldValue.text)
-                            textFieldValue = TextFieldValue(
-                                text = formattedCode,
-                                selection = TextRange(formattedCode.length)
-                            )
-                            onContentChange(formattedCode)
-                            showContextMenu = false
-                        },
-                        leadingIcon = {
-                            Icon(Icons.Default.FormatAlignLeft, contentDescription = null)
-                        }
-                    )
-                    
-                    HorizontalDivider()
-                    
-                    DropdownMenuItem(
-                        text = { Text("Find") },
-                        onClick = {
-                            showContextMenu = false
-                        },
-                        leadingIcon = {
-                            Icon(Icons.Default.Search, contentDescription = null)
-                        }
-                    )
-                    
-                    DropdownMenuItem(
-                        text = { Text("Find and Replace") },
-                        onClick = {
-                            showContextMenu = false
-                        },
-                        leadingIcon = {
-                            Icon(Icons.Default.FindReplace, contentDescription = null)
-                        }
-                    )
-                    
-                    HorizontalDivider()
-                    
-                    DropdownMenuItem(
-                        text = { Text("Undo") },
-                        onClick = {
-                            showContextMenu = false
-                        },
-                        leadingIcon = {
-                            Icon(Icons.AutoMirrored.Filled.Undo, contentDescription = null)
-                        }
-                    )
-                    
-                    DropdownMenuItem(
-                        text = { Text("Redo") },
-                        onClick = {
-                            showContextMenu = false
-                        },
-                        leadingIcon = {
-                            Icon(Icons.AutoMirrored.Filled.Redo, contentDescription = null)
-                        }
-                    )
                 }
             }
         }
     }
-}
-
-private fun formatCode(code: String): String {
-    val lines = code.lines()
-    var indentLevel = 0
-    val formattedLines = mutableListOf<String>()
-    
-    for (line in lines) {
-        val trimmedLine = line.trim()
-        
-        if (trimmedLine.isEmpty()) {
-            formattedLines.add("")
-            continue
-        }
-        
-        if (trimmedLine.startsWith("}") || trimmedLine.startsWith(")")) {
-            indentLevel = (indentLevel - 1).coerceAtLeast(0)
-        }
-        
-        val indent = "    ".repeat(indentLevel)
-        formattedLines.add("$indent$trimmedLine")
-        
-        if (trimmedLine.endsWith("{") || trimmedLine.endsWith("(") && !trimmedLine.endsWith(")")) {
-            indentLevel++
-        }
-    }
-    
-    return formattedLines.joinToString("\n")
 }
 
 @Composable
@@ -488,9 +334,15 @@ private fun EmptyEditorState(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            Icon(
+                imageVector = Icons.Outlined.Code,
+                contentDescription = null,
+                modifier = Modifier.size(64.dp),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+            )
             Text(
-                text = "Code Like Basti Move",
-                style = MaterialTheme.typography.headlineMedium,
+                text = "Keine Datei geöffnet",
+                style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -498,80 +350,10 @@ private fun EmptyEditorState(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(8.dp))
             
             Text(
-                text = "Open the left drawer for files.",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Text(
-                text = "Swipe nach oben für build output.",
+                text = "Wähle eine Datei im Projektbaum links aus.",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
 }
-
-private val sampleKotlinCode = """
-package com.scto.codelikebastimove
-
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            CodeLikeBastiMoveTheme {
-                Surface(color = MaterialTheme.colorScheme.background) {
-                    MainScreen()
-                }
-            }
-        }
-    }
-}
-""".trimIndent()
-
-private val sampleGradleCode = """
-plugins {
-    id("codelikebastimove.android.application")
-    id("codelikebastimove.android.application.compose")
-}
-
-android {
-    namespace = "com.scto.codelikebastimove"
-    
-    defaultConfig {
-        applicationId = "com.scto.codelikebastimove"
-        versionCode = 11
-        versionName = "0.1.0-alpha-11"
-    }
-}
-
-dependencies {
-    implementation(project(":features"))
-    implementation(project(":core:core-ui"))
-}
-""".trimIndent()
-
-private val sampleThemeCode = """
-package com.scto.codelikebastimove.core.ui.theme
-
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-
-@Composable
-fun CodeLikeBastiMoveTheme(
-    themeMode: ThemeMode = ThemeMode.FOLLOW_SYSTEM,
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
-) {
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = AppTypography,
-        content = content
-    )
-}
-""".trimIndent()

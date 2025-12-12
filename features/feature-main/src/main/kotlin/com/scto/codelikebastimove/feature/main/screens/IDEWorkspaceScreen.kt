@@ -33,15 +33,16 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
 import com.scto.codelikebastimove.feature.main.BottomSheetContentType
 import com.scto.codelikebastimove.feature.main.MainContentType
+import com.scto.codelikebastimove.feature.main.MainViewModel
 import com.scto.codelikebastimove.feature.main.components.BottomSheetBar
 import com.scto.codelikebastimove.feature.main.components.ContentNavigationRail
 import com.scto.codelikebastimove.feature.main.content.AssetsStudioContent
 import com.scto.codelikebastimove.feature.main.content.EditorContent
 import com.scto.codelikebastimove.feature.main.content.FileTreeDrawerContent
-import com.scto.codelikebastimove.feature.main.content.FileTreeItem
 import com.scto.codelikebastimove.feature.main.content.GitContent
 import com.scto.codelikebastimove.feature.main.content.LayoutDesignerContent
 import com.scto.codelikebastimove.feature.main.content.ProjectContent
@@ -53,7 +54,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun IDEWorkspaceScreen(
     projectName: String,
-    projectPath: String, // Neuer Parameter für den Pfad
+    projectPath: String,
     currentContent: MainContentType,
     isBottomSheetExpanded: Boolean,
     bottomSheetContent: BottomSheetContentType,
@@ -62,7 +63,9 @@ fun IDEWorkspaceScreen(
     onContentTypeChanged: (MainContentType) -> Unit,
     onBottomSheetToggle: () -> Unit,
     onBottomSheetContentChanged: (BottomSheetContentType) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    // ViewModel injecten oder übergeben, um es an EditorContent weiterzugeben
+    viewModel: MainViewModel = viewModel()
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -73,11 +76,12 @@ fun IDEWorkspaceScreen(
             ModalDrawerSheet {
                 FileTreeDrawerContent(
                     projectName = projectName,
-                    projectPath = projectPath, // Pfad an den Drawer weitergeben
+                    projectPath = projectPath,
                     onFileClick = { file ->
-                        // Handle file click logic here or pass up
-                        // For example: viewModel.openFile(file.path)
-                        scope.launch { drawerState.close() }
+                        if (!file.isDirectory) {
+                            viewModel.openFile(file.path)
+                            scope.launch { drawerState.close() }
+                        }
                     },
                     onOpenTerminalSheet = {
                         onBottomSheetContentChanged(BottomSheetContentType.TERMINAL)
@@ -129,11 +133,8 @@ fun IDEWorkspaceScreen(
                         label = "content_transition"
                     ) { contentType ->
                         when (contentType) {
-                            MainContentType.EDITOR -> EditorContent()
-                            MainContentType.PROJECT -> ProjectContent(
-                                // ViewModel sollte idealerweise injected oder übergeben werden
-                                viewModel = androidx.lifecycle.viewmodel.compose.viewModel()
-                            )
+                            MainContentType.EDITOR -> EditorContent(viewModel = viewModel)
+                            MainContentType.PROJECT -> ProjectContent(viewModel = viewModel)
                             MainContentType.GIT -> GitContent()
                             MainContentType.ASSETS_STUDIO -> AssetsStudioContent()
                             MainContentType.THEME_BUILDER -> ThemeBuilderContent()

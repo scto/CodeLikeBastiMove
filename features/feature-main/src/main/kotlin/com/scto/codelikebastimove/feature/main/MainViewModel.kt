@@ -16,6 +16,7 @@ import com.scto.codelikebastimove.core.templates.api.ProjectManager
 import com.scto.codelikebastimove.core.templates.impl.ProjectManagerImpl
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -35,7 +37,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
  
-    // Fixed: Derived from uiState instead of projectManager to avoid dependency on missing property
     val currentProjectPath: StateFlow<String?> = _uiState
         .map { state -> state.projectPath.ifBlank { null } }
         .stateIn(
@@ -45,11 +46,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         )
 
     fun updateContentType(contentType: MainContentType) {
-        // Fixed: Parameter name corrected to 'currentContent'
-        _uiState.value = _uiState.value.copy(currentContent = contentType)
+        _uiState.update { it.copy(currentContent = contentType) }
     }
     
-    // NEU: Update Funktion für den Projekt-Ansichtsmodus
     fun updateProjectViewMode(mode: ProjectViewMode) {
         _uiState.update { it.copy(projectViewType = mode) }
     }
@@ -74,36 +73,31 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
             
             // 2. Projekte laden
-            // Wir starten eine separate Coroutine für den Flow Collector, damit initializeApp weiterläuft
             launch {
                 repository.projects.collect { projects ->
                     _uiState.update { it.copy(projects = projects) }
                 }
             }
 
-            // 3. WICHTIG: Zuletzt geöffnetes Projekt aus Datastore wiederherstellen
+            // 3. Zuletzt geöffnetes Projekt wiederherstellen
             try {
-                // Wir holen die Preferences einmalig, um den Startzustand zu setzen
                 val prefs = repository.userPreferences.first()
-                val lastPath = prefs.currentProjectPath // Annahme: Dieses Feld existiert in UserPreferences
+                val lastPath = prefs.currentProjectPath
                 
                 if (!lastPath.isNullOrBlank()) {
                     val projectFile = File(lastPath)
                     if (projectFile.exists()) {
                         CLBMLogger.d(TAG, "Restoring last opened project: $lastPath")
                         
-                        // Wir öffnen das Projekt direkt im State, ohne Navigation Stack Manipulation
                         _uiState.update { 
                             it.copy(
                                 projectName = projectFile.name,
                                 projectPath = lastPath,
                                 isProjectOpen = true,
-                                // Wenn wir ein Projekt wiederherstellen, gehen wir direkt zur IDE
                                 currentDestination = MainDestination.IDE
                             )
                         }
                     } else {
-                        // Pfad existiert nicht mehr, bereinigen
                         repository.setCurrentProjectPath("")
                     }
                 }
@@ -112,6 +106,109 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+    
+    // --- Editor File Management ---
+
+    fun openFile(path: String) {
+        val file = File(path)
+        if (!file.exists() || !file.isFile) {
+            CLBMLogger.e(TAG, "File not found or is directory: $path")
+            return
+        }
+
+        // Prüfen, ob Datei bereits geöffnet ist
+        val existingIndex = _uiState.value.openFiles.indexOfFirst { it.path == path }
+        if (existingIndex != -1) {
+            _uiState.update { 
+                it.copy(
+                    activeFileIndex = existingIndex,
+                    currentContent = MainContentType.EDITOR 
+                ) 
+            }
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                _uiState.update { it.copy(isLoading = true) }
+                val content = withContext(Dispatchers.IO) {
+                    file.readText()
+                }
+                
+                val newFile = EditorFile(
+                    name = file.name,
+                    path = file.path,
+                    content = content
+                )
+
+                _uiState.update { state ->
+                    val newOpenFiles = state.openFiles + newFile
+                    state.copy(
+                        openFiles = newOpenFiles,
+                        activeFileIndex = newOpenFiles.lastIndex,
+                        currentContent = MainContentType.EDITOR,
+                        isLoading = false
+                    )
+                }
+            } catch (e: Exception) {
+                CLBMLogger.e(TAG, "Error reading file: $path", e)
+                _uiState.update { 
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = "Fehler beim Öffnen der Datei: ${e.message}"
+                    ) 
+                }
+            }
+        }
+    }
+
+    fun closeFile(index: Int) {
+        _uiState.update { state ->
+            val newOpenFiles = state.openFiles.toMutableList()
+            newOpenFiles.removeAt(index)
+            
+            var newActiveIndex = state.activeFileIndex
+            if (index <= state.activeFileIndex) {
+                newActiveIndex = (state.activeFileIndex - 1).coerceAtLeast(0)
+            }
+            if (newOpenFiles.isEmpty()) {
+                newActiveIndex = -1
+            } else if (newActiveIndex >= newOpenFiles.size) {
+                newActiveIndex = newOpenFiles.size - 1
+            }
+
+            state.copy(
+                openFiles = newOpenFiles,
+                activeFileIndex = newActiveIndex
+            )
+        }
+    }
+
+    fun selectFile(index: Int) {
+        if (index in _uiState.value.openFiles.indices) {
+            _uiState.update { it.copy(activeFileIndex = index) }
+        }
+    }
+
+    fun updateFileContent(content: String) {
+        val activeIndex = _uiState.value.activeFileIndex
+        if (activeIndex != -1) {
+            _uiState.update { state ->
+                val files = state.openFiles.toMutableList()
+                val currentFile = files[activeIndex]
+                files[activeIndex] = currentFile.copy(
+                    content = content,
+                    isModified = true
+                )
+                state.copy(
+                    openFiles = files,
+                    hasUnsavedChanges = true
+                )
+            }
+        }
+    }
+
+    // --- End Editor File Management ---
     
     fun refreshDirectoryContents() {
         val rootDir = _uiState.value.rootDirectory
@@ -167,7 +264,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun onOpenProject(projectPath: String, projectName: String) {
         viewModelScope.launch {
             repository.updateProjectLastOpened(projectPath, System.currentTimeMillis())
-            // Hier wird der Datastore aktualisiert
             repository.setCurrentProjectPath(projectPath)
         }
         navigationStack.add(_uiState.value.currentDestination)
@@ -183,7 +279,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     
     fun onCloseProject() {
         viewModelScope.launch {
-            // Datastore bereinigen
             repository.setCurrentProjectPath("")
         }
         navigationStack.clear()
@@ -191,7 +286,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             it.copy(
                 isProjectOpen = false,
                 projectPath = "",
-                currentDestination = MainDestination.Home
+                currentDestination = MainDestination.Home,
+                openFiles = emptyList(),
+                activeFileIndex = -1
             )
         }
     }
@@ -267,7 +364,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 repository.addProject(storedProject)
                 refreshDirectoryContents()
                 
-                // Nach Erstellung auch als "Aktuell" im Datastore speichern
                 repository.setCurrentProjectPath(project.path)
 
                 _uiState.update { 
@@ -305,16 +401,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun cloneRepository(url: String, branch: String, shallowClone: Boolean, singleBranch: Boolean) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, cloneProgress = "Cloning repository...") }
-            
-            val rootDir = _uiState.value.rootDirectory
-            if (rootDir.isBlank()) {
-                _uiState.update { it.copy(isLoading = false, errorMessage = "Root directory not set") }
-                return@launch
-            }
-            
-            val repoName = url.substringAfterLast("/").removeSuffix(".git")
-            
-            // Dummy implementation for clone simulation
+            // Dummy implementation
             _uiState.update { it.copy(isLoading = false, cloneProgress = "") }
         }
     }
@@ -358,12 +445,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     
     fun clearError() {
         _uiState.update { it.copy(errorMessage = null) }
-    }
-    
-    fun openFile(path: String) {
-        // Logik zum Öffnen einer Datei im Editor
-        // Dies würde idealerweise EditorContent state aktualisieren
-        CLBMLogger.d(TAG, "Opening file: $path")
     }
 
     fun createFolder(folderName: String) {

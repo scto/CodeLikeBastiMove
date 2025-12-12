@@ -19,11 +19,21 @@ data class MainUiState(
     val errorMessage: String? = null,
     val cloneProgress: String = "",
     val bottomSheetContent: BottomSheetContentType = BottomSheetContentType.TERMINAL,
-    // NEU: Speichert den Ansichtsmodus des Projekt-Explorers (z.B. Android vs Projekt)
+    // Speichert den Ansichtsmodus des Projekt-Explorers
     val projectViewType: ProjectViewMode = ProjectViewMode.ANDROID,
-    // Added missing fields to fix compilation errors
     val isLoading: Boolean = false,
-    val hasUnsavedChanges: Boolean = false
+    val hasUnsavedChanges: Boolean = false,
+    
+    // Editor State
+    val openFiles: List<EditorFile> = emptyList(),
+    val activeFileIndex: Int = -1
+)
+
+data class EditorFile(
+    val name: String,
+    val path: String,
+    val content: String,
+    val isModified: Boolean = false
 )
 
 enum class BottomSheetContentType(val title: String) {
@@ -34,7 +44,6 @@ enum class BottomSheetContentType(val title: String) {
     TODO_LIST("TODO")
 }
 
-// NEU: Enum für die Projekt-Ansicht in den State verschoben, damit es überall verfügbar ist
 enum class ProjectViewMode(val displayName: String) {
     ANDROID("Android"),
     PROJECT("Projekt"),

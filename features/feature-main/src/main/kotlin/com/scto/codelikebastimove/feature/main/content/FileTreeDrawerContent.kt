@@ -17,13 +17,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.Brush
@@ -34,9 +35,6 @@ import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.FolderOpen
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Terminal
-import androidx.compose.material.icons.outlined.Description
-import androidx.compose.material.icons.outlined.Image
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -44,6 +42,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -51,8 +50,6 @@ import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -71,9 +68,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.io.File
 
-// Erweiterte Datenklasse für die echte Dateistruktur
 data class FileTreeItem(
-    val file: File?, // File kann null sein für virtuelle Ordner, aber hier meistens gesetzt
+    val file: File?,
     val name: String,
     val path: String,
     val isDirectory: Boolean,
@@ -92,7 +88,7 @@ enum class DrawerTab(val title: String, val icon: ImageVector) {
 @Composable
 fun FileTreeDrawerContent(
     projectName: String,
-    projectPath: String, // Pfad zum Projektverzeichnis
+    projectPath: String,
     onFileClick: (FileTreeItem) -> Unit,
     onOpenTerminalSheet: () -> Unit = {},
     modifier: Modifier = Modifier
@@ -103,7 +99,7 @@ fun FileTreeDrawerContent(
     Column(
         modifier = modifier.fillMaxHeight()
     ) {
-        DrawerHeader(title = projectName) // Zeige Projektnamen als Header
+        DrawerHeader(title = projectName)
         
         ScrollableTabRow(
             selectedTabIndex = selectedTab,
@@ -192,7 +188,6 @@ private fun FileTreeTabContent(
     onFileClick: (FileTreeItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Echte Dateistruktur basierend auf dem Pfad erstellen
     val projectTree = remember(projectPath) { 
         if (projectPath.isNotBlank()) {
             val rootFile = File(projectPath)
@@ -696,13 +691,11 @@ private fun getDrawerFileIconColor(item: FileTreeItem): Color {
     }
 }
 
-// Rekursive Funktion zum Erstellen des Dateibaums
 private fun createRealFileTree(root: File, startLevel: Int = 0): List<FileTreeItem> {
     if (!root.exists() || !root.isDirectory) return emptyList()
 
     val files = root.listFiles() ?: return emptyList()
     
-    // Sortieren: Ordner zuerst, dann Dateien (alphabetisch)
     val sortedFiles = files.sortedWith(compareBy({ !it.isDirectory }, { it.name.lowercase() }))
 
     return sortedFiles.map { file ->
