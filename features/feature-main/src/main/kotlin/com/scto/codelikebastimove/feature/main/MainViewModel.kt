@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 import java.io.File
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -437,6 +438,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 buildFile.writeText(generateModuleBuildGradle(finalPackageName, type))
                 
                 // .gitignore erstellen
+                // Hier wird sichergestellt, dass der build-Ordner ignoriert wird
                 File(moduleDir, ".gitignore").writeText("/build\n")
                 
                 // proguard-rules.pro erstellen
