@@ -44,7 +44,7 @@ inapp-update = "2.1.0"
 splash-screen = "1.2.0"
 
 # Firebase
-firebase-bom = "34.3.0"
+firebase-bom = "34.7.0"
 
 # test libraries
 test-junit = "4.13.2"
