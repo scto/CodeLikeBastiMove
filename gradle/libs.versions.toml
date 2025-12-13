@@ -39,7 +39,7 @@ data-store = "1.2.0"
 security-crypto = "1.1.0"
 protobuf = "4.26.1" # keep 4.26.1 version , otherwise there is a duplicated classes in Firebase Firestore
 coroutines-android = "1.10.2"
-workmanager = "2.10.5"
+workmanager = "2.11.0"
 inapp-update = "2.1.0"
 splash-screen = "1.2.0"
 
