@@ -360,7 +360,7 @@ private fun SubModuleMakerTabContent(
         )
         
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            listOf("Library", "Feature", "Core").forEach { type ->
+            listOf("Application", "Library").forEach { type ->
                 FilterChip(
                     selected = selectedType == type,
                     onClick = { selectedType = type },
@@ -394,7 +394,7 @@ private fun AssetStudioTabContent(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
             text = "Asset Studio",

@@ -488,9 +488,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun generateModuleBuildGradle(packageName: String, type: ModuleType): String {
+        val pluginId = if (type == ModuleType.APPLICATION) "com.android.application" else "com.android.library"
+        val appIdConfig = if (type == ModuleType.APPLICATION) "    applicationId = \"$packageName\"" else ""
+        
         return """
             plugins {
-                id("com.android.library")
+                id("$pluginId")
                 id("org.jetbrains.kotlin.android")
             }
 
@@ -499,7 +502,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 compileSdk = 34
 
                 defaultConfig {
+                    $appIdConfig
                     minSdk = 24
+                    targetSdk = 34
                     
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                     consumerProguardFiles("consumer-rules.pro")
