@@ -21,6 +21,11 @@ dependencies {
     compileOnly(libs.gradle)
     compileOnly(libs.gradle.api)
     compileOnly(libs.kotlin.gradle.plugin)
+    compileOnly(libs.kotlin.stdlib)
+    
+    implementation(libs.detekt.plugin)
+    implementation(libs.spotless.plugin)
+    implementation(libs.ktlint.jlleitschuh.plugin)
     
     // Workaround to make version catalog type-safe accessors available in convention plugins
     // https://github.com/gradle/gradle/issues/15383
@@ -52,6 +57,10 @@ gradlePlugin {
         register("androidKoin") {
             id = "codelikebastimove.android.koin"
             implementationClass = "AndroidKoinConventionPlugin"
+        }
+        register("candroidCodeQuality") {
+            id = "codelikebastimove.android.code.quality"
+            implementationClass = "AndroidCodeQualiyConventionPlugin"
         }
     }
 }
