@@ -112,9 +112,9 @@ desugaring = { module = "com.android.tools:desugar_jdk_libs", version.ref = "des
 inapp-update = { module = "com.google.android.play:app-update", version.ref = "inapp-update" }
 inapp-update-ext = { module = "com.google.android.play:app-update-ktx", version.ref = "inapp-update" }
 splash-screen = { module = "androidx.core:core-splashscreen", version.ref = "splash-screen" }
-spotless-gradlePlugin = { group = "com.diffplug.spotless", name = "spotless-gradle-plugin", version.ref = "spotless" }
-detekt-gradlePlugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
-ktlint-gradlePlugin = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version.ref = "ktlint_jlleitschuh" }
+spotless-gradle-plugin = { group = "com.diffplug.spotless", name = "spotless-gradle-plugin", version.ref = "spotless" }
+detekt-gradle-plugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
+ktlint-gradle-plugin = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version.ref = "ktlint_jlleitschuh" }
 
 # Compose
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
