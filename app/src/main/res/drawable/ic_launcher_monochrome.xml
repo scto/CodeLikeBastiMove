@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- Linke Klammer / Teil des Logos -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M22.5,44.5 L22.5,63.5 C22.5,65.5 23.5,67 25.5,67 L31.5,67 C33.5,67 34.5,65.5 34.5,63.5 L34.5,44.5 C34.5,42.5 33.5,41 31.5,41 L25.5,41 C23.5,41 22.5,42.5 22.5,44.5 Z M26,46 L30,46 L30,62 L26,62 Z" />
+    
+    <!-- Mittlerer Teil 1 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M38,41 L38,67 L42,67 L42,56 L46,56 L46,67 L50,67 L50,41 L38,41 Z M42,52 L42,45 L46,45 L46,52 L42,52 Z" />
+    
+    <!-- Mittlerer Teil 2 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,41 L54,67 L58,67 L58,56 L60,56 L62,67 L66,67 L62,54 C64,53 66,51 66,48 C66,44 64,41 60,41 L54,41 Z M58,52 L58,45 L60,45 C62,45 62,47 62,48 C62,50 61,52 60,52 L58,52 Z" />
+    
+    <!-- Rechte Klammer / Teil des Logos -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M70,41 L70,67 L74,67 L74,58 L76,63 L78,58 L78,67 L82,67 L82,41 L78,41 L76,50 L74,41 L70,41 Z" />
+        
+</vector>

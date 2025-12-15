@@ -7,8 +7,8 @@ sdk-target = "35"
 sdk-compile = "36"
 
 # Plugins
-android-gradle = "8.13.2"
-#android-gradle = "8.11.1"
+#android-gradle = "8.13.2"
+android-gradle = "8.11.1"
 kotlin = "2.2.21"
 ksp = "2.3.3"
 

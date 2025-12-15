@@ -30,7 +30,7 @@
     <string name="action_share">Share</string>
     <string name="action_copy">Copy</string>
     
-    <string name="label_loading">Loading...</string>
+    <string name="label_loading">Loading &#8230;</string>
     <string name="label_error">Error</string>
     <string name="label_success">Success</string>
     <string name="label_warning">Warning</string>
@@ -130,7 +130,7 @@
     
     <string name="ai_agent">AI Agent</string>
     <string name="ai_model_select">Select Model</string>
-    <string name="ai_chat_hint">Type your message...</string>
+    <string name="ai_chat_hint">Type your message &#8230;</string>
     
     <string name="theme_builder">Theme Builder</string>
     <string name="theme_preview">Preview</string>
@@ -181,7 +181,7 @@
     <string name="welcome_instructions_de">Öffnen Sie eine Datei aus dem Projektbaum, um mit der Bearbeitung zu beginnen</string>
     
     <string name="recent_badge">Recent</string>
-    <string name="search_projects">Search projects...</string>
+    <string name="search_projects">Search projects &#8230;</string>
     <string name="browse_folders">Browse Folders</string>
     
     <string name="export_compose">Jetpack Compose</string>
