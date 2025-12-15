@@ -18,7 +18,7 @@ google-services = "4.4.4"
 plugin-crashlytics = "3.0.6"
 plugin-performance = "2.0.2"
 plugin-protobuf = "0.9.5"
-module-graph = "0.12.1"
+module-graph = "0.13.0"
 
 # Libs
 android-core-ktx = "1.17.0"
