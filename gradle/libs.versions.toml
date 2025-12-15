@@ -61,7 +61,7 @@ lottie = "6.7.1"
 desugaring = "2.1.5"
 
 # Sonstige
-jgit = "6.10.1.202505221210-r"
+jgit = "7.5.0.202512021534-r"
 treeview = "1.0.2"
 
 ktlint_jlleitschuh = "14.0.1"
