@@ -1,3 +1,4 @@
+/*
 package com.scto.codelikebastimove.core.templates.impl
 
 import android.content.Context
@@ -92,5 +93,42 @@ class ProjectManagerImpl(private val context: Context) : ProjectManager {
     
     companion object {
         private const val TAG = "ProjectManagerImpl"
+    }
+}
+
+*/
+package com.scto.codelikebastimove.core.templates.impl
+
+import com.scto.codelikebastimove.core.templates.api.Project
+import com.scto.codelikebastimove.core.templates.api.ProjectConfig
+import com.scto.codelikebastimove.core.templates.api.ProjectManager
+
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
+import java.io.File
+
+class ProjectManagerImpl : ProjectManager {
+
+    private val _currentProject = MutableStateFlow<Project?>(null)
+    override val currentProject: StateFlow<Project?> = _currentProject.asStateFlow()
+
+    override suspend fun createProject(config: ProjectConfig): Project {
+        // Mock Implementierung oder echte Logik hier
+        val project = Project(name = config.name, path = config.location)
+        _currentProject.value = project
+        return project
+    }
+
+    override suspend fun openProject(path: String): Project {
+        val file = File(path)
+        val project = Project(name = file.name, path = file.absolutePath)
+        _currentProject.value = project
+        return project
+    }
+
+    override fun closeProject() {
+        _currentProject.value = null
     }
 }
