@@ -29,46 +29,6 @@ android {
     namespace = "com.scto.codelikebastimove"
     
     lint {
-        checkReleaseBuilds = false
-    }
-        
-    signingConfigs {
-        if (hasValidSigningProps) {
-            create("release") {
-                storeFile = rootProject.file(keystoreProps["storeFile"] as String)
-                storePassword = keystoreProps["storePassword"] as String
-                keyAlias = keystoreProps["keyAlias"] as String
-                keyPassword = keystoreProps["keyPassword"] as String
-            }
-        }
-    }
-
-    defaultConfig {
-        applicationId = "com.scto.codelikebastimove"
-        targetSdk = libs.versions.sdk.target.get().toInt()
-        versionCode = libs.versions.app.version.code.get().toInt()
-        versionName = libs.versions.app.version.name.get()
-        
-        vectorDrawables { 
-            useSupportLibrary = true
-        }
-    }
-
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
-
-    buildTypes {
-        release {
-            if (hasValidSigningProps) {
-                signingConfig = signingConfigs.getByName("release")
-            }
-            isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-    }
-
-    lint {
         // --- Output Dateien (Wo die Warnungen geschrieben werden) ---
         
         // Schreibt einen XML-Bericht (gut für CI/CD Tools oder Parser im IDE)
@@ -107,6 +67,42 @@ android {
         // Warnungen darin gespeichert und ignoriert. Nur NEUE Warnungen werden gemeldet.
         // Nützlich für Legacy-Code.
         // baseline = file("lint-baseline.xml")
+    }
+        
+    signingConfigs {
+        if (hasValidSigningProps) {
+            create("release") {
+                storeFile = rootProject.file(keystoreProps["storeFile"] as String)
+                storePassword = keystoreProps["storePassword"] as String
+                keyAlias = keystoreProps["keyAlias"] as String
+                keyPassword = keystoreProps["keyPassword"] as String
+            }
+        }
+    }
+
+    defaultConfig {
+        applicationId = "com.scto.codelikebastimove"
+        targetSdk = libs.versions.sdk.target.get().toInt()
+        versionCode = libs.versions.app.version.code.get().toInt()
+        versionName = libs.versions.app.version.name.get()
+        
+        vectorDrawables { 
+            useSupportLibrary = true
+        }
+    }
+
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+    }
+
+    buildTypes {
+        release {
+            if (hasValidSigningProps) {
+                signingConfig = signingConfigs.getByName("release")
+            }
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
     }
 }
 
