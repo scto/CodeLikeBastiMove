@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- ============================================================= -->
+    <!-- STANDARD ANDROID LINT REGELN                                  -->
+    <!-- ============================================================= -->
+
+    <!-- Internationalization (I18n) -->
+    <!-- Texte sollten nicht hartkodiert sein, sondern in strings.xml stehen -->
+    <issue id="HardcodedText" severity="error" />
+    
+    <!-- RTL (Right-to-Left) Support -->
+    <!-- Erzwingt Start/End statt Left/Right für Layouts -->
+    <issue id="RtlHardcoded" severity="warning" />
+    <issue id="RtlSymmetry" severity="warning" />
+
+    <!-- ============================================================= -->
+    <!-- PERFORMANCE & SICHERHEIT                                      -->
+    <!-- ============================================================= -->
+    
+    <!-- Ungenutzte Ressourcen blähen die APK auf -->
+    <issue id="UnusedResources" severity="warning" />
+    
+    <!-- Veraltete APIs oder APIs, die höher sind als minSdk -->
+    <issue id="NewApi" severity="error" />
+    <issue id="ObsoleteSdkInt" severity="warning" />
+    
+    <!-- Handler sollten statisch sein, um Memory Leaks zu vermeiden -->
+    <issue id="HandlerLeak" severity="error" />
+    
+    <!-- Logging in Production vermeiden -->
+    <issue id="LogConditional" severity="warning" />
+
+    <!-- ============================================================= -->
+    <!-- ACCESSIBILITY (Barrierefreiheit)                              -->
+    <!-- ============================================================= -->
+    
+    <!-- Bilder benötigen eine Inhaltsbeschreibung (contentDescription) -->
+    <issue id="ContentDescription" severity="error" />
+    
+    <!-- Klickbare Elemente müssen groß genug sein (48dp) -->
+    <issue id="TouchTargetSizeCheck" severity="warning" />
+    
+    <!-- Textkontrast prüfen -->
+    <issue id="TextContrastCheck" severity="warning" />
+
+    <!-- ============================================================= -->
+    <!-- STRUKTUR & BEST PRACTICES                                     -->
+    <!-- ============================================================= -->
+    
+    <!-- Vector Pfade sollten valide sein -->
+    <issue id="VectorPath" severity="error" />
+    
+    <!-- Icons sollten in den richtigen Dichte-Ordnern liegen -->
+    <issue id="IconMissingDensityFolder" severity="warning" />
+    
+    <!-- Gradle Dependency Checks -->
+    <issue id="GradleDependency" severity="warning" />
+    <issue id="ObsoleteGradleDependency" severity="warning" />
+
+    <!-- ============================================================= -->
+    <!-- AUSNAHMEN (Beispiel)                                          -->
+    <!-- ============================================================= -->
+    
+    <!-- Beispiel: Eine Regel für bestimmte Dateien ignorieren -->
+    <issue id="TypographyQuotes">
+        <ignore path="**/values/strings_donottranslate.xml" />
+    </issue>
+
+</lint>

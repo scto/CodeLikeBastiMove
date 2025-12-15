@@ -67,6 +67,47 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
+    lint {
+        // --- Output Dateien (Wo die Warnungen geschrieben werden) ---
+        
+        // Schreibt einen XML-Bericht (gut für CI/CD Tools oder Parser im IDE)
+        xmlReport = true
+        xmlOutput = file("build/reports/lint/lint-report.xml")
+
+        // Schreibt einen HTML-Bericht (gut für Menschen lesbar)
+        htmlReport = true
+        htmlOutput = file("build/reports/lint/lint-report.html")
+        
+        // Schreibt einen einfachen Text-Bericht
+        textReport = true
+        // textOutput = file("stdout") // Ausgabe in Konsole
+        textOutput = file("build/reports/lint/lint-results.txt") // Ausgabe in Datei
+
+        // --- Verhaltensregeln ---
+
+        // Wenn true, bricht der Build bei Fehlern ab
+        abortOnError = false
+
+        // Wenn true, werden Warnungen als Fehler behandelt
+        warningsAsErrors = false
+
+        // Prüft auch alle Abhängigkeiten (kann den Build verlangsamen)
+        checkDependencies = true
+        
+        // Führt Lint checks auch bei Release Builds aus
+        checkReleaseBuilds = true
+        
+        // --- Konfigurationsdatei einbinden ---
+        // Hier verweisen wir auf die lint.xml, die wir oben erstellt haben
+        lintConfig = file("${project.rootDir}/lint.xml")
+
+        // --- Baseline (Snapshot) ---
+        // Wenn eine Datei hier angegeben ist, werden alle existierenden 
+        // Warnungen darin gespeichert und ignoriert. Nur NEUE Warnungen werden gemeldet.
+        // Nützlich für Legacy-Code.
+        // baseline = file("lint-baseline.xml")
+    }
 }
 
 dependencies {
