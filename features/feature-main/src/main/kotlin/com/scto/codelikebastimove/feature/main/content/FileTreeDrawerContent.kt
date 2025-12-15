@@ -94,6 +94,7 @@ fun FileTreeDrawerContent(
     projectPath: String,
     onFileClick: (FileTreeItem) -> Unit,
     onOpenTerminalSheet: () -> Unit = {},
+    fileSystemVersion: Long = 0L,
     modifier: Modifier = Modifier
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
@@ -144,6 +145,7 @@ fun FileTreeDrawerContent(
                 DrawerTab.FILES -> {
                     FileTreeTabContent(
                         projectPath = projectPath,
+                        fileSystemVersion = fileSystemVersion,
                         onFileClick = onFileClick
                     )
                 }
@@ -188,10 +190,11 @@ private fun DrawerHeader(
 @Composable
 private fun FileTreeTabContent(
     projectPath: String,
+    fileSystemVersion: Long,
     onFileClick: (FileTreeItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val projectTree = remember(projectPath) { 
+    val projectTree = remember(projectPath, fileSystemVersion) { 
         if (projectPath.isNotBlank()) {
             val rootFile = File(projectPath)
             createRealFileTree(rootFile)

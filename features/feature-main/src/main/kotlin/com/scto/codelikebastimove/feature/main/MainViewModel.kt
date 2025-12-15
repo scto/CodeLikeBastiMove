@@ -438,7 +438,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 buildFile.writeText(generateModuleBuildGradle(finalPackageName, type))
                 
                 // .gitignore erstellen
-                // Hier wird sichergestellt, dass der build-Ordner ignoriert wird
                 File(moduleDir, ".gitignore").writeText("/build\n")
                 
                 // proguard-rules.pro erstellen
@@ -467,6 +466,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 
                 if (settingsKts.exists()) {
                     val content = settingsKts.readText()
+                    // Einfacher Check, um Duplikate zu vermeiden
                     if (!content.contains("include(\"$gradlePath\")")) {
                         settingsKts.appendText("\ninclude(\"$gradlePath\")\n")
                     }
@@ -477,8 +477,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     }
                 }
 
+                // 5. UI aktualisieren und Dateibaum neu laden
                 _uiState.update { it.copy(isLoading = false, errorMessage = null) }
-                // Optional: Force refresh of file tree
+                notifyFileSystemChanged()
                 
             } catch (e: Exception) {
                 CLBMLogger.e(TAG, "Error creating submodule", e)
@@ -548,6 +549,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     CLBMLogger.d(TAG, "Project deleted successfully: $projectPath")
                 }
                 refreshDirectoryContents()
+                notifyFileSystemChanged()
             } catch (e: Exception) {
                 CLBMLogger.e(TAG, "Failed to delete project: ${e.message}", e)
                 _uiState.update { it.copy(errorMessage = "Failed to delete project: ${e.message}") }
@@ -560,6 +562,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _uiState.update { it.copy(isLoading = true, cloneProgress = "Cloning repository...") }
             // Dummy implementation
             _uiState.update { it.copy(isLoading = false, cloneProgress = "") }
+            notifyFileSystemChanged()
         }
     }
     
@@ -618,6 +621,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     newFolder.mkdirs()
                 }
                 refreshDirectoryContents()
+                notifyFileSystemChanged()
             } catch (e: Exception) {
                 _uiState.update { it.copy(errorMessage = "Failed to create folder: ${e.message}") }
             }
@@ -630,6 +634,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                File(file, "build.gradle").exists() ||
                File(file, "settings.gradle.kts").exists() ||
                File(file, "settings.gradle").exists()
+    }
+    
+    private fun notifyFileSystemChanged() {
+        _uiState.update { it.copy(lastFileSystemUpdate = System.currentTimeMillis()) }
     }
     
     companion object {

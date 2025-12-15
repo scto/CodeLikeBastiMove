@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+import org.json.JSONObject
+
 import java.io.File
 import java.util.Locale
 
@@ -30,18 +32,24 @@ class BuildVariantsViewModel : ViewModel() {
 
     private val _uiState = MutableStateFlow(BuildVariantsUiState())
     val uiState: StateFlow<BuildVariantsUiState> = _uiState.asStateFlow()
+    
+    private var currentProjectPath: String? = null
+    private val PREFS_DIR_NAME = ".androidide"
+    private val PREFS_FILE_NAME = "build_variants.json"
 
     fun loadBuildVariants(projectPath: String) {
         if (projectPath.isBlank()) {
             _uiState.update { it.copy(error = "Kein Projekt geöffnet") }
             return
         }
+        currentProjectPath = projectPath
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
                 val variants = withContext(Dispatchers.IO) {
-                    scanProjectForModules(File(projectPath))
+                    val modules = scanProjectForModules(File(projectPath))
+                    applySavedVariants(File(projectPath), modules)
                 }
                 _uiState.update { 
                     it.copy(
@@ -69,14 +77,62 @@ class BuildVariantsViewModel : ViewModel() {
                     variant
                 }
             }
+            saveVariants(updatedList)
             state.copy(variants = updatedList)
+        }
+    }
+    
+    private fun saveVariants(variants: List<BuildVariant>) {
+        val path = currentProjectPath ?: return
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val projectRoot = File(path)
+                val prefsFile = File(projectRoot, "$PREFS_DIR_NAME/$PREFS_FILE_NAME")
+                
+                if (!prefsFile.parentFile.exists()) {
+                    prefsFile.parentFile.mkdirs()
+                }
+                
+                val json = JSONObject()
+                variants.forEach { variant ->
+                    json.put(variant.moduleName, variant.activeVariant)
+                }
+                
+                // Pretty print mit Indentierung 2
+                prefsFile.writeText(json.toString(2))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun applySavedVariants(projectRoot: File, modules: List<BuildVariant>): List<BuildVariant> {
+        val prefsFile = File(projectRoot, "$PREFS_DIR_NAME/$PREFS_FILE_NAME")
+        if (!prefsFile.exists()) return modules
+
+        return try {
+            val content = prefsFile.readText()
+            if (content.isBlank()) return modules
+            
+            val json = JSONObject(content)
+            modules.map { variant ->
+                val savedVariant = json.optString(variant.moduleName)
+                // Prüfen ob die gespeicherte Variante noch gültig ist (in availableVariants existiert)
+                if (savedVariant.isNotEmpty() && variant.availableVariants.contains(savedVariant)) {
+                    variant.copy(activeVariant = savedVariant)
+                } else {
+                    variant
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            modules
         }
     }
 
     private fun scanProjectForModules(projectRoot: File): List<BuildVariant> {
         val modules = mutableListOf<BuildVariant>()
         
-        // Versuche settings.gradle.kts oder settings.gradle zu lesen
         val settingsKts = File(projectRoot, "settings.gradle.kts")
         val settingsGroovy = File(projectRoot, "settings.gradle")
         
@@ -88,12 +144,11 @@ class BuildVariantsViewModel : ViewModel() {
 
         if (settingsFile != null) {
             val content = settingsFile.readText()
-            // Regex um include(":app") oder include ':app' zu finden
             val regex = Regex("include\\s*\\(?\\s*[\"'](:[^\"']+)[\"']\\s*\\)?")
             val matches = regex.findAll(content)
             
             for (match in matches) {
-                val gradlePath = match.groupValues[1] // z.B. :features:login
+                val gradlePath = match.groupValues[1]
                 val relativePath = gradlePath.trimStart(':').replace(':', File.separatorChar)
                 val moduleDir = File(projectRoot, relativePath)
                 
@@ -105,12 +160,10 @@ class BuildVariantsViewModel : ViewModel() {
                 }
             }
         } else {
-            // Fallback: Wenn keine settings.gradle da ist, schaue einfach in root und 'app'
             val appDir = File(projectRoot, "app")
             if (appDir.exists()) {
                 parseModuleBuildFile(":app", appDir)?.let { modules.add(it) }
             }
-            // Check root als Modul
             parseModuleBuildFile(":", projectRoot)?.let { modules.add(it) }
         }
 
@@ -129,31 +182,23 @@ class BuildVariantsViewModel : ViewModel() {
 
         val content = buildFile.readText()
         
-        // Prüfen ob es ein Android Modul ist (Application oder Library)
         val isAndroid = content.contains("com.android.application") || 
                        content.contains("com.android.library") ||
                        content.contains("id(\"com.android.application\")") ||
                        content.contains("id(\"com.android.library\")")
 
         if (!isAndroid) {
-            // Für reine Kotlin/Java Module gibt es keine Build Varianten im Android-Sinne
             return BuildVariant(moduleName, "main", listOf("main"))
         }
 
-        // 1. Build Types extrahieren (Standard: debug, release)
         val buildTypes = extractBuildTypes(content)
-        
-        // 2. Product Flavors extrahieren
         val productFlavors = extractProductFlavors(content)
 
-        // 3. Varianten kombinieren (Flavor + BuildType)
-        // Android naming convention: <flavor><BuildType> (CamelCase)
         val variants = if (productFlavors.isEmpty()) {
             buildTypes.toList()
         } else {
             productFlavors.flatMap { flavor ->
                 buildTypes.map { type ->
-                    // flavor="demo", type="debug" -> "demoDebug"
                     val capitalizedType = type.replaceFirstChar { 
                         if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() 
                     }
@@ -164,7 +209,6 @@ class BuildVariantsViewModel : ViewModel() {
 
         val finalVariants = if (variants.isEmpty()) listOf("debug", "release") else variants.sorted()
         
-        // Standardmäßig 'debug' auswählen, wenn vorhanden
         val defaultVariant = finalVariants.find { it.contains("debug", ignoreCase = true) } 
             ?: finalVariants.firstOrNull() 
             ?: "debug"
@@ -179,18 +223,14 @@ class BuildVariantsViewModel : ViewModel() {
     private fun extractBuildTypes(content: String): Set<String> {
         val foundTypes = mutableSetOf("debug", "release")
         
-        // Sucht nach dem Block buildTypes { ... }
         val buildTypesMatch = Regex("buildTypes\\s*\\{([\\s\\S]*?)\\}").find(content)
         if (buildTypesMatch != null) {
             val blockContent = buildTypesMatch.groupValues[1]
             
-            // Matcht: create("staging") oder register("staging")
             Regex("(?:create|register)\\s*\\(\\s*[\"']([^\"']+)[\"']").findAll(blockContent).forEach {
                 foundTypes.add(it.groupValues[1])
             }
             
-            // Matcht Groovy Style: staging { ... }
-            // Wir filtern Standard-Methoden aus
             Regex("\\b(\\w+)\\s*\\{").findAll(blockContent).forEach {
                 val name = it.groupValues[1]
                 if (name !in listOf("getByName", "create", "register", "named", "release", "debug")) {
@@ -204,17 +244,14 @@ class BuildVariantsViewModel : ViewModel() {
     private fun extractProductFlavors(content: String): Set<String> {
         val foundFlavors = mutableSetOf<String>()
         
-        // Sucht nach dem Block productFlavors { ... }
         val flavorsMatch = Regex("productFlavors\\s*\\{([\\s\\S]*?)\\}").find(content)
         if (flavorsMatch != null) {
             val blockContent = flavorsMatch.groupValues[1]
             
-            // Matcht: create("demo") oder register("demo")
             Regex("(?:create|register)\\s*\\(\\s*[\"']([^\"']+)[\"']").findAll(blockContent).forEach {
                 foundFlavors.add(it.groupValues[1])
             }
             
-            // Matcht Groovy Style: demo { ... }
             Regex("\\b(\\w+)\\s*\\{").findAll(blockContent).forEach {
                 val name = it.groupValues[1]
                 if (name !in listOf("getByName", "create", "register", "named")) {

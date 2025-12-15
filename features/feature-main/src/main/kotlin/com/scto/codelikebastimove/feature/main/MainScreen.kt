@@ -114,11 +114,13 @@ fun MainScreen(
                     currentContent = uiState.currentContent,
                     isBottomSheetExpanded = uiState.isBottomSheetExpanded,
                     bottomSheetContent = uiState.bottomSheetContent,
+                    fileSystemVersion = uiState.lastFileSystemUpdate,
                     onNavigate = { viewModel.onNavigate(it) },
                     onBackToHome = { viewModel.onCloseProject() },
                     onContentTypeChanged = { viewModel.onContentTypeChanged(it) },
                     onBottomSheetToggle = { viewModel.onBottomSheetToggle() },
-                    onBottomSheetContentChanged = { viewModel.onBottomSheetContentChanged(it) }
+                    onBottomSheetContentChanged = { viewModel.onBottomSheetContentChanged(it) },
+                    viewModel = viewModel
                 )
             }
             

@@ -59,6 +59,7 @@ fun IDEWorkspaceScreen(
     currentContent: MainContentType,
     isBottomSheetExpanded: Boolean,
     bottomSheetContent: BottomSheetContentType,
+    fileSystemVersion: Long = 0L,
     onNavigate: (MainDestination) -> Unit,
     onBackToHome: () -> Unit,
     onContentTypeChanged: (MainContentType) -> Unit,
@@ -78,6 +79,7 @@ fun IDEWorkspaceScreen(
                 FileTreeDrawerContent(
                     projectName = projectName,
                     projectPath = projectPath,
+                    fileSystemVersion = fileSystemVersion,
                     onFileClick = { file ->
                         if (!file.isDirectory) {
                             viewModel.openFile(file.path)

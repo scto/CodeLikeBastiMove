@@ -26,7 +26,10 @@ data class MainUiState(
     
     // Editor State
     val openFiles: List<EditorFile> = emptyList(),
-    val activeFileIndex: Int = -1
+    val activeFileIndex: Int = -1,
+    
+    // Trigger für Dateisystem-Aktualisierungen (Timestamp)
+    val lastFileSystemUpdate: Long = 0L
 )
 
 data class EditorFile(
