@@ -1,655 +1,640 @@
-﻿2025-12-16T11:06:44.0774605Z ##[group]Run ./gradlew assembledebug
-2025-12-16T11:06:44.0774937Z [36;1m./gradlew assembledebug[0m
-2025-12-16T11:06:44.0808459Z shell: /usr/bin/bash -e {0}
-2025-12-16T11:06:44.0808693Z env:
-2025-12-16T11:06:44.0808978Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.17-10/x64
-2025-12-16T11:06:44.0809451Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.17-10/x64
-2025-12-16T11:06:44.0809815Z   ANDROID_HOME: /usr/local/lib/android/sdk
-2025-12-16T11:06:44.0810086Z   ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
-2025-12-16T11:06:44.0810326Z ##[endgroup]
-2025-12-16T11:06:44.1651111Z Downloading https://services.gradle.org/distributions/gradle-9.2.1-bin.zip
-2025-12-16T11:06:45.6226264Z ............10%.............20%.............30%.............40%.............50%.............60%.............70%.............80%.............90%.............100%
-2025-12-16T11:06:46.9336566Z 
-2025-12-16T11:06:46.9339317Z Welcome to Gradle 9.2.1!
-2025-12-16T11:06:46.9341495Z 
-2025-12-16T11:06:46.9348667Z Here are the highlights of this release:
-2025-12-16T11:06:46.9349260Z  - Windows ARM support
-2025-12-16T11:06:46.9349713Z  - Improved publishing APIs
-2025-12-16T11:06:46.9350446Z  - Better guidance for dependency verification failures
-2025-12-16T11:06:46.9350989Z 
-2025-12-16T11:06:46.9351539Z For more details see https://docs.gradle.org/9.2.1/release-notes.html
-2025-12-16T11:06:46.9352085Z 
-2025-12-16T11:06:47.0373652Z Starting a Gradle Daemon (subsequent builds will be faster)
-2025-12-16T11:08:16.7380550Z > Task :build-logic:convention:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:08:27.2329393Z > Task :build-logic:convention:pluginDescriptors
-2025-12-16T11:08:27.2333434Z > Task :build-logic:convention:processResources
-2025-12-16T11:08:33.7332638Z > Task :build-logic:convention:compileKotlin
-2025-12-16T11:08:33.7341909Z > Task :build-logic:convention:compileJava NO-SOURCE
-2025-12-16T11:08:33.7342777Z > Task :build-logic:convention:classes
-2025-12-16T11:08:33.8328933Z > Task :build-logic:convention:jar
-2025-12-16T11:08:52.4333489Z > Task :app:preBuild UP-TO-DATE
-2025-12-16T11:08:52.4340103Z > Task :app:preDebugBuild UP-TO-DATE
-2025-12-16T11:08:52.4344971Z > Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
-2025-12-16T11:08:52.4346448Z > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:08:52.4349212Z > Task :features:preBuild UP-TO-DATE
-2025-12-16T11:08:52.4373651Z > Task :features:preDebugBuild UP-TO-DATE
-2025-12-16T11:08:52.5334777Z > Task :core:core-datastore:preBuild UP-TO-DATE
-2025-12-16T11:08:52.5338352Z > Task :core:core-datastore:preDebugBuild UP-TO-DATE
-2025-12-16T11:08:52.5339064Z > Task :features:writeDebugAarMetadata
-2025-12-16T11:08:52.5339755Z > Task :core:core-datastore-proto:preBuild UP-TO-DATE
-2025-12-16T11:08:52.5340554Z > Task :core:core-datastore-proto:preDebugBuild UP-TO-DATE
-2025-12-16T11:08:52.5341326Z > Task :core:core-datastore:writeDebugAarMetadata
-2025-12-16T11:08:52.5342085Z > Task :core:core-datastore-proto:writeDebugAarMetadata
-2025-12-16T11:08:52.5342839Z > Task :core:core-logger:preBuild UP-TO-DATE
-2025-12-16T11:08:52.5343529Z > Task :core:core-logger:preDebugBuild UP-TO-DATE
-2025-12-16T11:08:52.5344212Z > Task :core:core-resources:preBuild UP-TO-DATE
-2025-12-16T11:08:52.5344983Z > Task :core:core-logger:writeDebugAarMetadata
-2025-12-16T11:08:52.5354918Z > Task :core:core-resources:preDebugBuild UP-TO-DATE
-2025-12-16T11:08:52.5356064Z > Task :core:core-ui:preBuild UP-TO-DATE
-2025-12-16T11:08:52.5356659Z > Task :core:core-ui:preDebugBuild UP-TO-DATE
-2025-12-16T11:08:52.5357262Z > Task :core:core-resources:writeDebugAarMetadata
-2025-12-16T11:08:52.5357928Z > Task :core:templates-api:preBuild UP-TO-DATE
-2025-12-16T11:08:52.5358618Z > Task :core:templates-api:preDebugBuild UP-TO-DATE
-2025-12-16T11:08:52.5359271Z > Task :core:core-ui:writeDebugAarMetadata
-2025-12-16T11:08:52.5359927Z > Task :core:templates-impl:preBuild UP-TO-DATE
-2025-12-16T11:08:52.5360618Z > Task :core:templates-impl:preDebugBuild UP-TO-DATE
-2025-12-16T11:08:52.5361630Z > Task :core:templates-api:writeDebugAarMetadata
-2025-12-16T11:08:52.5362256Z > Task :core:templates-impl:writeDebugAarMetadata
-2025-12-16T11:08:52.5362968Z > Task :features:feature-designer:preBuild UP-TO-DATE
-2025-12-16T11:08:52.5363713Z > Task :features:feature-designer:preDebugBuild UP-TO-DATE
-2025-12-16T11:08:52.5364472Z > Task :features:feature-editor:preBuild UP-TO-DATE
-2025-12-16T11:08:52.5365413Z > Task :features:feature-editor:preDebugBuild UP-TO-DATE
-2025-12-16T11:08:52.5366163Z > Task :features:feature-designer:writeDebugAarMetadata
-2025-12-16T11:08:52.5366876Z > Task :features:feature-explorer:preBuild UP-TO-DATE
-2025-12-16T11:08:52.5367602Z > Task :features:feature-explorer:preDebugBuild UP-TO-DATE
-2025-12-16T11:08:52.5368334Z > Task :features:feature-editor:writeDebugAarMetadata
-2025-12-16T11:08:52.5368965Z > Task :features:feature-git:preBuild UP-TO-DATE
-2025-12-16T11:08:52.5369611Z > Task :features:feature-git:preDebugBuild UP-TO-DATE
-2025-12-16T11:08:52.5370287Z > Task :features:feature-explorer:writeDebugAarMetadata
-2025-12-16T11:08:52.5370976Z > Task :features:feature-home:preBuild UP-TO-DATE
-2025-12-16T11:08:52.5371656Z > Task :features:feature-home:preDebugBuild UP-TO-DATE
-2025-12-16T11:08:52.5372329Z > Task :features:feature-git:writeDebugAarMetadata
-2025-12-16T11:08:52.6328881Z > Task :features:feature-home:writeDebugAarMetadata
-2025-12-16T11:08:52.6329929Z > Task :features:feature-main:preBuild UP-TO-DATE
-2025-12-16T11:08:52.6330824Z > Task :features:feature-main:preDebugBuild UP-TO-DATE
-2025-12-16T11:08:52.6331772Z > Task :features:feature-main:writeDebugAarMetadata
-2025-12-16T11:08:52.6332689Z > Task :features:feature-onboarding:preBuild UP-TO-DATE
-2025-12-16T11:08:52.6333693Z > Task :features:feature-onboarding:preDebugBuild UP-TO-DATE
-2025-12-16T11:08:52.6334515Z > Task :features:feature-settings:preBuild UP-TO-DATE
-2025-12-16T11:08:52.6335296Z > Task :features:feature-settings:preDebugBuild UP-TO-DATE
-2025-12-16T11:08:52.6335883Z > Task :features:feature-onboarding:writeDebugAarMetadata
-2025-12-16T11:08:52.6336894Z > Task :features:feature-settings:writeDebugAarMetadata
-2025-12-16T11:08:52.6337395Z > Task :features:feature-treeview:preBuild UP-TO-DATE
-2025-12-16T11:08:52.6337993Z > Task :features:feature-treeview:preDebugBuild UP-TO-DATE
-2025-12-16T11:08:52.6338404Z > Task :features:feature-treeview:writeDebugAarMetadata
-2025-12-16T11:08:52.6338738Z > Task :app:generateDebugResValues
-2025-12-16T11:09:22.6326852Z > Task :app:checkDebugAarMetadata
-2025-12-16T11:09:50.1328969Z > Task :features:generateDebugResValues
-2025-12-16T11:09:50.1329645Z > Task :features:generateDebugResources
-2025-12-16T11:09:50.2353538Z > Task :features:packageDebugResources
-2025-12-16T11:09:50.2355980Z > Task :core:core-datastore:generateDebugResValues
-2025-12-16T11:09:50.2370839Z > Task :core:core-datastore:generateDebugResources
-2025-12-16T11:09:50.2371538Z > Task :core:core-datastore:packageDebugResources
-2025-12-16T11:09:50.2372264Z > Task :core:core-datastore-proto:generateDebugResValues
-2025-12-16T11:09:50.2373044Z > Task :core:core-datastore-proto:generateDebugResources
-2025-12-16T11:09:50.2373795Z > Task :core:core-datastore-proto:packageDebugResources
-2025-12-16T11:09:50.2374459Z > Task :core:core-logger:generateDebugResValues
-2025-12-16T11:09:50.2375259Z > Task :core:core-logger:generateDebugResources
-2025-12-16T11:09:50.2375872Z > Task :core:core-logger:packageDebugResources
-2025-12-16T11:09:50.2376504Z > Task :core:core-resources:generateDebugResValues
-2025-12-16T11:09:50.2377147Z > Task :core:core-resources:generateDebugResources
-2025-12-16T11:09:50.3330537Z > Task :core:core-resources:packageDebugResources
-2025-12-16T11:09:50.3337471Z > Task :core:core-ui:generateDebugResValues
-2025-12-16T11:09:50.3338080Z > Task :core:core-ui:generateDebugResources
-2025-12-16T11:09:50.3338668Z > Task :core:core-ui:packageDebugResources
-2025-12-16T11:09:50.3339305Z > Task :core:templates-api:generateDebugResValues
-2025-12-16T11:09:50.3339949Z > Task :core:templates-api:generateDebugResources
-2025-12-16T11:09:50.4331054Z > Task :core:templates-api:packageDebugResources
-2025-12-16T11:09:50.4335644Z > Task :core:templates-impl:generateDebugResValues
-2025-12-16T11:09:50.4337099Z > Task :core:templates-impl:generateDebugResources
-2025-12-16T11:09:50.4338051Z > Task :core:templates-impl:packageDebugResources
-2025-12-16T11:09:50.4339154Z > Task :features:feature-designer:generateDebugResValues
-2025-12-16T11:09:50.4340020Z > Task :features:feature-designer:generateDebugResources
-2025-12-16T11:09:50.4343593Z > Task :features:feature-designer:packageDebugResources
-2025-12-16T11:09:50.4344505Z > Task :features:feature-editor:generateDebugResValues
-2025-12-16T11:09:50.4345920Z > Task :features:feature-editor:generateDebugResources
-2025-12-16T11:09:50.4347993Z > Task :features:feature-editor:packageDebugResources
-2025-12-16T11:09:50.4350095Z > Task :features:feature-explorer:generateDebugResValues
-2025-12-16T11:09:50.4351219Z > Task :features:feature-explorer:generateDebugResources
-2025-12-16T11:09:50.4352350Z > Task :features:feature-explorer:packageDebugResources
-2025-12-16T11:09:50.4354148Z > Task :features:feature-git:generateDebugResValues
-2025-12-16T11:09:50.4356313Z > Task :features:feature-git:generateDebugResources
-2025-12-16T11:09:50.4357150Z > Task :features:feature-git:packageDebugResources
-2025-12-16T11:09:50.4366141Z > Task :features:feature-home:generateDebugResValues
-2025-12-16T11:09:50.4369304Z > Task :features:feature-home:generateDebugResources
-2025-12-16T11:09:50.4370374Z > Task :features:feature-home:packageDebugResources
-2025-12-16T11:09:50.5362522Z > Task :features:feature-main:generateDebugResValues
-2025-12-16T11:09:50.5367860Z > Task :features:feature-main:generateDebugResources
-2025-12-16T11:09:50.5368558Z > Task :features:feature-main:packageDebugResources
-2025-12-16T11:09:50.5369302Z > Task :features:feature-onboarding:generateDebugResValues
-2025-12-16T11:09:50.5370089Z > Task :features:feature-onboarding:generateDebugResources
-2025-12-16T11:09:50.5370877Z > Task :features:feature-onboarding:packageDebugResources
-2025-12-16T11:09:50.5371972Z > Task :features:feature-settings:generateDebugResValues
-2025-12-16T11:09:50.5372728Z > Task :features:feature-settings:generateDebugResources
-2025-12-16T11:09:50.5373466Z > Task :features:feature-settings:packageDebugResources
-2025-12-16T11:09:50.5377778Z > Task :features:feature-treeview:generateDebugResValues
-2025-12-16T11:09:50.5378546Z > Task :features:feature-treeview:generateDebugResources
-2025-12-16T11:09:50.5379302Z > Task :features:feature-treeview:packageDebugResources
-2025-12-16T11:09:50.6336584Z > Task :app:mapDebugSourceSetPaths
-2025-12-16T11:09:50.6337228Z > Task :app:generateDebugResources
-2025-12-16T11:09:51.3327583Z > Task :app:packageDebugResources
-2025-12-16T11:09:51.9328257Z > Task :app:createDebugCompatibleScreenManifests
-2025-12-16T11:09:51.9329346Z > Task :app:extractDeepLinksDebug
-2025-12-16T11:09:51.9330097Z > Task :features:extractDeepLinksDebug
-2025-12-16T11:09:51.9330976Z > Task :core:core-datastore:extractDeepLinksDebug
-2025-12-16T11:09:52.0328770Z > Task :app:parseDebugLocalResources
-2025-12-16T11:09:52.0330026Z > Task :core:core-datastore-proto:extractDeepLinksDebug
-2025-12-16T11:09:52.0330941Z > Task :core:core-datastore:processDebugManifest
-2025-12-16T11:09:52.0331536Z > Task :features:processDebugManifest
-2025-12-16T11:09:52.0332103Z > Task :core:core-datastore-proto:processDebugManifest
-2025-12-16T11:09:52.1342081Z > Task :core:core-logger:extractDeepLinksDebug
-2025-12-16T11:09:52.1344237Z > Task :app:mergeDebugResources
-2025-12-16T11:09:52.1344827Z > Task :core:core-resources:extractDeepLinksDebug
-2025-12-16T11:09:52.1345644Z > Task :core:core-logger:processDebugManifest
-2025-12-16T11:09:52.1346192Z > Task :core:core-ui:extractDeepLinksDebug
-2025-12-16T11:09:52.1346731Z > Task :core:core-resources:processDebugManifest
-2025-12-16T11:09:52.1347298Z > Task :core:templates-api:extractDeepLinksDebug
-2025-12-16T11:09:52.1347853Z > Task :core:core-ui:processDebugManifest
-2025-12-16T11:09:52.1348400Z > Task :core:templates-impl:extractDeepLinksDebug
-2025-12-16T11:09:52.1349379Z > Task :core:templates-api:processDebugManifest
-2025-12-16T11:09:52.1350026Z > Task :features:feature-designer:extractDeepLinksDebug
-2025-12-16T11:09:52.1350652Z > Task :core:templates-impl:processDebugManifest
-2025-12-16T11:09:52.1351363Z > Task :features:feature-designer:processDebugManifest
-2025-12-16T11:09:52.1351995Z > Task :features:feature-editor:extractDeepLinksDebug
-2025-12-16T11:09:52.1352715Z > Task :features:feature-explorer:extractDeepLinksDebug
-2025-12-16T11:09:52.1353366Z > Task :features:feature-editor:processDebugManifest
-2025-12-16T11:09:52.1353940Z > Task :features:feature-git:extractDeepLinksDebug
-2025-12-16T11:09:52.1354567Z > Task :features:feature-explorer:processDebugManifest
-2025-12-16T11:09:52.1355451Z > Task :features:feature-home:extractDeepLinksDebug
-2025-12-16T11:09:52.1356086Z > Task :features:feature-git:processDebugManifest
-2025-12-16T11:09:52.2329223Z > Task :features:feature-home:processDebugManifest
-2025-12-16T11:09:52.2345505Z > Task :features:feature-main:extractDeepLinksDebug
-2025-12-16T11:09:52.2346329Z > Task :features:feature-onboarding:extractDeepLinksDebug
-2025-12-16T11:09:52.2347048Z > Task :features:feature-main:processDebugManifest
-2025-12-16T11:09:52.2347751Z > Task :features:feature-settings:extractDeepLinksDebug
-2025-12-16T11:09:52.2348489Z > Task :features:feature-onboarding:processDebugManifest
-2025-12-16T11:09:52.2349218Z > Task :features:feature-treeview:extractDeepLinksDebug
-2025-12-16T11:09:52.2349914Z > Task :features:feature-settings:processDebugManifest
-2025-12-16T11:09:52.2350607Z > Task :features:feature-treeview:processDebugManifest
-2025-12-16T11:09:52.7334341Z > Task :features:compileDebugLibraryResources
-2025-12-16T11:09:53.0376202Z > Task :app:processDebugMainManifest
-2025-12-16T11:09:53.1370350Z > Task :app:processDebugManifest
-2025-12-16T11:09:53.1379334Z > Task :core:core-datastore:compileDebugLibraryResources
-2025-12-16T11:09:53.1379967Z > Task :features:parseDebugLocalResources
-2025-12-16T11:09:53.1380496Z > Task :app:processDebugManifestForPackage
-2025-12-16T11:09:53.1381513Z > Task :core:core-datastore:parseDebugLocalResources
-2025-12-16T11:09:53.2334747Z > Task :core:core-datastore-proto:compileDebugLibraryResources
-2025-12-16T11:09:53.2335842Z > Task :core:core-logger:compileDebugLibraryResources
-2025-12-16T11:09:53.2336591Z > Task :core:core-datastore-proto:parseDebugLocalResources
-2025-12-16T11:09:53.2347951Z > Task :features:generateDebugRFile
-2025-12-16T11:09:53.2348564Z > Task :core:core-datastore:generateDebugRFile
-2025-12-16T11:09:53.2349226Z > Task :core:core-datastore-proto:generateDebugRFile
-2025-12-16T11:09:53.2349939Z > Task :core:core-resources:compileDebugLibraryResources
-2025-12-16T11:09:53.2350618Z > Task :core:core-logger:parseDebugLocalResources
-2025-12-16T11:09:53.3336781Z > Task :core:core-ui:compileDebugLibraryResources
-2025-12-16T11:09:53.3337533Z > Task :core:core-logger:generateDebugRFile
-2025-12-16T11:09:53.3338196Z > Task :core:core-resources:parseDebugLocalResources
-2025-12-16T11:09:53.3338897Z > Task :core:core-ui:parseDebugLocalResources
-2025-12-16T11:09:53.3339588Z > Task :core:templates-api:compileDebugLibraryResources
-2025-12-16T11:09:53.3340216Z > Task :core:core-ui:generateDebugRFile
-2025-12-16T11:09:53.3340868Z > Task :core:templates-impl:compileDebugLibraryResources
-2025-12-16T11:09:53.3341570Z > Task :core:templates-api:parseDebugLocalResources
-2025-12-16T11:09:53.3342211Z > Task :core:core-resources:generateDebugRFile
-2025-12-16T11:09:53.3342864Z > Task :core:templates-impl:parseDebugLocalResources
-2025-12-16T11:09:53.3343622Z > Task :features:feature-designer:compileDebugLibraryResources
-2025-12-16T11:09:53.3344322Z > Task :core:templates-api:generateDebugRFile
-2025-12-16T11:09:53.3344948Z > Task :core:templates-impl:generateDebugRFile
-2025-12-16T11:09:53.3345904Z > Task :features:feature-designer:parseDebugLocalResources
-2025-12-16T11:09:53.3346711Z > Task :features:feature-editor:compileDebugLibraryResources
-2025-12-16T11:09:53.4328844Z > Task :features:feature-designer:generateDebugRFile
-2025-12-16T11:09:53.4332390Z > Task :features:feature-editor:parseDebugLocalResources
-2025-12-16T11:09:53.4336157Z > Task :features:feature-explorer:compileDebugLibraryResources
-2025-12-16T11:09:53.4340452Z > Task :features:feature-git:compileDebugLibraryResources
-2025-12-16T11:09:53.4343558Z > Task :features:feature-editor:generateDebugRFile
-2025-12-16T11:09:53.4348712Z > Task :features:feature-explorer:parseDebugLocalResources
-2025-12-16T11:09:53.4351298Z > Task :features:feature-home:compileDebugLibraryResources
-2025-12-16T11:09:53.4354827Z > Task :features:feature-git:parseDebugLocalResources
-2025-12-16T11:09:53.4362736Z > Task :features:feature-explorer:generateDebugRFile
-2025-12-16T11:09:53.4363996Z > Task :features:feature-git:generateDebugRFile
-2025-12-16T11:09:53.4364883Z > Task :features:feature-home:parseDebugLocalResources
-2025-12-16T11:09:53.4365798Z > Task :features:feature-main:compileDebugLibraryResources
-2025-12-16T11:09:53.4366470Z > Task :features:feature-main:parseDebugLocalResources
-2025-12-16T11:09:53.4367102Z > Task :features:feature-home:generateDebugRFile
-2025-12-16T11:09:53.4367668Z > Task :features:feature-main:generateDebugRFile
-2025-12-16T11:09:53.4368325Z > Task :features:feature-onboarding:compileDebugLibraryResources
-2025-12-16T11:09:53.4369056Z > Task :features:feature-settings:compileDebugLibraryResources
-2025-12-16T11:09:53.4369775Z > Task :features:feature-onboarding:parseDebugLocalResources
-2025-12-16T11:09:53.5329012Z > Task :features:feature-settings:parseDebugLocalResources
-2025-12-16T11:09:53.5332570Z > Task :features:feature-onboarding:generateDebugRFile
-2025-12-16T11:09:53.5334467Z > Task :features:feature-settings:generateDebugRFile
-2025-12-16T11:09:53.5335401Z > Task :features:feature-treeview:compileDebugLibraryResources
-2025-12-16T11:09:53.5336336Z > Task :features:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:09:53.5337503Z > Task :core:core-datastore:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:09:53.5339569Z > Task :core:core-datastore-proto:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:09:53.5341353Z > Task :core:core-datastore-proto:protobufDummy UP-TO-DATE
-2025-12-16T11:09:53.5342169Z > Task :features:feature-treeview:parseDebugLocalResources
-2025-12-16T11:09:53.5342872Z > Task :core:core-datastore-proto:extractDebugProto
-2025-12-16T11:09:53.5343892Z > Task :features:feature-treeview:generateDebugRFile
-2025-12-16T11:09:53.7327638Z > Task :core:core-datastore-proto:extractIncludeDebugProto
-2025-12-16T11:09:54.0327396Z > Task :core:core-datastore-proto:extractProto
-2025-12-16T11:09:54.2327373Z > Task :app:processDebugResources
-2025-12-16T11:09:55.1369012Z > Task :core:core-datastore-proto:generateDebugProto
-2025-12-16T11:09:55.1370129Z > Task :core:core-datastore-proto:compileDebugKotlin NO-SOURCE
-2025-12-16T11:09:55.1371929Z > Task :core:core-logger:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:09:55.1372711Z > Task :core:core-datastore-proto:javaPreCompileDebug
-2025-12-16T11:09:55.1373332Z > Task :core:core-logger:generateDebugBuildConfig
-2025-12-16T11:10:00.7328061Z > Task :core:core-datastore-proto:compileDebugJavaWithJavac
-2025-12-16T11:10:00.8327322Z > Task :core:core-datastore-proto:bundleLibCompileToJarDebug
-2025-12-16T11:10:10.9329327Z > Task :core:core-resources:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:10:10.9330268Z > Task :core:core-logger:javaPreCompileDebug
-2025-12-16T11:10:10.9330962Z > Task :core:core-resources:compileDebugKotlin NO-SOURCE
-2025-12-16T11:10:10.9331837Z > Task :core:core-ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:10:10.9332650Z > Task :core:core-resources:javaPreCompileDebug
-2025-12-16T11:10:10.9333275Z > Task :core:core-datastore:javaPreCompileDebug
-2025-12-16T11:10:10.9333999Z > Task :core:core-resources:compileDebugJavaWithJavac NO-SOURCE
-2025-12-16T11:10:10.9334680Z > Task :core:core-ui:javaPreCompileDebug
-2025-12-16T11:10:10.9335777Z > Task :core:templates-api:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:10:10.9337070Z > Task :core:core-resources:bundleLibCompileToJarDebug
-2025-12-16T11:10:10.9337744Z > Task :core:templates-api:javaPreCompileDebug
-2025-12-16T11:10:17.5328930Z > Task :core:templates-impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:10:17.5330255Z > Task :core:templates-impl:javaPreCompileDebug
-2025-12-16T11:10:17.5331340Z > Task :features:feature-designer:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:10:17.5332691Z > Task :features:feature-editor:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:10:17.5333975Z > Task :features:feature-git:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:10:17.6330272Z > Task :features:feature-git:javaPreCompileDebug
-2025-12-16T11:10:17.6406977Z > Task :features:feature-treeview:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:10:17.6426023Z > Task :features:feature-treeview:javaPreCompileDebug
-2025-12-16T11:10:17.6427086Z > Task :features:feature-editor:javaPreCompileDebug
-2025-12-16T11:10:17.6428117Z > Task :features:feature-designer:javaPreCompileDebug
-2025-12-16T11:10:17.6429367Z > Task :features:feature-explorer:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:10:17.6430466Z > Task :features:feature-explorer:javaPreCompileDebug
-2025-12-16T11:10:17.6435705Z > Task :features:feature-home:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:10:17.6437922Z > Task :features:feature-home:javaPreCompileDebug
-2025-12-16T11:10:17.6438874Z > Task :features:feature-main:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:10:17.6439706Z > Task :features:feature-main:javaPreCompileDebug
-2025-12-16T11:10:17.6440662Z > Task :features:feature-onboarding:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:10:17.6441612Z > Task :features:feature-onboarding:javaPreCompileDebug
-2025-12-16T11:10:17.6442599Z > Task :features:feature-settings:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2025-12-16T11:10:17.6443528Z > Task :features:feature-settings:javaPreCompileDebug
-2025-12-16T11:10:17.6444609Z > Task :features:javaPreCompileDebug
-2025-12-16T11:10:17.6445353Z > Task :app:javaPreCompileDebug
-2025-12-16T11:10:17.7339442Z > Task :app:mergeDebugShaders
-2025-12-16T11:10:17.7340535Z > Task :app:compileDebugShaders NO-SOURCE
-2025-12-16T11:10:17.7341444Z > Task :app:generateDebugAssets UP-TO-DATE
-2025-12-16T11:10:17.7342350Z > Task :features:mergeDebugShaders
-2025-12-16T11:10:17.7343169Z > Task :features:compileDebugShaders NO-SOURCE
-2025-12-16T11:10:17.7344031Z > Task :features:generateDebugAssets UP-TO-DATE
-2025-12-16T11:10:17.7344801Z > Task :features:mergeDebugAssets
-2025-12-16T11:10:17.7345782Z > Task :core:core-datastore:mergeDebugShaders
-2025-12-16T11:10:17.7346724Z > Task :core:core-datastore:compileDebugShaders NO-SOURCE
-2025-12-16T11:10:17.7347718Z > Task :core:core-datastore:generateDebugAssets UP-TO-DATE
-2025-12-16T11:10:17.7348622Z > Task :core:core-datastore:mergeDebugAssets
-2025-12-16T11:10:17.7349491Z > Task :core:core-datastore-proto:mergeDebugShaders
-2025-12-16T11:10:17.7350558Z > Task :core:core-datastore-proto:compileDebugShaders NO-SOURCE
-2025-12-16T11:10:17.7351644Z > Task :core:core-datastore-proto:generateDebugAssets UP-TO-DATE
-2025-12-16T11:10:17.7352619Z > Task :core:core-datastore-proto:mergeDebugAssets
-2025-12-16T11:10:17.8328751Z > Task :core:core-logger:mergeDebugShaders
-2025-12-16T11:10:17.8329531Z > Task :core:core-logger:compileDebugShaders NO-SOURCE
-2025-12-16T11:10:17.8330227Z > Task :core:core-logger:generateDebugAssets UP-TO-DATE
-2025-12-16T11:10:17.8330828Z > Task :core:core-logger:mergeDebugAssets
-2025-12-16T11:10:17.8331408Z > Task :core:core-resources:mergeDebugShaders
-2025-12-16T11:10:17.8332083Z > Task :core:core-resources:compileDebugShaders NO-SOURCE
-2025-12-16T11:10:17.8332835Z > Task :core:core-resources:generateDebugAssets UP-TO-DATE
-2025-12-16T11:10:17.8333497Z > Task :core:core-resources:mergeDebugAssets
-2025-12-16T11:10:17.8333996Z > Task :core:core-ui:mergeDebugShaders
-2025-12-16T11:10:17.8334841Z > Task :core:core-ui:compileDebugShaders NO-SOURCE
-2025-12-16T11:10:17.8335739Z > Task :core:core-ui:generateDebugAssets UP-TO-DATE
-2025-12-16T11:10:17.8336253Z > Task :core:core-ui:mergeDebugAssets
-2025-12-16T11:10:17.8336746Z > Task :core:templates-api:mergeDebugShaders
-2025-12-16T11:10:17.8337313Z > Task :core:templates-api:compileDebugShaders NO-SOURCE
-2025-12-16T11:10:17.8337940Z > Task :core:templates-api:generateDebugAssets UP-TO-DATE
-2025-12-16T11:10:17.9339138Z > Task :core:templates-api:mergeDebugAssets
-2025-12-16T11:10:17.9340341Z > Task :core:templates-impl:mergeDebugShaders
-2025-12-16T11:10:17.9341380Z > Task :core:templates-impl:compileDebugShaders NO-SOURCE
-2025-12-16T11:10:17.9342519Z > Task :core:templates-impl:generateDebugAssets UP-TO-DATE
-2025-12-16T11:10:17.9343491Z > Task :core:templates-impl:mergeDebugAssets
-2025-12-16T11:10:17.9344364Z > Task :core:core-logger:compileDebugKotlin
-2025-12-16T11:10:17.9345454Z > Task :features:feature-designer:mergeDebugShaders
-2025-12-16T11:10:19.6327702Z > Task :core:core-logger:compileDebugJavaWithJavac
-2025-12-16T11:10:19.6328652Z > Task :features:feature-designer:compileDebugShaders NO-SOURCE
-2025-12-16T11:10:19.6329539Z > Task :features:feature-designer:generateDebugAssets UP-TO-DATE
-2025-12-16T11:10:19.6330331Z > Task :core:core-logger:bundleLibCompileToJarDebug
-2025-12-16T11:10:19.6331009Z > Task :features:feature-designer:mergeDebugAssets
-2025-12-16T11:10:20.1327275Z > Task :core:templates-api:compileDebugKotlin
-2025-12-16T11:10:20.3329232Z > Task :core:templates-api:compileDebugJavaWithJavac NO-SOURCE
-2025-12-16T11:10:20.3330115Z > Task :core:templates-api:bundleLibCompileToJarDebug
-2025-12-16T11:10:20.3330802Z > Task :features:feature-editor:mergeDebugShaders
-2025-12-16T11:10:20.3331549Z > Task :features:feature-editor:compileDebugShaders NO-SOURCE
-2025-12-16T11:10:20.3332360Z > Task :features:feature-editor:generateDebugAssets UP-TO-DATE
-2025-12-16T11:10:20.3333095Z > Task :features:feature-editor:mergeDebugAssets
-2025-12-16T11:10:20.3333772Z > Task :features:feature-explorer:mergeDebugShaders
-2025-12-16T11:10:20.3334847Z > Task :features:feature-explorer:compileDebugShaders NO-SOURCE
-2025-12-16T11:10:20.3335938Z > Task :features:feature-explorer:generateDebugAssets UP-TO-DATE
-2025-12-16T11:10:20.3336707Z > Task :features:feature-explorer:mergeDebugAssets
-2025-12-16T11:10:20.3337360Z > Task :features:feature-git:mergeDebugShaders
-2025-12-16T11:10:20.3338068Z > Task :features:feature-git:compileDebugShaders NO-SOURCE
-2025-12-16T11:10:20.3338852Z > Task :features:feature-git:generateDebugAssets UP-TO-DATE
-2025-12-16T11:10:20.3339534Z > Task :features:feature-git:mergeDebugAssets
-2025-12-16T11:10:20.4360276Z > Task :features:feature-home:mergeDebugShaders
-2025-12-16T11:10:20.4386233Z > Task :features:feature-home:compileDebugShaders NO-SOURCE
-2025-12-16T11:10:20.4401897Z > Task :features:feature-home:generateDebugAssets UP-TO-DATE
-2025-12-16T11:10:20.4402635Z > Task :features:feature-home:mergeDebugAssets
-2025-12-16T11:10:20.4403221Z > Task :features:feature-main:mergeDebugShaders
-2025-12-16T11:10:20.4403913Z > Task :features:feature-main:compileDebugShaders NO-SOURCE
-2025-12-16T11:10:20.4404649Z > Task :features:feature-main:generateDebugAssets UP-TO-DATE
-2025-12-16T11:10:20.4405546Z > Task :features:feature-main:mergeDebugAssets
-2025-12-16T11:10:20.4406207Z > Task :features:feature-onboarding:mergeDebugShaders
-2025-12-16T11:10:20.4406919Z > Task :features:feature-onboarding:compileDebugShaders NO-SOURCE
-2025-12-16T11:10:20.4407635Z > Task :features:feature-onboarding:generateDebugAssets UP-TO-DATE
-2025-12-16T11:10:20.4408265Z > Task :features:feature-onboarding:mergeDebugAssets
-2025-12-16T11:10:20.4408892Z > Task :features:feature-settings:mergeDebugShaders
-2025-12-16T11:10:20.4409630Z > Task :features:feature-settings:compileDebugShaders NO-SOURCE
-2025-12-16T11:10:20.4410449Z > Task :features:feature-settings:generateDebugAssets UP-TO-DATE
-2025-12-16T11:10:20.4411101Z > Task :features:feature-settings:mergeDebugAssets
-2025-12-16T11:10:20.4412031Z > Task :features:feature-treeview:mergeDebugShaders
-2025-12-16T11:10:20.4412735Z > Task :features:feature-treeview:compileDebugShaders NO-SOURCE
-2025-12-16T11:10:20.4413489Z > Task :features:feature-treeview:generateDebugAssets UP-TO-DATE
-2025-12-16T11:10:20.5350326Z > Task :features:feature-treeview:mergeDebugAssets
-2025-12-16T11:10:20.6346295Z > Task :app:mergeDebugAssets
-2025-12-16T11:10:20.6347068Z > Task :app:compressDebugAssets
-2025-12-16T11:10:20.9327194Z > Task :core:templates-api:bundleLibRuntimeToJarDebug
-2025-12-16T11:10:25.0327501Z > Task :core:core-resources:bundleLibRuntimeToJarDebug
-2025-12-16T11:10:25.0328876Z > Task :core:core-logger:bundleLibRuntimeToJarDebug
-2025-12-16T11:10:25.5327141Z > Task :core:core-datastore-proto:bundleLibRuntimeToJarDebug
-2025-12-16T11:10:26.2327123Z > Task :app:l8DexDesugarLibDebug
-2025-12-16T11:10:26.3357171Z > Task :app:desugarDebugFileDependencies
-2025-12-16T11:10:26.3360427Z > Task :core:core-datastore-proto:processDebugJavaRes
-2025-12-16T11:10:26.3361397Z > Task :core:core-logger:processDebugJavaRes
-2025-12-16T11:10:26.3362323Z > Task :core:core-resources:processDebugJavaRes NO-SOURCE
-2025-12-16T11:10:26.3363214Z > Task :core:templates-api:processDebugJavaRes
-2025-12-16T11:10:26.9333397Z 
-2025-12-16T11:10:26.9338128Z > Task :core:core-ui:compileDebugKotlin
-2025-12-16T11:10:26.9344478Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-ui/src/main/kotlin/com/scto/codelikebastimove/core/ui/theme/Icons.kt:80:29 'val Icons.Filled.InsertDriveFile: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.InsertDriveFile.
-2025-12-16T11:10:26.9352471Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-ui/src/main/kotlin/com/scto/codelikebastimove/core/ui/theme/Theme.kt:41:20 'var statusBarColor: Int' is deprecated. Deprecated in Java.
-2025-12-16T11:10:29.5327103Z 
-2025-12-16T11:10:29.5329144Z > Task :core:core-datastore:compileDebugKotlin
-2025-12-16T11:10:29.5331934Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:5:8 'class EncryptedSharedPreferences : Any, SharedPreferences' is deprecated. Deprecated in Java.
-2025-12-16T11:10:29.5336459Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:6:8 'class MasterKey : Any' is deprecated. Deprecated in Java.
-2025-12-16T11:10:29.5340059Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:17:28 'class MasterKey : Any' is deprecated. Deprecated in Java.
-2025-12-16T11:10:29.5343767Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:18:9 'class MasterKey : Any' is deprecated. Deprecated in Java.
-2025-12-16T11:10:29.5347650Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:18:19 'constructor(p0: Context): MasterKey.Builder' is deprecated. Deprecated in Java.
-2025-12-16T11:10:29.5351377Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:19:27 'class MasterKey : Any' is deprecated. Deprecated in Java.
-2025-12-16T11:10:29.5355308Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:19:37 'enum class KeyScheme : Enum<MasterKey.KeyScheme!>' is deprecated. Deprecated in Java.
-2025-12-16T11:10:29.5359330Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:24:9 'class EncryptedSharedPreferences : Any, SharedPreferences' is deprecated. Deprecated in Java.
-2025-12-16T11:10:29.5363669Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:28:13 'class EncryptedSharedPreferences : Any, SharedPreferences' is deprecated. Deprecated in Java.
-2025-12-16T11:10:29.5368232Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:28:40 'enum class PrefKeyEncryptionScheme : Enum<EncryptedSharedPreferences.PrefKeyEncryptionScheme!>' is deprecated. Deprecated in Java.
-2025-12-16T11:10:29.5372573Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:29:13 'class EncryptedSharedPreferences : Any, SharedPreferences' is deprecated. Deprecated in Java.
-2025-12-16T11:10:29.5377166Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:29:40 'enum class PrefValueEncryptionScheme : Enum<EncryptedSharedPreferences.PrefValueEncryptionScheme!>' is deprecated. Deprecated in Java.
-2025-12-16T11:10:29.8328375Z 
-2025-12-16T11:10:29.8345846Z > Task :core:core-datastore:compileDebugJavaWithJavac NO-SOURCE
-2025-12-16T11:10:29.8347120Z > Task :core:core-ui:compileDebugJavaWithJavac NO-SOURCE
-2025-12-16T11:10:29.8348103Z > Task :core:core-ui:bundleLibCompileToJarDebug
-2025-12-16T11:10:29.8348940Z > Task :core:core-datastore:bundleLibCompileToJarDebug
-2025-12-16T11:10:29.8349742Z > Task :core:core-ui:bundleLibRuntimeToJarDebug
-2025-12-16T11:10:29.9338212Z > Task :app:checkDebugDuplicateClasses
-2025-12-16T11:10:35.1386787Z > Task :features:feature-treeview:compileDebugKotlin
-2025-12-16T11:10:35.1400084Z > Task :features:feature-treeview:compileDebugJavaWithJavac NO-SOURCE
-2025-12-16T11:10:35.1422638Z > Task :features:feature-treeview:bundleLibCompileToJarDebug
-2025-12-16T11:10:35.5327014Z > Task :core:templates-impl:compileDebugKotlin
-2025-12-16T11:10:35.5328147Z > Task :core:templates-impl:compileDebugJavaWithJavac NO-SOURCE
-2025-12-16T11:10:35.5329217Z > Task :core:templates-impl:bundleLibCompileToJarDebug
-2025-12-16T11:10:36.1346005Z 
-2025-12-16T11:10:36.1348066Z > Task :features:feature-git:compileDebugKotlin
-2025-12-16T11:10:36.1351078Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:149:106 'val Icons.Filled.KeyboardArrowRight: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.KeyboardArrowRight.
-2025-12-16T11:10:36.1355905Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:222:99 'val Icons.Filled.KeyboardArrowRight: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.KeyboardArrowRight.
-2025-12-16T11:10:36.1361194Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:265:55 'val Icons.Filled.CallSplit: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.CallSplit.
-2025-12-16T11:10:36.1377541Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:284:46 'val Icons.Filled.Undo: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.Undo.
-2025-12-16T11:10:36.1381087Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:287:47 'val Icons.Filled.CallSplit: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.CallSplit.
-2025-12-16T11:10:36.1385994Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:290:46 'val Icons.Filled.CallMerge: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.CallMerge.
-2025-12-16T11:10:36.1390469Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:291:50 'val Icons.Filled.MergeType: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.MergeType.
-2025-12-16T11:10:36.1409111Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:294:44 'val Icons.Filled.Label: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.Label.
-2025-12-16T11:10:36.1413532Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:302:49 'val Icons.Filled.List: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.List.
-2025-12-16T11:10:36.1418074Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:311:47 'val Icons.Filled.Undo: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.Undo.
-2025-12-16T11:10:36.1422712Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:320:51 'val Icons.Filled.CallSplit: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.CallSplit.
-2025-12-16T11:10:36.1427167Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:322:48 'val Icons.Filled.List: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.List.
-2025-12-16T11:10:36.2337203Z 
-2025-12-16T11:10:36.2338469Z > Task :features:feature-git:compileDebugJavaWithJavac NO-SOURCE
-2025-12-16T11:10:36.2339554Z > Task :features:feature-git:bundleLibCompileToJarDebug
-2025-12-16T11:10:38.5326418Z 
-2025-12-16T11:10:38.5327423Z > Task :features:feature-explorer:compileDebugKotlin
-2025-12-16T11:10:38.5330718Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-explorer/src/main/kotlin/com/scto/codelikebastimove/feature/explorer/ExplorerScreen.kt:130:61 'val Icons.Filled.Sort: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.Sort.
-2025-12-16T11:10:38.5335774Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-explorer/src/main/kotlin/com/scto/codelikebastimove/feature/explorer/ExplorerScreen.kt:392:31 'val Icons.Filled.InsertDriveFile: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.InsertDriveFile.
-2025-12-16T11:10:38.5337963Z 
-2025-12-16T11:10:38.5338452Z > Task :features:feature-explorer:compileDebugJavaWithJavac NO-SOURCE
-2025-12-16T11:10:38.6327104Z > Task :features:feature-explorer:bundleLibCompileToJarDebug
-2025-12-16T11:10:41.5347914Z > Task :features:feature-settings:compileDebugKotlin
-2025-12-16T11:10:41.5352514Z > Task :features:feature-settings:compileDebugJavaWithJavac NO-SOURCE
-2025-12-16T11:10:41.5357221Z > Task :features:feature-settings:bundleLibCompileToJarDebug
-2025-12-16T11:10:41.5361540Z > Task :features:feature-settings:bundleLibRuntimeToJarDebug
-2025-12-16T11:10:41.8327615Z > Task :features:feature-editor:compileDebugKotlin
-2025-12-16T11:10:41.8328777Z > Task :features:feature-editor:compileDebugJavaWithJavac NO-SOURCE
-2025-12-16T11:10:41.8329845Z > Task :features:feature-editor:bundleLibCompileToJarDebug
-2025-12-16T11:10:42.4386505Z > Task :features:feature-editor:bundleLibRuntimeToJarDebug
-2025-12-16T11:10:42.4387511Z 
-2025-12-16T11:10:42.4416328Z > Task :features:feature-onboarding:compileDebugKotlin
-2025-12-16T11:10:42.4419814Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-onboarding/src/main/kotlin/com/scto/codelikebastimove/feature/onboarding/PermissionsPage.kt:68:26 'val LocalLifecycleOwner: ProvidableCompositionLocal<LifecycleOwner>' is deprecated. Moved to lifecycle-runtime-compose library in androidx.lifecycle.compose package.
-2025-12-16T11:10:42.4424900Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-onboarding/src/main/kotlin/com/scto/codelikebastimove/feature/onboarding/PermissionsPage.kt:270:16 'fun unsafeCheckOpNoThrow(p0: String, p1: Int, p2: String): Int' is deprecated. Deprecated in Java.
-2025-12-16T11:10:42.4427191Z 
-2025-12-16T11:10:42.4427705Z > Task :features:feature-onboarding:compileDebugJavaWithJavac NO-SOURCE
-2025-12-16T11:10:42.5359851Z > Task :features:feature-onboarding:bundleLibCompileToJarDebug
-2025-12-16T11:10:42.5360833Z > Task :features:feature-treeview:bundleLibRuntimeToJarDebug
-2025-12-16T11:10:43.0327497Z > Task :features:feature-git:bundleLibRuntimeToJarDebug
-2025-12-16T11:10:43.7327661Z > Task :features:feature-onboarding:bundleLibRuntimeToJarDebug
-2025-12-16T11:10:44.2327381Z > Task :features:feature-explorer:bundleLibRuntimeToJarDebug
-2025-12-16T11:10:44.7327291Z 
-2025-12-16T11:10:44.7356313Z > Task :features:feature-home:compileDebugKotlin
-2025-12-16T11:10:44.7359288Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-home/src/main/kotlin/com/scto/codelikebastimove/feature/home/CreateProjectDialog.kt:173:30 'fun Modifier.menuAnchor(): Modifier' is deprecated. Use overload that takes ExposedDropdownMenuAnchorType and enabled parameters.
-2025-12-16T11:10:44.7363747Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-home/src/main/kotlin/com/scto/codelikebastimove/feature/home/HomeScreen.kt:85:34 'val Icons.Filled.Help: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.Help.
-2025-12-16T11:10:44.8330900Z 
-2025-12-16T11:10:44.8355907Z > Task :features:feature-home:compileDebugJavaWithJavac NO-SOURCE
-2025-12-16T11:10:44.8357137Z > Task :features:feature-home:bundleLibCompileToJarDebug
-2025-12-16T11:10:44.8358335Z > Task :features:feature-home:bundleLibRuntimeToJarDebug
-2025-12-16T11:10:45.8328034Z > Task :core:templates-impl:bundleLibRuntimeToJarDebug
-2025-12-16T11:10:46.1332437Z > Task :core:core-datastore:bundleLibRuntimeToJarDebug
-2025-12-16T11:10:46.7327136Z > Task :core:core-datastore:processDebugJavaRes
-2025-12-16T11:10:46.7328295Z > Task :core:core-ui:processDebugJavaRes
-2025-12-16T11:10:46.7329180Z > Task :core:templates-impl:processDebugJavaRes
-2025-12-16T11:10:46.8346729Z > Task :features:feature-editor:processDebugJavaRes
-2025-12-16T11:10:46.8360331Z > Task :features:feature-explorer:processDebugJavaRes
-2025-12-16T11:10:46.8361338Z > Task :features:feature-git:processDebugJavaRes
-2025-12-16T11:10:46.8362073Z > Task :features:feature-home:processDebugJavaRes
-2025-12-16T11:10:46.8362950Z > Task :features:feature-onboarding:processDebugJavaRes
-2025-12-16T11:10:46.8363761Z > Task :features:feature-settings:processDebugJavaRes
-2025-12-16T11:10:46.8364509Z > Task :features:feature-treeview:processDebugJavaRes
-2025-12-16T11:11:02.8326151Z 
-2025-12-16T11:11:02.8328808Z > Task :features:feature-designer:compileDebugKotlin
-2025-12-16T11:11:02.8332137Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-designer/src/main/kotlin/com/scto/codelikebastimove/feature/designer/ui/palette/PalettePanel.kt:80:56 'val Icons.Filled.Input: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.Input.
-2025-12-16T11:11:02.8341404Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-designer/src/main/kotlin/com/scto/codelikebastimove/feature/designer/ui/palette/PalettePanel.kt:144:9 'fun ScrollableTabRow(selectedTabIndex: Int, modifier: Modifier = ..., containerColor: Color = ..., contentColor: Color = ..., edgePadding: Dp = ..., indicator: ComposableFunction1<List<TabPosition>, Unit> = ..., divider: ComposableFunction0<Unit> = ..., tabs: ComposableFunction0<Unit>): Unit' is deprecated. Replaced with PrimaryScrollableTabRow and SecondaryScrollableTabRow tab variants.
-2025-12-16T11:11:02.8348290Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-designer/src/main/kotlin/com/scto/codelikebastimove/feature/designer/ui/palette/PalettePanel.kt:277:78 'val Icons.Filled.Input: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.Input.
-2025-12-16T11:11:16.8356058Z 
-2025-12-16T11:11:16.8357027Z > Task :app:mergeExtDexDebug
-2025-12-16T11:12:29.4359368Z > Task :features:feature-designer:compileDebugJavaWithJavac NO-SOURCE
-2025-12-16T11:12:29.4385781Z > Task :features:feature-designer:bundleLibCompileToJarDebug
-2025-12-16T11:12:29.4445233Z > Task :features:feature-designer:bundleLibRuntimeToJarDebug
-2025-12-16T11:12:29.4446327Z > Task :features:feature-designer:processDebugJavaRes
-2025-12-16T11:12:29.7326907Z > Task :features:feature-home:bundleLibRuntimeToDirDebug
-2025-12-16T11:12:31.5327318Z > Task :features:feature-settings:bundleLibRuntimeToDirDebug
-2025-12-16T11:12:31.9327072Z > Task :features:feature-designer:bundleLibRuntimeToDirDebug
-2025-12-16T11:12:34.7346940Z > Task :features:feature-editor:bundleLibRuntimeToDirDebug
-2025-12-16T11:12:36.2327198Z > Task :features:feature-treeview:bundleLibRuntimeToDirDebug
-2025-12-16T11:12:36.8327134Z > Task :features:feature-git:bundleLibRuntimeToDirDebug
-2025-12-16T11:12:37.7327046Z > Task :features:feature-onboarding:bundleLibRuntimeToDirDebug
-2025-12-16T11:12:38.1327016Z > Task :features:feature-explorer:bundleLibRuntimeToDirDebug
-2025-12-16T11:12:38.9327152Z > Task :core:core-ui:bundleLibRuntimeToDirDebug
-2025-12-16T11:12:39.2338027Z > Task :core:templates-impl:bundleLibRuntimeToDirDebug
-2025-12-16T11:12:39.4327475Z > Task :core:core-datastore:bundleLibRuntimeToDirDebug
-2025-12-16T11:12:39.7327341Z > Task :core:templates-api:bundleLibRuntimeToDirDebug
-2025-12-16T11:12:40.0327077Z > Task :core:core-resources:bundleLibRuntimeToDirDebug
-2025-12-16T11:12:40.1326667Z > Task :core:core-logger:bundleLibRuntimeToDirDebug
-2025-12-16T11:12:40.3327480Z > Task :core:core-datastore-proto:bundleLibRuntimeToDirDebug
-2025-12-16T11:12:40.4327394Z > Task :app:mergeDebugJniLibFolders
-2025-12-16T11:12:40.4333166Z > Task :features:mergeDebugJniLibFolders
-2025-12-16T11:12:40.5352912Z > Task :features:mergeDebugNativeLibs NO-SOURCE
-2025-12-16T11:12:40.5355513Z > Task :features:copyDebugJniLibsProjectOnly
-2025-12-16T11:12:40.5365001Z > Task :core:core-datastore:mergeDebugJniLibFolders
-2025-12-16T11:12:40.5366133Z > Task :core:core-datastore:mergeDebugNativeLibs NO-SOURCE
-2025-12-16T11:12:40.5367042Z > Task :core:core-datastore:copyDebugJniLibsProjectOnly
-2025-12-16T11:12:40.5367938Z > Task :core:core-datastore-proto:mergeDebugJniLibFolders
-2025-12-16T11:12:40.5368906Z > Task :core:core-datastore-proto:mergeDebugNativeLibs NO-SOURCE
-2025-12-16T11:12:40.5369920Z > Task :core:core-datastore-proto:copyDebugJniLibsProjectOnly
-2025-12-16T11:12:40.5370775Z > Task :core:core-logger:mergeDebugJniLibFolders
-2025-12-16T11:12:40.6328067Z > Task :core:core-logger:mergeDebugNativeLibs NO-SOURCE
-2025-12-16T11:12:40.6333215Z > Task :core:core-logger:copyDebugJniLibsProjectOnly
-2025-12-16T11:12:40.6343824Z > Task :core:core-resources:mergeDebugJniLibFolders
-2025-12-16T11:12:40.6346438Z > Task :core:core-resources:mergeDebugNativeLibs NO-SOURCE
-2025-12-16T11:12:40.6349593Z > Task :core:core-resources:copyDebugJniLibsProjectOnly
-2025-12-16T11:12:40.6350511Z > Task :core:core-ui:mergeDebugJniLibFolders
-2025-12-16T11:12:40.6351262Z > Task :core:core-ui:mergeDebugNativeLibs NO-SOURCE
-2025-12-16T11:12:40.6351988Z > Task :core:core-ui:copyDebugJniLibsProjectOnly
-2025-12-16T11:12:40.6352723Z > Task :core:templates-api:mergeDebugJniLibFolders
-2025-12-16T11:12:40.6353544Z > Task :core:templates-api:mergeDebugNativeLibs NO-SOURCE
-2025-12-16T11:12:40.6354892Z > Task :core:templates-api:copyDebugJniLibsProjectOnly
-2025-12-16T11:12:40.7328230Z > Task :core:templates-impl:mergeDebugJniLibFolders
-2025-12-16T11:12:40.7356123Z > Task :core:templates-impl:mergeDebugNativeLibs NO-SOURCE
-2025-12-16T11:12:40.7357166Z > Task :core:templates-impl:copyDebugJniLibsProjectOnly
-2025-12-16T11:12:40.7358034Z > Task :features:feature-designer:mergeDebugJniLibFolders
-2025-12-16T11:12:40.7358911Z > Task :features:feature-designer:mergeDebugNativeLibs NO-SOURCE
-2025-12-16T11:12:40.7359800Z > Task :features:feature-designer:copyDebugJniLibsProjectOnly
-2025-12-16T11:12:40.7360645Z > Task :features:feature-editor:mergeDebugJniLibFolders
-2025-12-16T11:12:40.7361480Z > Task :features:feature-editor:mergeDebugNativeLibs NO-SOURCE
-2025-12-16T11:12:40.7362357Z > Task :features:feature-editor:copyDebugJniLibsProjectOnly
-2025-12-16T11:12:40.7363232Z > Task :features:feature-explorer:mergeDebugJniLibFolders
-2025-12-16T11:12:40.7364106Z > Task :features:feature-explorer:mergeDebugNativeLibs NO-SOURCE
-2025-12-16T11:12:40.7365223Z > Task :features:feature-explorer:copyDebugJniLibsProjectOnly
-2025-12-16T11:12:40.7366174Z > Task :features:feature-git:mergeDebugJniLibFolders
-2025-12-16T11:12:40.7367093Z > Task :features:feature-git:mergeDebugNativeLibs NO-SOURCE
-2025-12-16T11:12:40.8326768Z > Task :features:feature-git:copyDebugJniLibsProjectOnly
-2025-12-16T11:12:40.8333348Z > Task :features:feature-home:mergeDebugJniLibFolders
-2025-12-16T11:12:40.8337619Z > Task :features:feature-home:mergeDebugNativeLibs NO-SOURCE
-2025-12-16T11:12:40.8341868Z > Task :features:feature-home:copyDebugJniLibsProjectOnly
-2025-12-16T11:12:40.8346127Z > Task :features:feature-main:mergeDebugJniLibFolders
-2025-12-16T11:12:40.8350503Z > Task :features:feature-main:mergeDebugNativeLibs NO-SOURCE
-2025-12-16T11:12:40.8353127Z > Task :features:feature-main:copyDebugJniLibsProjectOnly
-2025-12-16T11:12:40.8354927Z > Task :features:feature-onboarding:mergeDebugJniLibFolders
-2025-12-16T11:12:40.8356975Z > Task :features:feature-onboarding:mergeDebugNativeLibs NO-SOURCE
-2025-12-16T11:12:40.8368502Z > Task :features:feature-onboarding:copyDebugJniLibsProjectOnly
-2025-12-16T11:12:40.8369320Z > Task :features:feature-settings:mergeDebugJniLibFolders
-2025-12-16T11:12:40.8370130Z > Task :features:feature-settings:mergeDebugNativeLibs NO-SOURCE
-2025-12-16T11:12:40.8370943Z > Task :features:feature-settings:copyDebugJniLibsProjectOnly
-2025-12-16T11:12:40.8371695Z > Task :features:feature-treeview:mergeDebugJniLibFolders
-2025-12-16T11:12:40.9332012Z > Task :features:feature-treeview:mergeDebugNativeLibs NO-SOURCE
-2025-12-16T11:12:40.9343007Z > Task :features:feature-treeview:copyDebugJniLibsProjectOnly
-2025-12-16T11:12:41.4446568Z > Task :app:mergeDebugNativeLibs
-2025-12-16T11:12:44.3327900Z > Task :app:validateSigningDebug
-2025-12-16T11:12:44.3331250Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:38:25 Property delegate must have a 'getValue(Nothing?, KProperty0<ERROR CLASS: Cannot infer argument for type parameter T>)' method. None of the following functions is applicable:
-2025-12-16T11:12:44.3334196Z fun <T> State<T>.getValue(thisObj: Any?, property: KProperty<*>): T
-2025-12-16T11:12:44.3336626Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:38:28 Cannot infer type for type parameter 'T'. Specify it explicitly.
-2025-12-16T11:12:44.3339676Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:38:38 Unresolved reference 'currentProjectPath'.
-2025-12-16T11:12:44.3342902Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:38:57 Cannot infer type for type parameter 'T'. Specify it explicitly.
-2025-12-16T11:12:44.3346649Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:41:24 Unresolved reference 'onBackPressed'.
-2025-12-16T11:12:44.3349637Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:63:46 Unresolved reference 'onNavigate'.
-2025-12-16T11:12:44.3352688Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:65:35 Unresolved reference 'onNavigate'.
-2025-12-16T11:12:44.3356862Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:68:35 Unresolved reference 'onNavigate'.
-2025-12-16T11:12:44.3359887Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:71:35 Unresolved reference 'onNavigate'.
-2025-12-16T11:12:44.3366061Z 
-2025-12-16T11:12:44.3369882Z > Task :features:feature-main:compileDebugKotlin FAILED
-2025-12-16T11:12:44.3379595Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:78:47 Unresolved reference 'onBackPressed'.
-2025-12-16T11:12:44.3385360Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:80:49 Argument type mismatch: actual type is 'String', but 'File' was expected.
-2025-12-16T11:12:44.3407921Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:80:68 Argument type mismatch: actual type is 'ProjectTemplateType', but 'ProjectTemplate' was expected.
-2025-12-16T11:12:44.3411906Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:80:82 Argument type mismatch: actual type is 'Int', but 'ProjectLanguage' was expected.
-2025-12-16T11:12:44.3416248Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:80:90 Argument type mismatch: actual type is 'Boolean', but 'GradleLanguage' was expected.
-2025-12-16T11:12:44.3420623Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:80:101 Too many arguments for 'fun createProject(parent: File, name: String, template: ProjectTemplate, language: ProjectLanguage, gradleLanguage: GradleLanguage): Unit'.
-2025-12-16T11:12:44.3424619Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:88:47 Unresolved reference 'onBackPressed'.
-2025-12-16T11:12:44.3428154Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:90:35 Unresolved reference 'onOpenProject'.
-2025-12-16T11:12:44.3431282Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:93:35 Unresolved reference 'deleteProject'.
-2025-12-16T11:12:44.3434438Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:101:47 Unresolved reference 'onBackPressed'.
-2025-12-16T11:12:44.3437994Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:103:35 Unresolved reference 'cloneRepository'.
-2025-12-16T11:12:44.3441517Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:118:46 Unresolved reference 'onNavigate'.
-2025-12-16T11:12:44.3444460Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:119:48 Unresolved reference 'onCloseProject'.
-2025-12-16T11:12:44.3447657Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:120:56 Unresolved reference 'onContentTypeChanged'.
-2025-12-16T11:12:44.3450692Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:121:55 Unresolved reference 'onBottomSheetToggle'.
-2025-12-16T11:12:44.3464564Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:122:63 Unresolved reference 'onBottomSheetContentChanged'.
-2025-12-16T11:12:44.3468024Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:129:47 Unresolved reference 'onBackPressed'.
-2025-12-16T11:12:44.3471140Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:130:55 Unresolved reference 'onNavigate'.
-2025-12-16T11:12:44.3474522Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:136:47 Unresolved reference 'onBackPressed'.
-2025-12-16T11:12:44.3478211Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:137:50 Unresolved reference 'onNavigate'.
-2025-12-16T11:12:44.3481755Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:138:52 Unresolved reference 'onNavigate'.
-2025-12-16T11:12:44.3485016Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:139:48 Unresolved reference 'onNavigate'.
-2025-12-16T11:12:44.3494704Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:140:49 Unresolved reference 'onNavigate'.
-2025-12-16T11:12:44.3498354Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:146:47 Unresolved reference 'onBackPressed'.
-2025-12-16T11:12:44.3501678Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:154:47 Unresolved reference 'onBackPressed'.
-2025-12-16T11:12:44.3505226Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:160:21 No parameter with name 'onBackClick' found.
-2025-12-16T11:12:44.3508538Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:160:47 Unresolved reference 'onBackPressed'.
-2025-12-16T11:12:44.3511874Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:161:21 No parameter with name 'onCreateModule' found.
-2025-12-16T11:12:44.3532517Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:161:21 No value passed for parameter 'onBack'.
-2025-12-16T11:12:44.3536801Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:161:40 Cannot infer type for value parameter 'modulePath'. Specify it explicitly.
-2025-12-16T11:12:44.3540576Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:161:52 Cannot infer type for value parameter 'packageName'. Specify it explicitly.
-2025-12-16T11:12:44.3544354Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:161:65 Cannot infer type for value parameter 'language'. Specify it explicitly.
-2025-12-16T11:12:44.3548155Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:161:75 Cannot infer type for value parameter 'type'. Specify it explicitly.
-2025-12-16T11:12:44.3551711Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:162:35 Unresolved reference 'createSubModule'.
-2025-12-16T11:12:44.3554943Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:163:35 Unresolved reference 'onNavigate'.
-2025-12-16T11:12:44.3558460Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:170:47 Unresolved reference 'onBackPressed'.
-2025-12-16T11:12:44.3561720Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:176:46 Unresolved reference 'onNavigate'.
-2025-12-16T11:12:44.3564978Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:177:51 Unresolved reference 'onNavigate'.
-2025-12-16T11:12:44.3568777Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:178:49 Unresolved reference 'onNavigate'.
-2025-12-16T11:12:44.3572078Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:179:53 Unresolved reference 'onNavigate'.
-2025-12-16T11:12:44.3575565Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:186:47 Unresolved reference 'onBackPressed'.
-2025-12-16T11:12:44.3596922Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:192:47 Unresolved reference 'onBackPressed'.
-2025-12-16T11:12:44.3600421Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:34:87 Unresolved reference 'Kotlin'.
-2025-12-16T11:12:44.3604715Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:41:10 None of the following candidates is applicable:
-2025-12-16T11:12:44.3607235Z fun <T> Flow<T>.stateIn(scope: CoroutineScope, started: SharingStarted, initialValue: T): StateFlow<T>
-2025-12-16T11:12:44.3608289Z suspend fun <T> Flow<T>.stateIn(scope: CoroutineScope): StateFlow<T>
-2025-12-16T11:12:44.3610758Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:41:72 Cannot infer type for type parameter 'T'. Specify it explicitly.
-2025-12-16T11:12:44.3614598Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:43:62 Unresolved reference 'currentProject'.
-2025-12-16T11:12:44.3618104Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:105:41 Unresolved reference 'rootDirectory'.
-2025-12-16T11:12:44.3621427Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:110:46 Unresolved reference 'rootDirectory'.
-2025-12-16T11:12:44.3624767Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:121:32 Unresolved reference 'createModule'.
-2025-12-16T11:12:44.3628287Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:126:53 Unresolved reference 'KotlinDsl'.
-2025-12-16T11:12:44.3631580Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:141:28 Unresolved reference 'openProject'.
-2025-12-16T11:12:44.3636045Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:153:42 Argument type mismatch: actual type is 'File', but 'ProjectTemplate' was expected.
-2025-12-16T11:12:44.3674637Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:153:50 Argument type mismatch: actual type is 'String', but 'ProjectConfig' was expected.
-2025-12-16T11:12:44.3678535Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:153:56 Argument type mismatch: actual type is 'ProjectTemplate', but 'String' was expected.
-2025-12-16T11:12:44.3683352Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:153:66 Too many arguments for 'suspend fun createProject(template: ProjectTemplate, config: ProjectConfig, outputPath: String): Result<Project>'.
-2025-12-16T11:12:44.3688317Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:153:76 Too many arguments for 'suspend fun createProject(template: ProjectTemplate, config: ProjectConfig, outputPath: String): Result<Project>'.
-2025-12-16T11:12:44.3692078Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/content/EditorContent.kt:90:45 Unresolved reference 'selectFile'.
-2025-12-16T11:12:44.3726279Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/content/EditorContent.kt:91:42 Unresolved reference 'closeFile'.
-2025-12-16T11:12:44.3729747Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/content/EditorContent.kt:104:39 Unresolved reference 'updateFileContent'.
-2025-12-16T11:12:44.3732512Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/content/ProjectContent.kt:45:25 Property delegate must have a 'getValue(Nothing?, KProperty0<ERROR CLASS: Cannot infer argument for type parameter T>)' method. None of the following functions is applicable:
-2025-12-16T11:12:44.3733996Z fun <T> State<T>.getValue(thisObj: Any?, property: KProperty<*>): T
-2025-12-16T11:12:44.3735915Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/content/ProjectContent.kt:45:28 Cannot infer type for type parameter 'T'. Specify it explicitly.
-2025-12-16T11:12:44.3737893Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/content/ProjectContent.kt:45:38 Unresolved reference 'currentProjectPath'.
-2025-12-16T11:12:44.3739901Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/content/ProjectContent.kt:45:57 Cannot infer type for type parameter 'T'. Specify it explicitly.
-2025-12-16T11:12:44.3742096Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/content/ProjectContent.kt:54:36 Condition type mismatch: inferred type is 'WideNavigationRailValue' but 'Boolean' was expected.
-2025-12-16T11:12:44.3744109Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/content/ProjectContent.kt:54:49 Unresolved reference 'exists'.
-2025-12-16T11:12:44.3746021Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/content/ProjectContent.kt:113:43 Unresolved reference 'openFile'.
-2025-12-16T11:12:44.3747849Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/IDEWorkspaceScreen.kt:85:39 Unresolved reference 'openFile'.
-2025-12-16T11:12:44.3749680Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:52:12 Unresolved reference 'koin'.
-2025-12-16T11:12:44.3751762Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:58:32 Unresolved reference 'koinViewModel'.
-2025-12-16T11:12:44.4326384Z 
-2025-12-16T11:12:44.4330155Z > Task :app:stripDebugDebugSymbols
-2025-12-16T11:12:44.4331547Z Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so. Run with --info option to learn more.
-2025-12-16T11:12:49.8335710Z 
-2025-12-16T11:12:49.8335816Z 
-2025-12-16T11:12:49.8337131Z FAILURE: Build failed with an exception.
-2025-12-16T11:12:49.8338647Z [Incubating] Problems report is available at: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/build/reports/problems/problems-report.html
-2025-12-16T11:12:49.8339933Z 
-2025-12-16T11:12:49.8339951Z 
-2025-12-16T11:12:49.8340799Z Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
-2025-12-16T11:12:49.8341763Z * What went wrong:
-2025-12-16T11:12:49.8342630Z Execution failed for task ':features:feature-main:compileDebugKotlin'.
-2025-12-16T11:12:49.8343088Z 
-2025-12-16T11:12:49.8352623Z > A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
-2025-12-16T11:12:49.8353845Z    > Compilation error. See log for more details
-2025-12-16T11:12:49.8354183Z 
-2025-12-16T11:12:49.8354288Z * Try:
-2025-12-16T11:12:49.8354777Z > Run with --stacktrace option to get the stack trace.
-2025-12-16T11:12:49.8355656Z > Run with --info or --debug option to get more log output.
-2025-12-16T11:12:49.8356412Z > Run with --scan to generate a Build Scan (powered by Develocity).
-2025-12-16T11:12:49.8357098Z > Get more help at https://help.gradle.org.
-2025-12-16T11:12:49.8357421Z 
-2025-12-16T11:12:49.8357606Z BUILD FAILED in 6m 5s
-2025-12-16T11:12:49.8358690Z You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
-2025-12-16T11:12:49.8359950Z 
-2025-12-16T11:12:49.8361022Z For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
-2025-12-16T11:12:49.8362140Z 347 actionable tasks: 347 executed
-2025-12-16T11:12:50.3147588Z ##[error]Process completed with exit code 1.
+﻿2025-12-16T11:50:32.3737100Z ##[group]Run ./gradlew assembledebug
+2025-12-16T11:50:32.3737432Z [36;1m./gradlew assembledebug[0m
+2025-12-16T11:50:32.3771774Z shell: /usr/bin/bash -e {0}
+2025-12-16T11:50:32.3772010Z env:
+2025-12-16T11:50:32.3772300Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.17-10/x64
+2025-12-16T11:50:32.3772968Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.17-10/x64
+2025-12-16T11:50:32.3773348Z   ANDROID_HOME: /usr/local/lib/android/sdk
+2025-12-16T11:50:32.3773613Z   ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+2025-12-16T11:50:32.3773857Z ##[endgroup]
+2025-12-16T11:50:32.4518135Z Downloading https://services.gradle.org/distributions/gradle-9.2.1-bin.zip
+2025-12-16T11:50:33.9390945Z ............10%.............20%.............30%.............40%.............50%.............60%.............70%.............80%.............90%.............100%
+2025-12-16T11:50:35.1107897Z 
+2025-12-16T11:50:35.1110055Z Welcome to Gradle 9.2.1!
+2025-12-16T11:50:35.1115433Z 
+2025-12-16T11:50:35.1115882Z Here are the highlights of this release:
+2025-12-16T11:50:35.1116471Z  - Windows ARM support
+2025-12-16T11:50:35.1116897Z  - Improved publishing APIs
+2025-12-16T11:50:35.1117490Z  - Better guidance for dependency verification failures
+2025-12-16T11:50:35.1117875Z 
+2025-12-16T11:50:35.1118286Z For more details see https://docs.gradle.org/9.2.1/release-notes.html
+2025-12-16T11:50:35.1118584Z 
+2025-12-16T11:50:35.2100563Z Starting a Gradle Daemon (subsequent builds will be faster)
+2025-12-16T11:52:11.0120630Z > Task :build-logic:convention:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:52:21.4101916Z > Task :build-logic:convention:pluginDescriptors
+2025-12-16T11:52:21.4103111Z > Task :build-logic:convention:processResources
+2025-12-16T11:52:27.8111651Z > Task :build-logic:convention:compileKotlin
+2025-12-16T11:52:27.8112417Z > Task :build-logic:convention:compileJava NO-SOURCE
+2025-12-16T11:52:27.8113255Z > Task :build-logic:convention:classes
+2025-12-16T11:52:27.8113798Z > Task :build-logic:convention:jar
+2025-12-16T11:52:45.5123973Z > Task :app:preBuild UP-TO-DATE
+2025-12-16T11:52:45.5125722Z > Task :app:preDebugBuild UP-TO-DATE
+2025-12-16T11:52:45.5126423Z > Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+2025-12-16T11:52:45.5127732Z > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:52:45.5133561Z > Task :features:preBuild UP-TO-DATE
+2025-12-16T11:52:45.5134402Z > Task :features:preDebugBuild UP-TO-DATE
+2025-12-16T11:52:45.5169355Z > Task :core:core-datastore:preBuild UP-TO-DATE
+2025-12-16T11:52:45.5170089Z > Task :core:core-datastore:preDebugBuild UP-TO-DATE
+2025-12-16T11:52:45.5170747Z > Task :features:writeDebugAarMetadata
+2025-12-16T11:52:45.5171416Z > Task :core:core-datastore-proto:preBuild UP-TO-DATE
+2025-12-16T11:52:45.5172184Z > Task :core:core-datastore-proto:preDebugBuild UP-TO-DATE
+2025-12-16T11:52:45.5173202Z > Task :core:core-datastore:writeDebugAarMetadata
+2025-12-16T11:52:45.5173857Z > Task :core:core-logger:preBuild UP-TO-DATE
+2025-12-16T11:52:45.5174588Z > Task :core:core-datastore-proto:writeDebugAarMetadata
+2025-12-16T11:52:45.5175288Z > Task :core:core-logger:preDebugBuild UP-TO-DATE
+2025-12-16T11:52:45.5175965Z > Task :core:core-resources:preBuild UP-TO-DATE
+2025-12-16T11:52:45.5176614Z > Task :core:core-resources:preDebugBuild UP-TO-DATE
+2025-12-16T11:52:45.5179965Z > Task :core:core-logger:writeDebugAarMetadata
+2025-12-16T11:52:45.5181938Z > Task :core:core-ui:preBuild UP-TO-DATE
+2025-12-16T11:52:45.5195771Z > Task :core:core-ui:preDebugBuild UP-TO-DATE
+2025-12-16T11:52:45.5196457Z > Task :core:core-resources:writeDebugAarMetadata
+2025-12-16T11:52:45.5197115Z > Task :core:templates-api:preBuild UP-TO-DATE
+2025-12-16T11:52:45.5197798Z > Task :core:templates-api:preDebugBuild UP-TO-DATE
+2025-12-16T11:52:45.5198449Z > Task :core:core-ui:writeDebugAarMetadata
+2025-12-16T11:52:45.5199084Z > Task :core:templates-impl:preBuild UP-TO-DATE
+2025-12-16T11:52:45.5199781Z > Task :core:templates-impl:preDebugBuild UP-TO-DATE
+2025-12-16T11:52:45.5200850Z > Task :core:templates-api:writeDebugAarMetadata
+2025-12-16T11:52:45.6117132Z > Task :features:feature-designer:preBuild UP-TO-DATE
+2025-12-16T11:52:45.6121284Z > Task :core:templates-impl:writeDebugAarMetadata
+2025-12-16T11:52:45.6122111Z > Task :features:feature-designer:preDebugBuild UP-TO-DATE
+2025-12-16T11:52:45.6123069Z > Task :features:feature-editor:preBuild UP-TO-DATE
+2025-12-16T11:52:45.6123772Z > Task :features:feature-editor:preDebugBuild UP-TO-DATE
+2025-12-16T11:52:45.6124536Z > Task :features:feature-designer:writeDebugAarMetadata
+2025-12-16T11:52:45.6125253Z > Task :features:feature-explorer:preBuild UP-TO-DATE
+2025-12-16T11:52:45.6125949Z > Task :features:feature-editor:writeDebugAarMetadata
+2025-12-16T11:52:45.6126678Z > Task :features:feature-explorer:preDebugBuild UP-TO-DATE
+2025-12-16T11:52:45.6127386Z > Task :features:feature-git:preBuild UP-TO-DATE
+2025-12-16T11:52:45.6128079Z > Task :features:feature-git:preDebugBuild UP-TO-DATE
+2025-12-16T11:52:45.6128814Z > Task :features:feature-explorer:writeDebugAarMetadata
+2025-12-16T11:52:45.6129573Z > Task :features:feature-home:preBuild UP-TO-DATE
+2025-12-16T11:52:45.6130400Z > Task :features:feature-home:preDebugBuild UP-TO-DATE
+2025-12-16T11:52:45.6131224Z > Task :features:feature-git:writeDebugAarMetadata
+2025-12-16T11:52:45.6131978Z > Task :features:feature-home:writeDebugAarMetadata
+2025-12-16T11:52:45.6132676Z > Task :features:feature-main:preBuild UP-TO-DATE
+2025-12-16T11:52:45.6133627Z > Task :features:feature-main:preDebugBuild UP-TO-DATE
+2025-12-16T11:52:45.6134411Z > Task :features:feature-onboarding:preBuild UP-TO-DATE
+2025-12-16T11:52:45.6135170Z > Task :features:feature-main:writeDebugAarMetadata
+2025-12-16T11:52:45.6135919Z > Task :features:feature-onboarding:preDebugBuild UP-TO-DATE
+2025-12-16T11:52:45.6136645Z > Task :features:feature-settings:preBuild UP-TO-DATE
+2025-12-16T11:52:45.6137363Z > Task :features:feature-settings:preDebugBuild UP-TO-DATE
+2025-12-16T11:52:45.6138099Z > Task :features:feature-onboarding:writeDebugAarMetadata
+2025-12-16T11:52:45.6139270Z > Task :features:feature-treeview:preBuild UP-TO-DATE
+2025-12-16T11:52:45.6140029Z > Task :features:feature-treeview:preDebugBuild UP-TO-DATE
+2025-12-16T11:52:45.6140769Z > Task :features:feature-settings:writeDebugAarMetadata
+2025-12-16T11:52:45.6141504Z > Task :features:feature-treeview:writeDebugAarMetadata
+2025-12-16T11:52:45.6142120Z > Task :app:generateDebugResValues
+2025-12-16T11:53:15.6099808Z > Task :app:checkDebugAarMetadata
+2025-12-16T11:54:12.9113657Z > Task :features:generateDebugResValues
+2025-12-16T11:54:12.9114346Z > Task :features:generateDebugResources
+2025-12-16T11:54:13.0109964Z > Task :features:packageDebugResources
+2025-12-16T11:54:13.0110710Z > Task :core:core-datastore:generateDebugResValues
+2025-12-16T11:54:13.0111368Z > Task :core:core-datastore:generateDebugResources
+2025-12-16T11:54:13.0112018Z > Task :core:core-datastore:packageDebugResources
+2025-12-16T11:54:13.0112932Z > Task :core:core-datastore-proto:generateDebugResValues
+2025-12-16T11:54:13.0113709Z > Task :core:core-datastore-proto:generateDebugResources
+2025-12-16T11:54:13.0122153Z > Task :core:core-datastore-proto:packageDebugResources
+2025-12-16T11:54:13.0123002Z > Task :core:core-logger:generateDebugResValues
+2025-12-16T11:54:13.0123638Z > Task :core:core-logger:generateDebugResources
+2025-12-16T11:54:13.0124237Z > Task :core:core-logger:packageDebugResources
+2025-12-16T11:54:13.0124843Z > Task :core:core-resources:generateDebugResValues
+2025-12-16T11:54:13.0125458Z > Task :core:core-resources:generateDebugResources
+2025-12-16T11:54:13.1106849Z > Task :core:core-resources:packageDebugResources
+2025-12-16T11:54:13.1109701Z > Task :core:core-ui:generateDebugResValues
+2025-12-16T11:54:13.1112276Z > Task :core:core-ui:generateDebugResources
+2025-12-16T11:54:13.1115151Z > Task :core:core-ui:packageDebugResources
+2025-12-16T11:54:13.1136125Z > Task :core:templates-api:generateDebugResValues
+2025-12-16T11:54:13.1139626Z > Task :core:templates-api:generateDebugResources
+2025-12-16T11:54:13.1140434Z > Task :core:templates-api:packageDebugResources
+2025-12-16T11:54:13.1140857Z > Task :core:templates-impl:generateDebugResValues
+2025-12-16T11:54:13.1141261Z > Task :core:templates-impl:generateDebugResources
+2025-12-16T11:54:13.1141648Z > Task :core:templates-impl:packageDebugResources
+2025-12-16T11:54:13.2106726Z > Task :features:feature-designer:generateDebugResValues
+2025-12-16T11:54:13.2108012Z > Task :features:feature-designer:generateDebugResources
+2025-12-16T11:54:13.2109237Z > Task :features:feature-designer:packageDebugResources
+2025-12-16T11:54:13.2111219Z > Task :features:feature-editor:generateDebugResValues
+2025-12-16T11:54:13.2112095Z > Task :features:feature-editor:generateDebugResources
+2025-12-16T11:54:13.2113231Z > Task :features:feature-editor:packageDebugResources
+2025-12-16T11:54:13.2114231Z > Task :features:feature-explorer:generateDebugResValues
+2025-12-16T11:54:13.2115133Z > Task :features:feature-explorer:generateDebugResources
+2025-12-16T11:54:13.2116040Z > Task :features:feature-explorer:packageDebugResources
+2025-12-16T11:54:13.2117205Z > Task :features:feature-git:generateDebugResValues
+2025-12-16T11:54:13.2121398Z > Task :features:feature-git:generateDebugResources
+2025-12-16T11:54:13.2129021Z > Task :features:feature-git:packageDebugResources
+2025-12-16T11:54:13.2129783Z > Task :features:feature-home:generateDebugResValues
+2025-12-16T11:54:13.2130486Z > Task :features:feature-home:generateDebugResources
+2025-12-16T11:54:13.2131163Z > Task :features:feature-home:packageDebugResources
+2025-12-16T11:54:13.2131823Z > Task :features:feature-main:generateDebugResValues
+2025-12-16T11:54:13.2132497Z > Task :features:feature-main:generateDebugResources
+2025-12-16T11:54:13.2133364Z > Task :features:feature-main:packageDebugResources
+2025-12-16T11:54:13.2134109Z > Task :features:feature-onboarding:generateDebugResValues
+2025-12-16T11:54:13.2134882Z > Task :features:feature-onboarding:generateDebugResources
+2025-12-16T11:54:13.2135637Z > Task :features:feature-onboarding:packageDebugResources
+2025-12-16T11:54:13.2136625Z > Task :features:feature-settings:generateDebugResValues
+2025-12-16T11:54:13.2137332Z > Task :features:feature-settings:generateDebugResources
+2025-12-16T11:54:13.2138042Z > Task :features:feature-settings:packageDebugResources
+2025-12-16T11:54:13.2138744Z > Task :features:feature-treeview:generateDebugResValues
+2025-12-16T11:54:13.3099329Z > Task :features:feature-treeview:generateDebugResources
+2025-12-16T11:54:13.3103824Z > Task :features:feature-treeview:packageDebugResources
+2025-12-16T11:54:13.3104506Z > Task :app:mapDebugSourceSetPaths
+2025-12-16T11:54:13.3105023Z > Task :app:generateDebugResources
+2025-12-16T11:54:13.9112582Z > Task :app:packageDebugResources
+2025-12-16T11:54:14.7101527Z > Task :app:createDebugCompatibleScreenManifests
+2025-12-16T11:54:14.7103709Z > Task :app:extractDeepLinksDebug
+2025-12-16T11:54:14.7105385Z > Task :features:extractDeepLinksDebug
+2025-12-16T11:54:14.7107136Z > Task :core:core-datastore:extractDeepLinksDebug
+2025-12-16T11:54:14.8099020Z > Task :app:mergeDebugResources
+2025-12-16T11:54:14.8104089Z > Task :core:core-datastore-proto:extractDeepLinksDebug
+2025-12-16T11:54:14.8108634Z > Task :app:parseDebugLocalResources
+2025-12-16T11:54:14.8113514Z > Task :core:core-datastore-proto:processDebugManifest
+2025-12-16T11:54:14.8115536Z > Task :core:core-datastore:processDebugManifest
+2025-12-16T11:54:14.8117402Z > Task :features:processDebugManifest
+2025-12-16T11:54:14.8123870Z > Task :core:core-logger:extractDeepLinksDebug
+2025-12-16T11:54:14.8125005Z > Task :core:core-resources:extractDeepLinksDebug
+2025-12-16T11:54:14.8126104Z > Task :core:core-logger:processDebugManifest
+2025-12-16T11:54:14.8126812Z > Task :core:core-resources:processDebugManifest
+2025-12-16T11:54:14.8127438Z > Task :core:core-ui:extractDeepLinksDebug
+2025-12-16T11:54:14.8128071Z > Task :core:templates-api:extractDeepLinksDebug
+2025-12-16T11:54:14.8128674Z > Task :core:core-ui:processDebugManifest
+2025-12-16T11:54:14.8129347Z > Task :core:templates-impl:extractDeepLinksDebug
+2025-12-16T11:54:14.8130348Z > Task :core:templates-api:processDebugManifest
+2025-12-16T11:54:14.8131053Z > Task :features:feature-designer:extractDeepLinksDebug
+2025-12-16T11:54:14.8131741Z > Task :core:templates-impl:processDebugManifest
+2025-12-16T11:54:14.9114924Z > Task :features:feature-editor:extractDeepLinksDebug
+2025-12-16T11:54:14.9115771Z > Task :features:feature-designer:processDebugManifest
+2025-12-16T11:54:14.9116520Z > Task :features:feature-explorer:extractDeepLinksDebug
+2025-12-16T11:54:14.9117249Z > Task :features:feature-editor:processDebugManifest
+2025-12-16T11:54:14.9117948Z > Task :features:feature-git:extractDeepLinksDebug
+2025-12-16T11:54:14.9118642Z > Task :features:feature-explorer:processDebugManifest
+2025-12-16T11:54:14.9119336Z > Task :features:feature-home:extractDeepLinksDebug
+2025-12-16T11:54:14.9119992Z > Task :features:feature-git:processDebugManifest
+2025-12-16T11:54:14.9120686Z > Task :features:feature-home:processDebugManifest
+2025-12-16T11:54:14.9121379Z > Task :features:feature-main:extractDeepLinksDebug
+2025-12-16T11:54:14.9122157Z > Task :features:feature-onboarding:extractDeepLinksDebug
+2025-12-16T11:54:14.9123146Z > Task :features:feature-main:processDebugManifest
+2025-12-16T11:54:14.9123842Z > Task :features:feature-settings:extractDeepLinksDebug
+2025-12-16T11:54:14.9124577Z > Task :features:feature-onboarding:processDebugManifest
+2025-12-16T11:54:14.9125318Z > Task :features:feature-treeview:extractDeepLinksDebug
+2025-12-16T11:54:14.9126025Z > Task :features:feature-settings:processDebugManifest
+2025-12-16T11:54:14.9126785Z > Task :features:feature-treeview:processDebugManifest
+2025-12-16T11:54:16.1108156Z > Task :features:compileDebugLibraryResources
+2025-12-16T11:54:16.3099654Z > Task :app:processDebugMainManifest
+2025-12-16T11:54:16.4137249Z > Task :app:processDebugManifest
+2025-12-16T11:54:16.5102215Z > Task :core:core-datastore:compileDebugLibraryResources
+2025-12-16T11:54:16.5105482Z > Task :features:parseDebugLocalResources
+2025-12-16T11:54:16.5107191Z > Task :core:core-datastore-proto:compileDebugLibraryResources
+2025-12-16T11:54:16.5108499Z > Task :core:core-datastore:parseDebugLocalResources
+2025-12-16T11:54:16.5109346Z > Task :app:processDebugManifestForPackage
+2025-12-16T11:54:16.5110213Z > Task :core:core-logger:compileDebugLibraryResources
+2025-12-16T11:54:16.5111205Z > Task :core:core-datastore-proto:parseDebugLocalResources
+2025-12-16T11:54:16.5112278Z > Task :core:core-logger:parseDebugLocalResources
+2025-12-16T11:54:16.5113431Z > Task :core:core-datastore-proto:generateDebugRFile
+2025-12-16T11:54:16.5114504Z > Task :core:core-logger:generateDebugRFile
+2025-12-16T11:54:16.5115273Z > Task :features:generateDebugRFile
+2025-12-16T11:54:16.5116197Z > Task :core:core-datastore:generateDebugRFile
+2025-12-16T11:54:16.5117203Z > Task :core:core-resources:compileDebugLibraryResources
+2025-12-16T11:54:16.5117955Z > Task :core:core-ui:compileDebugLibraryResources
+2025-12-16T11:54:16.6102476Z > Task :core:templates-api:compileDebugLibraryResources
+2025-12-16T11:54:16.6104021Z > Task :core:core-resources:parseDebugLocalResources
+2025-12-16T11:54:16.6105067Z > Task :core:core-ui:parseDebugLocalResources
+2025-12-16T11:54:16.6106105Z > Task :core:templates-api:parseDebugLocalResources
+2025-12-16T11:54:16.6107132Z > Task :core:templates-impl:compileDebugLibraryResources
+2025-12-16T11:54:16.6108090Z > Task :core:core-resources:generateDebugRFile
+2025-12-16T11:54:16.6109050Z > Task :core:templates-api:generateDebugRFile
+2025-12-16T11:54:16.6110039Z > Task :core:core-ui:generateDebugRFile
+2025-12-16T11:54:16.6110934Z > Task :core:templates-impl:parseDebugLocalResources
+2025-12-16T11:54:16.6112005Z > Task :features:feature-designer:compileDebugLibraryResources
+2025-12-16T11:54:16.6121397Z > Task :core:templates-impl:generateDebugRFile
+2025-12-16T11:54:16.6122250Z > Task :features:feature-editor:compileDebugLibraryResources
+2025-12-16T11:54:16.6123310Z > Task :features:feature-designer:parseDebugLocalResources
+2025-12-16T11:54:16.7105540Z > Task :features:feature-editor:parseDebugLocalResources
+2025-12-16T11:54:16.7106878Z > Task :features:feature-explorer:compileDebugLibraryResources
+2025-12-16T11:54:16.7115588Z > Task :features:feature-designer:generateDebugRFile
+2025-12-16T11:54:16.7120195Z > Task :features:feature-editor:generateDebugRFile
+2025-12-16T11:54:16.7120953Z > Task :features:feature-explorer:parseDebugLocalResources
+2025-12-16T11:54:16.7121699Z > Task :features:feature-git:compileDebugLibraryResources
+2025-12-16T11:54:16.7122444Z > Task :features:feature-home:compileDebugLibraryResources
+2025-12-16T11:54:16.7123378Z > Task :features:feature-explorer:generateDebugRFile
+2025-12-16T11:54:16.7124101Z > Task :features:feature-git:parseDebugLocalResources
+2025-12-16T11:54:16.7124844Z > Task :features:feature-main:compileDebugLibraryResources
+2025-12-16T11:54:16.7125582Z > Task :features:feature-home:parseDebugLocalResources
+2025-12-16T11:54:16.7126238Z > Task :features:feature-git:generateDebugRFile
+2025-12-16T11:54:16.7126872Z > Task :features:feature-main:parseDebugLocalResources
+2025-12-16T11:54:16.7127696Z > Task :features:feature-onboarding:compileDebugLibraryResources
+2025-12-16T11:54:16.7128382Z > Task :features:feature-main:generateDebugRFile
+2025-12-16T11:54:16.7129002Z > Task :features:feature-home:generateDebugRFile
+2025-12-16T11:54:16.7129744Z > Task :features:feature-settings:compileDebugLibraryResources
+2025-12-16T11:54:16.7130553Z > Task :features:feature-onboarding:parseDebugLocalResources
+2025-12-16T11:54:16.7131379Z > Task :features:feature-treeview:compileDebugLibraryResources
+2025-12-16T11:54:16.8099000Z > Task :features:feature-onboarding:generateDebugRFile
+2025-12-16T11:54:16.8110775Z > Task :features:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:54:16.8114511Z > Task :core:core-datastore:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:54:16.8116179Z > Task :core:core-datastore-proto:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:54:16.8117433Z > Task :core:core-datastore-proto:protobufDummy UP-TO-DATE
+2025-12-16T11:54:16.8118627Z > Task :features:feature-settings:parseDebugLocalResources
+2025-12-16T11:54:16.8121356Z > Task :features:feature-treeview:parseDebugLocalResources
+2025-12-16T11:54:16.8122363Z > Task :core:core-datastore-proto:extractDebugProto
+2025-12-16T11:54:16.8123543Z > Task :features:feature-settings:generateDebugRFile
+2025-12-16T11:54:16.8126156Z > Task :features:feature-treeview:generateDebugRFile
+2025-12-16T11:54:16.9101454Z > Task :core:core-datastore-proto:extractIncludeDebugProto
+2025-12-16T11:54:17.2116441Z > Task :core:core-datastore-proto:extractProto
+2025-12-16T11:54:17.5098641Z > Task :app:processDebugResources
+2025-12-16T11:54:18.2100403Z > Task :core:core-datastore-proto:generateDebugProto
+2025-12-16T11:54:18.2102333Z > Task :core:core-datastore-proto:compileDebugKotlin NO-SOURCE
+2025-12-16T11:54:18.2103486Z > Task :core:core-logger:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:54:18.2104362Z > Task :core:core-datastore-proto:javaPreCompileDebug
+2025-12-16T11:54:18.2105109Z > Task :core:core-logger:generateDebugBuildConfig
+2025-12-16T11:54:24.0105122Z > Task :core:core-datastore-proto:compileDebugJavaWithJavac
+2025-12-16T11:54:24.0108370Z > Task :core:core-datastore-proto:bundleLibCompileToJarDebug
+2025-12-16T11:54:35.3105789Z > Task :core:core-resources:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:54:35.3123654Z > Task :core:core-resources:compileDebugKotlin NO-SOURCE
+2025-12-16T11:54:35.3124397Z > Task :core:core-logger:javaPreCompileDebug
+2025-12-16T11:54:35.3125205Z > Task :core:core-ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:54:35.3126011Z > Task :core:core-datastore:javaPreCompileDebug
+2025-12-16T11:54:35.3126668Z > Task :core:core-resources:javaPreCompileDebug
+2025-12-16T11:54:35.3127441Z > Task :core:core-resources:compileDebugJavaWithJavac NO-SOURCE
+2025-12-16T11:54:35.3128128Z > Task :core:core-ui:javaPreCompileDebug
+2025-12-16T11:54:35.3128995Z > Task :core:templates-api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:54:35.3130238Z > Task :core:core-resources:bundleLibCompileToJarDebug
+2025-12-16T11:54:35.3130916Z > Task :core:templates-api:javaPreCompileDebug
+2025-12-16T11:54:40.2098768Z > Task :core:core-logger:compileDebugKotlin
+2025-12-16T11:54:44.5098772Z > Task :core:core-logger:compileDebugJavaWithJavac
+2025-12-16T11:54:44.6110648Z > Task :core:core-logger:bundleLibCompileToJarDebug
+2025-12-16T11:54:45.7100292Z > Task :core:templates-impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:54:45.7104817Z > Task :core:templates-impl:javaPreCompileDebug
+2025-12-16T11:54:45.7128219Z > Task :features:feature-designer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:54:45.7133024Z > Task :features:feature-editor:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:54:45.7134403Z > Task :features:feature-git:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:54:45.7138644Z > Task :features:feature-git:javaPreCompileDebug
+2025-12-16T11:54:45.7145554Z > Task :features:feature-treeview:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:54:45.8099163Z > Task :features:feature-treeview:javaPreCompileDebug
+2025-12-16T11:54:45.8103965Z > Task :features:feature-editor:javaPreCompileDebug
+2025-12-16T11:54:45.8105242Z > Task :features:feature-designer:javaPreCompileDebug
+2025-12-16T11:54:45.8106471Z > Task :features:feature-explorer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:54:45.8107530Z > Task :features:feature-explorer:javaPreCompileDebug
+2025-12-16T11:54:45.8108608Z > Task :features:feature-home:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:54:45.8109883Z > Task :features:feature-home:javaPreCompileDebug
+2025-12-16T11:54:45.8110925Z > Task :features:feature-main:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:54:45.8111895Z > Task :features:feature-main:javaPreCompileDebug
+2025-12-16T11:54:45.8113165Z > Task :features:feature-onboarding:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:54:45.8123904Z > Task :features:feature-onboarding:javaPreCompileDebug
+2025-12-16T11:54:45.8125080Z > Task :features:feature-settings:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2025-12-16T11:54:45.8126193Z > Task :features:feature-settings:javaPreCompileDebug
+2025-12-16T11:54:45.9099585Z > Task :features:javaPreCompileDebug
+2025-12-16T11:54:45.9103766Z > Task :app:javaPreCompileDebug
+2025-12-16T11:54:45.9107398Z > Task :app:mergeDebugShaders
+2025-12-16T11:54:45.9111783Z > Task :app:compileDebugShaders NO-SOURCE
+2025-12-16T11:54:45.9112671Z > Task :app:generateDebugAssets UP-TO-DATE
+2025-12-16T11:54:45.9117143Z > Task :features:mergeDebugShaders
+2025-12-16T11:54:45.9118011Z > Task :features:compileDebugShaders NO-SOURCE
+2025-12-16T11:54:45.9144861Z > Task :features:generateDebugAssets UP-TO-DATE
+2025-12-16T11:54:46.0154195Z > Task :features:mergeDebugAssets
+2025-12-16T11:54:46.0183835Z > Task :core:core-datastore:mergeDebugShaders
+2025-12-16T11:54:46.0185041Z > Task :core:core-datastore:compileDebugShaders NO-SOURCE
+2025-12-16T11:54:46.0186908Z > Task :core:core-datastore:generateDebugAssets UP-TO-DATE
+2025-12-16T11:54:46.0187795Z > Task :core:core-datastore:mergeDebugAssets
+2025-12-16T11:54:46.0188632Z > Task :core:core-datastore-proto:mergeDebugShaders
+2025-12-16T11:54:46.0189574Z > Task :core:core-datastore-proto:compileDebugShaders NO-SOURCE
+2025-12-16T11:54:46.0190598Z > Task :core:core-datastore-proto:generateDebugAssets UP-TO-DATE
+2025-12-16T11:54:46.0191550Z > Task :core:core-datastore-proto:mergeDebugAssets
+2025-12-16T11:54:46.0192379Z > Task :core:core-logger:mergeDebugShaders
+2025-12-16T11:54:46.0193446Z > Task :core:core-logger:compileDebugShaders NO-SOURCE
+2025-12-16T11:54:46.0194297Z > Task :core:core-logger:generateDebugAssets UP-TO-DATE
+2025-12-16T11:54:46.0195090Z > Task :core:core-logger:mergeDebugAssets
+2025-12-16T11:54:46.1100216Z > Task :core:core-resources:mergeDebugShaders
+2025-12-16T11:54:46.1101455Z > Task :core:core-resources:compileDebugShaders NO-SOURCE
+2025-12-16T11:54:46.1102966Z > Task :core:core-resources:generateDebugAssets UP-TO-DATE
+2025-12-16T11:54:46.1103933Z > Task :core:core-resources:mergeDebugAssets
+2025-12-16T11:54:46.1104650Z > Task :core:core-ui:mergeDebugShaders
+2025-12-16T11:54:46.1105401Z > Task :core:core-ui:compileDebugShaders NO-SOURCE
+2025-12-16T11:54:46.1106199Z > Task :core:core-ui:generateDebugAssets UP-TO-DATE
+2025-12-16T11:54:46.1106933Z > Task :core:core-ui:mergeDebugAssets
+2025-12-16T11:54:46.1107647Z > Task :core:templates-api:mergeDebugShaders
+2025-12-16T11:54:46.1108455Z > Task :core:templates-api:compileDebugShaders NO-SOURCE
+2025-12-16T11:54:46.1109309Z > Task :core:templates-api:generateDebugAssets UP-TO-DATE
+2025-12-16T11:54:46.1110116Z > Task :core:templates-api:mergeDebugAssets
+2025-12-16T11:54:46.1110830Z > Task :core:templates-impl:mergeDebugShaders
+2025-12-16T11:54:46.2100319Z > Task :core:templates-impl:compileDebugShaders NO-SOURCE
+2025-12-16T11:54:46.2129884Z > Task :core:templates-impl:generateDebugAssets UP-TO-DATE
+2025-12-16T11:54:46.2131062Z > Task :core:templates-impl:mergeDebugAssets
+2025-12-16T11:54:46.2135724Z > Task :features:feature-designer:mergeDebugShaders
+2025-12-16T11:54:46.2136837Z > Task :features:feature-designer:compileDebugShaders NO-SOURCE
+2025-12-16T11:54:46.2138015Z > Task :features:feature-designer:generateDebugAssets UP-TO-DATE
+2025-12-16T11:54:46.2139032Z > Task :features:feature-designer:mergeDebugAssets
+2025-12-16T11:54:46.2139850Z > Task :features:feature-editor:mergeDebugShaders
+2025-12-16T11:54:46.2140751Z > Task :features:feature-editor:compileDebugShaders NO-SOURCE
+2025-12-16T11:54:46.2141757Z > Task :features:feature-editor:generateDebugAssets UP-TO-DATE
+2025-12-16T11:54:46.2142660Z > Task :features:feature-editor:mergeDebugAssets
+2025-12-16T11:54:46.2143695Z > Task :features:feature-explorer:mergeDebugShaders
+2025-12-16T11:54:46.2144570Z > Task :features:feature-explorer:compileDebugShaders NO-SOURCE
+2025-12-16T11:54:46.2145608Z > Task :features:feature-explorer:generateDebugAssets UP-TO-DATE
+2025-12-16T11:54:46.2146979Z > Task :features:feature-explorer:mergeDebugAssets
+2025-12-16T11:54:46.3126970Z > Task :features:feature-git:mergeDebugShaders
+2025-12-16T11:54:46.3131315Z > Task :features:feature-git:compileDebugShaders NO-SOURCE
+2025-12-16T11:54:46.3133657Z > Task :features:feature-git:generateDebugAssets UP-TO-DATE
+2025-12-16T11:54:46.3137913Z > Task :features:feature-git:mergeDebugAssets
+2025-12-16T11:54:46.3139744Z > Task :features:feature-home:mergeDebugShaders
+2025-12-16T11:54:46.3144350Z > Task :features:feature-home:compileDebugShaders NO-SOURCE
+2025-12-16T11:54:46.3147970Z > Task :features:feature-home:generateDebugAssets UP-TO-DATE
+2025-12-16T11:54:46.3149031Z > Task :features:feature-home:mergeDebugAssets
+2025-12-16T11:54:46.3150014Z > Task :features:feature-main:mergeDebugShaders
+2025-12-16T11:54:46.3151979Z > Task :features:feature-main:compileDebugShaders NO-SOURCE
+2025-12-16T11:54:46.3153652Z > Task :features:feature-main:generateDebugAssets UP-TO-DATE
+2025-12-16T11:54:46.3183523Z > Task :features:feature-main:mergeDebugAssets
+2025-12-16T11:54:46.4124357Z > Task :features:feature-onboarding:mergeDebugShaders
+2025-12-16T11:54:46.4125817Z > Task :features:feature-onboarding:compileDebugShaders NO-SOURCE
+2025-12-16T11:54:46.4126992Z > Task :features:feature-onboarding:generateDebugAssets UP-TO-DATE
+2025-12-16T11:54:46.4128113Z > Task :features:feature-onboarding:mergeDebugAssets
+2025-12-16T11:54:46.4129023Z > Task :features:feature-settings:mergeDebugShaders
+2025-12-16T11:54:46.4130008Z > Task :features:feature-settings:compileDebugShaders NO-SOURCE
+2025-12-16T11:54:46.4131047Z > Task :features:feature-settings:generateDebugAssets UP-TO-DATE
+2025-12-16T11:54:46.4131993Z > Task :features:feature-settings:mergeDebugAssets
+2025-12-16T11:54:46.4133048Z > Task :features:feature-treeview:mergeDebugShaders
+2025-12-16T11:54:46.4154086Z > Task :features:feature-treeview:compileDebugShaders NO-SOURCE
+2025-12-16T11:54:46.4155349Z > Task :features:feature-treeview:generateDebugAssets UP-TO-DATE
+2025-12-16T11:54:46.5145793Z > Task :features:feature-treeview:mergeDebugAssets
+2025-12-16T11:54:46.8098715Z > Task :app:mergeDebugAssets
+2025-12-16T11:54:46.8099656Z > Task :app:compressDebugAssets
+2025-12-16T11:54:47.4127289Z > Task :core:templates-api:compileDebugKotlin
+2025-12-16T11:54:47.4128560Z > Task :core:templates-api:compileDebugJavaWithJavac NO-SOURCE
+2025-12-16T11:54:47.5098920Z > Task :core:templates-api:bundleLibCompileToJarDebug
+2025-12-16T11:54:47.5100160Z > Task :core:templates-api:bundleLibRuntimeToJarDebug
+2025-12-16T11:54:51.2099102Z > Task :core:core-resources:bundleLibRuntimeToJarDebug
+2025-12-16T11:54:51.2100406Z > Task :core:core-logger:bundleLibRuntimeToJarDebug
+2025-12-16T11:54:51.6098962Z > Task :core:core-datastore-proto:bundleLibRuntimeToJarDebug
+2025-12-16T11:54:52.4124366Z > Task :app:l8DexDesugarLibDebug
+2025-12-16T11:54:52.4126679Z > Task :app:desugarDebugFileDependencies
+2025-12-16T11:54:52.4127767Z > Task :core:core-datastore-proto:processDebugJavaRes
+2025-12-16T11:54:52.5107101Z > Task :core:core-logger:processDebugJavaRes
+2025-12-16T11:54:52.5111239Z > Task :core:core-resources:processDebugJavaRes NO-SOURCE
+2025-12-16T11:54:52.5113258Z > Task :core:templates-api:processDebugJavaRes
+2025-12-16T11:54:52.5116946Z 
+2025-12-16T11:54:52.5120585Z > Task :core:core-ui:compileDebugKotlin
+2025-12-16T11:54:52.5126904Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-ui/src/main/kotlin/com/scto/codelikebastimove/core/ui/theme/Icons.kt:80:29 'val Icons.Filled.InsertDriveFile: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.InsertDriveFile.
+2025-12-16T11:54:52.5131875Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-ui/src/main/kotlin/com/scto/codelikebastimove/core/ui/theme/Theme.kt:41:20 'var statusBarColor: Int' is deprecated. Deprecated in Java.
+2025-12-16T11:54:55.3103184Z 
+2025-12-16T11:54:55.3108747Z > Task :core:core-datastore:compileDebugKotlin
+2025-12-16T11:54:55.3126392Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:5:8 'class EncryptedSharedPreferences : Any, SharedPreferences' is deprecated. Deprecated in Java.
+2025-12-16T11:54:55.3155395Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:6:8 'class MasterKey : Any' is deprecated. Deprecated in Java.
+2025-12-16T11:54:55.3159189Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:17:28 'class MasterKey : Any' is deprecated. Deprecated in Java.
+2025-12-16T11:54:55.3163083Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:18:9 'class MasterKey : Any' is deprecated. Deprecated in Java.
+2025-12-16T11:54:55.3167048Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:18:19 'constructor(p0: Context): MasterKey.Builder' is deprecated. Deprecated in Java.
+2025-12-16T11:54:55.3170978Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:19:27 'class MasterKey : Any' is deprecated. Deprecated in Java.
+2025-12-16T11:54:55.3175003Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:19:37 'enum class KeyScheme : Enum<MasterKey.KeyScheme!>' is deprecated. Deprecated in Java.
+2025-12-16T11:54:55.3179218Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:24:9 'class EncryptedSharedPreferences : Any, SharedPreferences' is deprecated. Deprecated in Java.
+2025-12-16T11:54:55.3184217Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:28:13 'class EncryptedSharedPreferences : Any, SharedPreferences' is deprecated. Deprecated in Java.
+2025-12-16T11:54:55.3189119Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:28:40 'enum class PrefKeyEncryptionScheme : Enum<EncryptedSharedPreferences.PrefKeyEncryptionScheme!>' is deprecated. Deprecated in Java.
+2025-12-16T11:54:55.3194075Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:29:13 'class EncryptedSharedPreferences : Any, SharedPreferences' is deprecated. Deprecated in Java.
+2025-12-16T11:54:55.3198915Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/core-datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:29:40 'enum class PrefValueEncryptionScheme : Enum<EncryptedSharedPreferences.PrefValueEncryptionScheme!>' is deprecated. Deprecated in Java.
+2025-12-16T11:54:55.9099357Z 
+2025-12-16T11:54:55.9105494Z > Task :core:core-datastore:compileDebugJavaWithJavac NO-SOURCE
+2025-12-16T11:54:55.9108079Z > Task :core:core-ui:compileDebugJavaWithJavac NO-SOURCE
+2025-12-16T11:54:56.0145189Z > Task :core:core-datastore:bundleLibCompileToJarDebug
+2025-12-16T11:54:56.0146263Z > Task :core:core-ui:bundleLibCompileToJarDebug
+2025-12-16T11:54:56.0147056Z > Task :core:core-ui:bundleLibRuntimeToJarDebug
+2025-12-16T11:54:56.0147801Z > Task :app:checkDebugDuplicateClasses
+2025-12-16T11:55:00.7106449Z > Task :features:feature-treeview:compileDebugKotlin
+2025-12-16T11:55:00.7112257Z > Task :features:feature-treeview:compileDebugJavaWithJavac NO-SOURCE
+2025-12-16T11:55:00.8098969Z > Task :features:feature-treeview:bundleLibCompileToJarDebug
+2025-12-16T11:55:01.2099377Z > Task :core:templates-impl:compileDebugKotlin
+2025-12-16T11:55:01.2123966Z > Task :core:templates-impl:compileDebugJavaWithJavac NO-SOURCE
+2025-12-16T11:55:01.2124975Z > Task :core:templates-impl:bundleLibCompileToJarDebug
+2025-12-16T11:55:02.4100283Z 
+2025-12-16T11:55:02.4109522Z > Task :features:feature-git:compileDebugKotlin
+2025-12-16T11:55:02.4112470Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:149:106 'val Icons.Filled.KeyboardArrowRight: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.KeyboardArrowRight.
+2025-12-16T11:55:02.4117775Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:222:99 'val Icons.Filled.KeyboardArrowRight: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.KeyboardArrowRight.
+2025-12-16T11:55:02.4122160Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:265:55 'val Icons.Filled.CallSplit: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.CallSplit.
+2025-12-16T11:55:02.4149548Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:284:46 'val Icons.Filled.Undo: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.Undo.
+2025-12-16T11:55:02.4153959Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:287:47 'val Icons.Filled.CallSplit: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.CallSplit.
+2025-12-16T11:55:02.4158509Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:290:46 'val Icons.Filled.CallMerge: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.CallMerge.
+2025-12-16T11:55:02.4184208Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:291:50 'val Icons.Filled.MergeType: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.MergeType.
+2025-12-16T11:55:02.4188639Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:294:44 'val Icons.Filled.Label: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.Label.
+2025-12-16T11:55:02.4193119Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:302:49 'val Icons.Filled.List: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.List.
+2025-12-16T11:55:02.4197365Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:311:47 'val Icons.Filled.Undo: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.Undo.
+2025-12-16T11:55:02.4226570Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:320:51 'val Icons.Filled.CallSplit: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.CallSplit.
+2025-12-16T11:55:02.4240024Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-git/src/main/kotlin/com/scto/codelikebastimove/feature/git/GitScreen.kt:322:48 'val Icons.Filled.List: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.List.
+2025-12-16T11:55:02.5098535Z 
+2025-12-16T11:55:02.5099453Z > Task :features:feature-git:compileDebugJavaWithJavac NO-SOURCE
+2025-12-16T11:55:02.5100411Z > Task :features:feature-git:bundleLibCompileToJarDebug
+2025-12-16T11:55:04.4099508Z 
+2025-12-16T11:55:04.4104965Z > Task :features:feature-explorer:compileDebugKotlin
+2025-12-16T11:55:04.4109390Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-explorer/src/main/kotlin/com/scto/codelikebastimove/feature/explorer/ExplorerScreen.kt:130:61 'val Icons.Filled.Sort: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.Sort.
+2025-12-16T11:55:04.4114441Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-explorer/src/main/kotlin/com/scto/codelikebastimove/feature/explorer/ExplorerScreen.kt:392:31 'val Icons.Filled.InsertDriveFile: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.InsertDriveFile.
+2025-12-16T11:55:04.5124468Z 
+2025-12-16T11:55:04.5125794Z > Task :features:feature-explorer:compileDebugJavaWithJavac NO-SOURCE
+2025-12-16T11:55:04.5128053Z > Task :features:feature-explorer:bundleLibCompileToJarDebug
+2025-12-16T11:55:07.4099645Z > Task :features:feature-settings:compileDebugKotlin
+2025-12-16T11:55:07.4101115Z > Task :features:feature-settings:compileDebugJavaWithJavac NO-SOURCE
+2025-12-16T11:55:07.4102331Z > Task :features:feature-settings:bundleLibCompileToJarDebug
+2025-12-16T11:55:07.4103687Z > Task :features:feature-settings:bundleLibRuntimeToJarDebug
+2025-12-16T11:55:07.5098762Z > Task :features:feature-editor:compileDebugKotlin
+2025-12-16T11:55:07.5105334Z > Task :features:feature-editor:compileDebugJavaWithJavac NO-SOURCE
+2025-12-16T11:55:07.6126137Z > Task :features:feature-editor:bundleLibCompileToJarDebug
+2025-12-16T11:55:08.1098778Z 
+2025-12-16T11:55:08.1104443Z > Task :features:feature-onboarding:compileDebugKotlin
+2025-12-16T11:55:08.1108634Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-onboarding/src/main/kotlin/com/scto/codelikebastimove/feature/onboarding/PermissionsPage.kt:68:26 'val LocalLifecycleOwner: ProvidableCompositionLocal<LifecycleOwner>' is deprecated. Moved to lifecycle-runtime-compose library in androidx.lifecycle.compose package.
+2025-12-16T11:55:08.1114856Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-onboarding/src/main/kotlin/com/scto/codelikebastimove/feature/onboarding/PermissionsPage.kt:270:16 'fun unsafeCheckOpNoThrow(p0: String, p1: Int, p2: String): Int' is deprecated. Deprecated in Java.
+2025-12-16T11:55:08.2098891Z 
+2025-12-16T11:55:08.2103988Z > Task :features:feature-onboarding:compileDebugJavaWithJavac NO-SOURCE
+2025-12-16T11:55:08.2135814Z > Task :features:feature-onboarding:bundleLibCompileToJarDebug
+2025-12-16T11:55:08.2140348Z > Task :features:feature-editor:bundleLibRuntimeToJarDebug
+2025-12-16T11:55:08.2141531Z > Task :features:feature-treeview:bundleLibRuntimeToJarDebug
+2025-12-16T11:55:08.8113290Z > Task :features:feature-git:bundleLibRuntimeToJarDebug
+2025-12-16T11:55:09.8116108Z > Task :features:feature-onboarding:bundleLibRuntimeToJarDebug
+2025-12-16T11:55:09.9099079Z > Task :features:feature-explorer:bundleLibRuntimeToJarDebug
+2025-12-16T11:55:09.9104055Z 
+2025-12-16T11:55:09.9104687Z > Task :features:feature-home:compileDebugKotlin
+2025-12-16T11:55:09.9107837Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-home/src/main/kotlin/com/scto/codelikebastimove/feature/home/CreateProjectDialog.kt:173:30 'fun Modifier.menuAnchor(): Modifier' is deprecated. Use overload that takes ExposedDropdownMenuAnchorType and enabled parameters.
+2025-12-16T11:55:09.9112426Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-home/src/main/kotlin/com/scto/codelikebastimove/feature/home/HomeScreen.kt:85:34 'val Icons.Filled.Help: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.Help.
+2025-12-16T11:55:09.9114952Z 
+2025-12-16T11:55:09.9115509Z > Task :features:feature-home:compileDebugJavaWithJavac NO-SOURCE
+2025-12-16T11:55:10.0126222Z > Task :features:feature-home:bundleLibCompileToJarDebug
+2025-12-16T11:55:10.0127487Z > Task :features:feature-home:bundleLibRuntimeToJarDebug
+2025-12-16T11:55:11.6099586Z > Task :core:templates-impl:bundleLibRuntimeToJarDebug
+2025-12-16T11:55:12.0098938Z > Task :core:core-datastore:bundleLibRuntimeToJarDebug
+2025-12-16T11:55:12.2098880Z > Task :core:core-datastore:processDebugJavaRes
+2025-12-16T11:55:12.2123765Z > Task :core:core-ui:processDebugJavaRes
+2025-12-16T11:55:12.2124462Z > Task :core:templates-impl:processDebugJavaRes
+2025-12-16T11:55:12.3099063Z > Task :features:feature-editor:processDebugJavaRes
+2025-12-16T11:55:12.3100287Z > Task :features:feature-explorer:processDebugJavaRes
+2025-12-16T11:55:12.3101297Z > Task :features:feature-git:processDebugJavaRes
+2025-12-16T11:55:12.3102296Z > Task :features:feature-home:processDebugJavaRes
+2025-12-16T11:55:12.3103433Z > Task :features:feature-onboarding:processDebugJavaRes
+2025-12-16T11:55:12.4098708Z > Task :features:feature-settings:processDebugJavaRes
+2025-12-16T11:55:12.4104345Z > Task :features:feature-treeview:processDebugJavaRes
+2025-12-16T11:55:26.5098569Z 
+2025-12-16T11:55:26.5099696Z > Task :features:feature-designer:compileDebugKotlin
+2025-12-16T11:55:26.5103449Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-designer/src/main/kotlin/com/scto/codelikebastimove/feature/designer/ui/palette/PalettePanel.kt:80:56 'val Icons.Filled.Input: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.Input.
+2025-12-16T11:55:26.5119360Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-designer/src/main/kotlin/com/scto/codelikebastimove/feature/designer/ui/palette/PalettePanel.kt:144:9 'fun ScrollableTabRow(selectedTabIndex: Int, modifier: Modifier = ..., containerColor: Color = ..., contentColor: Color = ..., edgePadding: Dp = ..., indicator: ComposableFunction1<List<TabPosition>, Unit> = ..., divider: ComposableFunction0<Unit> = ..., tabs: ComposableFunction0<Unit>): Unit' is deprecated. Replaced with PrimaryScrollableTabRow and SecondaryScrollableTabRow tab variants.
+2025-12-16T11:55:26.5125910Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-designer/src/main/kotlin/com/scto/codelikebastimove/feature/designer/ui/palette/PalettePanel.kt:277:78 'val Icons.Filled.Input: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.Input.
+2025-12-16T11:55:42.4098078Z 
+2025-12-16T11:55:42.4099003Z > Task :app:mergeExtDexDebug
+2025-12-16T11:56:49.9098926Z > Task :features:feature-designer:compileDebugJavaWithJavac NO-SOURCE
+2025-12-16T11:56:49.9101150Z > Task :features:feature-designer:bundleLibCompileToJarDebug
+2025-12-16T11:56:50.0098475Z > Task :features:feature-designer:bundleLibRuntimeToJarDebug
+2025-12-16T11:56:50.0100639Z > Task :features:feature-designer:processDebugJavaRes
+2025-12-16T11:56:50.2124456Z > Task :features:feature-home:bundleLibRuntimeToDirDebug
+2025-12-16T11:56:51.8098656Z > Task :features:feature-settings:bundleLibRuntimeToDirDebug
+2025-12-16T11:56:52.1098639Z > Task :features:feature-designer:bundleLibRuntimeToDirDebug
+2025-12-16T11:56:54.0098724Z > Task :features:feature-editor:bundleLibRuntimeToDirDebug
+2025-12-16T11:56:55.0114541Z > Task :features:feature-treeview:bundleLibRuntimeToDirDebug
+2025-12-16T11:56:55.6098620Z > Task :features:feature-git:bundleLibRuntimeToDirDebug
+2025-12-16T11:56:56.4098619Z > Task :features:feature-onboarding:bundleLibRuntimeToDirDebug
+2025-12-16T11:56:57.6098728Z > Task :features:feature-explorer:bundleLibRuntimeToDirDebug
+2025-12-16T11:56:57.7114187Z > Task :core:core-ui:bundleLibRuntimeToDirDebug
+2025-12-16T11:56:58.1098806Z > Task :core:templates-impl:bundleLibRuntimeToDirDebug
+2025-12-16T11:56:58.4164327Z > Task :core:core-datastore:bundleLibRuntimeToDirDebug
+2025-12-16T11:56:58.6098724Z > Task :core:templates-api:bundleLibRuntimeToDirDebug
+2025-12-16T11:56:58.7118607Z > Task :core:core-resources:bundleLibRuntimeToDirDebug
+2025-12-16T11:56:58.8185227Z > Task :core:core-logger:bundleLibRuntimeToDirDebug
+2025-12-16T11:56:59.0125371Z > Task :core:core-datastore-proto:bundleLibRuntimeToDirDebug
+2025-12-16T11:56:59.3099728Z > Task :app:mergeDebugJniLibFolders
+2025-12-16T11:56:59.3100681Z > Task :features:mergeDebugJniLibFolders
+2025-12-16T11:56:59.3101533Z > Task :features:mergeDebugNativeLibs NO-SOURCE
+2025-12-16T11:56:59.3105402Z > Task :features:copyDebugJniLibsProjectOnly
+2025-12-16T11:56:59.3106239Z > Task :core:core-datastore:mergeDebugJniLibFolders
+2025-12-16T11:56:59.3106973Z > Task :core:core-datastore:mergeDebugNativeLibs NO-SOURCE
+2025-12-16T11:56:59.3107663Z > Task :core:core-datastore:copyDebugJniLibsProjectOnly
+2025-12-16T11:56:59.4126352Z > Task :core:core-datastore-proto:mergeDebugJniLibFolders
+2025-12-16T11:56:59.4127269Z > Task :core:core-datastore-proto:mergeDebugNativeLibs NO-SOURCE
+2025-12-16T11:56:59.4128131Z > Task :core:core-datastore-proto:copyDebugJniLibsProjectOnly
+2025-12-16T11:56:59.4128846Z > Task :core:core-logger:mergeDebugJniLibFolders
+2025-12-16T11:56:59.4129479Z > Task :core:core-logger:mergeDebugNativeLibs NO-SOURCE
+2025-12-16T11:56:59.4130100Z > Task :core:core-logger:copyDebugJniLibsProjectOnly
+2025-12-16T11:56:59.4130712Z > Task :core:core-resources:mergeDebugJniLibFolders
+2025-12-16T11:56:59.4131335Z > Task :core:core-resources:mergeDebugNativeLibs NO-SOURCE
+2025-12-16T11:56:59.4131985Z > Task :core:core-resources:copyDebugJniLibsProjectOnly
+2025-12-16T11:56:59.4132554Z > Task :core:core-ui:mergeDebugJniLibFolders
+2025-12-16T11:56:59.4133297Z > Task :core:core-ui:mergeDebugNativeLibs NO-SOURCE
+2025-12-16T11:56:59.4133864Z > Task :core:core-ui:copyDebugJniLibsProjectOnly
+2025-12-16T11:56:59.5100109Z > Task :core:templates-api:mergeDebugJniLibFolders
+2025-12-16T11:56:59.5105510Z > Task :core:templates-api:mergeDebugNativeLibs NO-SOURCE
+2025-12-16T11:56:59.5107351Z > Task :core:templates-api:copyDebugJniLibsProjectOnly
+2025-12-16T11:56:59.5112198Z > Task :core:templates-impl:mergeDebugJniLibFolders
+2025-12-16T11:56:59.5113601Z > Task :core:templates-impl:mergeDebugNativeLibs NO-SOURCE
+2025-12-16T11:56:59.5118561Z > Task :core:templates-impl:copyDebugJniLibsProjectOnly
+2025-12-16T11:56:59.5144560Z > Task :features:feature-designer:mergeDebugJniLibFolders
+2025-12-16T11:56:59.5163989Z > Task :features:feature-designer:mergeDebugNativeLibs NO-SOURCE
+2025-12-16T11:56:59.5165106Z > Task :features:feature-designer:copyDebugJniLibsProjectOnly
+2025-12-16T11:56:59.5166023Z > Task :features:feature-editor:mergeDebugJniLibFolders
+2025-12-16T11:56:59.5166839Z > Task :features:feature-editor:mergeDebugNativeLibs NO-SOURCE
+2025-12-16T11:56:59.6114608Z > Task :features:feature-editor:copyDebugJniLibsProjectOnly
+2025-12-16T11:56:59.6115843Z > Task :features:feature-explorer:mergeDebugJniLibFolders
+2025-12-16T11:56:59.6116835Z > Task :features:feature-explorer:mergeDebugNativeLibs NO-SOURCE
+2025-12-16T11:56:59.6117896Z > Task :features:feature-explorer:copyDebugJniLibsProjectOnly
+2025-12-16T11:56:59.6118853Z > Task :features:feature-git:mergeDebugJniLibFolders
+2025-12-16T11:56:59.6119695Z > Task :features:feature-git:mergeDebugNativeLibs NO-SOURCE
+2025-12-16T11:56:59.6120428Z > Task :features:feature-git:copyDebugJniLibsProjectOnly
+2025-12-16T11:56:59.6121110Z > Task :features:feature-home:mergeDebugJniLibFolders
+2025-12-16T11:56:59.6121805Z > Task :features:feature-home:mergeDebugNativeLibs NO-SOURCE
+2025-12-16T11:56:59.6122520Z > Task :features:feature-home:copyDebugJniLibsProjectOnly
+2025-12-16T11:56:59.6123379Z > Task :features:feature-main:mergeDebugJniLibFolders
+2025-12-16T11:56:59.6124068Z > Task :features:feature-main:mergeDebugNativeLibs NO-SOURCE
+2025-12-16T11:56:59.7099193Z > Task :features:feature-main:copyDebugJniLibsProjectOnly
+2025-12-16T11:56:59.7100082Z > Task :features:feature-onboarding:mergeDebugJniLibFolders
+2025-12-16T11:56:59.7102503Z > Task :features:feature-onboarding:mergeDebugNativeLibs NO-SOURCE
+2025-12-16T11:56:59.7165521Z > Task :features:feature-onboarding:copyDebugJniLibsProjectOnly
+2025-12-16T11:56:59.7166401Z > Task :features:feature-settings:mergeDebugJniLibFolders
+2025-12-16T11:56:59.7167192Z > Task :features:feature-settings:mergeDebugNativeLibs NO-SOURCE
+2025-12-16T11:56:59.7167996Z > Task :features:feature-settings:copyDebugJniLibsProjectOnly
+2025-12-16T11:56:59.7168748Z > Task :features:feature-treeview:mergeDebugJniLibFolders
+2025-12-16T11:56:59.7169515Z > Task :features:feature-treeview:mergeDebugNativeLibs NO-SOURCE
+2025-12-16T11:56:59.7170302Z > Task :features:feature-treeview:copyDebugJniLibsProjectOnly
+2025-12-16T11:57:00.0106012Z > Task :app:mergeDebugNativeLibs
+2025-12-16T11:57:02.2098995Z > Task :app:validateSigningDebug
+2025-12-16T11:57:02.2099847Z > Task :app:writeDebugAppMetadata
+2025-12-16T11:57:02.2100515Z > Task :app:writeDebugSigningConfigVersions
+2025-12-16T11:57:02.2101161Z > Task :features:stripDebugDebugSymbols NO-SOURCE
+2025-12-16T11:57:02.2101864Z > Task :features:copyDebugJniLibsProjectAndLocalJars
+2025-12-16T11:57:02.2102225Z 
+2025-12-16T11:57:02.2102458Z > Task :app:stripDebugDebugSymbols
+2025-12-16T11:57:02.2104085Z Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so. Run with --info option to learn more.
+2025-12-16T11:57:02.2105105Z 
+2025-12-16T11:57:02.2105394Z > Task :features:extractDeepLinksForAarDebug
+2025-12-16T11:57:02.3098840Z > Task :features:prepareDebugArtProfile
+2025-12-16T11:57:02.3101559Z > Task :core:core-datastore:stripDebugDebugSymbols NO-SOURCE
+2025-12-16T11:57:02.3102644Z > Task :features:prepareLintJarForPublish
+2025-12-16T11:57:02.3103648Z > Task :core:core-datastore:copyDebugJniLibsProjectAndLocalJars
+2025-12-16T11:57:03.8107382Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:160:21 No parameter with name 'onBackClick' found.
+2025-12-16T11:57:03.8111121Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:161:21 No parameter with name 'onCreateModule' found.
+2025-12-16T11:57:03.8114552Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:161:21 No value passed for parameter 'onBack'.
+2025-12-16T11:57:03.8117875Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:161:40 Cannot infer type for value parameter 'modulePath'. Specify it explicitly.
+2025-12-16T11:57:03.8121256Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:161:52 Cannot infer type for value parameter 'packageName'. Specify it explicitly.
+2025-12-16T11:57:03.8124877Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:161:65 Cannot infer type for value parameter 'language'. Specify it explicitly.
+2025-12-16T11:57:03.8128228Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainScreen.kt:161:75 Cannot infer type for value parameter 'type'. Specify it explicitly.
+2025-12-16T11:57:03.8131405Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:18:56 Unresolved reference 'ModuleType'.
+2025-12-16T11:57:03.8138111Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:19:56 Unresolved reference 'ProgrammingLanguage'.
+2025-12-16T11:57:03.8141742Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:398:19 Unresolved reference 'ProgrammingLanguage'.
+2025-12-16T11:57:03.8145082Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:399:15 Unresolved reference 'ModuleType'.
+2025-12-16T11:57:03.8148238Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:448:46 Unresolved reference 'ProgrammingLanguage'.
+2025-12-16T11:57:03.8151464Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:491:70 Unresolved reference 'ModuleType'.
+2025-12-16T11:57:03.8154721Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:492:36 Unresolved reference 'ModuleType'.
+2025-12-16T11:57:03.8157854Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/MainViewModel.kt:493:39 Unresolved reference 'ModuleType'.
+2025-12-16T11:57:03.8196817Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:64:25 Property delegate must have a 'getValue(Nothing?, KProperty0<ERROR CLASS: Cannot infer argument for type parameter T>)' method. None of the following functions is applicable:
+2025-12-16T11:57:03.8199508Z fun <T> State<T>.getValue(thisObj: Any?, property: KProperty<*>): T
+2025-12-16T11:57:03.8202073Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:64:28 Cannot infer type for type parameter 'T'. Specify it explicitly.
+2025-12-16T11:57:03.8206253Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:64:38 Unresolved reference 'moduleNameInput'.
+2025-12-16T11:57:03.8207835Z 
+2025-12-16T11:57:03.8210073Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:64:54 Cannot infer type for type parameter 'T'. Specify it explicitly.
+2025-12-16T11:57:03.8214777Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:65:26 Property delegate must have a 'getValue(Nothing?, KProperty0<ERROR CLASS: Cannot infer argument for type parameter T>)' method. None of the following functions is applicable:
+2025-12-16T11:57:03.8217453Z fun <T> State<T>.getValue(thisObj: Any?, property: KProperty<*>): T
+2025-12-16T11:57:03.8220078Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:65:29 Cannot infer type for type parameter 'T'. Specify it explicitly.
+2025-12-16T11:57:03.8254021Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:65:39 Unresolved reference 'selectedLanguage'.
+2025-12-16T11:57:03.8257933Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:65:56 Cannot infer type for type parameter 'T'. Specify it explicitly.
+2025-12-16T11:57:03.8262999Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:66:26 Property delegate must have a 'getValue(Nothing?, KProperty0<ERROR CLASS: Cannot infer argument for type parameter T>)' method. None of the following functions is applicable:
+2025-12-16T11:57:03.8265921Z fun <T> State<T>.getValue(thisObj: Any?, property: KProperty<*>): T
+2025-12-16T11:57:03.8268481Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:66:29 Cannot infer type for type parameter 'T'. Specify it explicitly.
+2025-12-16T11:57:03.8272133Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:66:39 Unresolved reference 'selectedTemplate'.
+2025-12-16T11:57:03.8275941Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:66:56 Cannot infer type for type parameter 'T'. Specify it explicitly.
+2025-12-16T11:57:03.8280603Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:67:28 Property delegate must have a 'getValue(Nothing?, KProperty0<ERROR CLASS: Cannot infer argument for type parameter T>)' method. None of the following functions is applicable:
+2025-12-16T11:57:03.8313515Z fun <T> State<T>.getValue(thisObj: Any?, property: KProperty<*>): T
+2025-12-16T11:57:03.8316160Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:67:31 Cannot infer type for type parameter 'T'. Specify it explicitly.
+2025-12-16T11:57:03.8319857Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:67:41 Unresolved reference 'availableTemplates'.
+2025-12-16T11:57:03.8323915Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:67:60 Cannot infer type for type parameter 'T'. Specify it explicitly.
+2025-12-16T11:57:03.8328500Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:68:24 Property delegate must have a 'getValue(Nothing?, KProperty0<ERROR CLASS: Cannot infer argument for type parameter T>)' method. None of the following functions is applicable:
+2025-12-16T11:57:03.8331126Z fun <T> State<T>.getValue(thisObj: Any?, property: KProperty<*>): T
+2025-12-16T11:57:03.8333773Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:68:27 Cannot infer type for type parameter 'T'. Specify it explicitly.
+2025-12-16T11:57:03.8337443Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:68:37 Unresolved reference 'currentProject'.
+2025-12-16T11:57:03.8341059Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:68:52 Cannot infer type for type parameter 'T'. Specify it explicitly.
+2025-12-16T11:57:03.8374930Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:94:59 Unresolved reference 'name'.
+2025-12-16T11:57:03.8378553Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:109:45 Unresolved reference 'setModuleNameInput'.
+2025-12-16T11:57:03.8382310Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:109:64 Unresolved reference 'it'.
+2025-12-16T11:57:03.8413619Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:110:27 @Composable invocations can only happen from the context of a @Composable function
+2025-12-16T11:57:03.8417753Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:111:33 @Composable invocations can only happen from the context of a @Composable function
+2025-12-16T11:57:03.8421743Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:112:36 @Composable invocations can only happen from the context of a @Composable function
+2025-12-16T11:57:03.8425810Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:127:47 Unresolved reference 'setSelectedLanguage'.
+2025-12-16T11:57:03.8429377Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:137:50 Unresolved reference 'setSelectedTemplate'.
+2025-12-16T11:57:03.8433338Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:141:31 Cannot infer type for type parameter 'T'. Specify it explicitly.
+2025-12-16T11:57:03.8437200Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:141:31 Cannot infer type for type parameter 'R'. Specify it explicitly.
+2025-12-16T11:57:03.8441301Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:141:37 Cannot infer type for type parameter 'T'. Specify it explicitly.
+2025-12-16T11:57:03.8445080Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:152:41 Unresolved reference 'name'.
+2025-12-16T11:57:03.8448320Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:158:41 Unresolved reference 'description'.
+2025-12-16T11:57:03.8451753Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:170:31 Unresolved reference 'createModuleWithGradleNotation'.
+2025-12-16T11:57:03.8485710Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/features/feature-main/src/main/kotlin/com/scto/codelikebastimove/feature/main/screens/SubModuleMakerScreen.kt:177:37 Cannot infer type for value parameter 'error'. Specify it explicitly.
+2025-12-16T11:57:03.8488796Z > Task :features:feature-main:compileDebugKotlin FAILED
+2025-12-16T11:57:12.1102168Z 
+2025-12-16T11:57:12.1103189Z > Task :core:core-datastore:extractDebugAnnotations
+2025-12-16T11:57:12.2099109Z 
+2025-12-16T11:57:12.2103788Z [Incubating] Problems report is available at: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/build/reports/problems/problems-report.html
+2025-12-16T11:57:12.2109568Z 
+2025-12-16T11:57:12.2109911Z FAILURE: Build failed with an exception.
+2025-12-16T11:57:12.2110623Z 
+2025-12-16T11:57:12.2110819Z * What went wrong:
+2025-12-16T11:57:12.2111491Z Execution failed for task ':features:feature-main:compileDebugKotlin'.
+2025-12-16T11:57:12.2113300Z > A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+2025-12-16T11:57:12.2114569Z    > Compilation error. See log for more details
+2025-12-16T11:57:12.2114932Z 
+2025-12-16T11:57:12.2115057Z * Try:
+2025-12-16T11:57:12.2115556Z > Run with --stacktrace option to get the stack trace.
+2025-12-16T11:57:12.2116259Z > Run with --info or --debug option to get more log output.
+2025-12-16T11:57:12.2117007Z > Run with --scan to generate a Build Scan (powered by Develocity).
+2025-12-16T11:57:12.2117708Z > Get more help at https://help.gradle.org.
+2025-12-16T11:57:12.2118039Z 
+2025-12-16T11:57:12.2121285Z Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+2025-12-16T11:57:12.2124216Z 
+2025-12-16T11:57:12.2124263Z 
+2025-12-16T11:57:12.2124797Z BUILD FAILED in 6m 39s
+2025-12-16T11:57:12.2129796Z You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+2025-12-16T11:57:12.2132029Z 
+2025-12-16T11:57:12.2133471Z For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+2025-12-16T11:57:12.2134746Z 355 actionable tasks: 355 executed
+2025-12-16T11:57:12.6428600Z ##[error]Process completed with exit code 1.
