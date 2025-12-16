@@ -42,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 import com.scto.codelikebastimove.core.templates.api.ProjectLanguage
 import com.scto.codelikebastimove.core.templates.api.ProjectTemplate
@@ -49,13 +50,11 @@ import com.scto.codelikebastimove.feature.main.MainViewModel
 
 import kotlinx.coroutines.launch
 
-import org.koin.androidx.compose.koinViewModel
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubModuleMakerScreen(
     onBack: () -> Unit,
-    viewModel: MainViewModel = koinViewModel()
+    viewModel: MainViewModel = viewModel()
 ) {
     val scrollState = rememberScrollState()
     val snackbarHostState = remember { SnackbarHostState() }
