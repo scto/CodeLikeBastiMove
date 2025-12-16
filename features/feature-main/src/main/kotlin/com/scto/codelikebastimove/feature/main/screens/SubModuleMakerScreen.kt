@@ -1,217 +1,274 @@
 package com.scto.codelikebastimove.feature.main.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.CreateNewFolder
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Domain
+import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.scto.codelikebastimove.core.templates.api.ProjectManager
-import kotlinx.coroutines.launch
-import org.koin.compose.koinInject
-import java.io.File
+
+import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
+
+enum class ProgrammingLanguage(val displayName: String) {
+    KOTLIN("Kotlin"),
+    JAVA("Java")
+}
+
+enum class ModuleType(val displayName: String) {
+    APPLICATION("Application"),
+    LIBRARY("Library")
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubModuleMakerScreen(
     onBackClick: () -> Unit,
-    projectManager: ProjectManager = koinInject()
+    onCreateModule: (modulePath: String, packageName: String, language: ProgrammingLanguage, type: ModuleType) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    // Beispiel: :features:login oder features:login
-    var modulePathInput by remember { mutableStateOf("") }
-    var packageName by remember { mutableStateOf("com.example.mymodule") }
-    val scope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
-
-    val currentProject by projectManager.currentProject.collectAsState()
-
+    // Default to a common pattern like :core:model to show user the expected format
+    var modulePath by remember { mutableStateOf("") }
+    var packageName by remember { mutableStateOf("") }
+    var selectedLanguage by remember { mutableStateOf(ProgrammingLanguage.KOTLIN) }
+    var selectedType by remember { mutableStateOf(ModuleType.LIBRARY) }
+    
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
-            TopAppBar(
-                title = { Text("Neues Submodul erstellen") },
+            AdaptiveTopAppBar(
+                title = "Sub-Module Maker",
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Zurück")
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Zurück"
+                        )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                ),
+                modifier = Modifier.statusBarsPadding()
             )
-        }
+        },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        modifier = modifier
     ) { paddingValues ->
         Column(
             modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
                 .padding(paddingValues)
                 .padding(16.dp)
-                .fillMaxSize(),
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-
-            if (currentProject == null) {
-                Text(
-                    text = "Kein Projekt geöffnet. Bitte öffne zuerst ein Projekt.",
-                    color = MaterialTheme.colorScheme.error
-                )
-            } else {
-                Text(
-                    text = "Aktuelles Projekt: ${currentProject?.name}",
-                    style = MaterialTheme.typography.labelLarge
-                )
-
-                OutlinedTextField(
-                    value = modulePathInput,
-                    onValueChange = { modulePathInput = it },
-                    label = { Text("Gradle Pfad (z.B. :features:login)") },
-                    placeholder = { Text(":features:feature-name") },
-                    supportingText = { Text("Nutze Doppelpunkte für Unterordner") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-
-                OutlinedTextField(
-                    value = packageName,
-                    onValueChange = { packageName = it },
-                    label = { Text("Package Name") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-
-                Button(
-                    onClick = {
-                        if (modulePathInput.isBlank()) {
-                            scope.launch { snackbarHostState.showSnackbar("Bitte Modulpfad eingeben") }
-                            return@Button
-                        }
-
-                        val projectRoot = currentProject!!.path
-                        val success = createSubModule(projectRoot, modulePathInput, packageName)
-
-                        scope.launch {
-                            if (success) {
-                                snackbarHostState.showSnackbar("Modul '$modulePathInput' erfolgreich erstellt!")
-                                modulePathInput = ""
-                            } else {
-                                snackbarHostState.showSnackbar("Fehler: Modul existiert bereits oder Pfad ungültig.")
-                            }
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = modulePathInput.isNotBlank()
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                ),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(20.dp)
                 ) {
-                    Icon(Icons.Default.CreateNewFolder, contentDescription = null)
-                    Spacer(Modifier.width(8.dp))
-                    Text("Modul erstellen")
+                    Text(
+                        text = "Neues Modul erstellen",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    
+                    Spacer(modifier = Modifier.height(4.dp))
+                    
+                    Text(
+                        text = "Erstelle neue Sub-Module mit Gradle Notation.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                    )
+                }
+            }
+            
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                ),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(20.dp)
+                ) {
+                    Text(
+                        text = "Konfiguration",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    // --- Language Selection ---
+                    Text(
+                        text = "Sprache",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        ProgrammingLanguage.entries.forEach { language ->
+                            FilterChip(
+                                selected = selectedLanguage == language,
+                                onClick = { selectedLanguage = language },
+                                label = { Text(language.displayName) },
+                                leadingIcon = if (selectedLanguage == language) {
+                                    { Icon(Icons.Default.Check, null, modifier = Modifier.size(18.dp)) }
+                                } else null,
+                                colors = FilterChipDefaults.filterChipColors(
+                                    selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer
+                                )
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // --- Type Selection ---
+                    Text(
+                        text = "Modultyp",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        ModuleType.entries.forEach { type ->
+                            FilterChip(
+                                selected = selectedType == type,
+                                onClick = { selectedType = type },
+                                label = { Text(type.displayName) },
+                                leadingIcon = if (selectedType == type) {
+                                    { Icon(Icons.Default.Check, null, modifier = Modifier.size(18.dp)) }
+                                } else null,
+                                colors = FilterChipDefaults.filterChipColors(
+                                    selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer
+                                )
+                            )
+                        }
+                    }
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    // --- Module Path Input ---
+                    OutlinedTextField(
+                        value = modulePath,
+                        onValueChange = { 
+                            modulePath = it 
+                            // Einfache Auto-Vervollständigung des Package-Namens, wenn dieser leer ist
+                            if (packageName.isEmpty() && it.isNotEmpty()) {
+                                val cleanPath = it.replace(":", ".").trim('.')
+                                packageName = "com.example.app.$cleanPath"
+                            }
+                        },
+                        label = { Text("Gradle Pfad (z.B. :features:login)") },
+                        placeholder = { Text(":core:network") },
+                        leadingIcon = {
+                            Icon(Icons.Default.Folder, contentDescription = null)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp),
+                        singleLine = true
+                    )
+                    Text(
+                        text = "Verwende ':' um Ordner zu verschachteln.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                        modifier = Modifier.padding(start = 4.dp, top = 4.dp)
+                    )
+                    
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    // --- Package Name Input ---
+                    OutlinedTextField(
+                        value = packageName,
+                        onValueChange = { packageName = it },
+                        label = { Text("Paketname (Optional)") },
+                        placeholder = { Text("com.example.app.features.login") },
+                        leadingIcon = {
+                            Icon(Icons.Default.Domain, contentDescription = null)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp),
+                        singleLine = true
+                    )
+                    
+                    Spacer(modifier = Modifier.height(24.dp))
+                    
+                    Button(
+                        onClick = {
+                            if (modulePath.isNotBlank()) {
+                                onCreateModule(modulePath, packageName, selectedLanguage, selectedType)
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = modulePath.isNotBlank(),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Modul erstellen")
+                    }
                 }
             }
         }
-    }
-}
-
-private fun createSubModule(rootPath: String, moduleInputName: String, packageName: String): Boolean {
-    return try {
-        val rootDir = File(rootPath)
-
-        // 1. Pfad normalisieren
-        // Stellt sicher, dass der Gradle-Pfad mit einem Doppelpunkt beginnt (z.B. ":features:login")
-        val gradlePath = if (moduleInputName.startsWith(":")) moduleInputName else ":$moduleInputName"
-
-        // Entfernt den führenden Doppelpunkt und ersetzt den Rest durch Dateiseparatoren
-        // Beispiel: ":features:login" -> "features/login" (auf Linux/Mac) oder "features\login" (auf Windows)
-        val relativeFilePath = gradlePath.trimStart(':').replace(':', File.separatorChar)
-
-        val moduleDir = File(rootDir, relativeFilePath)
-
-        if (moduleDir.exists()) return false
-
-        // mkdirs() erstellt auch alle notwendigen Elternordner (z.B. den Ordner 'features')
-        moduleDir.mkdirs()
-
-        // 2. build.gradle.kts erstellen
-        val buildFile = File(moduleDir, "build.gradle.kts")
-        buildFile.writeText("""
-            plugins {
-                id("com.android.library")
-                id("org.jetbrains.kotlin.android")
-            }
-
-            android {
-                namespace = "$packageName"
-                compileSdk = 34
-
-                defaultConfig {
-                    minSdk = 24
-                }
-                
-                compileOptions {
-                    sourceCompatibility = JavaVersion.VERSION_1_8
-                    targetCompatibility = JavaVersion.VERSION_1_8
-                }
-                kotlinOptions {
-                    jvmTarget = "1.8"
-                }
-            }
-
-            dependencies {
-                implementation("androidx.core:core-ktx:1.12.0")
-                implementation("androidx.appcompat:appcompat:1.6.1")
-                implementation("com.google.android.material:material:1.11.0")
-            }
-        """.trimIndent())
-
-        // 3. .gitignore erstellen
-        val gitignore = File(moduleDir, ".gitignore")
-        gitignore.writeText("/build\n")
-
-        // 4. src Ordner Struktur erstellen
-        val srcMain = File(moduleDir, "src/main")
-        srcMain.mkdirs()
-
-        // AndroidManifest.xml
-        val manifest = File(srcMain, "AndroidManifest.xml")
-        manifest.writeText("""
-            <?xml version="1.0" encoding="utf-8"?>
-            <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-            </manifest>
-        """.trimIndent())
-
-        // Java/Kotlin Ordner
-        val packagePath = packageName.replace('.', '/')
-        val codeDir = File(srcMain, "kotlin/$packagePath")
-        codeDir.mkdirs()
-
-        // 5. settings.gradle.kts aktualisieren
-        val settingsFile = File(rootDir, "settings.gradle.kts")
-        if (settingsFile.exists()) {
-            // Fügt include(":features:login") hinzu
-            settingsFile.appendText("\ninclude(\"$gradlePath\")")
-        }
-
-        true
-    } catch (e: Exception) {
-        e.printStackTrace()
-        false
     }
 }

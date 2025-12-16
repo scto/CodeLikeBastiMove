@@ -1,4 +1,3 @@
-/*
 package com.scto.codelikebastimove.feature.main
 
 import androidx.activity.compose.BackHandler
@@ -192,95 +191,6 @@ fun MainScreen(
                 VectorAssetStudioScreen(
                     onBackClick = { viewModel.onBackPressed() }
                 )
-            }
-        }
-    }
-}
-*/
-package com.scto.codelikebastimove.feature.main
-
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-
-import com.scto.codelikebastimove.feature.main.components.ContentNavigationRail
-import com.scto.codelikebastimove.feature.main.content.*
-import com.scto.codelikebastimove.feature.main.screens.*
-import org.koin.androidx.compose.koinViewModel
-
-@Composable
-fun MainScreen(
-    viewModel: MainViewModel = koinViewModel()
-) {
-    val uiState by viewModel.uiState.collectAsState()
-
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Row(modifier = Modifier.fillMaxSize()) {
-            ContentNavigationRail(
-                selectedContent = uiState.selectedContent,
-                onContentSelected = viewModel::onContentSelected,
-                onOpenSettings = { viewModel.onContentSelected(MainContentType.Settings) }
-            )
-
-            Column(modifier = Modifier.fillMaxSize()) {
-                when (uiState.selectedContent) {
-                    MainContentType.Project -> ProjectContent(
-                        onOpenProject = { viewModel.onContentSelected(MainContentType.OpenProject) },
-                        onCreateProject = { viewModel.onContentSelected(MainContentType.CreateProject) }
-                    )
-                    MainContentType.Editor -> EditorContent()
-                    MainContentType.ThemeBuilder -> ThemeBuilderContent()
-                    MainContentType.LayoutDesigner -> LayoutDesignerContent()
-                    MainContentType.Git -> GitContent(
-                        onCloneRepo = { viewModel.onContentSelected(MainContentType.CloneRepository) }
-                    )
-                    MainContentType.Assets -> AssetsStudioContent(
-                        onOpenAssetStudio = { viewModel.onContentSelected(MainContentType.AssetStudio) }
-                    )
-                    MainContentType.OpenProject -> OpenProjectScreen(
-                        onBackClick = { viewModel.onContentSelected(MainContentType.Project) },
-                        onProjectOpened = { viewModel.onContentSelected(MainContentType.Project) }
-                    )
-                    MainContentType.CreateProject -> CreateProjectScreen(
-                        onBackClick = { viewModel.onContentSelected(MainContentType.Project) },
-                        onProjectCreated = { viewModel.onContentSelected(MainContentType.Project) }
-                    )
-                    MainContentType.CloneRepository -> CloneRepositoryScreen(
-                        onBackClick = { viewModel.onContentSelected(MainContentType.Git) },
-                        onRepositoryCloned = { viewModel.onContentSelected(MainContentType.Project) }
-                    )
-                    MainContentType.Settings -> IDESettingsScreen(
-                        onBackClick = { viewModel.onContentSelected(MainContentType.Project) }
-                    )
-                    MainContentType.AssetStudio -> AssetStudioScreen(
-                        onBackClick = { viewModel.onContentSelected(MainContentType.Assets) }
-                    )
-                    MainContentType.BuildVariants -> BuildVariantsScreen(
-                        onBackClick = { viewModel.onContentSelected(MainContentType.Project) }
-                    )
-                    MainContentType.SubModuleMaker -> SubModuleMakerScreen(
-                        onBackClick = { viewModel.onContentSelected(MainContentType.Project) },
-                        // Wir übergeben leere Defaults, da der Screen sich selbst via ProjectManager versorgt.
-                        // Die Parameter sind nur da, um die Signatur kompatibel zu halten, falls wir sie nicht entfernen wollen.
-                        projectPath = "",
-                        onCreateModule = { _, _, _, _ ->
-                            // Optional: Navigiere zurück nach Erstellung
-                            // viewModel.onContentSelected(MainContentType.Project)
-                        }
-                    )
-                    MainContentType.AIAgent -> AIAgentScreen()
-                    MainContentType.Console -> ConsoleScreen()
-                    MainContentType.IDEWorkspace -> IDEWorkspaceScreen()
-                }
             }
         }
     }
