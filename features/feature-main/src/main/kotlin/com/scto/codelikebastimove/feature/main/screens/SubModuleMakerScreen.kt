@@ -1,273 +1,269 @@
 package com.scto.codelikebastimove.feature.main.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Domain
-import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
-import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
+import com.scto.codelikebastimove.core.templates.api.ProjectLanguage
+import com.scto.codelikebastimove.core.templates.api.ProjectTemplate
+import com.scto.codelikebastimove.feature.main.MainViewModel
 
-enum class ProgrammingLanguage(val displayName: String) {
-    KOTLIN("Kotlin"),
-    JAVA("Java")
-}
+import kotlinx.coroutines.launch
 
-enum class ModuleType(val displayName: String) {
-    APPLICATION("Application"),
-    LIBRARY("Library")
-}
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubModuleMakerScreen(
-    onBackClick: () -> Unit,
-    onCreateModule: (modulePath: String, packageName: String, language: ProgrammingLanguage, type: ModuleType) -> Unit,
-    modifier: Modifier = Modifier
+    onBack: () -> Unit,
+    viewModel: MainViewModel = koinViewModel()
 ) {
-    // Default to a common pattern like :core:model to show user the expected format
-    var modulePath by remember { mutableStateOf("") }
-    var packageName by remember { mutableStateOf("") }
-    var selectedLanguage by remember { mutableStateOf(ProgrammingLanguage.KOTLIN) }
-    var selectedType by remember { mutableStateOf(ModuleType.LIBRARY) }
-    
+    val scrollState = rememberScrollState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    // Data from ViewModel
+    val moduleNameInput by viewModel.moduleNameInput.collectAsState()
+    val selectedLanguage by viewModel.selectedLanguage.collectAsState()
+    val selectedTemplate by viewModel.selectedTemplate.collectAsState()
+    val availableTemplates by viewModel.availableTemplates.collectAsState()
+    val currentProject by viewModel.currentProject.collectAsState()
+
     Scaffold(
         topBar = {
-            AdaptiveTopAppBar(
-                title = "Sub-Module Maker",
+            TopAppBar(
+                title = { Text("Create New Module") },
                 navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Zurück"
-                        )
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                ),
-                modifier = Modifier.statusBarsPadding()
+                }
             )
         },
-        contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        modifier = modifier
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
                 .padding(paddingValues)
                 .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Card(
+            // Project Context Info
+            if (currentProject != null) {
+                Text(
+                    text = "In Project: ${currentProject?.name}",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            } else {
+                Text(
+                    text = "No Project Open!",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+
+            // Module Name / Gradle Path Input
+            OutlinedTextField(
+                value = moduleNameInput,
+                onValueChange = { viewModel.setModuleNameInput(it) },
+                label = { Text("Module Path (Gradle Notation)") },
+                placeholder = { Text(":features:my-feature") },
+                supportingText = { Text("Use ':' to create nested modules (e.g. :core:ui)") },
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant
-                ),
-                shape = RoundedCornerShape(16.dp)
+                singleLine = true
+            )
+
+            // Language Selection
+            Text("Language", style = MaterialTheme.typography.titleMedium)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Column(
-                    modifier = Modifier.padding(20.dp)
-                ) {
-                    Text(
-                        text = "Neues Modul erstellen",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    
-                    Spacer(modifier = Modifier.height(4.dp))
-                    
-                    Text(
-                        text = "Erstelle neue Sub-Module mit Gradle Notation.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                ProjectLanguage.entries.forEach { language ->
+                    LanguageChip(
+                        language = language,
+                        selected = language == selectedLanguage,
+                        onClick = { viewModel.setSelectedLanguage(language) }
                     )
                 }
             }
-            
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant
-                ),
-                shape = RoundedCornerShape(16.dp)
-            ) {
+
+            // Template Selection
+            Text("Template", style = MaterialTheme.typography.titleMedium)
+            TemplateSelector(
+                templates = availableTemplates,
+                selectedTemplate = selectedTemplate,
+                onTemplateSelected = { viewModel.setSelectedTemplate(it) }
+            )
+
+            // Template Description
+            selectedTemplate?.let { template ->
                 Column(
-                    modifier = Modifier.padding(20.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                            shape = MaterialTheme.shapes.medium
+                        )
+                        .padding(12.dp)
                 ) {
                     Text(
-                        text = "Konfiguration",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
+                        text = template.name,
+                        style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    
-                    Spacer(modifier = Modifier.height(16.dp))
-                    
-                    // --- Language Selection ---
+                    Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "Sprache",
+                        text = template.description,
                         style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        ProgrammingLanguage.entries.forEach { language ->
-                            FilterChip(
-                                selected = selectedLanguage == language,
-                                onClick = { selectedLanguage = language },
-                                label = { Text(language.displayName) },
-                                leadingIcon = if (selectedLanguage == language) {
-                                    { Icon(Icons.Default.Check, null, modifier = Modifier.size(18.dp)) }
-                                } else null,
-                                colors = FilterChipDefaults.filterChipColors(
-                                    selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                                    selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer
-                                )
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // --- Type Selection ---
-                    Text(
-                        text = "Modultyp",
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        ModuleType.entries.forEach { type ->
-                            FilterChip(
-                                selected = selectedType == type,
-                                onClick = { selectedType = type },
-                                label = { Text(type.displayName) },
-                                leadingIcon = if (selectedType == type) {
-                                    { Icon(Icons.Default.Check, null, modifier = Modifier.size(18.dp)) }
-                                } else null,
-                                colors = FilterChipDefaults.filterChipColors(
-                                    selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                                    selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer
-                                )
-                            )
-                        }
-                    }
-                    
-                    Spacer(modifier = Modifier.height(16.dp))
-                    
-                    // --- Module Path Input ---
-                    OutlinedTextField(
-                        value = modulePath,
-                        onValueChange = { 
-                            modulePath = it 
-                            // Einfache Auto-Vervollständigung des Package-Namens, wenn dieser leer ist
-                            if (packageName.isEmpty() && it.isNotEmpty()) {
-                                val cleanPath = it.replace(":", ".").trim('.')
-                                packageName = "com.example.app.$cleanPath"
-                            }
-                        },
-                        label = { Text("Gradle Pfad (z.B. :features:login)") },
-                        placeholder = { Text(":core:network") },
-                        leadingIcon = {
-                            Icon(Icons.Default.Folder, contentDescription = null)
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp),
-                        singleLine = true
-                    )
-                    Text(
-                        text = "Verwende ':' um Ordner zu verschachteln.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
-                        modifier = Modifier.padding(start = 4.dp, top = 4.dp)
-                    )
-                    
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    // --- Package Name Input ---
-                    OutlinedTextField(
-                        value = packageName,
-                        onValueChange = { packageName = it },
-                        label = { Text("Paketname (Optional)") },
-                        placeholder = { Text("com.example.app.features.login") },
-                        leadingIcon = {
-                            Icon(Icons.Default.Domain, contentDescription = null)
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp),
-                        singleLine = true
-                    )
-                    
-                    Spacer(modifier = Modifier.height(24.dp))
-                    
-                    Button(
-                        onClick = {
-                            if (modulePath.isNotBlank()) {
-                                onCreateModule(modulePath, packageName, selectedLanguage, selectedType)
-                            }
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        enabled = modulePath.isNotBlank(),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = MaterialTheme.colorScheme.onPrimary
-                        )
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Modul erstellen")
-                    }
                 }
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            // Action Button
+            Button(
+                onClick = {
+                    viewModel.createModuleWithGradleNotation(
+                        onSuccess = {
+                            scope.launch {
+                                snackbarHostState.showSnackbar("Module created successfully!")
+                                onBack()
+                            }
+                        },
+                        onError = { error ->
+                            scope.launch {
+                                snackbarHostState.showSnackbar("Error: $error")
+                            }
+                        }
+                    )
+                },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = moduleNameInput.isNotBlank() && selectedTemplate != null && currentProject != null
+            ) {
+                Icon(Icons.Default.Check, contentDescription = null)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Create Module")
+            }
+        }
+    }
+}
+
+@Composable
+private fun LanguageChip(
+    language: ProjectLanguage,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    val containerColor = if (selected) {
+        MaterialTheme.colorScheme.primaryContainer
+    } else {
+        MaterialTheme.colorScheme.surface
+    }
+
+    val contentColor = if (selected) {
+        MaterialTheme.colorScheme.onPrimaryContainer
+    } else {
+        MaterialTheme.colorScheme.onSurface
+    }
+    
+    val borderColor = if (selected) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.outline
+    }
+
+    Box(
+        modifier = Modifier
+            .background(containerColor, MaterialTheme.shapes.small)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        Text(
+            text = language.name,
+            color = contentColor,
+            style = MaterialTheme.typography.labelLarge
+        )
+    }
+}
+
+@Composable
+private fun TemplateSelector(
+    templates: List<ProjectTemplate>,
+    selectedTemplate: ProjectTemplate?,
+    onTemplateSelected: (ProjectTemplate) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(modifier = Modifier.fillMaxWidth()) {
+        OutlinedButton(
+            onClick = { expanded = true },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = selectedTemplate?.name ?: "Select Template")
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.fillMaxWidth(0.9f)
+        ) {
+            templates.forEach { template ->
+                DropdownMenuItem(
+                    text = {
+                        Column {
+                            Text(template.name, style = MaterialTheme.typography.bodyLarge)
+                        }
+                    },
+                    onClick = {
+                        onTemplateSelected(template)
+                        expanded = false
+                    }
+                )
             }
         }
     }
