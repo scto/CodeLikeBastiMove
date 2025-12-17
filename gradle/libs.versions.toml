@@ -31,12 +31,12 @@ compose-bom = "2025.12.00"
 
 ktor = "3.3.2"
 
-coil = "3.3.0"
-coil-compose = "3.3.0"
-coil-gif = "3.3.0"
-coil-svg = "3.3.0"
-coil-video = "3.3.0"
-coil-ktor = "3.3.0"
+coil = "2.7.0"
+coil-compose = "2.7.0"
+coil-gif = "2.7.0"
+coil-svg = "2.7.0"
+coil-video = "2.7.0"
+coil-ktor = "2.7.0"
 
 material3 = "1.4.0"
 material-icons-extended = "1.7.8"
@@ -108,11 +108,13 @@ lyfecycle-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-
 lyfecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 lyfecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
 navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
-coil = { group = "io.coil-kt.coil3", name = "coil", version.ref = "coil" }
-coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil-compose" }
-coil-gif = { group = "io.coil-kt.coil3", name = "coil-gif", version.ref = "coil-gif" }
-coil-svg = { group = "io.coil-kt.coil3", name = "coil-svg", version.ref = "coil-svg" }
-coil-video = { group = "io.coil-kt.coil3", name = "coil-video", version.ref = "coil-video" }
+# Coil
+coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
+coil-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil-gif" }
+coil-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil-svg" }
+coil-video = { group = "io.coil-kt", name = "coil-video", version.ref = "coil-video" }
+
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle" }
