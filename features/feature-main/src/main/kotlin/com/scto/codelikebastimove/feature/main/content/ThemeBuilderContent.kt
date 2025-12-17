@@ -1,470 +1,13 @@
 package com.scto.codelikebastimove.feature.main.content
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Slider
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-
-/**
- * Data class representing the editable configuration of a Theme.
- */
-data class ThemeConfig(
-    val primary: Color = Color(0xFF6750A4),
-    val secondary: Color = Color(0xFF625B71),
-    val tertiary: Color = Color(0xFF7D5260),
-    val background: Color = Color(0xFFFFFBFE),
-    val surface: Color = Color(0xFFFFFBFE),
-    val error: Color = Color(0xFFB3261E),
-    val onPrimary: Color = Color.White,
-    val onSecondary: Color = Color.White,
-    val onBackground: Color = Color(0xFF1C1B1F),
-    val onSurface: Color = Color(0xFF1C1B1F)
-)
-
-/**
- * Main Content for the Theme Builder Feature.
- * Allows users to edit theme colors and preview changes live.
- */
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ThemeBuilderContent() {
-    var themeConfig by remember { mutableStateOf(ThemeConfig()) }
-    var showCodeDialog by remember { mutableStateOf(false) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        // Toolbar
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Theme Builder",
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
-            )
-            Row {
-                IconButton(onClick = { themeConfig = ThemeConfig() }) {
-                    Icon(Icons.Default.Refresh, contentDescription = "Reset Theme")
-                }
-                Button(onClick = { showCodeDialog = true }) {
-                    Icon(Icons.Default.ContentCopy, contentDescription = null)
-                    Spacer(Modifier.width(8.dp))
-                    Text("Export Code")
-                }
-            }
-        }
-
-        Divider()
-
-        Row(modifier = Modifier.fillMaxSize().padding(top = 16.dp)) {
-            // Left Panel: Property Editors
-            Column(
-                modifier = Modifier
-                    .weight(0.4f)
-                    .fillMaxHeight()
-                    .verticalScroll(rememberScrollState())
-                    .padding(end = 16.dp)
-            ) {
-                Text(
-                    text = "Color Scheme",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-
-                ColorPickerItem("Primary", themeConfig.primary) { themeConfig = themeConfig.copy(primary = it) }
-                ColorPickerItem("On Primary", themeConfig.onPrimary) { themeConfig = themeConfig.copy(onPrimary = it) }
-                Spacer(Modifier.height(8.dp))
-                
-                ColorPickerItem("Secondary", themeConfig.secondary) { themeConfig = themeConfig.copy(secondary = it) }
-                ColorPickerItem("On Secondary", themeConfig.onSecondary) { themeConfig = themeConfig.copy(onSecondary = it) }
-                Spacer(Modifier.height(8.dp))
-
-                ColorPickerItem("Tertiary", themeConfig.tertiary) { themeConfig = themeConfig.copy(tertiary = it) }
-                Spacer(Modifier.height(8.dp))
-
-                ColorPickerItem("Background", themeConfig.background) { themeConfig = themeConfig.copy(background = it) }
-                ColorPickerItem("On Background", themeConfig.onBackground) { themeConfig = themeConfig.copy(onBackground = it) }
-                Spacer(Modifier.height(8.dp))
-
-                ColorPickerItem("Surface", themeConfig.surface) { themeConfig = themeConfig.copy(surface = it) }
-                ColorPickerItem("On Surface", themeConfig.onSurface) { themeConfig = themeConfig.copy(onSurface = it) }
-                Spacer(Modifier.height(8.dp))
-
-                ColorPickerItem("Error", themeConfig.error) { themeConfig = themeConfig.copy(error = it) }
-            }
-
-            // Right Panel: Live Preview
-            Column(
-                modifier = Modifier
-                    .weight(0.6f)
-                    .fillMaxHeight()
-            ) {
-                Text(
-                    text = "Preview",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-                
-                // Wrap preview in a Box with border to distinct it from the editor tool
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
-                        .clip(RoundedCornerShape(12.dp))
-                ) {
-                    ThemePreview(themeConfig)
-                }
-            }
-        }
-    }
-
-    if (showCodeDialog) {
-        CodeExportDialog(themeConfig) { showCodeDialog = false }
-    }
-}
-
-@Composable
-fun ColorPickerItem(label: String, currentColor: Color, onColorChange: (Color) -> Unit) {
-    var showDialog by remember { mutableStateOf(false) }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .clickable { showDialog = true }
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .background(currentColor)
-                .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Column {
-            Text(text = label, style = MaterialTheme.typography.bodyMedium)
-            Text(
-                text = currentColor.toHexString(),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-
-    if (showDialog) {
-        SimpleColorSelectionDialog(
-            initialColor = currentColor,
-            onDismiss = { showDialog = false },
-            onColorSelected = {
-                onColorChange(it)
-                showDialog = false
-            }
-        )
-    }
-}
-
-/**
- * A dialog to select a color from a predefined palette or presets.
- * (In a full production app, this would be a full HSV/RGB slider picker)
- */
-@Composable
-fun SimpleColorSelectionDialog(
-    initialColor: Color,
-    onDismiss: () -> Unit,
-    onColorSelected: (Color) -> Unit
-) {
-    val basicColors = listOf(
-        Color(0xFF6750A4), Color(0xFF625B71), Color(0xFF7D5260),
-        Color(0xFFB3261E), Color(0xFF21005D), Color(0xFFFFFFFF),
-        Color(0xFF000000), Color(0xFF1C1B1F), Color(0xFF31111D),
-        Color(0xFF6200EE), Color(0xFF03DAC6), Color(0xFF018786),
-        Color(0xFF4CAF50), Color(0xFFFB8C00), Color(0xFFE91E63)
-    )
-
-    Dialog(onDismissRequest = onDismiss) {
-        Surface(
-            shape = RoundedCornerShape(16.dp),
-            color = MaterialTheme.colorScheme.surface,
-            tonalElevation = 6.dp,
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Column(
-                modifier = Modifier.padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("Select Color", style = MaterialTheme.typography.headlineSmall)
-                Spacer(modifier = Modifier.height(24.dp))
-                
-                LazyVerticalGrid(
-                    columns = GridCells.Adaptive(minSize = 48.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.height(200.dp)
-                ) {
-                    items(basicColors) { color ->
-                        Box(
-                            modifier = Modifier
-                                .size(48.dp)
-                                .clip(CircleShape)
-                                .background(color)
-                                .clickable { onColorSelected(color) }
-                                .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            if (color == initialColor) {
-                                Icon(
-                                    imageVector = Icons.Default.Check,
-                                    contentDescription = "Selected",
-                                    tint = if (color.luminance() > 0.5f) Color.Black else Color.White
-                                )
-                            }
-                        }
-                    }
-                }
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                TextButton(onClick = onDismiss, modifier = Modifier.align(Alignment.End)) {
-                    Text("Cancel")
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ThemePreview(config: ThemeConfig) {
-    val previewColorScheme = lightColorScheme(
-        primary = config.primary,
-        onPrimary = config.onPrimary,
-        secondary = config.secondary,
-        onSecondary = config.onSecondary,
-        tertiary = config.tertiary,
-        background = config.background,
-        onBackground = config.onBackground,
-        surface = config.surface,
-        onSurface = config.onSurface,
-        error = config.error
-    )
-
-    MaterialTheme(colorScheme = previewColorScheme) {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text("App Preview") },
-                    colors = androidx.compose.material3.TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        titleContentColor = MaterialTheme.colorScheme.onPrimary
-                    )
-                )
-            },
-            floatingActionButton = {
-                FloatingActionButton(onClick = {}) {
-                    Icon(Icons.Default.Add, contentDescription = "Add")
-                }
-            }
-        ) { padding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-                    .padding(16.dp)
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Text("Typography & Components", style = MaterialTheme.typography.titleLarge)
-                
-                Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text("Card Title", style = MaterialTheme.typography.titleMedium)
-                        Text("This is a card displaying the surface color and onSurface typography.", style = MaterialTheme.typography.bodyMedium)
-                    }
-                }
-
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Button(onClick = {}) { Text("Filled") }
-                    FilledTonalButton(onClick = {}) { Text("Tonal") }
-                    OutlinedButton(onClick = {}) { Text("Outlined") }
-                }
-
-                TextField(
-                    value = "",
-                    onValueChange = {},
-                    label = { Text("Text Field") },
-                    placeholder = { Text("Type something...") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Switch item")
-                    Spacer(Modifier.weight(1f))
-                    androidx.compose.material3.Switch(checked = true, onCheckedChange = {})
-                }
-                
-                Slider(value = 0.5f, onValueChange = {})
-            }
-        }
-    }
-}
-
-@Composable
-fun CodeExportDialog(config: ThemeConfig, onDismiss: () -> Unit) {
-    val code = """
-        package com.scto.codelikebastimove.core.ui.theme
-
-        import androidx.compose.ui.graphics.Color
-        import androidx.compose.material3.lightColorScheme
-
-        val LightColorScheme = lightColorScheme(
-            primary = Color(${config.primary.toHexString().replace("#", "0xFF")}),
-            onPrimary = Color(${config.onPrimary.toHexString().replace("#", "0xFF")}),
-            secondary = Color(${config.secondary.toHexString().replace("#", "0xFF")}),
-            onSecondary = Color(${config.onSecondary.toHexString().replace("#", "0xFF")}),
-            tertiary = Color(${config.tertiary.toHexString().replace("#", "0xFF")}),
-            background = Color(${config.background.toHexString().replace("#", "0xFF")}),
-            onBackground = Color(${config.onBackground.toHexString().replace("#", "0xFF")}),
-            surface = Color(${config.surface.toHexString().replace("#", "0xFF")}),
-            onSurface = Color(${config.onSurface.toHexString().replace("#", "0xFF")}),
-            error = Color(${config.error.toHexString().replace("#", "0xFF")})
-        )
-    """.trimIndent()
-
-    val clipboardManager = LocalClipboardManager.current
-
-    Dialog(onDismissRequest = onDismiss) {
-        Surface(
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(500.dp)
-                .padding(16.dp)
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text("Generated Kotlin Code", style = MaterialTheme.typography.titleLarge)
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                OutlinedTextField(
-                    value = code,
-                    onValueChange = {},
-                    readOnly = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    textStyle = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace)
-                )
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                    TextButton(onClick = onDismiss) {
-                        Text("Close")
-                    }
-                    Spacer(Modifier.width(8.dp))
-                    Button(onClick = {
-                        clipboardManager.setText(AnnotatedString(code))
-                    }) {
-                        Icon(Icons.Default.ContentCopy, contentDescription = null)
-                        Spacer(Modifier.width(8.dp))
-                        Text("Copy to Clipboard")
-                    }
-                }
-            }
-        }
-    }
-}
-
-// Extension to get Hex String
-fun Color.toHexString(): String {
-    val argb = this.toArgb()
-    return String.format("#%08X", argb)
-}
-
-// Extension to calc luminance for contrast text
-fun Color.luminance(): Float {
-    val red = this.red
-    val green = this.green
-    val blue = this.blue
-    return 0.2126f * red + 0.7152f * green + 0.0722f * blue
-}
-
-/*
-package com.scto.codelikebastimove.feature.main.content
-
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -495,6 +38,8 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ColorLens
+import androidx.compose.material.icons.filled.AddPhotoAlternate
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.FormatSize
 import androidx.compose.material.icons.filled.MoreVert
@@ -537,6 +82,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -545,6 +91,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
+
+import coil.compose.AsyncImage
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.util.zip.ZipEntry
@@ -579,9 +133,25 @@ fun ThemeBuilderContent(
     var showColorPicker by remember { mutableStateOf(false) }
     var editingColorName by remember { mutableStateOf("") }
     var editingColor by remember { mutableStateOf(Color.White) }
+
+    var showImagePicker by remember { mutableStateOf(false) }    
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    
+    // Image Picker Implementation
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            imageUri = uri
+            extractColorFromUri(context, uri) { extractedColor ->
+                themeColors = themeColors.copy(primary = extractedColor)
+            }
+        }
+    }
     
     var displayFont by remember { mutableStateOf("-- System Default --") }
     var bodyFont by remember { mutableStateOf("-- System Default --") }
+    
     var themeName by remember { mutableStateOf("material-theme") }
     
     var dynamicColorEnabled by remember { mutableStateOf(false) }
@@ -696,6 +266,7 @@ fun ThemeBuilderContent(
                     item {
                         SeedColorRow(
                             themeColors = themeColors,
+                            selectedImageUri = imageUri,
                             onColorSelected = { color ->
                                 themeColors = themeColors.copy(primary = color)
                             },
@@ -703,6 +274,9 @@ fun ThemeBuilderContent(
                                 editingColorName = "Primary"
                                 editingColor = themeColors.primary
                                 showColorPicker = true
+                            },
+                            onPickImage = {
+                                imagePickerLauncher.launch("image/*")
                             }
                         )
                     }
@@ -1738,8 +1312,10 @@ private fun ThemeNameCard(
 @Composable
 private fun SeedColorRow(
     themeColors: ThemeColors,
+    selectedImageUri: Uri?,
     onColorSelected: (Color) -> Unit,
     onPickColor: () -> Unit,
+    onPickImage: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val seedColors = listOf(
@@ -1792,7 +1368,56 @@ private fun SeedColorRow(
                     modifier = Modifier.size(20.dp)
                 )
             }
+
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape)
+                    .clickable(onClick = onPickImage),
+                contentAlignment = Alignment.Center
+            ) {
+                if (selectedImageUri != null) {
+                    AsyncImage(
+                        model = selectedImageUri,
+                        contentDescription = "Selected Image",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Default.AddPhotoAlternate,
+                        contentDescription = "Pick image",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+            }
         }
+    }
+}
+
+/**
+ * Extracts a representative color from the center of the image to simulate dynamic color extraction
+ * without heavy dependencies.
+ */
+fun extractColorFromUri(context: Context, uri: Uri, onColorExtracted: (Color) -> Unit) {
+    try {
+        val inputStream = context.contentResolver.openInputStream(uri)
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+        inputStream?.close()
+
+        if (bitmap != null) {
+            // Simple logic: Take the center pixel
+            // Ideally use androidx.palette:palette here
+            val centerX = bitmap.width / 2
+            val centerY = bitmap.height / 2
+            val pixel = bitmap.getPixel(centerX, centerY)
+            onColorExtracted(Color(pixel))
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
     }
 }
 
@@ -1808,16 +1433,30 @@ private fun exportTheme(
         val cacheDir = context.cacheDir
         val themeDir = File(cacheDir, "theme_export")
         themeDir.mkdirs()
+        val themeUiDir = File(themeDir, "ui/theme")
+        themeUiDir.mkdirs()
         
+        // 2. Read Readme from Assets
+        var readmeContent = "Material Theme Readme"
+        try {
+            // Try to read from assets "README.md"
+            context.assets.open("README.md").use { stream ->
+                    readmeContent = stream.bufferedReader().use { it.readText() }
+            }
+        } catch (e: Exception) {
+            readmeContent = "# Readme not found\nPlease refer to Material Design 3 documentation."
+        }
+
         when (format) {
             "compose" -> {
                 val colorKt = generateComposeColorKt(themeName, colors)
                 val themeKt = generateComposeThemeKt(themeName)
                 val typeKt = generateComposeTypeKt(displayFont, bodyFont)
                 
-                File(themeDir, "Color.kt").writeText(colorKt)
-                File(themeDir, "Theme.kt").writeText(themeKt)
-                File(themeDir, "Type.kt").writeText(typeKt)
+                File(themeDir, "README.md").writeText(readmeContent)
+                File(themeUiDir, "Color.kt").writeText(colorKt)
+                File(themeUiDir, "Theme.kt").writeText(themeKt)
+                File(themeUiDir, "Type.kt").writeText(typeKt)
             }
             "android" -> {
                 val colorsXml = generateAndroidColorsXml(colors)
@@ -2325,4 +1964,3 @@ private fun colorToArgbHex(color: Color): String {
     val argb = color.toArgb()
     return String.format("0x%08X", argb)
 }
-*/

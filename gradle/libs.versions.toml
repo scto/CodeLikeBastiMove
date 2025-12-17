@@ -28,8 +28,14 @@ retrofit = "2.9.0"
 room = "2.8.4"
 lifecycle = "2.10.0"
 compose-bom = "2025.12.00"
-
-coil = "2.7.0"
+ktor = "3.3.2"
+coil-core = "3.3.0"
+coil-compose = "3.3.0"
+coil-gif = "3.3.0"
+coil-svg = "3.3.0"
+coil-video = "3.3.0"
+coil-ktor = "3.3.0"
+"
 material3 = "1.4.0"
 material-icons-extended = "1.7.8"
 koin = "4.1.1"
@@ -73,10 +79,13 @@ treeview = "1.0.2"
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle" }
 android-library = { id = "com.android.library", version.ref = "android-gradle" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
-kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 #ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint_jlleitschuh" }
 #detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 #spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
@@ -95,7 +104,11 @@ lyfecycle-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-
 lyfecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 lyfecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
 navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+coil-core = { group = "io.coil-kt", name = "coil-core", version.ref = "coil-core" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
+coil-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil-gif" }
+coil-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil-svg" }
+coil-video = { group = "io.coil-kt", name = "coil-video", version.ref = "coil-video" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle" }
@@ -131,6 +144,7 @@ compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
 # test libraries
 test-junit = { module = "junit:junit", version.ref = "test-junit" }
 test-kotlin = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+test-kotlin-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 test-kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
 test-mockk = { module = "io.mockk:mockk", version.ref = "test-mockk" }
 test-coroutines-flow = { module = "app.cash.turbine:turbine", version.ref = "test-coroutines-flow" }
@@ -153,6 +167,8 @@ koin-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navig
 koin-workmanager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 koin-test-junit = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin" }
+koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
+koin-logger-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin" }
 
 room = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
@@ -197,6 +213,7 @@ lifecycle = [
 test-common = [
     "test-junit",
     "test-kotlin",
+    "test-kotlin-junit",
     "test-kotlin-coroutines",
     "test-mockk",
     "test-coroutines-flow",
