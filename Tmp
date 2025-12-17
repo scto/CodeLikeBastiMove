@@ -1,0 +1,286 @@
+package com.scto.codelikebastimove.feature.main.content
+
+import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.scto.codelikebastimove.feature.main.MainUiState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
+
+// --- Hilfsfunktionen für Farben & Konvertierung ---
+
+fun colorToArgbHex(color: Color): String {
+    return String.format("#%08X", color.toArgb())
+}
+
+suspend fun extractColorFromUri(context: Context, uri: Uri): Color = withContext(Dispatchers.IO) {
+    try {
+        val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val source = ImageDecoder.createSource(context.contentResolver, uri)
+            ImageDecoder.decodeBitmap(source)
+        } else {
+            MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+        }
+        
+        if (bitmap.width > 0 && bitmap.height > 0) {
+            val pixel = bitmap.getPixel(bitmap.width / 2, bitmap.height / 2)
+            Color(pixel)
+        } else Color.Gray
+    } catch (e: Exception) {
+        Color.Gray
+    }
+}
+
+// --- Datei-Generatoren (Code Emitter) ---
+
+fun generateComposeColorKt(colors: Map<String, Color>): String {
+    val sb = StringBuilder("package com.example.ui.theme\n\nimport androidx.compose.ui.graphics.Color\n\n")
+    colors.forEach { (name, color) ->
+        sb.append("val ${name} = Color(0x${Integer.toHexString(color.toArgb()).uppercase()})\n")
+    }
+    return sb.toString()
+}
+
+fun generateComposeThemeKt(colors: Map<String, Color>): String {
+    return """
+        package com.example.ui.theme
+        import androidx.compose.material3.MaterialTheme
+        import androidx.compose.material3.lightColorScheme
+        import androidx.compose.runtime.Composable
+
+        private val LightColorScheme = lightColorScheme(
+            primary = Color(0x${Integer.toHexString(colors["Primary"]?.toArgb() ?: 0xFF6200EE.toInt())})
+        )
+
+        @Composable
+        fun AppTheme(content: @Composable () -> Unit) {
+            MaterialTheme(colorScheme = LightColorScheme, content = content)
+        }
+    """.trimIndent()
+}
+
+fun generateComposeTypeKt(displayFontFamily: String = "FontFamily.Default", bodyFontFamily: String = "FontFamily.Default"): String {
+    return """
+        package com.example.ui.theme
+        import androidx.compose.material3.Typography
+        import androidx.compose.ui.text.TextStyle
+        import androidx.compose.ui.text.font.FontFamily
+        import androidx.compose.ui.text.font.FontWeight
+        import androidx.compose.ui.unit.sp
+
+        val Typography = Typography(
+            displayLarge = TextStyle(
+                fontFamily = $displayFontFamily,
+                fontWeight = FontWeight.Normal,
+                fontSize = 57.sp,
+                lineHeight = 64.sp,
+                letterSpacing = (-0.25).sp
+            ),
+            bodyLarge = TextStyle(
+                fontFamily = $bodyFontFamily,
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp,
+                lineHeight = 24.sp,
+                letterSpacing = 0.5.sp
+            ),
+            labelSmall = TextStyle(
+                fontFamily = $bodyFontFamily,
+                fontWeight = FontWeight.Medium,
+                fontSize = 11.sp,
+                lineHeight = 16.sp,
+                letterSpacing = 0.5.sp
+            )
+        )
+    """.trimIndent()
+}
+
+fun generateAndroidColorsXml(colors: Map<String, Color>): String {
+    val sb = StringBuilder("<resources>\n")
+    colors.forEach { (name, color) ->
+        sb.append("    <color name=\"${name.lowercase()}\">${colorToArgbHex(color)}</color>\n")
+    }
+    sb.append("</resources>")
+    return sb.toString()
+}
+
+fun generateAndroidThemeXml(): String = "<resources><style name=\"Theme.App\" parent=\"Theme.Material3.DayNight\" /></resources>"
+fun generateAndroidTypeXml(): String = "<resources></resources>"
+fun generateWebCss(colors: Map<String, Color>): String {
+    val sb = StringBuilder(":root {\n")
+    colors.forEach { (name, color) ->
+        sb.append("  --color-${name.lowercase()}: ${colorToArgbHex(color)};\n")
+    }
+    sb.append("}")
+    return sb.toString()
+}
+
+fun generateThemeJson(colors: Map<String, Color>): String {
+    val sb = StringBuilder("{\n  \"colors\": {\n")
+    val entries = colors.entries.toList()
+    entries.forEachIndexed { index, entry ->
+        sb.append("    \"${entry.key}\": \"${colorToArgbHex(entry.value)}\"${if (index < entries.size - 1) "," else ""}\n")
+    }
+    sb.append("  }\n}")
+    return sb.toString()
+}
+
+// --- Export & Archivierung ---
+
+fun createZip(files: Map<String, String>, outputFile: File) {
+    ZipOutputStream(FileOutputStream(outputFile)).use { zip ->
+        files.forEach { (name, content) ->
+            zip.putNextEntry(ZipEntry(name))
+            zip.write(content.toByteArray())
+            zip.closeEntry()
+        }
+    }
+}
+
+private fun exportTheme(context: Context, colors: Map<String, Color>, outputFile: File) {
+    val files = mutableMapOf<String, String>()
+    files["kotlin/Color.kt"] = generateComposeColorKt(colors)
+    files["kotlin/Theme.kt"] = generateComposeThemeKt(colors)
+    files["kotlin/Type.kt"] = generateComposeTypeKt()
+    files["xml/colors.xml"] = generateAndroidColorsXml(colors)
+    files["xml/themes.xml"] = generateAndroidThemeXml()
+    files["xml/dimens.xml"] = generateAndroidTypeXml()
+    files["web/theme.css"] = generateWebCss(colors)
+    files["theme.json"] = generateThemeJson(colors)
+    createZip(files, outputFile)
+}
+
+// --- Haupt-UI ---
+
+@Composable
+fun ThemeBuilderContent(
+    uiState: MainUiState,
+    onColorExtracted: (Color) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var primaryColor by remember { mutableStateOf(Color(0xFF6200EE)) }
+    var secondaryColor by remember { mutableStateOf(Color(0xFF03DAC6)) }
+    
+    // Launcher für Bildauswahl zur Farbaextraktion
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            scope.launch {
+                val extractedColor: Color = extractColorFromUri(context, it)
+                primaryColor = extractedColor
+                onColorExtracted(extractedColor)
+                Toast.makeText(context, "Farbe extrahiert!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .verticalScroll(scrollState),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text("Material 3 Theme Designer", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text("Theme Basis", fontWeight = FontWeight.SemiBold)
+                Spacer(modifier = Modifier.height(12.dp))
+                
+                ColorRow("Primary", primaryColor) { primaryColor = it }
+                ColorRow("Secondary", secondaryColor) { secondaryColor = it }
+                
+                Button(
+                    onClick = { launcher.launch("image/*") },
+                    modifier = Modifier.padding(top = 8.dp)
+                ) {
+                    Icon(Icons.Default.Build, null)
+                    Spacer(Modifier.width(8.dp))
+                    Text("Aus Bild extrahieren")
+                }
+            }
+        }
+
+        // Export Bereich
+        Button(
+            onClick = {
+                scope.launch(Dispatchers.IO) {
+                    val exportFile = File(context.cacheDir, "ThemeBundle.zip")
+                    exportTheme(context, mapOf("Primary" to primaryColor, "Secondary" to secondaryColor), exportFile)
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Export erfolgreich!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(Icons.Default.Share, null)
+            Spacer(Modifier.width(8.dp))
+            Text("In Zip exportieren")
+        }
+
+        // Preview der gewählten Farben
+        Text("Vorschau", fontWeight = FontWeight.Bold)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Box(Modifier.size(60.dp).clip(CircleShape).background(primaryColor))
+            Box(Modifier.size(60.dp).clip(CircleShape).background(secondaryColor))
+        }
+    }
+}
+
+@Composable
+fun ColorRow(label: String, color: Color, onColorChange: (Color) -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+    ) {
+        Box(Modifier.size(32.dp).clip(RoundedCornerShape(4.dp)).background(color).border(1.dp, Color.Gray, RoundedCornerShape(4.dp)))
+        Spacer(Modifier.width(12.dp))
+        Text(label, Modifier.weight(1f))
+        Text(colorToArgbHex(color), fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace, fontSize = 12.sp)
+    }
+}

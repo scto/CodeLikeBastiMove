@@ -6,8 +6,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -137,18 +136,6 @@ fun ThemeBuilderContent(
     var showImagePicker by remember { mutableStateOf(false) }    
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     
-    // Image Picker Implementation
-    val imagePickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        if (uri != null) {
-            imageUri = uri
-            extractColorFromUri(context, uri) { extractedColor ->
-                themeColors = themeColors.copy(primary = extractedColor)
-            }
-        }
-    }
-    
     var displayFont by remember { mutableStateOf("-- System Default --") }
     var bodyFont by remember { mutableStateOf("-- System Default --") }
     
@@ -266,7 +253,6 @@ fun ThemeBuilderContent(
                     item {
                         SeedColorRow(
                             themeColors = themeColors,
-                            selectedImageUri = imageUri,
                             onColorSelected = { color ->
                                 themeColors = themeColors.copy(primary = color)
                             },
@@ -274,33 +260,11 @@ fun ThemeBuilderContent(
                                 editingColorName = "Primary"
                                 editingColor = themeColors.primary
                                 showColorPicker = true
-                            },
-                            onPickImage = {
-                                imagePickerLauncher.launch("image/*")
                             }
                         )
                     }
                 }
             } else {
-                // Edit Tab content
-                item {
-                    SeedColorRow(
-                        themeColors = themeColors,
-                        selectedImageUri = imageUri,
-                        onColorSelected = { color ->
-                            themeColors = themeColors.copy(primary = color)
-                        },
-                        onPickColor = {
-                            editingColorName = "Primary"
-                            editingColor = themeColors.primary
-                            showColorPicker = true
-                        },
-                        onPickImage = {
-                            imagePickerLauncher.launch("image/*")
-                        }
-                    )
-                }
-
                 item {
                     FontSelectionSection(
                         displayFont = displayFont,
@@ -1331,18 +1295,13 @@ private fun ThemeNameCard(
 @Composable
 private fun SeedColorRow(
     themeColors: ThemeColors,
-    selectedImageUri: Uri?,
     onColorSelected: (Color) -> Unit,
     onPickColor: () -> Unit,
-    onPickImage: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val seedColors = listOf(
-        Color(0xFFE8B896),
-        Color(0xFFD4A8A8),
-        Color(0xFFC4C4A8),
-        Color(0xFFE8A8A8),
-        Color(0xFFA8C4D4)
+        Color(0xFFE8B896), Color(0xFFD4A8A8), Color(0xFFC4C4A8),
+        Color(0xFFE8A8A8), Color(0xFFA8C4D4)
     )
     
     Card(
@@ -1359,6 +1318,21 @@ private fun SeedColorRow(
             verticalAlignment = Alignment.CenterVertically
         ) {
             seedColors.forEach { color ->
+                Box(
+                    modifier = Modifier
+                        .size(44.dp)
+                        .clip(CircleShape)
+                        .background(color)
+                        .border(
+                            width = if (color == themeColors.primary) 3.dp else 1.dp,
+                            color = if (color == themeColors.primary) MaterialTheme.colorScheme.primary 
+                                   else MaterialTheme.colorScheme.outline,
+                            shape = CircleShape
+                        )
+                        .clickable { onColorSelected(color) }
+                )
+            }
+            
             Box(
                 modifier = Modifier
                     .size(44.dp)
@@ -1375,32 +1349,6 @@ private fun SeedColorRow(
                     modifier = Modifier.size(20.dp)
                 )
             }
-
-            Box(
-                modifier = Modifier
-                    .size(44.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape)
-                    .clickable(onClick = onPickImage),
-                contentAlignment = Alignment.Center
-            ) {
-                if (selectedImageUri != null) {
-                    AsyncImage(
-                        model = selectedImageUri,
-                        contentDescription = "Selected Image",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Default.AddPhotoAlternate,
-                        contentDescription = "Pick image",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
-            }
         }
     }
 }
@@ -1409,11 +1357,7 @@ private fun SeedColorRow(
  * Extracts a representative color from the center of the image to simulate dynamic color extraction
  * without heavy dependencies.
  */
-fun extractColorFromUri(
-    context: Context,
-    uri: Uri,
-    onColorExtracted: (Color) -> Unit
-) {
+fun extractColorFromUri(context: Context, uri: Uri, onColorExtracted: (Color) -> Unit) {
     try {
         val inputStream = context.contentResolver.openInputStream(uri)
         val bitmap = BitmapFactory.decodeStream(inputStream)
@@ -1432,7 +1376,6 @@ fun extractColorFromUri(
     }
 }
 
-
 private fun exportTheme(
     context: Context,
     themeName: String,
@@ -1445,30 +1388,16 @@ private fun exportTheme(
         val cacheDir = context.cacheDir
         val themeDir = File(cacheDir, "theme_export")
         themeDir.mkdirs()
-        val themeUiDir = File(themeDir, "ui/theme")
-        themeUiDir.mkdirs()
         
-        // 2. Read Readme from Assets
-        var readmeContent = "Material Theme Readme"
-        try {
-            // Try to read from assets "README.md"
-            context.assets.open("README.md").use { stream ->
-                    readmeContent = stream.bufferedReader().use { it.readText() }
-            }
-        } catch (e: Exception) {
-            readmeContent = "# Readme not found\nPlease refer to Material Design 3 documentation."
-        }
-
         when (format) {
             "compose" -> {
                 val colorKt = generateComposeColorKt(themeName, colors)
                 val themeKt = generateComposeThemeKt(themeName)
                 val typeKt = generateComposeTypeKt(displayFont, bodyFont)
                 
-                File(themeDir, "README.md").writeText(readmeContent)
-                File(themeUiDir, "Color.kt").writeText(colorKt)
-                File(themeUiDir, "Theme.kt").writeText(themeKt)
-                File(themeUiDir, "Type.kt").writeText(typeKt)
+                File(themeDir, "Color.kt").writeText(colorKt)
+                File(themeDir, "Theme.kt").writeText(themeKt)
+                File(themeDir, "Type.kt").writeText(typeKt)
             }
             "android" -> {
                 val colorsXml = generateAndroidColorsXml(colors)
