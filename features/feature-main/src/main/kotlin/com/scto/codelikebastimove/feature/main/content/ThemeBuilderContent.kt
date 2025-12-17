@@ -282,6 +282,25 @@ fun ThemeBuilderContent(
                     }
                 }
             } else {
+                // Edit Tab content
+                item {
+                    SeedColorRow(
+                        themeColors = themeColors,
+                        selectedImageUri = imageUri,
+                        onColorSelected = { color ->
+                            themeColors = themeColors.copy(primary = color)
+                        },
+                        onPickColor = {
+                            editingColorName = "Primary"
+                            editingColor = themeColors.primary
+                            showColorPicker = true
+                        },
+                        onPickImage = {
+                            imagePickerLauncher.launch("image/*")
+                        }
+                    )
+                }
+
                 item {
                     FontSelectionSection(
                         displayFont = displayFont,
@@ -1319,8 +1338,11 @@ private fun SeedColorRow(
     modifier: Modifier = Modifier
 ) {
     val seedColors = listOf(
-        Color(0xFFE8B896), Color(0xFFD4A8A8), Color(0xFFC4C4A8),
-        Color(0xFFE8A8A8), Color(0xFFA8C4D4)
+        Color(0xFFE8B896),
+        Color(0xFFD4A8A8),
+        Color(0xFFC4C4A8),
+        Color(0xFFE8A8A8),
+        Color(0xFFA8C4D4)
     )
     
     Card(
@@ -1337,21 +1359,6 @@ private fun SeedColorRow(
             verticalAlignment = Alignment.CenterVertically
         ) {
             seedColors.forEach { color ->
-                Box(
-                    modifier = Modifier
-                        .size(44.dp)
-                        .clip(CircleShape)
-                        .background(color)
-                        .border(
-                            width = if (color == themeColors.primary) 3.dp else 1.dp,
-                            color = if (color == themeColors.primary) MaterialTheme.colorScheme.primary 
-                                   else MaterialTheme.colorScheme.outline,
-                            shape = CircleShape
-                        )
-                        .clickable { onColorSelected(color) }
-                )
-            }
-            
             Box(
                 modifier = Modifier
                     .size(44.dp)
@@ -1402,7 +1409,11 @@ private fun SeedColorRow(
  * Extracts a representative color from the center of the image to simulate dynamic color extraction
  * without heavy dependencies.
  */
-fun extractColorFromUri(context: Context, uri: Uri, onColorExtracted: (Color) -> Unit) {
+fun extractColorFromUri(
+    context: Context,
+    uri: Uri,
+    onColorExtracted: (Color) -> Unit
+) {
     try {
         val inputStream = context.contentResolver.openInputStream(uri)
         val bitmap = BitmapFactory.decodeStream(inputStream)
@@ -1420,6 +1431,7 @@ fun extractColorFromUri(context: Context, uri: Uri, onColorExtracted: (Color) ->
         e.printStackTrace()
     }
 }
+
 
 private fun exportTheme(
     context: Context,
