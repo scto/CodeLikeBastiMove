@@ -1,145 +1,118 @@
 package com.scto.codelikebastimove.feature.main.components
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.PhotoCamera
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.AddPhotoAlternate
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import coil.compose.rememberAsyncImagePainter
 
 /**
- * Ein moderner Image Picker, der den Android Photo Picker nutzt.
- * Diese Implementierung lädt das Bild asynchron in einem IO-Thread,
- * um Ruckler in der UI zu vermeiden (ohne Coil).
+ * Ein smarter Image Picker, der die Material3 Card-Ästhetik nutzt.
+ * * @param selectedImageUri Das aktuell ausgewählte Bild (Uri).
+ * @param onImageSelected Callback, wenn ein neues Bild ausgewählt wurde.
+ * @param modifier Modifier für das Layout.
  */
 @Composable
 fun SensibleImagePicker(
+    selectedImageUri: Uri?,
     onImageSelected: (Uri?) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
-    var selectedUri by remember { mutableStateOf<Uri?>(null) }
-    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
-    var isLoading by remember { mutableStateOf(false) }
-
-    // Launcher für den offiziellen Android Photo Picker
-    val pickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia()
-    ) { uri ->
-        selectedUri = uri
+    // Launcher für die Bildauswahl aus dem System
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
         onImageSelected(uri)
     }
 
-    // Effekt zum asynchronen Laden des Bitmaps, wenn sich die URI ändert
-    LaunchedEffect(selectedUri) {
-        selectedUri?.let { uri ->
-            isLoading = true
-            // Wechsel in den IO-Thread zum Laden der Datei
-            val loadedBitmap = withContext(Dispatchers.IO) {
-                try {
-                    context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                        BitmapFactory.decodeStream(inputStream)
-                    }
-                } catch (e: Exception) {
-                    null
-                }
-            }
-            bitmap = loadedBitmap
-            isLoading = false
-        }
-    }
+    Column(modifier = modifier) {
+        Text(
+            text = "Hintergrundbild",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
 
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box(
+        Card(
             modifier = Modifier
-                .size(150.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .clickable {
-                    // Startet den Picker (nur Bilder)
-                    pickerLauncher.launch(
-                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                    )
-                },
-            contentAlignment = Alignment.Center
+                .fillMaxWidth()
+                .height(200.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .clickable { launcher.launch("image/*") },
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            )
         ) {
-            if (isLoading) {
-                CircularProgressIndicator(modifier = Modifier.size(40.dp))
-            } else if (bitmap != null) {
-                // Natives Compose Image
-                Image(
-                    bitmap = bitmap!!.asImageBitmap(),
-                    contentDescription = "Profilbild",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-                
-                // Kleiner Edit-Indikator
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Black.copy(alpha = 0.2f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = null,
-                        tint = Color.White
-                    )
-                }
-            } else {
-                // Platzhalter, wenn kein Bild gewählt ist
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        imageVector = Icons.Default.PhotoCamera,
-                        contentDescription = null,
-                        modifier = Modifier.size(48.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Text(
-                        text = "Bild wählen",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
-        }
-        
-        if (selectedUri != null) {
-            TextButton(
-                onClick = { 
-                    selectedUri = null
-                    bitmap = null
-                    onImageSelected(null)
-                },
-                modifier = Modifier.padding(top = 8.dp)
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
-                Text("Bild entfernen", color = MaterialTheme.colorScheme.error)
+                if (selectedImageUri != null) {
+                    // Anzeige des ausgewählten Bildes mit Coil
+                    Image(
+                        painter = rememberAsyncImagePainter(selectedImageUri),
+                        contentDescription = "Theme Hintergrund",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                    
+                    // Button zum Entfernen oben rechts
+                    IconButton(
+                        onClick = { onImageSelected(null) },
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Bild entfernen",
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    }
+                } else {
+                    // Platzhalter, wenn kein Bild gewählt ist
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.AddPhotoAlternate,
+                            contentDescription = null,
+                            modifier = Modifier.size(48.dp),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Bild wählen",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
             }
         }
     }

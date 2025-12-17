@@ -2,11 +2,8 @@ package com.scto.codelikebastimove.feature.main.content
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -37,8 +34,6 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ColorLens
-import androidx.compose.material.icons.filled.AddPhotoAlternate
-import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.FormatSize
 import androidx.compose.material.icons.filled.MoreVert
@@ -81,7 +76,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -90,16 +84,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
-
-import com.scto.codelikebastimove.feature.main.MainViewModel
-
-import com.scto.codelikebastimove.feature.main.components.SensibleImagePicker
-
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-
-import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.util.zip.ZipEntry
@@ -134,14 +118,9 @@ fun ThemeBuilderContent(
     var showColorPicker by remember { mutableStateOf(false) }
     var editingColorName by remember { mutableStateOf("") }
     var editingColor by remember { mutableStateOf(Color.White) }
-
-    var showImagePicker by remember { mutableStateOf(false) }    
-    // Zustand für das ausgewählte Vorschaubild
-    var selectedPreviewUri by remember { mutableStateOf<Uri?>(null) }
     
     var displayFont by remember { mutableStateOf("-- System Default --") }
     var bodyFont by remember { mutableStateOf("-- System Default --") }
-    
     var themeName by remember { mutableStateOf("material-theme") }
     
     var dynamicColorEnabled by remember { mutableStateOf(false) }
@@ -244,45 +223,6 @@ fun ThemeBuilderContent(
                     item {
                         TonalPaletteSection(themeColors)
                     }
-                } if (selectedTab = 2) {
-                    item {
-                        Text(
-                            text = "Vorschau & Farbschema",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-
-                    // Integration des SensibleImagePicker anstelle des statischen Bildes
-                    item {
-                        Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = MaterialTheme.shapes.large,
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
-                            )
-                        ) {
-                            Column(
-                                modifier = Modifier.padding(16.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(
-                                    text = "Hintergrundbild für UI-Vorschau",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    modifier = Modifier.padding(bottom = 12.dp)
-                                )
-                        
-                                // Hier wird der Picker aufgerufen
-                                SensibleImagePicker(
-                                    onImageSelected = { uri ->
-                                        selectedPreviewUri = uri
-                                        // Hier könnte man die URI auch an das ViewModel weiterreichen
-                                    }
-                                )
-                            }
-                        }
-                    }
-            
                 } else {
                     item {
                         ThemeNameCard(
@@ -1392,29 +1332,6 @@ private fun SeedColorRow(
                 )
             }
         }
-    }
-}
-
-/**
- * Extracts a representative color from the center of the image to simulate dynamic color extraction
- * without heavy dependencies.
- */
-fun extractColorFromUri(context: Context, uri: Uri, onColorExtracted: (Color) -> Unit) {
-    try {
-        val inputStream = context.contentResolver.openInputStream(uri)
-        val bitmap = BitmapFactory.decodeStream(inputStream)
-        inputStream?.close()
-
-        if (bitmap != null) {
-            // Simple logic: Take the center pixel
-            // Ideally use androidx.palette:palette here
-            val centerX = bitmap.width / 2
-            val centerY = bitmap.height / 2
-            val pixel = bitmap.getPixel(centerX, centerY)
-            onColorExtracted(Color(pixel))
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
     }
 }
 
