@@ -25,7 +25,8 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("api", libs.androidx.core.ktx)
                 add("api", libs.coroutines.android)
                 
-                add("api", libs.coil.compose)                
+                add("api", libs.coil)
+                add("api", libs.coil.compose)
                 add("api", platform(libs.compose.bom))
                 add("api", libs.bundles.compose)
                 add("api", libs.bundles.lifecycle)
