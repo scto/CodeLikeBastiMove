@@ -91,7 +91,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 
-import coil.compose.AsyncImage
+import com.scto.codelikebastimove.feature.main.MainViewModel
+
+import com.scto.codelikebastimove.feature.main.components.SensibleImagePicker
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -134,7 +136,8 @@ fun ThemeBuilderContent(
     var editingColor by remember { mutableStateOf(Color.White) }
 
     var showImagePicker by remember { mutableStateOf(false) }    
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    // Zustand für das ausgewählte Vorschaubild
+    var selectedPreviewUri by remember { mutableStateOf<Uri?>(null) }
     
     var displayFont by remember { mutableStateOf("-- System Default --") }
     var bodyFont by remember { mutableStateOf("-- System Default --") }
@@ -241,6 +244,45 @@ fun ThemeBuilderContent(
                     item {
                         TonalPaletteSection(themeColors)
                     }
+                } if (selectedTab = 2) {
+                    item {
+                        Text(
+                            text = "Vorschau & Farbschema",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    // Integration des SensibleImagePicker anstelle des statischen Bildes
+                    item {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = MaterialTheme.shapes.large,
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                            )
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(16.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "Hintergrundbild für UI-Vorschau",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    modifier = Modifier.padding(bottom = 12.dp)
+                                )
+                        
+                                // Hier wird der Picker aufgerufen
+                                SensibleImagePicker(
+                                    onImageSelected = { uri ->
+                                        selectedPreviewUri = uri
+                                        // Hier könnte man die URI auch an das ViewModel weiterreichen
+                                    }
+                                )
+                            }
+                        }
+                    }
+            
                 } else {
                     item {
                         ThemeNameCard(
