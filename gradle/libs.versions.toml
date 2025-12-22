@@ -10,7 +10,7 @@ sdk-compile = "36"
 #android-gradle = "8.13.2"
 android-gradle = "8.11.1"
 kotlin = "2.2.21"
-ksp = "2.3.3"
+ksp = "2.3.4"
 
 kotlin-coroutines = "1.10.2"
 kotlin-serialization = "1.4.1"
