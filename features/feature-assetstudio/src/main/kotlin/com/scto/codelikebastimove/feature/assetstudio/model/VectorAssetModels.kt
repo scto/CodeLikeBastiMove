@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.feature.main.assetstudio.model
+package com.scto.codelikebastimove.feature.assetstudio.model
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector

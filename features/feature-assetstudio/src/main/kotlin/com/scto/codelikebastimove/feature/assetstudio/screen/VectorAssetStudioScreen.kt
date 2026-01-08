@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.feature.main.assetstudio
+package com.scto.codelikebastimove.feature.assetstudio.screen
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -45,7 +45,6 @@ import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SelectAll
 import androidx.compose.material.icons.filled.ViewList
@@ -69,13 +68,11 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Slider
-import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
@@ -83,7 +80,6 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -105,9 +101,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
-import com.scto.codelikebastimove.feature.main.assetstudio.model.ExportFormat
-import com.scto.codelikebastimove.feature.main.assetstudio.model.IconProvider
-import com.scto.codelikebastimove.feature.main.assetstudio.model.VectorAsset
+import com.scto.codelikebastimove.feature.assetstudio.AssetStudioTab
+import com.scto.codelikebastimove.feature.assetstudio.VectorAssetStudioState
+import com.scto.codelikebastimove.feature.assetstudio.VectorAssetStudioViewModel
+import com.scto.codelikebastimove.feature.assetstudio.ViewMode
+import com.scto.codelikebastimove.feature.assetstudio.model.ExportConfig
+import com.scto.codelikebastimove.feature.assetstudio.model.ExportFormat
+import com.scto.codelikebastimove.feature.assetstudio.model.VectorAsset
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -1034,7 +1034,7 @@ private fun ConvertTab(
 
 @Composable
 private fun ExportDialog(
-    exportConfig: com.scto.codelikebastimove.feature.main.assetstudio.model.ExportConfig,
+    exportConfig: ExportConfig,
     selectedCount: Int,
     onFormatChange: (ExportFormat) -> Unit,
     onSizeChange: (Int) -> Unit,

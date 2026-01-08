@@ -1,19 +1,18 @@
-package com.scto.codelikebastimove.feature.main.assetstudio.repository
+package com.scto.codelikebastimove.feature.assetstudio.repository
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.scto.codelikebastimove.feature.main.assetstudio.model.IconCategory
-import com.scto.codelikebastimove.feature.main.assetstudio.model.IconProvider
-import com.scto.codelikebastimove.feature.main.assetstudio.model.IconSearchResult
-import com.scto.codelikebastimove.feature.main.assetstudio.model.IconStyle
-import com.scto.codelikebastimove.feature.main.assetstudio.model.VectorAsset
+import com.scto.codelikebastimove.feature.assetstudio.model.IconCategory
+import com.scto.codelikebastimove.feature.assetstudio.model.IconProvider
+import com.scto.codelikebastimove.feature.assetstudio.model.IconSearchResult
+import com.scto.codelikebastimove.feature.assetstudio.model.IconStyle
+import com.scto.codelikebastimove.feature.assetstudio.model.VectorAsset
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import java.util.UUID
 
 interface IconRepositoryProvider {
     val provider: IconProvider

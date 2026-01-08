@@ -15,7 +15,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 import com.scto.codelikebastimove.feature.main.screens.AIAgentScreen
-import com.scto.codelikebastimove.feature.main.screens.AssetStudioScreen
+import com.scto.codelikebastimove.feature.assetstudio.screen.AssetStudioScreen
 import com.scto.codelikebastimove.feature.main.screens.BuildVariantsScreen
 import com.scto.codelikebastimove.feature.main.screens.CloneRepositoryScreen
 import com.scto.codelikebastimove.feature.main.screens.ConsoleScreen
@@ -26,7 +26,7 @@ import com.scto.codelikebastimove.feature.main.screens.IDEWorkspaceScreen
 import com.scto.codelikebastimove.feature.main.screens.OpenProjectScreen
 import com.scto.codelikebastimove.feature.submodulemaker.SubModuleMakerScreen
 import com.scto.codelikebastimove.feature.designer.ui.screen.DesignerScreen
-import com.scto.codelikebastimove.feature.main.assetstudio.VectorAssetStudioScreen
+import com.scto.codelikebastimove.feature.assetstudio.screen.VectorAssetStudioScreen
 
 @Composable
 fun MainScreen(

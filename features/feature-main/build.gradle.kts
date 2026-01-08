@@ -17,6 +17,7 @@ dependencies {
     api(project(":features:feature-treeview"))
     api(project(":features:feature-designer"))
     api(project(":features:feature-explorer"))
+    api(project(":features:feature-assetstudio"))
     api(project(":features:feature-themebuilder"))
     api(project(":features:feature-submodulemaker"))
     //api(project(":features:feature-slidingpanel"))

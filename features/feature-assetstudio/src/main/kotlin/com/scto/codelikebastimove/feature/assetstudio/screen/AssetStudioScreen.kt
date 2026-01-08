@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.feature.main.screens
+package com.scto.codelikebastimove.feature.assetstudio.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

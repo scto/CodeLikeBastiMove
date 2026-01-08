@@ -1,9 +1,9 @@
-package com.scto.codelikebastimove.feature.main.assetstudio.converter
+package com.scto.codelikebastimove.feature.assetstudio.converter
 
 import androidx.compose.ui.graphics.Color
-import com.scto.codelikebastimove.feature.main.assetstudio.model.AVDDocument
-import com.scto.codelikebastimove.feature.main.assetstudio.model.VectorGroup
-import com.scto.codelikebastimove.feature.main.assetstudio.model.VectorPath
+import com.scto.codelikebastimove.feature.assetstudio.model.AVDDocument
+import com.scto.codelikebastimove.feature.assetstudio.model.VectorGroup
+import com.scto.codelikebastimove.feature.assetstudio.model.VectorPath
 import java.util.UUID
 
 class SvgToAvdConverter {
