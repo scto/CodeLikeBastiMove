@@ -34,6 +34,14 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 
 **System Design Choices:**
 - **Modular Architecture:** Core modules (`core-ui`, `core-resources`, `core-datastore`, `core-logger`, `templates-api`, `templates-impl`, `actions-api`, `actions-impl`, `plugin-api`, `plugin-impl`) and distinct feature modules for clear separation of concerns and maintainability.
+- **Git Module (`features/git`):** Comprehensive Git version control integration for the IDE, organized into:
+  - `api/` - GitOperations interface defining all Git operations (status, stage, commit, branch, merge, stash, remote, tag, diff, blame)
+  - `model/` - Data classes (GitRepository, GitBranch, GitCommit, GitFileChange, GitStatus, GitStash, GitRemote, GitTag, GitDiff, etc.)
+  - `repository/` - GitCommandExecutor for git binary interaction and DefaultGitRepository implementation with full Git workflow support
+  - `viewmodel/` - GitViewModel for reactive state management with StateFlow
+  - `ui/screens/` - GitScreen main composable with tabbed interface
+  - `ui/components/` - Tab components (ChangesTab, BranchesTab, CommitsTab, StashTab, RemotesTab, TagsTab) with full CRUD operations
+  - **Note:** Requires bundled git binary (via Termux packages or AndroidIDE bootstrap) for operation; includes availability detection and graceful error handling
 - **Theme Builder Module (`feature-themebuilder`):** Dedicated feature module for Material Theme Builder functionality, organized into:
   - `model/` - Data classes (ThemeColors)
   - `util/` - Color utilities, presets, and helper functions

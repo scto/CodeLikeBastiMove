@@ -44,10 +44,10 @@ import com.scto.codelikebastimove.feature.main.components.ContentNavigationRail
 import com.scto.codelikebastimove.feature.main.content.AssetsStudioContent
 import com.scto.codelikebastimove.feature.main.content.EditorContent
 import com.scto.codelikebastimove.feature.main.content.FileTreeDrawerContent
-import com.scto.codelikebastimove.feature.main.content.GitContent
 import com.scto.codelikebastimove.feature.main.content.LayoutDesignerContent
 import com.scto.codelikebastimove.feature.main.content.ProjectContent
 import com.scto.codelikebastimove.feature.themebuilder.ThemeBuilderContent
+import com.scto.codelikebastimove.features.git.ui.screens.GitScreen
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 import kotlinx.coroutines.launch
 
@@ -138,7 +138,7 @@ fun IDEWorkspaceScreen(
                         when (contentType) {
                             MainContentType.EDITOR -> EditorContent(viewModel = viewModel)
                             MainContentType.PROJECT -> ProjectContent(viewModel = viewModel)
-                            MainContentType.GIT -> GitContent()
+                            MainContentType.GIT -> GitScreen(projectPath = projectPath)
                             MainContentType.ASSETS_STUDIO -> AssetsStudioContent()
                             MainContentType.THEME_BUILDER -> ThemeBuilderContent()
                             MainContentType.LAYOUT_DESIGNER -> LayoutDesignerContent()
