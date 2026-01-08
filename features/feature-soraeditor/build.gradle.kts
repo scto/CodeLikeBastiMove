@@ -1,6 +1,6 @@
 plugins {
     id("codelikebastimove.android.library")
-    id("codelikebastimove.android.compose")
+    id("codelikebastimove.android.library.compose")
 }
 
 android {
