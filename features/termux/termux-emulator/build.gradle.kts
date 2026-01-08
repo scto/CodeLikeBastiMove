@@ -7,5 +7,5 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.annotation)
+    implementation("androidx.annotation:annotation:1.7.1")
 }

@@ -16,7 +16,7 @@ dependencies {
     implementation(project(":core:core-resources"))
     implementation(project(":core:core-logger"))
     
-    implementation(libs.androidx.annotation)
+    implementation("androidx.annotation:annotation:1.7.1")
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
+    implementation("androidx.appcompat:appcompat:1.7.0")
 }

@@ -14,7 +14,7 @@ dependencies {
     api(project(":features:feature-settings"))
     api(project(":features:feature-treeview"))
     api(project(":features:feature-soraeditor"))
-    api(project(":features:feature-git"))
+    api(project(":features:git"))
     api(project(":features:feature-onboarding"))
     api(project(":features:feature-main"))
     api(project(":features:feature-designer"))

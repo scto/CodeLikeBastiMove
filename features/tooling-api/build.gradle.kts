@@ -1,5 +1,9 @@
 plugins {
-    id("codelikebastimove.kotlin.library")
+    id("codelikebastimove.android.library")
+}
+
+android {
+    namespace = "com.scto.codelikebastimove.features.tooling.api"
 }
 
 dependencies {
