@@ -15,8 +15,9 @@ import com.scto.codelikebastimove.core.templates.api.ProjectLanguage
 import com.scto.codelikebastimove.core.templates.api.ProjectManager
 import com.scto.codelikebastimove.core.templates.impl.ProjectManagerImpl
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
-import com.scto.codelikebastimove.feature.main.screens.ModuleType
-import com.scto.codelikebastimove.feature.main.screens.ProgrammingLanguage
+import com.scto.codelikebastimove.feature.submodulemaker.model.ModuleConfig
+import com.scto.codelikebastimove.feature.submodulemaker.model.ModuleType
+import com.scto.codelikebastimove.feature.submodulemaker.model.ProgrammingLanguage
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -387,17 +388,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * Erstellt ein Sub-Modul basierend auf der Gradle-Notation (z.B. :core:ui).
-     * @param modulePath Der Pfad im Gradle-Format (z.B. :features:login)
-     * @param packageName Der Paketname für das neue Modul (optional)
-     * @param language Die Programmiersprache (Kotlin/Java)
-     * @param type Der Modultyp (Library, Feature, Core) für die build.gradle Konfiguration
+     * @param config Die Konfiguration für das neue Modul
      */
-    fun createSubModule(
-        modulePath: String,
-        packageName: String,
-        language: ProgrammingLanguage,
-        type: ModuleType
-    ) {
+    fun createSubModule(config: ModuleConfig) {
+        val modulePath = config.gradlePath
+        val packageName = config.packageName
+        val language = config.language
+        val type = config.moduleType
         val currentProjectPath = _uiState.value.projectPath
         if (currentProjectPath.isBlank()) {
             _uiState.update { it.copy(errorMessage = "Kein Projekt geöffnet") }

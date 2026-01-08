@@ -24,7 +24,7 @@ import com.scto.codelikebastimove.feature.main.screens.HomeScreen
 import com.scto.codelikebastimove.feature.main.screens.IDESettingsScreen
 import com.scto.codelikebastimove.feature.main.screens.IDEWorkspaceScreen
 import com.scto.codelikebastimove.feature.main.screens.OpenProjectScreen
-import com.scto.codelikebastimove.feature.main.screens.SubModuleMakerScreen
+import com.scto.codelikebastimove.feature.submodulemaker.SubModuleMakerScreen
 import com.scto.codelikebastimove.feature.designer.ui.screen.DesignerScreen
 import com.scto.codelikebastimove.feature.main.assetstudio.VectorAssetStudioScreen
 
@@ -158,8 +158,8 @@ fun MainScreen(
             MainDestination.SubModuleMaker -> {
                 SubModuleMakerScreen(
                     onBackClick = { viewModel.onBackPressed() },
-                    onCreateModule = { modulePath, packageName, language, type ->
-                        viewModel.createSubModule(modulePath, packageName, language, type)
+                    onCreateModule = { config ->
+                        viewModel.createSubModule(config)
                         viewModel.onNavigate(MainDestination.IDE)
                     }
                 )
