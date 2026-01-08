@@ -33,7 +33,7 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 - **Scoped Storage:** Implemented Android 10+ scoped storage using DocumentFile and Storage Access Framework.
 
 **System Design Choices:**
-- **Modular Architecture:** Core modules (`core-ui`, `core-resources`, `core-datastore`, `core-logger`, `templates-api`, `templates-impl`) and distinct feature modules for clear separation of concerns and maintainability.
+- **Modular Architecture:** Core modules (`core-ui`, `core-resources`, `core-datastore`, `core-logger`, `templates-api`, `templates-impl`, `actions-api`, `actions-impl`, `plugin-api`, `plugin-impl`) and distinct feature modules for clear separation of concerns and maintainability.
 - **Theme Builder Module (`feature-themebuilder`):** Dedicated feature module for Material Theme Builder functionality, organized into:
   - `model/` - Data classes (ThemeColors)
   - `util/` - Color utilities, presets, and helper functions
@@ -56,9 +56,27 @@ The application is an Android mobile application leveraging Jetpack Compose for 
   - `compose/` - SoraEditor Composable and SoraEditorState for Jetpack Compose integration
   - `screen/` - SoraEditorScreen with tab support, status bar, and context menus
   - `viewmodel/` - SoraEditorViewModel for state management
+  - `plugin/` - VS Code/Android Studio-style plugin system:
+    - `theme/` - EditorThemePlugin interface for custom editor themes
+    - `language/` - LanguagePackPlugin for language support (syntax, snippets, completion)
+    - `action/` - EditorActionPlugin for editor actions with keybindings
+    - `contribution/` - EditorPluginManager and contribution system
   - `assets/` - TextMate grammars/themes and TreeSitter query files
   - **Supported languages:** Java, Kotlin, XML, Gradle (Groovy & Kotlin DSL), AIDL, C, C++, Makefile, JSON, Log, Properties
   - **Highlighting modes:** TextMate (regex-based), TreeSitter (AST-based), Simple
+- **Action System (`actions-api` and `actions-impl`):** VS Code-style command/action system for event-driven architecture:
+  - `actions-api/` - Pure Kotlin contracts (no Android dependencies):
+    - `action/` - Action, ActionContext, ActionResult, ActionCategory, Keybinding, ActionWhen
+    - `event/` - ActionEvent, ActionEventBus, ActionEventListener for pub/sub event system
+    - `registry/` - ActionRegistry interface, BuiltinActions constants
+    - `keybinding/` - KeybindingService, KeyEvent, ResolvedKeybinding for keyboard shortcuts
+    - `contribution/` - ActionContributor, EditorActionContribution, MenuContribution for plugin contributions
+  - `actions-impl/` - Android implementation layer:
+    - `registry/` - DefaultActionRegistry, DefaultContributorRegistry
+    - `event/` - DefaultActionEventBus with SharedFlow-based event distribution
+    - `executor/` - ActionExecutor, ActionInvoker for action execution with cancellation support
+    - `keybinding/` - DefaultKeybindingService, DefaultKeybindingHandler
+    - `integration/` - ActionSystem singleton, PluginActionIntegration for plugin-api bridge
 - **Plugin System (`plugin-api` and `plugin-impl`):** Core modules for Android Studio/VS Code style extensibility, organized into:
   - `plugin-api/` - Pure Kotlin contracts with no Android dependencies:
     - `descriptor/` - PluginDescriptor, PluginState, PluginPermission, PluginCategory

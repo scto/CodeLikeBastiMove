@@ -11,6 +11,8 @@ dependencies {
     implementation(project(":core:core-ui"))
     implementation(project(":core:core-resources"))
     implementation(project(":core:core-logger"))
+    implementation(project(":core:plugin-api"))
+    implementation(project(":core:actions-api"))
     
     implementation(platform("io.github.Rosemoe.sora-editor:bom:0.23.4"))
     implementation("io.github.Rosemoe.sora-editor:editor")

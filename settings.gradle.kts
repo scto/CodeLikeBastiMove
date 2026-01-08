@@ -22,6 +22,8 @@ rootProject.name = "CodeLikeBastiMove"
 
 include(":app")
 
+include(":core:actions-api")
+include(":core:actions-impl")
 include(":core:core-datastore")
 include(":core:core-datastore-proto")
 include(":core:core-logger")
