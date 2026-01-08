@@ -49,3 +49,11 @@ include(":features:feature-soraeditor")
 include(":features:feature-submodulemaker")
 include(":features:feature-themebuilder")
 include(":features:feature-treeview")
+
+include(":features:termux:termux-shared")
+include(":features:termux:termux-emulator")
+include(":features:termux:termux-view")
+include(":features:termux:termux-app")
+
+include(":features:tooling-api")
+include(":features:tooling-impl")

@@ -91,6 +91,34 @@ The application is an Android mobile application leveraging Jetpack Compose for 
     - `registry/` - DefaultExtensionRegistry, DefaultPluginEventBus
     - `security/` - PluginSecurityManager with signature verification, permission management, compatibility checks
     - `storage/` - PluginStorage for persisting enabled plugins and plugin settings
+- **Termux Terminal System (`features/termux/`):** Termux-inspired terminal emulator modules providing full terminal capabilities:
+  - `termux-shared/` - Core shared constants, utilities, shell environment, and logging:
+    - `termux/` - TermuxConstants with package names, paths, actions, and extras
+    - `shell/` - ShellEnvironment, ShellEnvironmentClient, ExecutionCommand
+    - `logger/` - Logger facade with log levels
+  - `termux-emulator/` - Terminal emulation engine (comparable to terminal-emulator from Termux):
+    - `TerminalEmulator` - Core emulator with cursor, colors, buffer management
+    - `TerminalSession` - Session management with I/O handling
+    - `TerminalBuffer` - Screen buffer with scrollback
+    - `TextStyle` - Text styling and color encoding
+  - `termux-view/` - Terminal UI components (comparable to terminal-view from Termux):
+    - `TerminalView` - Custom Android View for terminal rendering
+    - `TerminalColorScheme` - 256-color palette support
+    - `TerminalViewClient` - Input handling interface
+  - `termux-app/` - Terminal application integration:
+    - `TermuxTerminalSession` - Session implementation
+    - `TermuxService` - Session management service
+- **Tooling Bridge (`tooling-api` and `tooling-impl`):** Bridge between Gradle outputs, Termux terminal, and IDE log views:
+  - `tooling-api/` - Pure Kotlin contracts for tooling integration:
+    - `gradle/` - GradleOutputProvider, GradleBuildResult, BuildState, GradleBuildListener
+    - `terminal/` - TerminalBridge, CommandResult, TerminalSessionProvider
+    - `log/` - LogViewProvider, LogEntry, LogLevel, LogFilter, LogExportFormat
+    - `bridge/` - ToolingBridge unifying all output streams, ActiveTool enum, BuildOutputParser
+  - `tooling-impl/` - Android implementation layer:
+    - `bridge/` - DefaultToolingBridge coordinating all providers
+    - `gradle/` - DefaultGradleOutputProvider with error detection and phase tracking
+    - `terminal/` - DefaultTerminalBridge using Termux sessions
+    - `log/` - DefaultLogViewProvider with filtering, search, and export (JSON, CSV, HTML, plain text)
 - **Convention Plugins:** Custom Gradle plugins centralize build logic, SDK versions, and common dependencies across modules.
 - **Centralized Resources:** `core-resources` module for shared strings, dimensions, and Material 3 color palettes.
 - **Centralized Logging:** `core-logger` module provides CLBMLogger facade that wraps android.util.Log with runtime-toggleable logging controlled via Settings and persisted in DataStore. Logging defaults to BuildConfig.LOGGING_DEFAULT_ENABLED (true for debug, false for release builds) and uses a `loggingInitialized` guard to properly seed defaults for both fresh installs and upgrades.
