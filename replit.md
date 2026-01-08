@@ -43,6 +43,11 @@ The application is an Android mobile application leveraging Jetpack Compose for 
   - `model/` - Data classes (ModuleConfig, ProgrammingLanguage, ModuleType)
   - `components/` - Reusable UI components (LanguageSelector, ModuleTypeSelector, ModulePathInput, ComposeToggle, ModulePreviewCard)
   - `generator/` - ModuleGenerator for file creation (build.gradle.kts, AndroidManifest.xml, source directories, settings.gradle.kts updates)
+- **Asset Studio (`feature-assetstudio`):** Dedicated feature module for Vector Asset Studio functionality, organized into:
+  - `model/` - Data classes (VectorAsset, AVDDocument, VectorPath, VectorGroup, ExportConfig, IconProvider)
+  - `converter/` - SvgToAvdConverter for SVG to Android Vector Drawable conversion
+  - `repository/` - IconRepository system with MaterialIconsRepository, FeatherIconsRepository, and IconRepositoryManager
+  - `screen/` - AssetStudioScreen (launcher) and VectorAssetStudioScreen (full editor with Browse, Create, Edit, Convert tabs)
 - **Convention Plugins:** Custom Gradle plugins centralize build logic, SDK versions, and common dependencies across modules.
 - **Centralized Resources:** `core-resources` module for shared strings, dimensions, and Material 3 color palettes.
 - **Centralized Logging:** `core-logger` module provides CLBMLogger facade that wraps android.util.Log with runtime-toggleable logging controlled via Settings and persisted in DataStore. Logging defaults to BuildConfig.LOGGING_DEFAULT_ENABLED (true for debug, false for release builds) and uses a `loggingInitialized` guard to properly seed defaults for both fresh installs and upgrades.
