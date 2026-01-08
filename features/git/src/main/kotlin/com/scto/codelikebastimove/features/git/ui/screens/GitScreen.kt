@@ -1,12 +1,10 @@
 package com.scto.codelikebastimove.features.git.ui.screens
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
@@ -14,17 +12,31 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.scto.codelikebastimove.features.git.model.*
-import com.scto.codelikebastimove.features.git.ui.components.*
-import com.scto.codelikebastimove.features.git.viewmodel.GitTab
 import com.scto.codelikebastimove.features.git.viewmodel.GitViewModel
 import kotlinx.coroutines.flow.collectLatest
+import java.text.SimpleDateFormat
+import java.util.*
 
-@OptIn(ExperimentalMaterial3Api::class)
+enum class GitSection {
+    CHANGES, HISTORY, BRANCHES, REMOTES, SETTINGS
+}
+
+private val GitAccentColor = Color(0xFF8B7355)
+private val GitAccentColorLight = Color(0xFFA89078)
+private val GitCardBackground = Color(0xFF2A2A2A)
+private val GitSurfaceBackground = Color(0xFF1A1A1A)
+private val GitStatusModified = Color(0xFFE59400)
+private val GitStatusUntracked = Color(0xFFE59400)
+private val GitCommitHashColor = Color(0xFF4A9F7A)
+
 @Composable
 fun GitScreen(
     projectPath: String,
@@ -35,12 +47,11 @@ fun GitScreen(
     val status by viewModel.status.collectAsState()
     val branches by viewModel.branches.collectAsState()
     val commits by viewModel.commits.collectAsState()
-    val stashes by viewModel.stashes.collectAsState()
     val remotes by viewModel.remotes.collectAsState()
-    val tags by viewModel.tags.collectAsState()
     val repository by viewModel.currentRepository.collectAsState()
     val isOperationInProgress by viewModel.isOperationInProgress.collectAsState()
     
+    var selectedSection by remember { mutableStateOf(GitSection.CHANGES) }
     val snackbarHostState = remember { SnackbarHostState() }
     
     LaunchedEffect(projectPath) {
@@ -63,252 +74,294 @@ fun GitScreen(
     
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        topBar = {
-            GitTopBar(
-                repository = repository,
-                isLoading = isOperationInProgress || uiState.isLoading,
-                onRefresh = { viewModel.refresh() },
-                onFetch = { viewModel.fetch() },
-                onPull = { viewModel.pull() },
-                onPush = { viewModel.push() }
-            )
-        },
+        containerColor = GitSurfaceBackground,
         modifier = modifier
     ) { padding ->
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            GitTabRow(
-                selectedTab = uiState.selectedTab,
-                onTabSelected = { viewModel.selectTab(it) }
+            GitNavigationRail(
+                selectedSection = selectedSection,
+                onSectionSelected = { selectedSection = it }
             )
             
-            HorizontalDivider()
-            
-            when (uiState.selectedTab) {
-                GitTab.CHANGES -> ChangesTab(
-                    status = status,
-                    commitMessage = uiState.commitMessage,
-                    onCommitMessageChanged = { viewModel.updateCommitMessage(it) },
-                    onStageFile = { viewModel.stageFile(it) },
-                    onUnstageFile = { viewModel.unstageFile(it) },
-                    onStageAll = { viewModel.stageAll() },
-                    onUnstageAll = { viewModel.unstageAll() },
-                    onDiscardChanges = { viewModel.discardChanges(it) },
-                    onCommit = { viewModel.commit(uiState.commitMessage) }
-                )
-                GitTab.BRANCHES -> BranchesTab(
-                    branches = branches,
-                    onCheckout = { viewModel.checkout(it) },
-                    onCreateBranch = { viewModel.createBranch(it) },
-                    onDeleteBranch = { viewModel.deleteBranch(it) },
-                    onMerge = { viewModel.merge(it) }
-                )
-                GitTab.COMMITS -> CommitsTab(
-                    commits = commits,
-                    onRevert = { viewModel.revert(it) },
-                    onCherryPick = { viewModel.cherryPick(it) }
-                )
-                GitTab.STASH -> StashTab(
-                    stashes = stashes,
-                    onStash = { viewModel.stash(it) },
-                    onPop = { viewModel.stashPop(it) },
-                    onApply = { viewModel.stashApply(it) },
-                    onDrop = { viewModel.stashDrop(it) }
-                )
-                GitTab.REMOTES -> RemotesTab(remotes = remotes)
-                GitTab.TAGS -> TagsTab(
-                    tags = tags,
-                    onCreateTag = { name, message -> viewModel.createTag(name, message) },
-                    onDeleteTag = { viewModel.deleteTag(it) }
-                )
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .padding(16.dp)
+            ) {
+                when (selectedSection) {
+                    GitSection.CHANGES -> ChangesContent(
+                        status = status,
+                        commitMessage = uiState.commitMessage,
+                        isLoading = isOperationInProgress,
+                        onRefresh = { viewModel.refresh() },
+                        onStageFile = { viewModel.stageFile(it) },
+                        onUnstageFile = { viewModel.unstageFile(it) },
+                        onStageAll = { viewModel.stageAll() },
+                        onUnstageAll = { viewModel.unstageAll() },
+                        onDiscardFile = { viewModel.discardChanges(it) },
+                        onCommitMessageChanged = { viewModel.updateCommitMessage(it) },
+                        onCommit = { viewModel.commit(uiState.commitMessage) }
+                    )
+                    GitSection.HISTORY -> HistoryContent(
+                        commits = commits,
+                        isLoading = isOperationInProgress,
+                        onRefresh = { viewModel.refresh() }
+                    )
+                    GitSection.BRANCHES -> BranchesContent(
+                        branches = branches,
+                        currentBranch = repository?.currentBranch ?: "main",
+                        isLoading = isOperationInProgress,
+                        onRefresh = { viewModel.refresh() },
+                        onCheckout = { viewModel.checkout(it) },
+                        onDelete = { viewModel.deleteBranch(it) },
+                        onCreateBranch = { viewModel.createBranch(it) }
+                    )
+                    GitSection.REMOTES -> RemotesContent(
+                        remotes = remotes,
+                        isLoading = isOperationInProgress,
+                        onRefresh = { viewModel.refresh() },
+                        onPush = { viewModel.push() },
+                        onPull = { viewModel.pull() },
+                        onFetch = { viewModel.fetch() },
+                        onRemoveRemote = { }
+                    )
+                    GitSection.SETTINGS -> SettingsContent(
+                        repository = repository
+                    )
+                }
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun GitTopBar(
-    repository: GitRepository?,
-    isLoading: Boolean,
-    onRefresh: () -> Unit,
-    onFetch: () -> Unit,
-    onPull: () -> Unit,
-    onPush: () -> Unit
+private fun GitNavigationRail(
+    selectedSection: GitSection,
+    onSectionSelected: (GitSection) -> Unit
 ) {
-    TopAppBar(
-        title = {
-            Column {
-                Text(
-                    text = repository?.name ?: "Git",
-                    style = MaterialTheme.typography.titleMedium
-                )
-                repository?.let {
-                    Text(
-                        text = "${it.currentBranch}${if (it.hasUncommittedChanges) " *" else ""}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
-        },
-        actions = {
-            if (isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(24.dp),
-                    strokeWidth = 2.dp
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-            
-            IconButton(onClick = onRefresh) {
-                Icon(Icons.Default.Refresh, contentDescription = "Refresh")
-            }
-            
-            IconButton(onClick = onFetch) {
-                Icon(Icons.Outlined.CloudDownload, contentDescription = "Fetch")
-            }
-            
-            IconButton(onClick = onPull) {
-                Icon(Icons.Default.Download, contentDescription = "Pull")
-            }
-            
-            IconButton(onClick = onPush) {
-                Icon(Icons.Default.Upload, contentDescription = "Push")
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        )
-    )
-}
-
-@Composable
-private fun GitTabRow(
-    selectedTab: GitTab,
-    onTabSelected: (GitTab) -> Unit
-) {
-    ScrollableTabRow(
-        selectedTabIndex = selectedTab.ordinal,
-        edgePadding = 8.dp,
-        containerColor = MaterialTheme.colorScheme.surfaceContainer
+    Column(
+        modifier = Modifier
+            .width(80.dp)
+            .fillMaxHeight()
+            .background(GitSurfaceBackground)
+            .padding(vertical = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        GitTab.entries.forEach { tab ->
-            Tab(
-                selected = tab == selectedTab,
-                onClick = { onTabSelected(tab) },
-                text = { Text(tab.name.lowercase().replaceFirstChar { it.uppercase() }) },
-                icon = {
-                    Icon(
-                        imageVector = when (tab) {
-                            GitTab.CHANGES -> Icons.Outlined.Edit
-                            GitTab.BRANCHES -> Icons.Outlined.AccountTree
-                            GitTab.COMMITS -> Icons.Outlined.History
-                            GitTab.STASH -> Icons.Outlined.Archive
-                            GitTab.REMOTES -> Icons.Outlined.Cloud
-                            GitTab.TAGS -> Icons.Outlined.LocalOffer
-                        },
-                        contentDescription = null,
-                        modifier = Modifier.size(18.dp)
-                    )
-                }
+        Text(
+            text = "Git client",
+            style = MaterialTheme.typography.labelMedium,
+            color = Color(0xFFE0D4C8),
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+        
+        GitNavItem(
+            icon = Icons.Outlined.SwapVert,
+            label = "Changes",
+            selected = selectedSection == GitSection.CHANGES,
+            onClick = { onSectionSelected(GitSection.CHANGES) }
+        )
+        
+        GitNavItem(
+            icon = Icons.Outlined.History,
+            label = "History",
+            selected = selectedSection == GitSection.HISTORY,
+            onClick = { onSectionSelected(GitSection.HISTORY) }
+        )
+        
+        GitNavItem(
+            icon = Icons.Outlined.CallSplit,
+            label = "Branches",
+            selected = selectedSection == GitSection.BRANCHES,
+            onClick = { onSectionSelected(GitSection.BRANCHES) }
+        )
+        
+        GitNavItem(
+            icon = Icons.Outlined.Wifi,
+            label = "Remotes",
+            selected = selectedSection == GitSection.REMOTES,
+            onClick = { onSectionSelected(GitSection.REMOTES) }
+        )
+        
+        GitNavItem(
+            icon = Icons.Outlined.Settings,
+            label = "Settings",
+            selected = selectedSection == GitSection.SETTINGS,
+            onClick = { onSectionSelected(GitSection.SETTINGS) }
+        )
+    }
+}
+
+@Composable
+private fun GitNavItem(
+    icon: ImageVector,
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    val backgroundColor = if (selected) GitAccentColor.copy(alpha = 0.3f) else Color.Transparent
+    val contentColor = if (selected) Color(0xFFE0D4C8) else Color(0xFF888888)
+    
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(12.dp),
+        color = backgroundColor,
+        modifier = Modifier.padding(horizontal = 8.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(vertical = 8.dp, horizontal = 12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = label,
+                tint = contentColor,
+                modifier = Modifier.size(24.dp)
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelSmall,
+                color = contentColor,
+                fontSize = 10.sp
             )
         }
     }
 }
 
 @Composable
-private fun ChangesTab(
+private fun ChangesContent(
     status: GitStatus?,
     commitMessage: String,
-    onCommitMessageChanged: (String) -> Unit,
+    isLoading: Boolean,
+    onRefresh: () -> Unit,
     onStageFile: (String) -> Unit,
     onUnstageFile: (String) -> Unit,
     onStageAll: () -> Unit,
     onUnstageAll: () -> Unit,
-    onDiscardChanges: (String) -> Unit,
+    onDiscardFile: (String) -> Unit,
+    onCommitMessageChanged: (String) -> Unit,
     onCommit: () -> Unit
 ) {
-    if (status == null) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("No repository loaded")
-        }
-        return
-    }
-    
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
-            CommitSection(
-                message = commitMessage,
-                onMessageChanged = onCommitMessageChanged,
-                onCommit = onCommit,
-                canCommit = status.stagedChanges.isNotEmpty()
+            GitActionCard {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    GitActionButton(
+                        text = "Stage All",
+                        icon = Icons.Default.Add,
+                        onClick = onStageAll
+                    )
+                    GitActionButton(
+                        text = "Refresh",
+                        icon = Icons.Default.Refresh,
+                        onClick = onRefresh,
+                        isLoading = isLoading
+                    )
+                }
+            }
+        }
+        
+        val stagedChanges = status?.stagedChanges ?: emptyList()
+        if (stagedChanges.isNotEmpty()) {
+            item {
+                GitActionCard {
+                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Staged Changes (${stagedChanges.size})",
+                                style = MaterialTheme.typography.titleSmall,
+                                color = Color(0xFFE0D4C8),
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            GitOutlinedButton(
+                                text = "Unstage All",
+                                onClick = onUnstageAll
+                            )
+                        }
+                        
+                        stagedChanges.forEach { change ->
+                            StagedFileItem(
+                                fileName = change.path,
+                                status = change.status,
+                                onUnstage = { onUnstageFile(change.path) }
+                            )
+                        }
+                        
+                        HorizontalDivider(color = Color(0xFF444444))
+                        
+                        OutlinedTextField(
+                            value = commitMessage,
+                            onValueChange = onCommitMessageChanged,
+                            modifier = Modifier.fillMaxWidth(),
+                            placeholder = { Text("Commit message", color = Color(0xFF666666)) },
+                            minLines = 2,
+                            maxLines = 4,
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedTextColor = Color(0xFFE0D4C8),
+                                unfocusedTextColor = Color(0xFFE0D4C8),
+                                focusedBorderColor = GitAccentColor,
+                                unfocusedBorderColor = Color(0xFF444444),
+                                cursorColor = GitAccentColor
+                            )
+                        )
+                        
+                        GitFilledButton(
+                            text = "Commit",
+                            onClick = onCommit,
+                            enabled = commitMessage.isNotBlank() && stagedChanges.isNotEmpty()
+                        )
+                    }
+                }
+            }
+        }
+        
+        val unstagedChanges = mutableListOf<Pair<String, GitFileStatus>>()
+        status?.unstagedChanges?.forEach { change ->
+            unstagedChanges.add(change.path to change.status)
+        }
+        status?.untrackedFiles?.forEach { file ->
+            unstagedChanges.add(file to GitFileStatus.UNTRACKED)
+        }
+        
+        items(unstagedChanges) { (path, fileStatus) ->
+            FileChangeCard(
+                fileName = path,
+                status = fileStatus,
+                onStage = { onStageFile(path) },
+                onDiscard = { onDiscardFile(path) }
             )
         }
         
-        if (status.stagedChanges.isNotEmpty()) {
+        if (unstagedChanges.isEmpty() && stagedChanges.isEmpty() && status != null) {
             item {
-                FileChangeSection(
-                    title = "Staged Changes (${status.stagedChanges.size})",
-                    changes = status.stagedChanges,
-                    onUnstageFile = onUnstageFile,
-                    onUnstageAll = onUnstageAll,
-                    isStaged = true
-                )
-            }
-        }
-        
-        if (status.unstagedChanges.isNotEmpty()) {
-            item {
-                FileChangeSection(
-                    title = "Changes (${status.unstagedChanges.size})",
-                    changes = status.unstagedChanges,
-                    onStageFile = onStageFile,
-                    onStageAll = onStageAll,
-                    onDiscardChanges = onDiscardChanges,
-                    isStaged = false
-                )
-            }
-        }
-        
-        if (status.untrackedFiles.isNotEmpty()) {
-            item {
-                UntrackedFilesSection(
-                    files = status.untrackedFiles,
-                    onStageFile = onStageFile
-                )
-            }
-        }
-        
-        if (status.stagedChanges.isEmpty() && status.unstagedChanges.isEmpty() && status.untrackedFiles.isEmpty()) {
-            item {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant
-                    )
-                ) {
+                GitActionCard {
                     Row(
-                        modifier = Modifier.padding(16.dp),
+                        modifier = Modifier.padding(8.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Icon(
                             Icons.Default.CheckCircle,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = GitCommitHashColor
                         )
-                        Text("Working tree clean")
+                        Text(
+                            "Working tree clean",
+                            color = Color(0xFFE0D4C8)
+                        )
                     }
                 }
             }
@@ -317,225 +370,724 @@ private fun ChangesTab(
 }
 
 @Composable
-private fun CommitSection(
-    message: String,
-    onMessageChanged: (String) -> Unit,
-    onCommit: () -> Unit,
-    canCommit: Boolean
-) {
-    Card(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Text(
-                text = "Commit",
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.SemiBold
-            )
-            
-            OutlinedTextField(
-                value = message,
-                onValueChange = onMessageChanged,
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("Commit message") },
-                minLines = 2,
-                maxLines = 4
-            )
-            
-            Button(
-                onClick = onCommit,
-                enabled = canCommit && message.isNotBlank(),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Icon(Icons.Default.Check, contentDescription = null)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("Commit")
-            }
-        }
-    }
-}
-
-@Composable
-private fun FileChangeSection(
-    title: String,
-    changes: List<GitFileChange>,
-    onStageFile: ((String) -> Unit)? = null,
-    onUnstageFile: ((String) -> Unit)? = null,
-    onStageAll: (() -> Unit)? = null,
-    onUnstageAll: (() -> Unit)? = null,
-    onDiscardChanges: ((String) -> Unit)? = null,
-    isStaged: Boolean
-) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold
-                )
-                
-                if (isStaged && onUnstageAll != null) {
-                    TextButton(onClick = onUnstageAll) {
-                        Text("Unstage All")
-                    }
-                } else if (!isStaged && onStageAll != null) {
-                    TextButton(onClick = onStageAll) {
-                        Text("Stage All")
-                    }
-                }
-            }
-            
-            HorizontalDivider()
-            
-            changes.forEach { change ->
-                FileChangeItem(
-                    change = change,
-                    onStage = if (!isStaged && onStageFile != null) {{ onStageFile(change.path) }} else null,
-                    onUnstage = if (isStaged && onUnstageFile != null) {{ onUnstageFile(change.path) }} else null,
-                    onDiscard = if (!isStaged && onDiscardChanges != null) {{ onDiscardChanges(change.path) }} else null
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun FileChangeItem(
-    change: GitFileChange,
-    onStage: (() -> Unit)?,
-    onUnstage: (() -> Unit)?,
-    onDiscard: (() -> Unit)?
+private fun StagedFileItem(
+    fileName: String,
+    status: GitFileStatus,
+    onUnstage: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
-            modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.weight(1f)
         ) {
-            StatusBadge(status = change.status)
-            
+            FileStatusBadge(status = status)
             Text(
-                text = change.path.substringAfterLast("/"),
-                style = MaterialTheme.typography.bodyMedium,
+                text = fileName.let { 
+                    if (it.length > 25) "${it.take(10)}...${it.takeLast(10)}" else it 
+                },
+                style = MaterialTheme.typography.bodySmall,
+                color = Color(0xFFE0D4C8),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
         }
-        
-        Row {
-            onStage?.let {
-                IconButton(onClick = it, modifier = Modifier.size(32.dp)) {
-                    Icon(Icons.Default.Add, contentDescription = "Stage", modifier = Modifier.size(18.dp))
-                }
-            }
-            onUnstage?.let {
-                IconButton(onClick = it, modifier = Modifier.size(32.dp)) {
-                    Icon(Icons.Default.Remove, contentDescription = "Unstage", modifier = Modifier.size(18.dp))
-                }
-            }
-            onDiscard?.let {
-                IconButton(onClick = it, modifier = Modifier.size(32.dp)) {
-                    Icon(Icons.Default.Close, contentDescription = "Discard", modifier = Modifier.size(18.dp))
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun StatusBadge(status: GitFileStatus) {
-    val (color, text) = when (status) {
-        GitFileStatus.ADDED -> MaterialTheme.colorScheme.primary to "A"
-        GitFileStatus.MODIFIED -> MaterialTheme.colorScheme.tertiary to "M"
-        GitFileStatus.DELETED -> MaterialTheme.colorScheme.error to "D"
-        GitFileStatus.RENAMED -> MaterialTheme.colorScheme.secondary to "R"
-        GitFileStatus.COPIED -> MaterialTheme.colorScheme.secondary to "C"
-        GitFileStatus.UNTRACKED -> MaterialTheme.colorScheme.outline to "?"
-        GitFileStatus.IGNORED -> MaterialTheme.colorScheme.outline to "!"
-        GitFileStatus.CONFLICT -> MaterialTheme.colorScheme.error to "U"
-        GitFileStatus.TYPECHANGE -> MaterialTheme.colorScheme.tertiary to "T"
-    }
-    
-    Surface(
-        shape = MaterialTheme.shapes.extraSmall,
-        color = color.copy(alpha = 0.2f)
-    ) {
-        Text(
-            text = text,
-            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-            style = MaterialTheme.typography.labelSmall,
-            color = color,
-            fontWeight = FontWeight.Bold
+        GitOutlinedButton(
+            text = "Unstage",
+            onClick = onUnstage
         )
     }
 }
 
 @Composable
-private fun UntrackedFilesSection(
-    files: List<String>,
-    onStageFile: (String) -> Unit
+private fun FileChangeCard(
+    fileName: String,
+    status: GitFileStatus,
+    onStage: () -> Unit,
+    onDiscard: () -> Unit
 ) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column {
+    GitActionCard {
+        Column(
+            modifier = Modifier.padding(4.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                FileStatusBadge(status = status)
+                Text(
+                    text = fileName.let { 
+                        if (it.length > 20) "${it.take(8)}...${it.takeLast(8)}" else it 
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFFE0D4C8),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                GitOutlinedButton(
+                    text = "Stage",
+                    onClick = onStage
+                )
+                GitOutlinedButton(
+                    text = "Discard",
+                    onClick = onDiscard
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun FileStatusBadge(status: GitFileStatus) {
+    val (backgroundColor, text) = when (status) {
+        GitFileStatus.MODIFIED -> GitStatusModified to "M"
+        GitFileStatus.UNTRACKED -> GitStatusUntracked to "U"
+        GitFileStatus.ADDED -> Color(0xFF4CAF50) to "A"
+        GitFileStatus.DELETED -> Color(0xFFE53935) to "D"
+        GitFileStatus.RENAMED -> Color(0xFF2196F3) to "R"
+        GitFileStatus.COPIED -> Color(0xFF9C27B0) to "C"
+        GitFileStatus.CONFLICT -> Color(0xFFE53935) to "!"
+        else -> GitStatusModified to "?"
+    }
+    
+    Surface(
+        shape = RoundedCornerShape(4.dp),
+        color = backgroundColor,
+        modifier = Modifier.size(28.dp)
+    ) {
+        Box(contentAlignment = Alignment.Center) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.labelMedium,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+}
+
+@Composable
+private fun HistoryContent(
+    commits: List<GitCommit>,
+    isLoading: Boolean,
+    onRefresh: () -> Unit
+) {
+    val dateFormat = remember { SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault()) }
+    
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        item {
+            GitActionCard {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        text = "Commit History",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color(0xFFE0D4C8),
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    GitActionButton(
+                        text = "Refresh",
+                        icon = Icons.Default.Refresh,
+                        onClick = onRefresh,
+                        isLoading = isLoading
+                    )
+                }
+            }
+        }
+        
+        items(commits) { commit ->
+            CommitCard(commit = commit, dateFormat = dateFormat)
+        }
+    }
+}
+
+@Composable
+private fun CommitCard(
+    commit: GitCommit,
+    dateFormat: SimpleDateFormat
+) {
+    GitActionCard {
+        Column(
+            modifier = Modifier.padding(4.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = commit.message,
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color(0xFFE0D4C8),
+                maxLines = 4,
+                overflow = TextOverflow.Ellipsis
+            )
+            
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Surface(
+                    shape = RoundedCornerShape(4.dp),
+                    color = GitCommitHashColor
+                ) {
+                    Text(
+                        text = commit.shortHash,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Color.White
+                    )
+                }
+                
+                Text(
+                    text = dateFormat.format(Date(commit.date)),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color(0xFF888888)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun BranchesContent(
+    branches: List<GitBranch>,
+    currentBranch: String,
+    isLoading: Boolean,
+    onRefresh: () -> Unit,
+    onCheckout: (String) -> Unit,
+    onDelete: (String) -> Unit,
+    onCreateBranch: (String) -> Unit
+) {
+    var showNewBranchDialog by remember { mutableStateOf(false) }
+    var newBranchName by remember { mutableStateOf("") }
+    
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(bottom = 80.dp)
+        ) {
+            item {
+                GitActionCard {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            text = "Current: $currentBranch",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color(0xFFE0D4C8),
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        GitActionButton(
+                            text = "Refresh",
+                            icon = Icons.Default.Refresh,
+                            onClick = onRefresh,
+                            isLoading = isLoading
+                        )
+                    }
+                }
+            }
+            
+            val localBranches = branches.filter { it.isLocal }
+            val remoteBranches = branches.filter { it.isRemote }
+            
+            if (localBranches.isNotEmpty()) {
+                item {
+                    Text(
+                        text = "Local Branches",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Color(0xFF888888),
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+                }
+            }
+            
+            items(localBranches) { branch ->
+                BranchCard(
+                    branch = branch,
+                    isCurrent = branch.isCurrent,
+                    onCheckout = { onCheckout(branch.name) },
+                    onDelete = { onDelete(branch.name) }
+                )
+            }
+            
+            if (remoteBranches.isNotEmpty()) {
+                item {
+                    Text(
+                        text = "Remote Branches",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Color(0xFF888888),
+                        modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
+                    )
+                }
+                
+                items(remoteBranches) { branch ->
+                    BranchCard(
+                        branch = branch,
+                        isCurrent = false,
+                        onCheckout = { onCheckout(branch.name) },
+                        onDelete = null
+                    )
+                }
+            }
+        }
+        
+        GitFab(
+            text = "New Branch",
+            onClick = { showNewBranchDialog = true },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 16.dp)
+        )
+    }
+    
+    if (showNewBranchDialog) {
+        AlertDialog(
+            onDismissRequest = { showNewBranchDialog = false },
+            containerColor = GitCardBackground,
+            title = { 
+                Text("Create Branch", color = Color(0xFFE0D4C8)) 
+            },
+            text = {
+                OutlinedTextField(
+                    value = newBranchName,
+                    onValueChange = { newBranchName = it },
+                    label = { Text("Branch name") },
+                    singleLine = true,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color(0xFFE0D4C8),
+                        unfocusedTextColor = Color(0xFFE0D4C8)
+                    )
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        if (newBranchName.isNotBlank()) {
+                            onCreateBranch(newBranchName)
+                            newBranchName = ""
+                            showNewBranchDialog = false
+                        }
+                    }
+                ) {
+                    Text("Create")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showNewBranchDialog = false }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+}
+
+@Composable
+private fun BranchCard(
+    branch: GitBranch,
+    isCurrent: Boolean,
+    onCheckout: () -> Unit,
+    onDelete: (() -> Unit)?
+) {
+    GitActionCard {
+        Column(
+            modifier = Modifier.padding(4.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                text = branch.name,
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color(0xFFE0D4C8),
+                fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Normal
+            )
+            
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                GitOutlinedButton(
+                    text = "Checkout",
+                    onClick = onCheckout,
+                    enabled = !isCurrent
+                )
+                if (onDelete != null) {
+                    GitOutlinedButton(
+                        text = "Delete",
+                        onClick = onDelete,
+                        enabled = !isCurrent
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun RemotesContent(
+    remotes: List<GitRemote>,
+    isLoading: Boolean,
+    onRefresh: () -> Unit,
+    onPush: () -> Unit,
+    onPull: () -> Unit,
+    onFetch: () -> Unit,
+    onRemoveRemote: (String) -> Unit
+) {
+    var showAddRemoteDialog by remember { mutableStateOf(false) }
+    
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(bottom = 80.dp)
+        ) {
+            item {
+                GitActionCard {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            text = "Remote Operations",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color(0xFFE0D4C8),
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        GitActionButton(
+                            text = "Refresh",
+                            icon = Icons.Default.Refresh,
+                            onClick = onRefresh,
+                            isLoading = isLoading
+                        )
+                        
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.padding(top = 8.dp)
+                        ) {
+                            GitOutlinedButton(
+                                text = "Push",
+                                icon = Icons.Default.Upload,
+                                onClick = onPush
+                            )
+                            GitOutlinedButton(
+                                text = "Pull",
+                                icon = Icons.Default.Download,
+                                onClick = onPull
+                            )
+                            GitOutlinedButton(
+                                text = "Fetch",
+                                icon = Icons.Default.Sync,
+                                onClick = onFetch
+                            )
+                        }
+                    }
+                }
+            }
+            
+            items(remotes) { remote ->
+                RemoteCard(
+                    remote = remote,
+                    onRemove = { onRemoveRemote(remote.name) }
+                )
+            }
+        }
+        
+        GitFab(
+            text = "Add Remote",
+            onClick = { showAddRemoteDialog = true },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 16.dp)
+        )
+    }
+}
+
+@Composable
+private fun RemoteCard(
+    remote: GitRemote,
+    onRemove: () -> Unit
+) {
+    GitActionCard {
+        Column(
+            modifier = Modifier.padding(4.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Untracked Files (${files.size})",
-                    style = MaterialTheme.typography.titleSmall,
+                    text = remote.name,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color(0xFFE0D4C8),
                     fontWeight = FontWeight.SemiBold
+                )
+                GitOutlinedButton(
+                    text = "Remove",
+                    onClick = onRemove
                 )
             }
             
-            HorizontalDivider()
-            
-            files.forEach { file ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+            Text(
+                text = remote.fetchUrl.let {
+                    if (it.length > 30) "${it.take(15)}...${it.takeLast(12)}" else it
+                },
+                style = MaterialTheme.typography.bodySmall,
+                color = Color(0xFF888888)
+            )
+        }
+    }
+}
+
+@Composable
+private fun SettingsContent(
+    repository: GitRepository?
+) {
+    var rememberCredentials by remember { mutableStateOf(true) }
+    
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        item {
+            GitActionCard {
+                Column(
+                    modifier = Modifier.padding(4.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Row(
-                        modifier = Modifier.weight(1f),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        StatusBadge(status = GitFileStatus.UNTRACKED)
+                    Text(
+                        text = "Git User Configuration",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color(0xFFE0D4C8),
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    
+                    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         Text(
-                            text = file.substringAfterLast("/"),
+                            text = "Name:",
                             style = MaterialTheme.typography.bodyMedium,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                            color = Color(0xFF888888)
+                        )
+                        Text(
+                            text = "User",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color(0xFFE0D4C8)
                         )
                     }
                     
-                    IconButton(onClick = { onStageFile(file) }, modifier = Modifier.size(32.dp)) {
-                        Icon(Icons.Default.Add, contentDescription = "Stage", modifier = Modifier.size(18.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                        Text(
+                            text = "Email:",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color(0xFF888888)
+                        )
+                        Text(
+                            text = "user@example.com",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color(0xFFE0D4C8)
+                        )
                     }
+                    
+                    GitFilledButton(
+                        text = "Edit User Config",
+                        onClick = { }
+                    )
                 }
             }
         }
+        
+        item {
+            GitActionCard {
+                Column(
+                    modifier = Modifier.padding(4.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text(
+                        text = "Credentials",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color(0xFFE0D4C8),
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text(
+                                text = "Remember credentials",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color(0xFFE0D4C8)
+                            )
+                            Text(
+                                text = "Save username and password for push/pull",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color(0xFF888888)
+                            )
+                        }
+                        
+                        Switch(
+                            checked = rememberCredentials,
+                            onCheckedChange = { rememberCredentials = it },
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = GitAccentColor,
+                                checkedTrackColor = GitAccentColor.copy(alpha = 0.5f)
+                            )
+                        )
+                    }
+                    
+                    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                        Text(
+                            text = "Status:",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color(0xFF888888)
+                        )
+                        Text(
+                            text = if (rememberCredentials) "Saved" else "Not saved",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color(0xFFE0D4C8)
+                        )
+                    }
+                    
+                    GitOutlinedButton(
+                        text = "Clear Saved Credentials",
+                        onClick = { }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun GitActionCard(
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Surface(
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        color = GitCardBackground
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            content = content
+        )
+    }
+}
+
+@Composable
+private fun GitActionButton(
+    text: String,
+    icon: ImageVector? = null,
+    onClick: () -> Unit,
+    isLoading: Boolean = false
+) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(24.dp),
+        color = GitAccentColor,
+        enabled = !isLoading
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(16.dp),
+                    strokeWidth = 2.dp,
+                    color = Color.White
+                )
+            } else {
+                icon?.let {
+                    Icon(
+                        imageVector = it,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+            }
+            Text(
+                text = text,
+                color = Color.White,
+                style = MaterialTheme.typography.labelLarge
+            )
+        }
+    }
+}
+
+@Composable
+private fun GitOutlinedButton(
+    text: String,
+    icon: ImageVector? = null,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
+    OutlinedButton(
+        onClick = onClick,
+        enabled = enabled,
+        shape = RoundedCornerShape(24.dp),
+        colors = ButtonDefaults.outlinedButtonColors(
+            contentColor = Color(0xFFE0D4C8),
+            disabledContentColor = Color(0xFF666666)
+        ),
+        border = ButtonDefaults.outlinedButtonBorder(enabled).copy(
+            brush = androidx.compose.ui.graphics.SolidColor(
+                if (enabled) Color(0xFF555555) else Color(0xFF333333)
+            )
+        )
+    ) {
+        icon?.let {
+            Icon(
+                imageVector = it,
+                contentDescription = null,
+                modifier = Modifier.size(16.dp)
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+        }
+        Text(text = text)
+    }
+}
+
+@Composable
+private fun GitFilledButton(
+    text: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
+    Button(
+        onClick = onClick,
+        enabled = enabled,
+        shape = RoundedCornerShape(24.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = GitAccentColor,
+            disabledContainerColor = GitAccentColor.copy(alpha = 0.5f)
+        )
+    ) {
+        Text(text = text, color = if (enabled) Color.White else Color.White.copy(alpha = 0.5f))
+    }
+}
+
+@Composable
+private fun GitFab(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    ExtendedFloatingActionButton(
+        onClick = onClick,
+        modifier = modifier,
+        containerColor = GitAccentColor,
+        contentColor = Color.White,
+        shape = RoundedCornerShape(28.dp)
+    ) {
+        Icon(Icons.Default.Add, contentDescription = null)
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = text)
     }
 }

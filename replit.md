@@ -34,13 +34,18 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 
 **System Design Choices:**
 - **Modular Architecture:** Core modules (`core-ui`, `core-resources`, `core-datastore`, `core-logger`, `templates-api`, `templates-impl`, `actions-api`, `actions-impl`, `plugin-api`, `plugin-impl`) and distinct feature modules for clear separation of concerns and maintainability.
-- **Git Module (`features/git`):** Comprehensive Git version control integration for the IDE, organized into:
+- **Git Module (`features/git`):** Comprehensive Git version control integration for the IDE with AndroidIDE-inspired UI, organized into:
   - `api/` - GitOperations interface defining all Git operations (status, stage, commit, branch, merge, stash, remote, tag, diff, blame)
   - `model/` - Data classes (GitRepository, GitBranch, GitCommit, GitFileChange, GitStatus, GitStash, GitRemote, GitTag, GitDiff, etc.)
   - `repository/` - GitCommandExecutor for git binary interaction and DefaultGitRepository implementation with full Git workflow support
   - `viewmodel/` - GitViewModel for reactive state management with StateFlow
-  - `ui/screens/` - GitScreen main composable with tabbed interface
-  - `ui/components/` - Tab components (ChangesTab, BranchesTab, CommitsTab, StashTab, RemotesTab, TagsTab) with full CRUD operations
+  - `ui/screens/` - GitScreen with NavigationRail layout featuring 5 sections:
+    - Changes: Stage All/Refresh actions, staged changes with commit composer, unstaged file cards with M/U status badges, Stage/Discard buttons
+    - History: Commit history with refresh, commit cards showing message, hash badge (green), and date
+    - Branches: Current branch display, local/remote branch sections, branch cards with Checkout/Delete, New Branch FAB
+    - Remotes: Push/Pull/Fetch operations, remote cards with URL and Remove button, Add Remote FAB
+    - Settings: Git user configuration (name/email), credentials management with remember toggle
+  - **UI Design:** Dark theme (0xFF1A1A1A background), brown/amber accent (0xFF8B7355), rounded card-based layout matching AndroidIDE Git client
   - **Note:** Requires bundled git binary (via Termux packages or AndroidIDE bootstrap) for operation; includes availability detection and graceful error handling
 - **Theme Builder Module (`feature-themebuilder`):** Dedicated feature module for Material Theme Builder functionality, organized into:
   - `model/` - Data classes (ThemeColors)
