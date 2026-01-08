@@ -25,7 +25,7 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 - **State Management:** MainViewModel manages navigation, project state, content selection, and UI component visibility.
 - **Data Persistence:** Proto DataStore for user preferences and EncryptedSharedPreferences for secure data.
 - **Project Management:** Provides 5 distinct project templates, project creation wizard, project list management, and Git repository cloning.
-- **Code Editor:** Tabbed editor with monospace font, line numbers, BasicTextField, and a long-press context menu.
+- **Code Editor:** Advanced Sora Editor integration with TextMate and TreeSitter syntax highlighting, supporting Java, Kotlin, XML, Gradle, C/C++, Makefile, and more. Features tabbed editing, undo/redo, find/replace, and multiple color themes.
 - **File System Interaction:** Hierarchical file structure display (Android, Project, Packages views) with file operations, comprehensive file system browsing and project selection.
 - **Asset Studio:** Comprehensive Vector Asset Studio with icon repository system (Material, Feather), SVG to AVD conversion, AVD editor, and export options.
 - **Theming:** Full Material Theme Builder with interactive color picker, tonal palettes, font selection, platform selector, dynamic color toggle, schema style selector, and export options (Jetpack Compose, Android XML, Web/CSS, JSON).
@@ -48,6 +48,17 @@ The application is an Android mobile application leveraging Jetpack Compose for 
   - `converter/` - SvgToAvdConverter for SVG to Android Vector Drawable conversion
   - `repository/` - IconRepository system with MaterialIconsRepository, FeatherIconsRepository, and IconRepositoryManager
   - `screen/` - AssetStudioScreen (launcher) and VectorAssetStudioScreen (full editor with Browse, Create, Edit, Convert tabs)
+- **Sora Editor (`feature-soraeditor`):** Advanced code editor module using Rosemoe's sora-editor library, organized into:
+  - `model/` - Data classes (EditorLanguageType, EditorConfig, EditorTheme, EditorFile, EditorTab)
+  - `language/` - LanguageRegistry, TextMateLanguageProvider, TreeSitterLanguageProvider for syntax highlighting
+  - `theme/` - EditorThemeProvider with multiple color schemes (Dark Modern, Light Modern, Dracula, Monokai Pro, One Dark Pro)
+  - `widget/` - SoraEditorView wrapping CodeEditor with full API
+  - `compose/` - SoraEditor Composable and SoraEditorState for Jetpack Compose integration
+  - `screen/` - SoraEditorScreen with tab support, status bar, and context menus
+  - `viewmodel/` - SoraEditorViewModel for state management
+  - `assets/` - TextMate grammars/themes and TreeSitter query files
+  - **Supported languages:** Java, Kotlin, XML, Gradle (Groovy & Kotlin DSL), AIDL, C, C++, Makefile, JSON, Log, Properties
+  - **Highlighting modes:** TextMate (regex-based), TreeSitter (AST-based), Simple
 - **Plugin System (`plugin-api` and `plugin-impl`):** Core modules for Android Studio/VS Code style extensibility, organized into:
   - `plugin-api/` - Pure Kotlin contracts with no Android dependencies:
     - `descriptor/` - PluginDescriptor, PluginState, PluginPermission, PluginCategory
@@ -73,3 +84,5 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 - **Jetpack Compose libraries:** UI development.
 - **Material Design 3 libraries:** UI components and styling.
 - **Accompanist Permissions:** Runtime permission handling.
+- **Sora Editor (io.github.Rosemoe.sora-editor):** Advanced Android code editor library with TextMate and TreeSitter support.
+- **Android Tree-Sitter:** Java bindings for Tree-sitter parsing library, providing AST-based syntax highlighting.

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Properties",
+  "scopeName": "source.ini",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#sections" },
+    { "include": "#properties" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.properties",
+          "match": "^\\s*#.*$"
+        },
+        {
+          "name": "comment.line.exclamation.properties",
+          "match": "^\\s*!.*$"
+        }
+      ]
+    },
+    "sections": {
+      "patterns": [
+        {
+          "name": "entity.name.section.properties",
+          "match": "^\\s*\\[[^\\]]+\\]"
+        }
+      ]
+    },
+    "properties": {
+      "patterns": [
+        {
+          "name": "variable.other.property.properties",
+          "match": "^[^=:]+(?=[=:])"
+        },
+        {
+          "name": "keyword.operator.properties",
+          "match": "[=:]"
+        },
+        {
+          "name": "string.unquoted.properties",
+          "match": "(?<=[=:]).*$"
+        }
+      ]
+    }
+  }
+}
