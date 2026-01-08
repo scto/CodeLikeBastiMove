@@ -12,7 +12,7 @@ dependencies {
     api(project(":core:templates-api"))
     implementation(project(":core:templates-impl"))
     
-    api(project(":features:feature-editor"))
+    api(project(":features:feature-soraeditor"))
     api(project(":features:feature-git"))
     api(project(":features:feature-treeview"))
     api(project(":features:feature-designer"))

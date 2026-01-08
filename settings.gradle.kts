@@ -37,7 +37,6 @@ include(":core:templates-impl")
 
 include(":features")
 include(":features:feature-designer")
-include(":features:feature-editor")
 include(":features:feature-explorer")
 include(":features:feature-git")
 include(":features:feature-home")
