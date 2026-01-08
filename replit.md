@@ -48,6 +48,20 @@ The application is an Android mobile application leveraging Jetpack Compose for 
   - `converter/` - SvgToAvdConverter for SVG to Android Vector Drawable conversion
   - `repository/` - IconRepository system with MaterialIconsRepository, FeatherIconsRepository, and IconRepositoryManager
   - `screen/` - AssetStudioScreen (launcher) and VectorAssetStudioScreen (full editor with Browse, Create, Edit, Convert tabs)
+- **Plugin System (`plugin-api` and `plugin-impl`):** Core modules for Android Studio/VS Code style extensibility, organized into:
+  - `plugin-api/` - Pure Kotlin contracts with no Android dependencies:
+    - `descriptor/` - PluginDescriptor, PluginState, PluginPermission, PluginCategory
+    - `lifecycle/` - Plugin interface, AbstractPlugin, PluginLifecycleListener
+    - `context/` - PluginContext, PluginLogger, PluginDataStore
+    - `extension/` - ExtensionPoint abstractions (EditorAction, ToolWindowProvider, ThemeProvider, ProjectWizardExtension, CodeAnalyzer, CommandContribution, BackgroundTask)
+    - `event/` - PluginEvent, PluginEventBus, PluginEventListener
+    - `annotations/` - Declarative annotations (@PluginInfo, @RequiresPermission, @DependsOn, @ExtensionContribution)
+  - `plugin-impl/` - Android implementation layer:
+    - `manager/` - PluginManager with state machine, dependency resolution, host service registry
+    - `loader/` - PluginLoader using DexClassLoader for dynamic plugin loading
+    - `registry/` - DefaultExtensionRegistry, DefaultPluginEventBus
+    - `security/` - PluginSecurityManager with signature verification, permission management, compatibility checks
+    - `storage/` - PluginStorage for persisting enabled plugins and plugin settings
 - **Convention Plugins:** Custom Gradle plugins centralize build logic, SDK versions, and common dependencies across modules.
 - **Centralized Resources:** `core-resources` module for shared strings, dimensions, and Material 3 color palettes.
 - **Centralized Logging:** `core-logger` module provides CLBMLogger facade that wraps android.util.Log with runtime-toggleable logging controlled via Settings and persisted in DataStore. Logging defaults to BuildConfig.LOGGING_DEFAULT_ENABLED (true for debug, false for release builds) and uses a `loggingInitialized` guard to properly seed defaults for both fresh installs and upgrades.

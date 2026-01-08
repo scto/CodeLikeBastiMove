@@ -27,6 +27,8 @@ include(":core:core-datastore-proto")
 include(":core:core-logger")
 include(":core:core-resources")
 include(":core:core-ui")
+include(":core:plugin-api")
+include(":core:plugin-impl")
 include(":core:templates-api")
 include(":core:templates-impl")
 
