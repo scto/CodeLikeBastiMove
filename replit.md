@@ -39,6 +39,10 @@ The application is an Android mobile application leveraging Jetpack Compose for 
   - `util/` - Color utilities, presets, and helper functions
   - `components/` - Reusable UI components (ColorPickerDialog, FontComponents, ColorSections, PreviewComponents, BottomActionBar, ThemeHeader)
   - `export/` - Theme export generators for multiple platforms (Jetpack Compose, Android XML, Web/CSS, JSON)
+- **Sub-Module Maker (`feature-submodulemaker`):** Dedicated feature module for creating new Gradle sub-modules, organized into:
+  - `model/` - Data classes (ModuleConfig, ProgrammingLanguage, ModuleType)
+  - `components/` - Reusable UI components (LanguageSelector, ModuleTypeSelector, ModulePathInput, ComposeToggle, ModulePreviewCard)
+  - `generator/` - ModuleGenerator for file creation (build.gradle.kts, AndroidManifest.xml, source directories, settings.gradle.kts updates)
 - **Convention Plugins:** Custom Gradle plugins centralize build logic, SDK versions, and common dependencies across modules.
 - **Centralized Resources:** `core-resources` module for shared strings, dimensions, and Material 3 color palettes.
 - **Centralized Logging:** `core-logger` module provides CLBMLogger facade that wraps android.util.Log with runtime-toggleable logging controlled via Settings and persisted in DataStore. Logging defaults to BuildConfig.LOGGING_DEFAULT_ENABLED (true for debug, false for release builds) and uses a `loggingInitialized` guard to properly seed defaults for both fresh installs and upgrades.
