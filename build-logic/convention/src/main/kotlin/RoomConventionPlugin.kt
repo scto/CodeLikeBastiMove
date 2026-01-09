@@ -14,31 +14,33 @@
  * limitations under the License.
  */
 
-import com.android.build.gradle.LibraryExtension
+import androidx.room.gradle.RoomExtension
+import com.google.devtools.ksp.gradle.KspExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.kotlin
 
-import dev.scto.convention.configureKotlinAndroid
-import dev.scto.convention.versionInt
+import dev.scto.convention.libs
 
-class LibraryConventionPlugin : Plugin<Project> {
+class RoomConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            with(pluginManager) {
-                apply("com.android.library")
-                apply("org.jetbrains.kotlin.android")
+            pluginManager.apply("androidx.room")
+            pluginManager.apply("com.google.devtools.ksp")
+
+            extensions.configure<KspExtension> {
+                arg("room.generateKotlin", "true")
             }
 
-            extensions.configure<LibraryExtension> {
-                configureKotlinAndroid(this)
-                defaultConfig.targetSdk = versionInt("targetSdk")
+            extensions.configure<RoomExtension> {
+                schemaDirectory("$projectDir/schemas")
             }
-            
+
             dependencies {
-                add("testImplementation", kotlin("test"))
+                add("implementation", libs.findLibrary("androidx.room.runtime").get())
+                add("implementation", libs.findLibrary("androidx.room.ktx").get())
+                add("ksp", libs.findLibrary("androidx.room.compiler").get())
             }
         }
     }

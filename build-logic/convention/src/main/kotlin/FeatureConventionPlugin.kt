@@ -1,4 +1,21 @@
+/*
+ * Copyright 2024 Thomas Schmid
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import com.android.build.gradle.LibraryExtension
+
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -7,12 +24,17 @@ import org.gradle.kotlin.dsl.kotlin
 
 import com.scto.convention.libs
 
-class FeatureConventionPlugin : Plugin<Project> {
+/**
+ * Standardisiertes Plugin für Feature-Module.
+ * Kombiniert Library, Hilt und Compose.
+ */
+class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             pluginManager.apply {
-                apply("codelikebastimove.android.library")
-                apply("codelikebastimove.android.library.compose")
+                apply("com.scto.android.library")
+                apply("com.scto.android.hilt")
+                apply("com.scto.android.compose")
             }
 
             extensions.configure<LibraryExtension> {
@@ -22,19 +44,18 @@ class FeatureConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                add("api", project(":core:core-ui"))
-                add("api", project(":core:core-resources"))
+                add("implementation", project(":core:ui"))
+                // add("implementation", project(":core:android")) // Utils etc.
 
-                add("api", libs.findLibrary("androidx-core-ktx").get())
-                add("api", libs.findLibrary("coroutines-android").get())
-                
-                add("api", platform(libs.findLibrary("compose-bom").get()))
-                add("api", libs.findBundle("compose").get())
-                add("api", libs.findBundle("lifecycle").get())
-                
-                add("api", libs.findLibrary("activity-compose").get())
-                
-                add("debugImplementation", libs.findLibrary("compose-ui-tooling").get())
+                add("testImplementation", kotlin("test"))
+                add("androidTestImplementation", kotlin("test"))
+
+                add("implementation", libs.findLibrary("androidx.hilt.navigation.compose").get())
+                add("implementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
+                add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
+
+                add("implementation", libs.findLibrary("coil.kt").get())
+                add("implementation", libs.findLibrary("coil.kt.compose").get())
             }
         }
     }
