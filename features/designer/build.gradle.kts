@@ -8,7 +8,7 @@ android {
 
 dependencies {
     api(project(":core:core-datastore"))
-    api(project(":features:feature-soraeditor"))
+    api(project(":features:soraeditor"))
     
     implementation(libs.androidx.documentfile)
 }

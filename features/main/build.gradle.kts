@@ -12,13 +12,12 @@ dependencies {
     api(project(":core:templates:templates-api"))
     implementation(project(":core:templates:templates-impl"))
     
-    api(project(":features:feature-soraeditor"))
+    api(project(":features:soraeditor"))
     api(project(":features:git"))
     api(project(":features:treeview"))
-    api(project(":features:feature-designer"))
-    api(project(":features:feature-explorer"))
-    api(project(":features:feature-assetstudio"))
-    api(project(":features:feature-themebuilder"))
+    api(project(":features:designer"))
+    api(project(":features:explorer"))
+    api(project(":features:assetstudio"))
+    api(project(":features:themebuilder"))
     api(project(":features:submodulemaker"))
-    //api(project(":features:feature-slidingpanel"))
 }
