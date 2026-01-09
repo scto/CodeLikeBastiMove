@@ -19,7 +19,7 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 
 **Technical Implementations:**
 - **Language & Frameworks:** Kotlin, Jetpack Compose.
-- **Build System:** Gradle with Kotlin DSL and custom Convention Plugins.
+- **Build System:** Gradle with Kotlin DSL and custom Convention Plugins (migrated to Koin DI, no Dagger Hilt).
 - **SDKs:** Compile SDK 36, Target SDK 35, Minimum SDK 29.
 - **Architecture:** MVVM with ViewModel and StateFlow, emphasizing a multi-module design.
 - **State Management:** MainViewModel manages core application state.

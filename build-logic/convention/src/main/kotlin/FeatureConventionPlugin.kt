@@ -1,13 +1,16 @@
-import com.android.build.api.dsl.LibraryExtension
+import com.android.build.gradle.LibraryExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.kotlin
 
-class AndroidFeatureConventionPlugin : Plugin<Project> {
+import com.scto.convention.libs
+
+class FeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            with(pluginManager) {
+            pluginManager.apply {
                 apply("codelikebastimove.android.library")
                 apply("codelikebastimove.android.library.compose")
             }
@@ -21,17 +24,17 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             dependencies {
                 add("api", project(":core:core-ui"))
                 add("api", project(":core:core-resources"))
+
+                add("api", libs.findLibrary("androidx-core-ktx").get())
+                add("api", libs.findLibrary("coroutines-android").get())
                 
-                add("api", libs.androidx.core.ktx)
-                add("api", libs.coroutines.android)
+                add("api", platform(libs.findLibrary("compose-bom").get()))
+                add("api", libs.findBundle("compose").get())
+                add("api", libs.findBundle("lifecycle").get())
                 
-                add("api", platform(libs.compose.bom))
-                add("api", libs.bundles.compose)
-                add("api", libs.bundles.lifecycle)
+                add("api", libs.findLibrary("activity-compose").get())
                 
-                add("api", libs.activity.compose)
-                
-                add("debugImplementation", libs.compose.ui.tooling)
+                add("debugImplementation", libs.findLibrary("compose-ui-tooling").get())
             }
         }
     }

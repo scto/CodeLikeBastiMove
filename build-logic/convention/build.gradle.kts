@@ -6,53 +6,53 @@ plugins {
 
 group = "com.scto.codelikebastimove.buildlogic"
 
+val javaVersion = libs.versions.java.get().toInt()
+
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.values()[javaVersion - 1]
+    targetCompatibility = JavaVersion.values()[javaVersion - 1]
 }
 
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.JVM_17
+        jvmTarget.set(JvmTarget.valueOf("JVM_$javaVersion"))
     }
 }
 
 dependencies {
-    compileOnly(libs.gradle)
-    compileOnly(libs.gradle.api)
-    compileOnly(libs.kotlin.gradle.plugin)
-    compileOnly(libs.kotlin.stdlib)
-    
-    // Workaround to make version catalog type-safe accessors available in convention plugins
-    // https://github.com/gradle/gradle/issues/15383
-    implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
+    compileOnly(libs.android.gradlePlugin)
+    compileOnly(libs.android.tools.common)
+    compileOnly(libs.kotlin.gradlePlugin)
+    compileOnly(libs.compose.gradlePlugin)
+    compileOnly(libs.ksp.gradlePlugin)
+    compileOnly(libs.room.gradlePlugin)
 }
 
 gradlePlugin {
     plugins {
         register("androidApplication") {
             id = "codelikebastimove.android.application"
-            implementationClass = "AndroidApplicationConventionPlugin"
+            implementationClass = "ApplicationConventionPlugin"
         }
         register("androidApplicationCompose") {
             id = "codelikebastimove.android.application.compose"
-            implementationClass = "AndroidApplicationComposeConventionPlugin"
+            implementationClass = "ComposeConventionPlugin"
         }
         register("androidLibrary") {
             id = "codelikebastimove.android.library"
-            implementationClass = "AndroidLibraryConventionPlugin"
+            implementationClass = "LibraryConventionPlugin"
         }
         register("androidLibraryCompose") {
             id = "codelikebastimove.android.library.compose"
-            implementationClass = "AndroidLibraryComposeConventionPlugin"
+            implementationClass = "ComposeConventionPlugin"
         }
         register("androidFeature") {
             id = "codelikebastimove.android.feature"
-            implementationClass = "AndroidFeatureConventionPlugin"
+            implementationClass = "FeatureConventionPlugin"
         }
         register("androidKoin") {
             id = "codelikebastimove.android.koin"
-            implementationClass = "AndroidKoinConventionPlugin"
+            implementationClass = "KoinConventionPlugin"
         }
     }
 }
