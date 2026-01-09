@@ -12,7 +12,7 @@ dependencies {
     
     api(project(":features:feature-home"))
     api(project(":features:feature-settings"))
-    api(project(":features:feature-treeview"))
+    api(project(":features:treeview"))
     api(project(":features:feature-soraeditor"))
     api(project(":features:git"))
     api(project(":features:feature-onboarding"))

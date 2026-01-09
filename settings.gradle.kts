@@ -52,6 +52,6 @@ include(":features:feature-assetstudio")
 include(":features:feature-soraeditor")
 include(":features:submodulemaker")
 include(":features:feature-themebuilder")
-include(":features:feature-treeview")
+include(":features:treeview")
 
 include(":features:git")
