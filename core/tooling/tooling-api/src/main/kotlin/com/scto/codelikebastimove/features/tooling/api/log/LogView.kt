@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.features.tooling.api.log
+package com.scto.codelikebastimove.feature.tooling.api.log
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow

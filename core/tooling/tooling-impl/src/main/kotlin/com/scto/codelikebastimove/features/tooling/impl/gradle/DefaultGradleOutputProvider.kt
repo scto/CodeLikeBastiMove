@@ -1,6 +1,6 @@
-package com.scto.codelikebastimove.features.tooling.impl.gradle
+package com.scto.codelikebastimove.feature.tooling.impl.gradle
 
-import com.scto.codelikebastimove.features.tooling.api.gradle.*
+import com.scto.codelikebastimove.feature.tooling.api.gradle.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

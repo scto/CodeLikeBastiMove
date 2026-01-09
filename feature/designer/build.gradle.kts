@@ -1,0 +1,14 @@
+plugins {
+    id("clbm.android.feature")
+}
+
+android {
+    namespace = "com.scto.codelikebastimove.feature.designer"
+}
+
+dependencies {
+    api(project(":core:datastore:datastore"))
+    api(project(":feature:soraeditor"))
+    
+    implementation(libs.androidx.documentfile)
+}

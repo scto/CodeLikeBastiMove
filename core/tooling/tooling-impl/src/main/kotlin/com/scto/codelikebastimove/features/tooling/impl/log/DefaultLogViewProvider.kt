@@ -1,7 +1,7 @@
-package com.scto.codelikebastimove.features.tooling.impl.log
+package com.scto.codelikebastimove.feature.tooling.impl.log
 
-import com.scto.codelikebastimove.features.tooling.api.bridge.LogConfig
-import com.scto.codelikebastimove.features.tooling.api.log.*
+import com.scto.codelikebastimove.feature.tooling.api.bridge.LogConfig
+import com.scto.codelikebastimove.feature.tooling.api.log.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

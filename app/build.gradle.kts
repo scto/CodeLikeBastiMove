@@ -107,7 +107,7 @@ android {
 }
 
 dependencies {
-    api(project(":features"))
+    api(project(":feature"))
     api(project(":core:ui"))
     api(project(":core:resources"))
     api(project(":core:logger"))

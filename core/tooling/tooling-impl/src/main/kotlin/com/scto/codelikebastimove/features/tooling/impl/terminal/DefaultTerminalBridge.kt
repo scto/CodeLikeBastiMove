@@ -1,7 +1,7 @@
-package com.scto.codelikebastimove.features.tooling.impl.terminal
+package com.scto.codelikebastimove.feature.tooling.impl.terminal
 
-import com.scto.codelikebastimove.features.tooling.api.bridge.TerminalConfig
-import com.scto.codelikebastimove.features.tooling.api.terminal.*
+import com.scto.codelikebastimove.feature.tooling.api.bridge.TerminalConfig
+import com.scto.codelikebastimove.feature.tooling.api.terminal.*
 import com.termux.app.TermuxService
 import com.termux.app.terminal.TermuxTerminalSession
 import com.termux.app.terminal.TermuxTerminalSessionClientAdapter

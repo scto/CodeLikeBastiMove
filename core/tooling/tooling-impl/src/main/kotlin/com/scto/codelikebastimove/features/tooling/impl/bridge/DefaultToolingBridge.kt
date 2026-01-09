@@ -1,13 +1,13 @@
-package com.scto.codelikebastimove.features.tooling.impl.bridge
+package com.scto.codelikebastimove.feature.tooling.impl.bridge
 
-import com.scto.codelikebastimove.features.tooling.api.bridge.*
-import com.scto.codelikebastimove.features.tooling.api.gradle.GradleBuildResult
-import com.scto.codelikebastimove.features.tooling.api.gradle.GradleOutputProvider
-import com.scto.codelikebastimove.features.tooling.api.log.LogViewProvider
-import com.scto.codelikebastimove.features.tooling.api.terminal.TerminalBridge
-import com.scto.codelikebastimove.features.tooling.impl.gradle.DefaultGradleOutputProvider
-import com.scto.codelikebastimove.features.tooling.impl.log.DefaultLogViewProvider
-import com.scto.codelikebastimove.features.tooling.impl.terminal.DefaultTerminalBridge
+import com.scto.codelikebastimove.feature.tooling.api.bridge.*
+import com.scto.codelikebastimove.feature.tooling.api.gradle.GradleBuildResult
+import com.scto.codelikebastimove.feature.tooling.api.gradle.GradleOutputProvider
+import com.scto.codelikebastimove.feature.tooling.api.log.LogViewProvider
+import com.scto.codelikebastimove.feature.tooling.api.terminal.TerminalBridge
+import com.scto.codelikebastimove.feature.tooling.impl.gradle.DefaultGradleOutputProvider
+import com.scto.codelikebastimove.feature.tooling.impl.log.DefaultLogViewProvider
+import com.scto.codelikebastimove.feature.tooling.impl.terminal.DefaultTerminalBridge
 import kotlinx.coroutines.flow.*
 
 class DefaultToolingBridge(

@@ -1,9 +1,9 @@
-package com.scto.codelikebastimove.features.tooling.api.bridge
+package com.scto.codelikebastimove.feature.tooling.api.bridge
 
-import com.scto.codelikebastimove.features.tooling.api.gradle.GradleBuildResult
-import com.scto.codelikebastimove.features.tooling.api.gradle.GradleOutputProvider
-import com.scto.codelikebastimove.features.tooling.api.log.LogViewProvider
-import com.scto.codelikebastimove.features.tooling.api.terminal.TerminalBridge
+import com.scto.codelikebastimove.feature.tooling.api.gradle.GradleBuildResult
+import com.scto.codelikebastimove.feature.tooling.api.gradle.GradleOutputProvider
+import com.scto.codelikebastimove.feature.tooling.api.log.LogViewProvider
+import com.scto.codelikebastimove.feature.tooling.api.terminal.TerminalBridge
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 

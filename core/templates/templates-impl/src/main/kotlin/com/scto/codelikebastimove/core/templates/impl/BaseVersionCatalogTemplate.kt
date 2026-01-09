@@ -495,7 +495,7 @@ org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
 android.useAndroidX=true
 kotlin.code.style=official
 android.nonTransitiveRClass=true
-android.defaults.buildfeatures.buildconfig=true
+android.defaults.buildfeature.buildconfig=true
 """.trimIndent()
         return ProjectFile("gradle.properties", content)
     }
