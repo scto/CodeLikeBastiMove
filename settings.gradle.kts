@@ -50,7 +50,7 @@ include(":features:feature-settings")
 //include(":features:feature-slidingpanel")
 include(":features:feature-assetstudio")
 include(":features:feature-soraeditor")
-include(":features:feature-submodulemaker")
+include(":features:submodulemaker")
 include(":features:feature-themebuilder")
 include(":features:feature-treeview")
 

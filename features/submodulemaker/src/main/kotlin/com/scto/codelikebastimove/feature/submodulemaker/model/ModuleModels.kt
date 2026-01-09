@@ -23,14 +23,22 @@ data class ModuleConfig(
         get() = gradlePath.isNotBlank() && gradlePath.startsWith(":")
 
     val moduleName: String
-        get() = gradlePath.split(":").lastOrNull() ?: ""
+        get() = gradlePath.split(":").lastOrNull { it.isNotBlank() } ?: ""
+
+    val folderName: String
+        get() {
+            val parts = gradlePath.split(":").filter { it.isNotBlank() }
+            return if (parts.size > 1) parts.dropLast(1).joinToString("/") else ""
+        }
 
     val directoryPath: String
         get() = gradlePath.replace(":", "/").trimStart('/')
 
-    fun generatePackageName(basePackage: String = "com.example.app"): String {
+    fun generatePackageName(basePackage: String = "com.scto.codelikebastimove"): String {
         if (packageName.isNotBlank()) return packageName
-        val cleanPath = gradlePath.replace(":", ".").trim('.')
+        val cleanPath = gradlePath.replace(":", ".").replace("-", ".").trim('.').lowercase()
         return "$basePackage.$cleanPath"
     }
+
+    fun toGradleNotation(): String = gradlePath
 }

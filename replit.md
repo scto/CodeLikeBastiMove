@@ -42,7 +42,7 @@ The application is an Android mobile application leveraging Jetpack Compose for 
   - `core/core-ui`, `core/core-resources`, `core/core-datastore`, `core/core-logger`
 - **Git Module (`features/git`):** Comprehensive Git version control integration with AndroidIDE-inspired UI, including GitOperations interface, data models, repository for binary interaction, ViewModel, and dedicated UI screens for changes, history, branches, remotes, and settings.
 - **Theme Builder Module (`feature-themebuilder`):** Dedicated module for Material Theme Builder functionality with data models, color utilities, UI components, and theme export generators.
-- **Sub-Module Maker (`feature-submodulemaker`):** Dedicated module for creating new Gradle sub-modules with data models, UI components, and a module generator.
+- **Sub-Module Maker (`features/submodulemaker`):** Dedicated module for creating new Gradle sub-modules with AndroidIDE-inspired dark UI, supporting Kotlin Gradle notation `:folderName:moduleName`. Features include programming language selector (Kotlin/Java), folder path input, module name input, and automatic settings.gradle.kts updates.
 - **Asset Studio (`feature-assetstudio`):** Dedicated module for Vector Asset Studio functionality with data models, SVG to AVD converter, icon repository system, and editor screens.
 - **Sora Editor (`feature-soraeditor`):** Advanced code editor module using Rosemoe's sora-editor library, featuring language support, theming, UI widgets, Jetpack Compose integration, and a plugin system for extensions.
 - **Action System (`core/actions/`):** VS Code-style command/action system for event-driven architecture, including interfaces for actions, events, registry, keybinding, and plugin contributions.
