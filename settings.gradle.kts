@@ -22,18 +22,23 @@ rootProject.name = "CodeLikeBastiMove"
 
 include(":app")
 
-include(":core:actions-api")
-include(":core:actions-impl")
+include(":core:actions:actions-api")
+include(":core:actions:actions-impl")
 include(":core:core-datastore")
 include(":core:core-datastore-proto")
 include(":core:core-logger")
 include(":core:core-resources")
 include(":core:core-ui")
-include(":core:plugin-api")
-include(":core:plugin-impl")
-include(":core:templates-api")
-include(":core:templates-impl")
-
+include(":core:plugin:plugin-api")
+include(":core:plugin:plugin-impl")
+include(":core:templates:templates-api")
+include(":core:templates:templates-impl")
+include(":core:tooling:tooling-api")
+include(":core:tooling:tooling-impl")
+include(":core:termux:termux-shared")
+include(":core:termux:termux-emulator")
+include(":core:termux:termux-view")
+include(":core:termux:termux-app")
 
 include(":features")
 include(":features:feature-designer")
@@ -50,11 +55,3 @@ include(":features:feature-themebuilder")
 include(":features:feature-treeview")
 
 include(":features:git")
-
-include(":features:termux:termux-shared")
-include(":features:termux:termux-emulator")
-include(":features:termux:termux-view")
-include(":features:termux:termux-app")
-
-include(":features:tooling-api")
-include(":features:tooling-impl")

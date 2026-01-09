@@ -9,8 +9,8 @@ android {
 dependencies {
     implementation(project(":core:core-logger"))
     api(project(":core:core-datastore"))
-    api(project(":core:templates-api"))
-    implementation(project(":core:templates-impl"))
+    api(project(":core:templates:templates-api"))
+    implementation(project(":core:templates:templates-impl"))
     
     api(project(":features:feature-soraeditor"))
     api(project(":features:git"))

@@ -3,13 +3,12 @@ plugins {
 }
 
 android {
-    namespace = "com.scto.codelikebastimove.core.plugin.impl"
+    namespace = "com.scto.codelikebastimove.core.actions.impl"
 }
 
 dependencies {
-    api(project(":core:plugin-api"))
+    implementation(project(":core:actions:actions-api"))
     implementation(project(":core:core-logger"))
     
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("com.google.code.gson:gson:2.10.1")
 }

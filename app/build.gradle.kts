@@ -112,7 +112,7 @@ dependencies {
     api(project(":core:core-resources"))
     api(project(":core:core-logger"))
     implementation(project(":core:core-datastore"))
-    implementation(project(":core:templates-api"))
+    implementation(project(":core:templates:templates-api"))
     
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)

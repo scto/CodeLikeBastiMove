@@ -3,11 +3,13 @@ plugins {
 }
 
 android {
-    namespace = "com.scto.codelikebastimove.core.actions.impl"
+    namespace = "com.scto.codelikebastimove.features.tooling.impl"
 }
 
 dependencies {
-    implementation(project(":core:actions-api"))
+    api(project(":core:tooling:tooling-api"))
+    api(project(":core:termux:termux-app"))
+    
     implementation(project(":core:core-logger"))
     
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")

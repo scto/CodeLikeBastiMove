@@ -7,7 +7,7 @@ android {
 }
 
 dependencies {
-    api(project(":core:templates-api"))
-    api(project(":core:templates-impl"))
+    api(project(":core:templates:templates-api"))
+    api(project(":core:templates:templates-impl"))
     api(project(":core:core-datastore"))
 }

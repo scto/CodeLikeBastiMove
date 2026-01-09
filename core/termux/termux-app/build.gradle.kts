@@ -8,9 +8,9 @@ android {
 }
 
 dependencies {
-    api(project(":features:termux:termux-shared"))
-    api(project(":features:termux:termux-view"))
-    api(project(":features:termux:termux-emulator"))
+    api(project(":core:termux:termux-shared"))
+    api(project(":core:termux:termux-view"))
+    api(project(":core:termux:termux-emulator"))
     
     implementation(project(":core:core-ui"))
     implementation(project(":core:core-resources"))

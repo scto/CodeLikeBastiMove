@@ -7,5 +7,5 @@ android {
 }
 
 dependencies {
-    api(project(":core:templates-api"))
+    api(project(":core:templates:templates-api"))
 }

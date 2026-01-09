@@ -7,7 +7,7 @@ android {
 }
 
 dependencies {
-    api(project(":features:termux:termux-emulator"))
+    api(project(":core:termux:termux-emulator"))
     
     implementation("androidx.annotation:annotation:1.7.1")
     implementation(libs.androidx.core.ktx)
