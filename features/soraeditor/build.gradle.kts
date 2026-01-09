@@ -1,6 +1,6 @@
 plugins {
-    id("codelikebastimove.android.library")
-    id("codelikebastimove.android.library.compose")
+    id("clbm.android.library")
+    id("clbm.android.compose")
 }
 
 android {
@@ -8,9 +8,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:core-ui"))
-    implementation(project(":core:core-resources"))
-    implementation(project(":core:core-logger"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:resources"))
+    implementation(project(":core:logger"))
     implementation(project(":core:plugin:plugin-api"))
     implementation(project(":core:actions:actions-api"))
     

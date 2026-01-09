@@ -1,7 +1,7 @@
 import java.io.File
 
 plugins {
-    id("ckbm.library")
+    id("clbm.android.library")
     alias(libs.plugins.google.protobuf)
 }
 

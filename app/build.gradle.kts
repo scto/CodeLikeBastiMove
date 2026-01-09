@@ -3,8 +3,8 @@ import java.util.Properties
 import java.io.FileInputStream
 
 plugins {
-    id("clbm.application")
-    id("clbm.compose")
+    id("clbm.android.application")
+    id("clbm.android.compose")
 }
 
 val keystorePropsFile = rootProject.file("release.properties")
@@ -108,10 +108,10 @@ android {
 
 dependencies {
     api(project(":features"))
-    api(project(":core:core-ui"))
-    api(project(":core:core-resources"))
-    api(project(":core:core-logger"))
-    implementation(project(":core:core-datastore"))
+    api(project(":core:ui"))
+    api(project(":core:resources"))
+    api(project(":core:logger"))
+    implementation(project(":core:datastore:datastore"))
     implementation(project(":core:templates:templates-api"))
     
     implementation(platform(libs.compose.bom))

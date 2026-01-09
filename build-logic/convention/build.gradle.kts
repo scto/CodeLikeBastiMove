@@ -58,54 +58,51 @@ dependencies {
 gradlePlugin {
     plugins {
         register("application") {
-            id = "com.scto.application"
+            id = "clbm.android.application"
             implementationClass = "ApplicationConventionPlugin"
         }
         register("library") {
-            id = "com.scto.library"
+            id = "clbm.android.library"
             implementationClass = "LibraryConventionPlugin"
         }
+        register("feature") {
+            id = "clbm.android.feature"
+            implementationClass = "FeatureConventionPlugin"
+        }
+        register("compose") {
+            id = "clbm.android.compose"
+            implementationClass = "ComposeConventionPlugin"
+        }
         register("koin") {
-            id = "com.scto.koin"
+            id = "clbm.android.koin"
             implementationClass = "KoinConventionPlugin"
         }
         register("firebase") {
-            id = "com.scto.firebase"
+            id = "clbm.android.firebase"
             implementationClass = "FirebaseConventionPlugin"
         }
         register("dokka") {
-            id = "com.scto.dokka"
+            id = "clbm.android.dokka"
             implementationClass = "DokkaConventionPlugin"
         }
-        // --- Feature Plugin (Das "Arbeitspferd") ---
-        register("feature") {
-            id = "com.scto.feature"
-            implementationClass = "FeatureConventionPlugin"
-        }
-        // --- Fähigkeits-Plugins (Capabilities) ---
-        register("compose") {
-            id = "com.scto.compose"
-            implementationClass = "ComposeConventionPlugin"
-        }
         register("lint") {
-            id = "com.scto.lint"
+            id = "clbm.android.lint"
             implementationClass = "LintConventionPlugin"
         }
         register("room") {
-            id = "com.scto.room"
+            id = "clbm.android.room"
             implementationClass = "RoomConventionPlugin"
         }
-        // --- Tooling ---
         register("codeQuality") {
-            id = "com.scto.codequality"
+            id = "clbm.android.codequality"
             implementationClass = "CodeQualityConventionPlugin"
         }
         register("spotless") {
-            id = "com.scto.spotless"
+            id = "clbm.android.spotless"
             implementationClass = "SpotlessConventionPlugin"
         }
         register("detekt") {
-            id = "com.scto.detekt"
+            id = "clbm.android.detekt"
             implementationClass = "DetektConventionPlugin"
         }
     }

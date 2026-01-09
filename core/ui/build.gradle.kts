@@ -1,6 +1,6 @@
 plugins {
-    id("codelikebastimove.android.library")
-    id("codelikebastimove.android.library.compose")
+    id("clbm.android.library")
+    id("clbm.android.compose")
 }
 
 android {
@@ -8,7 +8,7 @@ android {
 }
 
 dependencies {
-    api(project(":core:core-resources"))
+    api(project(":core:resources"))
     
     api(platform(libs.compose.bom))
     api(libs.bundles.compose)

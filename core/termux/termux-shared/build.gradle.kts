@@ -1,5 +1,5 @@
 plugins {
-    id("codelikebastimove.android.library")
+    id("clbm.android.library")
 }
 
 android {
@@ -7,7 +7,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:core-logger"))
+    implementation(project(":core:logger"))
     
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("org.apache.commons:commons-text:1.10.0")

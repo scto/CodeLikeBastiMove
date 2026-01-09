@@ -22,7 +22,6 @@ class ApplicationConventionPlugin : Plugin<Project> {
 
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = versionInt("targetSdk")
             }
         }
     }

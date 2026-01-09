@@ -26,10 +26,6 @@ import com.scto.convention.libs
 class KoinConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            pluginManager.apply("io.insert-koin")
-
-            val javaVersion = javaVersion("java")
-            
             dependencies {
                 add("implementation", libs.findLibrary("koin-android").get())
                 add("implementation", libs.findLibrary("koin-compose").get())

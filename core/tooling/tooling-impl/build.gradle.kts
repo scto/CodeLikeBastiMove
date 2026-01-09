@@ -1,5 +1,5 @@
 plugins {
-    id("codelikebastimove.android.library")
+    id("clbm.android.library")
 }
 
 android {
@@ -10,7 +10,7 @@ dependencies {
     api(project(":core:tooling:tooling-api"))
     api(project(":core:termux:termux-app"))
     
-    implementation(project(":core:core-logger"))
+    implementation(project(":core:logger"))
     
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 }

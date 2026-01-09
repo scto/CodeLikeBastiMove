@@ -21,8 +21,8 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.kotlin
 
-import dev.scto.convention.configureKotlinAndroid
-import dev.scto.convention.versionInt
+import com.scto.convention.configureKotlinAndroid
+import com.scto.convention.versionInt
 
 class LibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -34,7 +34,6 @@ class LibraryConventionPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = versionInt("targetSdk")
             }
             
             dependencies {

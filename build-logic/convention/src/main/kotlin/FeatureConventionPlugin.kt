@@ -26,15 +26,14 @@ import com.scto.convention.libs
 
 /**
  * Standardisiertes Plugin für Feature-Module.
- * Kombiniert Library, Hilt und Compose.
+ * Kombiniert Library, Koin und Compose.
  */
-class AndroidFeatureConventionPlugin : Plugin<Project> {
+class FeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             pluginManager.apply {
-                apply("com.scto.android.library")
-                apply("com.scto.android.hilt")
-                apply("com.scto.android.compose")
+                apply("clbm.android.library")
+                apply("clbm.android.compose")
             }
 
             extensions.configure<LibraryExtension> {
@@ -44,18 +43,22 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                add("implementation", project(":core:ui"))
-                // add("implementation", project(":core:android")) // Utils etc.
+                add("api", project(":core:ui"))
+                add("api", project(":core:resources"))
 
                 add("testImplementation", kotlin("test"))
                 add("androidTestImplementation", kotlin("test"))
 
-                add("implementation", libs.findLibrary("androidx.hilt.navigation.compose").get())
-                add("implementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
-                add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
-
-                add("implementation", libs.findLibrary("coil.kt").get())
-                add("implementation", libs.findLibrary("coil.kt.compose").get())
+                add("api", libs.findLibrary("androidx-core-ktx").get())
+                add("api", libs.findLibrary("coroutines-android").get())
+                
+                add("api", platform(libs.findLibrary("compose-bom").get()))
+                add("api", libs.findBundle("compose").get())
+                add("api", libs.findBundle("lifecycle").get())
+                
+                add("api", libs.findLibrary("activity-compose").get())
+                
+                add("debugImplementation", libs.findLibrary("compose-ui-tooling").get())
             }
         }
     }

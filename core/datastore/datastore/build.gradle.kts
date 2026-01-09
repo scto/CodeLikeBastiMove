@@ -1,5 +1,5 @@
 plugins {
-    id("clbm.library")
+    id("clbm.android.library")
 }
 
 android {
@@ -7,9 +7,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:core-logger"))
-    api(project(":core:core-datastore-proto"))
-    api(project(":core:core-resources"))
+    implementation(project(":core:logger"))
+    api(project(":core:datastore:datastore-proto"))
+    api(project(":core:resources"))
     
     api(libs.data.store.core)
     api(libs.data.store.preferences)

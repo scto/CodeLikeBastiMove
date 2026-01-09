@@ -1,6 +1,6 @@
 plugins {
-    id("codelikebastimove.android.library")
-    id("codelikebastimove.android.library.compose")
+    id("clbm.android.library")
+    id("clbm.android.compose")
 }
 
 android {
@@ -12,9 +12,9 @@ dependencies {
     api(project(":core:termux:termux-view"))
     api(project(":core:termux:termux-emulator"))
     
-    implementation(project(":core:core-ui"))
-    implementation(project(":core:core-resources"))
-    implementation(project(":core:core-logger"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:resources"))
+    implementation(project(":core:logger"))
     
     implementation("androidx.annotation:annotation:1.7.1")
     implementation(libs.androidx.core.ktx)

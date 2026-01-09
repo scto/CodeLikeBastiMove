@@ -24,7 +24,7 @@ import com.scto.convention.configureAndroidCompose
 /**
  * Wendet Compose-Konfiguration auf App ODER Library an.
  */
-class AndroidComposeConventionPlugin : Plugin<Project> {
+class ComposeConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             pluginManager.withPlugin("com.android.application") {

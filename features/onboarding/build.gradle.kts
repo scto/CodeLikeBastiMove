@@ -1,5 +1,5 @@
 plugins {
-    id("codelikebastimove.android.feature")
+    id("clbm.android.feature")
 }
 
 android {
@@ -7,8 +7,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:core-logger"))
-    api(project(":core:core-datastore"))
+    implementation(project(":core:logger"))
+    api(project(":core:datastore:datastore"))
     
     implementation("com.google.accompanist:accompanist-permissions:0.37.3")
 }

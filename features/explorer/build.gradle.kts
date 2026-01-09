@@ -1,5 +1,5 @@
 plugins {
-    id("codelikebastimove.android.feature")
+    id("clbm.android.feature")
 }
 
 android {
@@ -7,5 +7,5 @@ android {
 }
 
 dependencies {
-    api(project(":core:core-datastore"))
+    api(project(":core:datastore:datastore"))
 }

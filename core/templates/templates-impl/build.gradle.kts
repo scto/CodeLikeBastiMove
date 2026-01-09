@@ -1,5 +1,5 @@
 plugins {
-    id("codelikebastimove.android.library")
+    id("clbm.android.library")
 }
 
 android {
@@ -7,10 +7,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:core-logger"))
-    implementation(project(":core:core-datastore"))
+    implementation(project(":core:logger"))
+    implementation(project(":core:datastore:datastore"))
     api(project(":core:templates:templates-api"))
-    api(project(":core:core-resources"))
+    api(project(":core:resources"))
     
     implementation(libs.androidx.core.ktx)
     implementation(libs.coroutines.core)

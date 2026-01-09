@@ -1,5 +1,5 @@
 plugins {
-    id("codelikebastimove.android.feature")
+    id("clbm.android.feature")
 }
 
 android {
@@ -7,6 +7,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:core-ui"))
-    implementation(project(":core:core-resources"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:resources"))
 }

@@ -1,5 +1,5 @@
 plugins {
-    id("codelikebastimove.android.library")
+    id("clbm.android.library")
 }
 
 android {
@@ -7,8 +7,8 @@ android {
 }
 
 dependencies {
-    api(project(":core:core-ui"))
-    api(project(":core:core-resources"))
+    api(project(":core:ui"))
+    api(project(":core:resources"))
     
     api(project(":features:home"))
     api(project(":features:settings"))

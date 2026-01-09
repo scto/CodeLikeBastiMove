@@ -13,7 +13,6 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
-        // NEU: JitPack Repository hinzufügen, um die TreeView-Bibliothek zu laden
         maven { url = uri("https://jitpack.io") }
     }
 }
@@ -24,11 +23,11 @@ include(":app")
 
 include(":core:actions:actions-api")
 include(":core:actions:actions-impl")
-include(":core:core-datastore")
-include(":core:core-datastore-proto")
-include(":core:core-logger")
-include(":core:core-resources")
-include(":core:core-ui")
+include(":core:datastore:datastore")
+include(":core:datastore:datastore-proto")
+include(":core:logger")
+include(":core:resources")
+include(":core:ui")
 include(":core:plugin:plugin-api")
 include(":core:plugin:plugin-impl")
 include(":core:templates:templates-api")
@@ -52,5 +51,4 @@ include(":features:soraeditor")
 include(":features:submodulemaker")
 include(":features:themebuilder")
 include(":features:treeview")
-
 include(":features:git")

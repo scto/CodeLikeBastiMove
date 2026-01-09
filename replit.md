@@ -20,7 +20,7 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 **Technical Implementations:**
 - **Language & Frameworks:** Kotlin, Jetpack Compose.
 - **Build System:** Gradle with Kotlin DSL and custom Convention Plugins (migrated to Koin DI, no Dagger Hilt).
-- **SDKs:** Compile SDK 36, Target SDK 35, Minimum SDK 29.
+- **SDKs:** Compile SDK 36, Target SDK 35, Minimum SDK 24.
 - **Architecture:** MVVM with ViewModel and StateFlow, emphasizing a multi-module design.
 - **State Management:** MainViewModel manages core application state.
 - **Data Persistence:** Proto DataStore for user preferences and EncryptedSharedPreferences for secure data.
@@ -39,7 +39,8 @@ The application is an Android mobile application leveraging Jetpack Compose for 
   - `core/templates/` - Project templates (templates-api, templates-impl)
   - `core/tooling/` - Tooling bridge (tooling-api, tooling-impl)
   - `core/termux/` - Terminal emulator (termux-shared, termux-emulator, termux-view, termux-app)
-  - `core/core-ui`, `core/core-resources`, `core/core-datastore`, `core/core-logger`
+  - `core/datastore/` - Data persistence (datastore, datastore-proto)
+  - `core/ui`, `core/resources`, `core/logger`
 - **Git Module (`features/git`):** Comprehensive Git version control integration with AndroidIDE-inspired UI, including GitOperations interface, data models, repository for binary interaction, ViewModel, and dedicated UI screens for changes, history, branches, remotes, and settings.
 - **Theme Builder Module (`features/themebuilder`):** Dedicated module for Material Theme Builder functionality with data models, color utilities, UI components, and theme export generators.
 - **Sub-Module Maker (`features/submodulemaker`):** Dedicated module for creating new Gradle sub-modules with AndroidIDE-inspired dark UI, supporting Kotlin Gradle notation `:folderName:moduleName`. Features include programming language selector (Kotlin/Java), folder path input, module name input, and automatic settings.gradle.kts updates.
@@ -56,9 +57,9 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 - **Plugin System (`core/plugin/`):** Core modules for Android Studio/VS Code style extensibility, defining plugin descriptors, lifecycle, context, extension points, event system, and annotations. Implementation includes a plugin manager, dynamic loader, and security manager.
 - **Termux Terminal System (`core/termux/`):** Termux-inspired terminal emulator modules providing core shared utilities, terminal emulation engine, and UI components for integration.
 - **Tooling Bridge (`core/tooling/`):** Bridge between Gradle outputs, Termux terminal, and IDE log views, providing interfaces for tooling integration and an implementation coordinating various providers.
-- **Convention Plugins:** Custom Gradle plugins centralize build logic and dependencies.
-- **Centralized Resources:** `core-resources` module for shared resources.
-- **Centralized Logging:** `core-logger` module with a facade wrapping `android.util.Log` and runtime-toggleable logging.
+- **Convention Plugins:** Custom Gradle plugins with `clbm.android.*` IDs centralize build logic and dependencies.
+- **Centralized Resources:** `core/resources` module for shared resources.
+- **Centralized Logging:** `core/logger` module with a facade wrapping `android.util.Log` and runtime-toggleable logging.
 
 ## External Dependencies
 - **Proto DataStore:** User preferences and settings.

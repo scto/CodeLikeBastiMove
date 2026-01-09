@@ -11,10 +11,10 @@ internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension<*, *, *, *, *, *>,
 ) {
     commonExtension.apply {
-        compileSdk = versionInt("sdk-compile")
+        compileSdk = versionInt("compileSdk")
 
         defaultConfig {
-            minSdk = versionInt("sdk-min")
+            minSdk = versionInt("minSdk")
         }
 
         val javaVersion = javaVersion("java")
