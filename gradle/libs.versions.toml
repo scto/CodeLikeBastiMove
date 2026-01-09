@@ -10,7 +10,7 @@ java = "17"
 # Plugins
 android-gradle = "8.11.1"
 android-tools = "31.11.1"
-kotlin = "2.2.21"
+kotlin = "2.3.0"
 ksp = "2.2.21-1.0.32"
 
 kotlin-coroutines = "1.10.2"
