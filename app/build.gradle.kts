@@ -3,8 +3,8 @@ import java.util.Properties
 import java.io.FileInputStream
 
 plugins {
-    id("codelikebastimove.android.application")
-    id("codelikebastimove.android.application.compose")
+    id("clbm.application")
+    id("clbm.compose")
 }
 
 val keystorePropsFile = rootProject.file("release.properties")

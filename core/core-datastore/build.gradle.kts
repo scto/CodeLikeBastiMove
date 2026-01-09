@@ -1,5 +1,5 @@
 plugins {
-    id("codelikebastimove.android.library")
+    id("clbm.library")
 }
 
 android {

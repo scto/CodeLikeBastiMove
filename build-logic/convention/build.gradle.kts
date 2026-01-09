@@ -65,8 +65,8 @@ gradlePlugin {
             id = "com.scto.library"
             implementationClass = "LibraryConventionPlugin"
         }
-        register("androidKoin") {
-            id = "com.scto.android.koin"
+        register("koin") {
+            id = "com.scto.koin"
             implementationClass = "KoinConventionPlugin"
         }
         register("firebase") {

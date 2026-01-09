@@ -1,7 +1,7 @@
 import java.io.File
 
 plugins {
-    id("codelikebastimove.android.library")
+    id("ckbm.library")
     alias(libs.plugins.google.protobuf)
 }
 

@@ -42,6 +42,10 @@ coil = "2.7.0"
 # ... STORAGE:PREFERENCES ...
 androidxDataStore = "1.1.7"
 plugin-protobuf = "0.9.5"
+# keep 4.26.1 version , otherwise there is a duplicated classes in Firebase Firestore
+protobuf = "4.33.2"
+androidx-documentfile = "1.1.0"
+security-crypto = "1.1.0"
 
 # ... STORAGE:ROOM ...
 room = "2.8.3"
@@ -83,6 +87,7 @@ targetSdk = "35"
 [libraries]
 # ... CORE:ANDROID ...
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+
 kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
@@ -137,7 +142,6 @@ androidx-dataStore-preferences = { group = "androidx.datastore", name = "datasto
 androidx-documentfile = { module = "androidx.documentfile:documentfile", version.ref = "androidx-documentfile" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
 protobuf-kotlin = { module = "com.google.protobuf:protobuf-kotlin-lite", version.ref = "protobuf" }
-
 # ... ROOM ...
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
@@ -163,12 +167,14 @@ firebase-perf = { group = "com.google.firebase", name = "firebase-perf" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
 
-# ... DAGGER-HILT ...
-dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "daggerHilt" }
-dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "daggerHilt" }
-androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "daggerHiltExt" }
-androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "daggerHiltExt" }
-androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
+# ... KOIN ...
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin-compose" }
+koin-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navigation", version.ref = "koin-compose" }
+koin-workmanager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koin" }
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
+koin-test-junit = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin" }
 
 # ... OSS ...
 google-oss-licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "googleOss" }
@@ -210,7 +216,7 @@ kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt" }
+koin = { id = "io.insert-koin", version.ref = "koin" }
 gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerfPlugin" }
@@ -225,19 +231,6 @@ secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugi
 google-protobuf = { id = "com.google.protobuf", version.ref = "plugin-protobuf" }
 
 # ... Custom Plugins ...
-codeonmobile-application = { id = "com.scto.application" }
-codeonmobile-library = { id = "com.scto.library" }
-codeonmobile-compose = { id = "com.scto.compose" }
-codeonmobile-feature = { id = "com.scto.feature" }
-codeonmobile-lint = { id = "com.scto.lint" }
-codeonmobile-firebase = { id = "com.scto.firebase" }
-codeonmobile-room = { id = "com.scto.room" }
-codeonmobile-dagger-hilt = { id = "com.scto.dagger.hilt" }
-codeonmobile-dokka = { id = "com.scto.dokka" }
-codeonmobile-codequality = { id = "com.scto.codequality" }
-codeonmobile-spotless = { id = "com.scto.spotless" }
-codeonmobile-detekt = { id = "com.scto.detekt" }
-
 clbm-application = { id = "com.scto.application" }
 clbm-library = { id = "com.scto.library" }
 clbm-compose = { id = "com.scto.compose" }
@@ -245,7 +238,7 @@ clbm-feature = { id = "com.scto.feature" }
 clbm-lint = { id = "com.scto.lint" }
 clbm-firebase = { id = "com.scto.firebase" }
 clbm-room = { id = "com.scto.room" }
-clbm-dagger-hilt = { id = "com.scto.android.koin" }
+clbm-koin = { id = "com.scto.koin" }
 clbm-dokka = { id = "com.scto.dokka" }
 clbm-codequality = { id = "com.scto.codequality" }
 clbm-spotless = { id = "com.scto.spotless" }
