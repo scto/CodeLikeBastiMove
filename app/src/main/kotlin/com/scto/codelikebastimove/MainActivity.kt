@@ -26,6 +26,9 @@ import com.scto.codelikebastimove.core.datastore.UserPreferences
 import com.scto.codelikebastimove.core.datastore.UserPreferencesRepository
 import com.scto.codelikebastimove.core.ui.theme.CodeLikeBastiMoveTheme
 import com.scto.codelikebastimove.core.ui.theme.ThemeMode
+import com.scto.codelikebastimove.core.auth.AuthRepository
+import com.scto.codelikebastimove.core.auth.AuthState
+import com.scto.codelikebastimove.feature.auth.navigation.AuthNavHost
 import com.scto.codelikebastimove.feature.main.MainScreen
 import com.scto.codelikebastimove.feature.onboarding.OnboardingScreen
 import kotlinx.coroutines.launch
@@ -82,12 +85,30 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val isOnboardingComplete = userPreferences.onboardingConfig.onboardingCompleted
                     
-                    if (!isOnboardingComplete || !hasRealPermission) {
-                        OnboardingScreen(
-                            onOnboardingComplete = { }
-                        )
-                    } else {
-                        MainScreen()
+                    val authRepository = remember { AuthRepository.getInstance() }
+                    val authState by authRepository.authStateFlow.collectAsState(initial = AuthState.Loading)
+                    
+                    val isAuthenticated = when (authState) {
+                        is AuthState.Authenticated -> true
+                        is AuthState.NotAuthenticated -> false
+                        is AuthState.Loading -> authRepository.isLoggedIn
+                        is AuthState.Error -> false
+                    }
+                    
+                    when {
+                        !isOnboardingComplete || !hasRealPermission -> {
+                            OnboardingScreen(
+                                onOnboardingComplete = { }
+                            )
+                        }
+                        !isAuthenticated -> {
+                            AuthNavHost(
+                                onAuthSuccess = { }
+                            )
+                        }
+                        else -> {
+                            MainScreen()
+                        }
                     }
                 }
             }

@@ -19,4 +19,5 @@ dependencies {
     api(project(":feature:main"))
     api(project(":feature:designer"))
     api(project(":feature:explorer"))
+    api(project(":feature:auth"))
 }

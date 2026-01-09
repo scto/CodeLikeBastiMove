@@ -48,8 +48,10 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 - **Tree View (`feature/treeview`):** File tree view component with AndroidIDE-inspired dark design, featuring brownish folder icons, animated chevron expand/collapse indicators, project header with settings and new folder buttons, and support for hidden files display.
 - **Sora Editor (`feature/soraeditor`):** Advanced code editor module using Rosemoe's sora-editor library, featuring language support, theming, UI widgets, Jetpack Compose integration, and a plugin system for extensions.
 - **Main (`feature/main`):** Main IDE workspace module with NavigationRail, drawer navigation, and BottomSheetBar panels.
+- **Auth (`feature/auth`):** User authentication module with login and registration screens, integrated with Firebase Authentication.
+- **Auth Core (`core/auth`):** Core authentication module providing AuthRepository, AuthState management, and Google Sign-In helper.
 - **Home (`feature/home`):** Home screen with action cards and project list management.
-- **Settings (`feature/settings`):** Application settings and preferences UI.
+- **Settings (`feature/settings`):** Application settings and preferences UI with sign-out functionality.
 - **Onboarding (`feature/onboarding`):** Multi-page onboarding flow with permission handling.
 - **Designer (`feature/designer`):** Layout designer for visual UI editing.
 - **Explorer (`feature/explorer`):** File system exploration and browsing.
@@ -70,3 +72,12 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 - **Accompanist Permissions:** Runtime permission handling.
 - **Sora Editor (io.github.Rosemoe.sora-editor):** Advanced Android code editor library.
 - **Android Tree-Sitter:** Java bindings for Tree-sitter parsing library.
+- **Firebase Authentication:** User authentication with email/password and Google Sign-In support.
+- **Play Services Auth & Credentials:** Google Sign-In integration using modern Credential Manager API.
+
+## Firebase Setup Required
+To use Firebase Authentication, you need to:
+1. Create a Firebase project at https://console.firebase.google.com/
+2. Add your Android app with the package name `com.scto.codelikebastimove`
+3. Download `google-services.json` and place it in the `app/` directory
+4. For Google Sign-In, configure OAuth consent screen and add Web Client ID to `GoogleSignInHelper`

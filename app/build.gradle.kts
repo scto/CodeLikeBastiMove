@@ -113,6 +113,8 @@ dependencies {
     api(project(":core:logger"))
     implementation(project(":core:datastore:datastore"))
     implementation(project(":core:templates:templates-api"))
+    implementation(project(":core:auth"))
+    implementation(project(":feature:auth"))
     
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)

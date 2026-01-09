@@ -8,4 +8,5 @@ android {
 
 dependencies {
     api(project(":core:datastore:datastore"))
+    implementation(project(":core:auth"))
 }

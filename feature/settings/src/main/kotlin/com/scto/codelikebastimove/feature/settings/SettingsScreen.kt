@@ -18,7 +18,11 @@ import androidx.compose.material.icons.filled.BrightnessAuto
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -26,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -37,15 +42,26 @@ import com.scto.codelikebastimove.core.datastore.ThemeMode
 
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel = viewModel()
+    viewModel: SettingsViewModel = viewModel(),
+    onSignOut: () -> Unit = {}
 ) {
     val userPreferences by viewModel.userPreferences.collectAsState()
+    val signOutTriggered by viewModel.signOutTriggered.collectAsState()
+    
+    LaunchedEffect(signOutTriggered) {
+        if (signOutTriggered) {
+            viewModel.resetSignOutTrigger()
+            onSignOut()
+        }
+    }
     
     GeneralSettings(
         selectedThemeMode = userPreferences.themeMode,
         dynamicColorsEnabled = userPreferences.dynamicColorsEnabled,
         onThemeModeSelected = { viewModel.setThemeMode(it) },
-        onDynamicColorsChanged = { viewModel.setDynamicColorsEnabled(it) }
+        onDynamicColorsChanged = { viewModel.setDynamicColorsEnabled(it) },
+        currentUserEmail = viewModel.currentUserEmail,
+        onSignOut = { viewModel.signOut() }
     )
 }
 
@@ -54,7 +70,9 @@ fun GeneralSettings(
     selectedThemeMode: ThemeMode,
     dynamicColorsEnabled: Boolean,
     onThemeModeSelected: (ThemeMode) -> Unit,
-    onDynamicColorsChanged: (Boolean) -> Unit
+    onDynamicColorsChanged: (Boolean) -> Unit,
+    currentUserEmail: String? = null,
+    onSignOut: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -70,6 +88,13 @@ fun GeneralSettings(
         
         Spacer(modifier = Modifier.height(24.dp))
         
+        AccountSection(
+            currentUserEmail = currentUserEmail,
+            onSignOut = onSignOut
+        )
+        
+        Spacer(modifier = Modifier.height(24.dp))
+        
         ThemeSection(
             selectedThemeMode = selectedThemeMode,
             onThemeModeSelected = onThemeModeSelected
@@ -81,6 +106,76 @@ fun GeneralSettings(
             dynamicColorsEnabled = dynamicColorsEnabled,
             onDynamicColorsChanged = onDynamicColorsChanged
         )
+    }
+}
+
+@Composable
+private fun AccountSection(
+    currentUserEmail: String?,
+    onSignOut: () -> Unit
+) {
+    Column {
+        Text(
+            text = "Account",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary
+        )
+        
+        Spacer(modifier = Modifier.height(12.dp))
+        
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
+            )
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "User",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    
+                    Spacer(modifier = Modifier.width(16.dp))
+                    
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "Signed in as",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                        )
+                        Text(
+                            text = currentUserEmail ?: "Not signed in",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                Button(
+                    onClick = onSignOut,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Logout,
+                        contentDescription = "Sign Out",
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Sign Out")
+                }
+            }
+        }
     }
 }
 
