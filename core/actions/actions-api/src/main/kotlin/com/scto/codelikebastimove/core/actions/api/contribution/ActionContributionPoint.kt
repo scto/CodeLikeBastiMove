@@ -39,7 +39,7 @@ data class EditorActionContribution(
     val action: Action,
     val keybinding: Keybinding? = null,
     val menuContributions: List<MenuContribution> = emptyList(),
-    val when: ActionWhen? = null
+    val condition: ActionWhen? = null
 )
 
 data class CommandContribution(
@@ -55,7 +55,7 @@ data class MenuItemContribution(
     val commandId: String,
     val group: String? = null,
     val order: Int = 0,
-    val when: ActionWhen? = null
+    val condition: ActionWhen? = null
 )
 
 data class SubMenuContribution(

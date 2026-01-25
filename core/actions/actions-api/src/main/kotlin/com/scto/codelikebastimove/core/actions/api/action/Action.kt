@@ -41,7 +41,7 @@ data class ActionDescriptor(
     val category: ActionCategory = ActionCategory.GENERAL,
     val icon: String? = null,
     val defaultKeybinding: Keybinding? = null,
-    val when: ActionWhen? = null,
+    val condition: ActionWhen? = null,
     val args: Map<String, Any> = emptyMap()
 )
 
@@ -172,7 +172,7 @@ interface ActionContribution {
 data class KeybindingContribution(
     val actionId: String,
     val keybinding: Keybinding,
-    val when: ActionWhen? = null
+    val condition: ActionWhen? = null
 )
 
 data class MenuContribution(
@@ -180,7 +180,7 @@ data class MenuContribution(
     val menuId: String,
     val group: String? = null,
     val order: Int = 0,
-    val when: ActionWhen? = null
+    val condition: ActionWhen? = null
 )
 
 object MenuIds {

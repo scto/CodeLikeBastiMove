@@ -124,7 +124,7 @@ interface FileTypeHandler : Extension {
     val icon: String? get() = null
     
     fun canHandle(filePath: String): Boolean
-    fun getHighlightingRules(): Map<String, String> get() = emptyMap()
+    fun getHighlightingRules(): Map<String, String> = emptyMap()
 }
 
 interface CommandContribution : Extension {

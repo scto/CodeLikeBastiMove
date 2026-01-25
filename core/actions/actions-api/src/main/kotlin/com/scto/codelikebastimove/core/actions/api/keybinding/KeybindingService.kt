@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 interface KeybindingService {
     val keybindings: StateFlow<List<ResolvedKeybinding>>
     
-    fun registerKeybinding(actionId: String, keybinding: Keybinding, when: ActionWhen? = null): Boolean
+    fun registerKeybinding(actionId: String, keybinding: Keybinding, condition: ActionWhen? = null): Boolean
     
     fun unregisterKeybinding(actionId: String, keybinding: Keybinding): Boolean
     
@@ -31,7 +31,7 @@ interface KeybindingService {
 data class ResolvedKeybinding(
     val actionId: String,
     val keybinding: Keybinding,
-    val when: ActionWhen? = null,
+    val condition: ActionWhen? = null,
     val priority: Int = 0,
     val source: KeybindingSource = KeybindingSource.DEFAULT
 )
@@ -60,7 +60,7 @@ interface KeybindingResolver {
     
     fun findMatches(event: KeyEvent): List<ResolvedKeybinding>
     
-    fun evaluateWhen(when: ActionWhen?, context: ActionContext): Boolean
+    fun evaluateCondition(condition: ActionWhen?, context: ActionContext): Boolean
 }
 
 interface KeybindingHandler {
