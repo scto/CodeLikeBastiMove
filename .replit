@@ -1,4 +1,4 @@
-modules = ["nix"]
+modules = ["nix", "ruby-3.2"]
 [agent]
 expertMode = true
 
