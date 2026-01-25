@@ -1,11 +1,11 @@
 [versions]
 # ... PROJECT ...
 java = "17"
-kotlin = "2.2.21"
+kotlin = "2.2.0"
 androidGradlePlugin = "8.11.1"
 androidTools = "31.13.1"
 gmsPlugin = "4.4.4"
-ksp = "2.2.21-1.0.32"
+ksp = "2.2.0-2.0.2"
 dokka = "2.1.0"
 dokkaMermaid = "0.6.0"
 develocity = "4.3" # Oder 4.2.1 wie angefragt
