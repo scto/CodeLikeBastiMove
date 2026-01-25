@@ -237,13 +237,13 @@ data class KeybindingContribute(
     val mac: String? = null,
     val linux: String? = null,
     val win: String? = null,
-    val when: String? = null
+    val `when`: String? = null
 )
 
 data class MenuItemContribute(
     val command: String,
     val group: String? = null,
-    val when: String? = null
+    val `when`: String? = null
 )
 
 data class ConfigurationContribute(
@@ -255,6 +255,6 @@ data class ConfigurationProperty(
     val type: String,
     val default: Any? = null,
     val description: String = "",
-    val enum: List<Any>? = null,
+    val enumValues: List<Any>? = null,
     val enumDescriptions: List<String>? = null
 )

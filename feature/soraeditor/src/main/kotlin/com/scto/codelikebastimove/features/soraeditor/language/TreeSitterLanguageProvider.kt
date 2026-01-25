@@ -16,8 +16,6 @@ class TreeSitterLanguageProvider : LanguageProvider {
         EditorLanguageType.KOTLIN,
         EditorLanguageType.XML,
         EditorLanguageType.CPP,
-        EditorLanguageType.C,
-        EditorLanguageType.MAKEFILE,
         EditorLanguageType.JSON
     )
     
@@ -70,8 +68,7 @@ class TreeSitterLanguageProvider : LanguageProvider {
                 EditorLanguageType.JAVA -> com.itsaky.androidide.treesitter.java.TSLanguageJava.getInstance()
                 EditorLanguageType.KOTLIN -> com.itsaky.androidide.treesitter.kotlin.TSLanguageKotlin.getInstance()
                 EditorLanguageType.XML -> com.itsaky.androidide.treesitter.xml.TSLanguageXml.getInstance()
-                EditorLanguageType.CPP, EditorLanguageType.C -> com.itsaky.androidide.treesitter.cpp.TSLanguageCpp.getInstance()
-                EditorLanguageType.MAKEFILE -> com.itsaky.androidide.treesitter.make.TSLanguageMake.getInstance()
+                EditorLanguageType.CPP -> com.itsaky.androidide.treesitter.cpp.TSLanguageCpp.getInstance()
                 EditorLanguageType.JSON -> com.itsaky.androidide.treesitter.json.TSLanguageJson.getInstance()
                 else -> null
             }
@@ -98,8 +95,6 @@ class TreeSitterLanguageProvider : LanguageProvider {
             EditorLanguageType.KOTLIN -> "kotlin"
             EditorLanguageType.XML -> "xml"
             EditorLanguageType.CPP -> "cpp"
-            EditorLanguageType.C -> "c"
-            EditorLanguageType.MAKEFILE -> "make"
             EditorLanguageType.JSON -> "json"
             else -> "plain"
         }

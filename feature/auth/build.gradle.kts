@@ -11,6 +11,8 @@ dependencies {
     implementation(project(":core:auth"))
     implementation(project(":core:ui"))
     
+    implementation(libs.androidx.navigation.compose)
+    
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
 }

@@ -20,13 +20,13 @@ interface LanguagePackPlugin : Extension {
     
     fun getTreeSitterQueries(): TreeSitterQueries?
     
-    fun getSnippets(): List<Snippet> get() = emptyList()
+    fun getSnippets(): List<Snippet> = emptyList()
     
-    fun getCompletionProvider(): CompletionProvider? get() = null
+    fun getCompletionProvider(): CompletionProvider? = null
     
-    fun getHoverProvider(): HoverProvider? get() = null
+    fun getHoverProvider(): HoverProvider? = null
     
-    fun getFormattingProvider(): FormattingProvider? get() = null
+    fun getFormattingProvider(): FormattingProvider? = null
 }
 
 data class LanguageConfiguration(

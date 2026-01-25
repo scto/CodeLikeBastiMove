@@ -11,9 +11,9 @@ interface EditorActionPlugin : Extension, ActionContributor {
     
     fun getEditorActions(): List<EditorPluginAction>
     
-    fun getContextMenuActions(): List<EditorPluginAction> get() = emptyList()
+    fun getContextMenuActions(): List<EditorPluginAction> = emptyList()
     
-    fun getToolbarActions(): List<EditorPluginAction> get() = emptyList()
+    fun getToolbarActions(): List<EditorPluginAction> = emptyList()
 }
 
 data class EditorPluginAction(

@@ -23,9 +23,7 @@ dependencies {
     implementation("com.itsaky.androidide.treesitter:tree-sitter-java:4.1.0")
     implementation("com.itsaky.androidide.treesitter:tree-sitter-kotlin:4.1.0")
     implementation("com.itsaky.androidide.treesitter:tree-sitter-xml:4.1.0")
-    implementation("com.itsaky.androidide.treesitter:tree-sitter-c:4.1.0")
     implementation("com.itsaky.androidide.treesitter:tree-sitter-cpp:4.1.0")
-    implementation("com.itsaky.androidide.treesitter:tree-sitter-make:4.1.0")
     implementation("com.itsaky.androidide.treesitter:tree-sitter-json:4.1.0")
     
     implementation(libs.kotlinx.coroutines.android)

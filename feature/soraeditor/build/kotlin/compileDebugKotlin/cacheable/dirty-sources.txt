@@ -1,0 +1,16 @@
+/home/runner/workspace/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/features/soraeditor/plugin/language/LanguagePackPlugin.kt
+/home/runner/workspace/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/features/soraeditor/compose/SoraEditor.kt
+/home/runner/workspace/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/features/soraeditor/model/EditorLanguageType.kt
+/home/runner/workspace/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/features/soraeditor/plugin/action/EditorActionPlugin.kt
+/home/runner/workspace/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/features/soraeditor/screen/SoraEditorScreen.kt
+/home/runner/workspace/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/features/soraeditor/language/LanguageRegistry.kt
+/home/runner/workspace/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/features/soraeditor/language/TextMateLanguageProvider.kt
+/home/runner/workspace/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/features/soraeditor/model/EditorConfig.kt
+/home/runner/workspace/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/features/soraeditor/plugin/SoraEditorPluginSystem.kt
+/home/runner/workspace/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/features/soraeditor/plugin/contribution/EditorPluginContributor.kt
+/home/runner/workspace/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/features/soraeditor/widget/SoraEditorView.kt
+/home/runner/workspace/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/features/soraeditor/theme/EditorThemeProvider.kt
+/home/runner/workspace/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/features/soraeditor/viewmodel/SoraEditorViewModel.kt
+/home/runner/workspace/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/features/soraeditor/language/TreeSitterLanguageProvider.kt
+/home/runner/workspace/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/features/soraeditor/plugin/theme/EditorThemePlugin.kt
+/home/runner/workspace/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/features/soraeditor/model/EditorTheme.kt
