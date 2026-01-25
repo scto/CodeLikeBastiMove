@@ -10,12 +10,15 @@ android {
 dependencies {
     api(project(":core:resources"))
     
-    api(platform(libs.compose.bom))
-    api(libs.bundles.compose)
-    api(libs.bundles.lifecycle)
-    api(libs.activity.compose)
+    api(platform(libs.androidx.compose.bom))
+    api(libs.androidx.compose.material3)
+    api(libs.androidx.compose.foundation)
+    api(libs.androidx.compose.ui.tooling.preview)
+    api(libs.androidx.lifecycle.runtime.ktx)
+    api(libs.androidx.lifecycle.viewModelCompose)
+    api(libs.androidx.activity.compose)
     
     implementation(libs.androidx.core.ktx)
     
-    debugImplementation(libs.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }

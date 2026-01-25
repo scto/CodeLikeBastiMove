@@ -2,6 +2,8 @@
 # ... PROJECT ...
 java = "17"
 kotlin = "2.2.0"
+appVersionCode = "1"
+appVersionName = "1.0.0"
 androidGradlePlugin = "8.11.1"
 androidTools = "31.13.1"
 gmsPlugin = "4.4.4"
@@ -16,6 +18,7 @@ spotless = "7.0.0.BETA4"
 detekt = "1.23.6"
 
 # ... CORE:ANDROID ...
+desugarJdkLibs = "2.1.4"
 androidxCore = "1.17.0"
 kotlinxCoroutines = "1.10.2"
 kotlinxDatetime = "0.7.1-0.6.x-compat"
@@ -86,6 +89,7 @@ targetSdk = "35"
 
 [libraries]
 # ... CORE:ANDROID ...
+desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
 
 kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }

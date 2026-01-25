@@ -18,6 +18,6 @@ dependencies {
     api(libs.identity.google.id)
     
     implementation(libs.androidx.core.ktx)
-    implementation(libs.coroutines.core)
-    implementation(libs.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
 }

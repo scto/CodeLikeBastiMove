@@ -50,15 +50,18 @@ class FeatureConventionPlugin : Plugin<Project> {
                 add("androidTestImplementation", kotlin("test"))
 
                 add("api", libs.findLibrary("androidx-core-ktx").get())
-                add("api", libs.findLibrary("coroutines-android").get())
+                add("api", libs.findLibrary("kotlinx-coroutines-android").get())
                 
-                add("api", platform(libs.findLibrary("compose-bom").get()))
-                add("api", libs.findBundle("compose").get())
-                add("api", libs.findBundle("lifecycle").get())
+                add("api", platform(libs.findLibrary("androidx-compose-bom").get()))
+                add("api", libs.findLibrary("androidx-compose-material3").get())
+                add("api", libs.findLibrary("androidx-compose-foundation").get())
+                add("api", libs.findLibrary("androidx-compose-ui-tooling-preview").get())
+                add("api", libs.findLibrary("androidx-lifecycle-runtime-ktx").get())
+                add("api", libs.findLibrary("androidx-lifecycle-viewModelCompose").get())
                 
-                add("api", libs.findLibrary("activity-compose").get())
+                add("api", libs.findLibrary("androidx-activity-compose").get())
                 
-                add("debugImplementation", libs.findLibrary("compose-ui-tooling").get())
+                add("debugImplementation", libs.findLibrary("androidx-compose-ui-tooling").get())
             }
         }
     }

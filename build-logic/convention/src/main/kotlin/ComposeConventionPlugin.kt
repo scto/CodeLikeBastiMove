@@ -27,6 +27,8 @@ import com.scto.convention.configureAndroidCompose
 class ComposeConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
+            pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
+            
             pluginManager.withPlugin("com.android.application") {
                 val extension = extensions.getByType<ApplicationExtension>()
                 configureAndroidCompose(extension)

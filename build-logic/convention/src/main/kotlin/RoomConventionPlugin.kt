@@ -21,7 +21,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
-import dev.scto.convention.libs
+import com.scto.convention.libs
 
 class RoomConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {

@@ -10,5 +10,5 @@ dependencies {
     api(project(":core:resources"))
     
     implementation(libs.androidx.core.ktx)
-    implementation(libs.coroutines.core)
+    implementation(libs.kotlinx.coroutines.core)
 }

@@ -82,9 +82,9 @@ android {
 
     defaultConfig {
         applicationId = "com.scto.codelikebastimove"
-        targetSdk = libs.versions.sdk.target.get().toInt()
-        versionCode = libs.versions.app.version.code.get().toInt()
-        versionName = libs.versions.app.version.name.get()
+        targetSdk = libs.versions.targetSdk.get().toInt()
+        versionCode = libs.versions.appVersionCode.get().toInt()
+        versionName = libs.versions.appVersionName.get()
         
         vectorDrawables { 
             useSupportLibrary = true
@@ -116,16 +116,20 @@ dependencies {
     implementation(project(":core:auth"))
     implementation(project(":feature:auth"))
     
-    implementation(platform(libs.compose.bom))
-    implementation(libs.bundles.compose)
-    implementation(libs.bundles.lifecycle)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewModelCompose)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
     
-    implementation(libs.activity.compose)
-    implementation(libs.navigation)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.coroutines.android)
+    implementation(libs.kotlinx.coroutines.android)
 
     coreLibraryDesugaring(libs.desugaring)
     
-    debugImplementation(libs.bundles.compose.debug)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }

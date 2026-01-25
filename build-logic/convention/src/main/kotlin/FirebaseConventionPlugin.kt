@@ -18,7 +18,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 
-import dev.scto.convention.libs
+import com.scto.convention.libs
 
 class FirebaseConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
