@@ -81,3 +81,11 @@ To use Firebase Authentication, you need to:
 2. Add your Android app with the package name `com.scto.codelikebastimove`
 3. Download `google-services.json` and place it in the `app/` directory
 4. For Google Sign-In, configure OAuth consent screen and add Web Client ID to `GoogleSignInHelper`
+
+## Recent Changes (January 2026)
+- **Build Fixes Completed:** Successfully resolved all compilation errors to achieve BUILD SUCCESSFUL
+- **Kotlin Reserved Keyword Refactoring:** Renamed `when` parameters to `condition` throughout keybinding/action APIs (DefaultKeybindingService, PluginActionIntegration, EditorActionPlugin)
+- **Platform Declaration Clash Fix:** Changed EditorThemePlugin from abstract property `themeDefinition` to abstract function `createThemeDefinition()`
+- **Smart Cast Fixes:** Resolved smart cast issues in PluginManager, TerminalSession, and DefaultLogViewProvider by caching nullable values in local variables
+- **TreeSitter Workaround:** Temporarily simplified TreeSitterLanguageProvider to return EmptyLanguage() until proper dependencies are available
+- **APK Generated:** Debug APK successfully built at `app/build/outputs/apk/debug/app-debug.apk`
