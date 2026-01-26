@@ -43,7 +43,7 @@ include(":core:firebase:analytics")
 include(":core:firebase:auth")
 include(":core:firebase:firestore")
 
-include(":feature")
+//include(":feature")
 include(":feature:assetstudio")
 include(":feature:designer")
 include(":feature:explorer")
