@@ -7,17 +7,22 @@ android {
 }
 
 dependencies {
-    api(project(":core:ui"))
+    /* Core Modules */
     api(project(":core:resources"))
-    
-    api(project(":feature:home"))
-    api(project(":feature:settings"))
-    api(project(":feature:treeview"))
-    api(project(":feature:soraeditor"))
-    api(project(":feature:git"))
-    api(project(":feature:onboarding"))
-    api(project(":feature:main"))
+    api(project(":core:ui"))
+
+    /* Feature Modules */
+    api(project(":feature:assetstudio"))
+    api(project(":feature:auth"))
     api(project(":feature:designer"))
     api(project(":feature:explorer"))
-    api(project(":feature:auth"))
+    api(project(":feature:git"))
+    api(project(":feature:home"))
+    api(project(":feature:main"))
+    api(project(":feature:onboarding"))
+    api(project(":feature:settings"))
+    api(project(":feature:soraeditor"))
+    api(project(":feature:submodulemaker"))
+    api(project(":feature:themebuilder"))
+    api(project(":feature:treeview"))
 }
