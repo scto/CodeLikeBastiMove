@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.feature.soraeditor.model
+package com.scto.codelikebastimove.features.soraeditor.model
 
 enum class EditorLanguageType(
     val displayName: String,

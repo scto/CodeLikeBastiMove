@@ -1,16 +1,16 @@
-package com.scto.codelikebastimove.feature.soraeditor.widget
+package com.scto.codelikebastimove.features.soraeditor.widget
 
 import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.widget.FrameLayout
-import com.scto.codelikebastimove.feature.soraeditor.language.LanguageRegistry
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorConfig
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorLanguageType
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorTheme
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorThemes
-import com.scto.codelikebastimove.feature.soraeditor.model.HighlightingMode
-import com.scto.codelikebastimove.feature.soraeditor.theme.EditorThemeProvider
+import com.scto.codelikebastimove.features.soraeditor.language.LanguageRegistry
+import com.scto.codelikebastimove.features.soraeditor.model.EditorConfig
+import com.scto.codelikebastimove.features.soraeditor.model.EditorLanguageType
+import com.scto.codelikebastimove.features.soraeditor.model.EditorTheme
+import com.scto.codelikebastimove.features.soraeditor.model.EditorThemes
+import com.scto.codelikebastimove.features.soraeditor.model.HighlightingMode
+import com.scto.codelikebastimove.features.soraeditor.theme.EditorThemeProvider
 import io.github.rosemoe.sora.event.ContentChangeEvent
 import io.github.rosemoe.sora.event.SelectionChangeEvent
 import io.github.rosemoe.sora.text.Content

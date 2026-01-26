@@ -1,7 +1,7 @@
-package com.scto.codelikebastimove.feature.soraeditor.language
+package com.scto.codelikebastimove.features.soraeditor.language
 
 import android.content.Context
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorLanguageType
+import com.scto.codelikebastimove.features.soraeditor.model.EditorLanguageType
 import io.github.rosemoe.sora.lang.EmptyLanguage
 import io.github.rosemoe.sora.lang.Language
 import io.github.rosemoe.sora.langs.textmate.TextMateColorScheme

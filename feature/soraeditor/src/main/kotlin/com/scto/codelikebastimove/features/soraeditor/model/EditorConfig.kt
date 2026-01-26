@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.feature.soraeditor.model
+package com.scto.codelikebastimove.features.soraeditor.model
 
 data class EditorConfig(
     val textSize: Float = 14f,

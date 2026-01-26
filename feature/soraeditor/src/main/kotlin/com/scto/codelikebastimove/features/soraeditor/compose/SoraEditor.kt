@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.feature.soraeditor.compose
+package com.scto.codelikebastimove.features.soraeditor.compose
 
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,11 +9,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorConfig
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorLanguageType
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorTheme
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorThemes
-import com.scto.codelikebastimove.feature.soraeditor.widget.SoraEditorView
+import com.scto.codelikebastimove.features.soraeditor.model.EditorConfig
+import com.scto.codelikebastimove.features.soraeditor.model.EditorLanguageType
+import com.scto.codelikebastimove.features.soraeditor.model.EditorTheme
+import com.scto.codelikebastimove.features.soraeditor.model.EditorThemes
+import com.scto.codelikebastimove.features.soraeditor.widget.SoraEditorView
 
 @Composable
 fun SoraEditor(

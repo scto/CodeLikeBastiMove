@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.feature.soraeditor.model
+package com.scto.codelikebastimove.features.soraeditor.model
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.feature.soraeditor.plugin.language
+package com.scto.codelikebastimove.features.soraeditor.plugin.language
 
 import com.scto.codelikebastimove.core.plugin.api.extension.Extension
 import com.scto.codelikebastimove.core.plugin.api.extension.ExtensionPointDescriptor

@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.feature.soraeditor.screen
+package com.scto.codelikebastimove.features.soraeditor.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -54,14 +54,14 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.scto.codelikebastimove.feature.soraeditor.compose.SoraEditor
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorConfig
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorFile
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorLanguageType
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorTab
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorTheme
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorThemes
-import com.scto.codelikebastimove.feature.soraeditor.widget.SoraEditorView
+import com.scto.codelikebastimove.features.soraeditor.compose.SoraEditor
+import com.scto.codelikebastimove.features.soraeditor.model.EditorConfig
+import com.scto.codelikebastimove.features.soraeditor.model.EditorFile
+import com.scto.codelikebastimove.features.soraeditor.model.EditorLanguageType
+import com.scto.codelikebastimove.features.soraeditor.model.EditorTab
+import com.scto.codelikebastimove.features.soraeditor.model.EditorTheme
+import com.scto.codelikebastimove.features.soraeditor.model.EditorThemes
+import com.scto.codelikebastimove.features.soraeditor.widget.SoraEditorView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

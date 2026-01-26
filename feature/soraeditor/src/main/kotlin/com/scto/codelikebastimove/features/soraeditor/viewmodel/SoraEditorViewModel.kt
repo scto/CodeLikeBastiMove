@@ -1,14 +1,14 @@
-package com.scto.codelikebastimove.feature.soraeditor.viewmodel
+package com.scto.codelikebastimove.features.soraeditor.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorConfig
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorFile
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorLanguageType
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorTab
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorTheme
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorThemes
-import com.scto.codelikebastimove.feature.soraeditor.model.HighlightingMode
+import com.scto.codelikebastimove.features.soraeditor.model.EditorConfig
+import com.scto.codelikebastimove.features.soraeditor.model.EditorFile
+import com.scto.codelikebastimove.features.soraeditor.model.EditorLanguageType
+import com.scto.codelikebastimove.features.soraeditor.model.EditorTab
+import com.scto.codelikebastimove.features.soraeditor.model.EditorTheme
+import com.scto.codelikebastimove.features.soraeditor.model.EditorThemes
+import com.scto.codelikebastimove.features.soraeditor.model.HighlightingMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.feature.soraeditor.plugin.theme
+package com.scto.codelikebastimove.features.soraeditor.plugin.theme
 
 import com.scto.codelikebastimove.core.plugin.api.extension.Extension
 import com.scto.codelikebastimove.core.plugin.api.extension.ExtensionPointDescriptor

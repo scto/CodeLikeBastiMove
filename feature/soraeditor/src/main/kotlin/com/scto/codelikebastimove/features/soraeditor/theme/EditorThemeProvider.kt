@@ -1,8 +1,8 @@
-package com.scto.codelikebastimove.feature.soraeditor.theme
+package com.scto.codelikebastimove.features.soraeditor.theme
 
 import android.graphics.Typeface
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorTheme
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorThemes
+import com.scto.codelikebastimove.features.soraeditor.model.EditorTheme
+import com.scto.codelikebastimove.features.soraeditor.model.EditorThemes
 import io.github.rosemoe.sora.widget.CodeEditor
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
 
