@@ -332,7 +332,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 when (templateType) {
                     ProjectTemplateType.EMPTY_ACTIVITY -> it.name == "Empty Activity"
                     ProjectTemplateType.EMPTY_COMPOSE -> it.name == "Empty Compose Activity"
-                    ProjectTemplateType.BOTTOM_NAVIGATION -> it.name == "Bottom Navigation"
+                    ProjectTemplateType.BOTTOM_NAVIGATION -> it.name == "Bottom Navigation Activity"
                     ProjectTemplateType.NAVIGATION_DRAWER -> it.name == "Navigation Drawer Activity"
                     ProjectTemplateType.TABBED -> it.name == "Tabbed Activity"
                     ProjectTemplateType.MULTI_MODULE -> it.name == "Empty Compose Activity"
