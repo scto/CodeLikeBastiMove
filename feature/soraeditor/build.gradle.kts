@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.scto.codelikebastimove.features.soraeditor"
+    namespace = "com.scto.codelikebastimove.feature.soraeditor"
 }
 
 dependencies {

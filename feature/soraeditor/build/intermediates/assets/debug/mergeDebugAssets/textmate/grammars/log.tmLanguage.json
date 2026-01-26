@@ -1,0 +1,80 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Log",
+  "scopeName": "text.log",
+  "patterns": [
+    { "include": "#levels" },
+    { "include": "#timestamps" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#urls" }
+  ],
+  "repository": {
+    "levels": {
+      "patterns": [
+        {
+          "name": "markup.error.log",
+          "match": "\\b(ERROR|FATAL|CRITICAL|SEVERE|FAIL|FAILED|EXCEPTION)\\b"
+        },
+        {
+          "name": "markup.warning.log",
+          "match": "\\b(WARN|WARNING|CAUTION)\\b"
+        },
+        {
+          "name": "markup.info.log",
+          "match": "\\b(INFO|INFORMATION|NOTICE)\\b"
+        },
+        {
+          "name": "markup.debug.log",
+          "match": "\\b(DEBUG|TRACE|VERBOSE)\\b"
+        },
+        {
+          "name": "markup.success.log",
+          "match": "\\b(SUCCESS|OK|PASSED)\\b"
+        }
+      ]
+    },
+    "timestamps": {
+      "patterns": [
+        {
+          "name": "constant.numeric.timestamp.log",
+          "match": "\\d{4}[-/]\\d{2}[-/]\\d{2}[T ]\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:?\\d{2})?"
+        },
+        {
+          "name": "constant.numeric.timestamp.log",
+          "match": "\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.log",
+          "begin": "\"",
+          "end": "\""
+        },
+        {
+          "name": "string.quoted.single.log",
+          "begin": "'",
+          "end": "'"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.log",
+          "match": "\\b[0-9]+\\b"
+        }
+      ]
+    },
+    "urls": {
+      "patterns": [
+        {
+          "name": "markup.underline.link.log",
+          "match": "(https?|ftp)://[^\\s]+"
+        }
+      ]
+    }
+  }
+}

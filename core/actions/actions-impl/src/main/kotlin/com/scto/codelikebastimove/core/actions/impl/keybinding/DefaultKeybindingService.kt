@@ -17,8 +17,8 @@ class DefaultKeybindingService : KeybindingService, KeybindingResolver {
     private val keybindingMap = ConcurrentHashMap<String, MutableList<ResolvedKeybinding>>()
     private var enabled = true
     
-    override fun registerKeybinding(actionId: String, keybinding: Keybinding, when: ActionWhen?): Boolean {
-        val resolved = ResolvedKeybinding(actionId, keybinding, when)
+    override fun registerKeybinding(actionId: String, keybinding: Keybinding, condition: ActionWhen?): Boolean {
+        val resolved = ResolvedKeybinding(actionId, keybinding, condition)
         
         val list = keybindingMap.getOrPut(actionId) { mutableListOf() }
         
@@ -53,7 +53,7 @@ class DefaultKeybindingService : KeybindingService, KeybindingResolver {
         return keybindingMap.values
             .flatten()
             .filter { it.keybinding == keybinding }
-            .filter { evaluateWhen(it.when, context) }
+            .filter { evaluateCondition(it.condition, context) }
             .maxByOrNull { it.priority }
             ?.actionId
     }
@@ -79,7 +79,7 @@ class DefaultKeybindingService : KeybindingService, KeybindingResolver {
         if (!enabled) return null
         
         return findMatches(event)
-            .filter { evaluateWhen(it.when, context) }
+            .filter { evaluateCondition(it.condition, context) }
             .maxByOrNull { it.priority }
     }
     
@@ -91,8 +91,8 @@ class DefaultKeybindingService : KeybindingService, KeybindingResolver {
                      it.keybinding.modifiers == eventKeybinding.modifiers }
     }
     
-    override fun evaluateWhen(when: ActionWhen?, context: ActionContext): Boolean {
-        return when?.evaluate(context) ?: true
+    override fun evaluateCondition(condition: ActionWhen?, context: ActionContext): Boolean {
+        return condition?.evaluate(context) ?: true
     }
     
     private fun updateKeybindingsFlow() {

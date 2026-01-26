@@ -4,7 +4,7 @@
     "type": "AAPT_FRIENDLY_MERGED_MANIFESTS",
     "kind": "Directory"
   },
-  "applicationId": "com.scto.codelikebastimove.features.soraeditor",
+  "applicationId": "com.scto.codelikebastimove.feature.soraeditor",
   "variantName": "debug",
   "elements": [
     {

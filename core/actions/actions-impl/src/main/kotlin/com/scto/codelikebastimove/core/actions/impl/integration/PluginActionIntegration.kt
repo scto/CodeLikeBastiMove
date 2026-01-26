@@ -113,8 +113,8 @@ class ActionSystem private constructor() {
         return registry.unregisterAction(actionId)
     }
     
-    fun registerKeybinding(actionId: String, keybinding: Keybinding, when: ActionWhen? = null): Boolean {
-        return keybindingService.registerKeybinding(actionId, keybinding, `when`)
+    fun registerKeybinding(actionId: String, keybinding: Keybinding, condition: ActionWhen? = null): Boolean {
+        return keybindingService.registerKeybinding(actionId, keybinding, condition)
     }
     
     fun getAvailableActions(): List<Action> = registry.getActions()

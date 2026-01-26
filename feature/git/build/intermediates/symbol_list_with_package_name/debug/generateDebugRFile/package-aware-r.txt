@@ -1,1 +1,1 @@
-com.scto.codelikebastimove.features.git
+com.scto.codelikebastimove.feature.git

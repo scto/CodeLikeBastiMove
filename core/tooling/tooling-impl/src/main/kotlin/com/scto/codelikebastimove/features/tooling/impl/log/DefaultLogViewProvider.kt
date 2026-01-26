@@ -88,13 +88,14 @@ class DefaultLogViewProvider(
     private fun applyFilter(logs: List<LogEntry>): List<LogEntry> {
         val currentFilter = _filter.value
         
+        val searchQuery = currentFilter.searchQuery
         return logs.filter { entry ->
             entry.level.priority >= currentFilter.minLevel.priority &&
             (currentFilter.tags.isEmpty() || currentFilter.tags.contains(entry.tag)) &&
             currentFilter.sources.contains(entry.source) &&
-            (currentFilter.searchQuery.isNullOrEmpty() || 
-             entry.message.contains(currentFilter.searchQuery, ignoreCase = true) ||
-             entry.tag.contains(currentFilter.searchQuery, ignoreCase = true))
+            (searchQuery.isNullOrEmpty() || 
+             entry.message.contains(searchQuery, ignoreCase = true) ||
+             entry.tag.contains(searchQuery, ignoreCase = true))
         }
     }
     

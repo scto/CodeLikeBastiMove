@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.scto.codelikebastimove.features"
+    namespace = "com.scto.codelikebastimove.feature"
 }
 
 dependencies {

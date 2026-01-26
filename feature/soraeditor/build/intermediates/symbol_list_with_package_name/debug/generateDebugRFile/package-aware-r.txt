@@ -1,1 +1,1 @@
-com.scto.codelikebastimove.features.soraeditor
+com.scto.codelikebastimove.feature.soraeditor

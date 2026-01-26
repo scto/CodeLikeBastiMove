@@ -118,8 +118,9 @@ class PluginManager(
             
             val result = pluginLoader.loadPlugin(pluginPath, hostServices, _securityManager)
             
-            if (result.success && result.plugin != null) {
-                val compatResult = _securityManager.checkCompatibility(result.plugin.descriptor, hostVersion)
+            val loadedPlugin = result.plugin
+            if (result.success && loadedPlugin != null) {
+                val compatResult = _securityManager.checkCompatibility(loadedPlugin.descriptor, hostVersion)
                 if (!compatResult.compatible) {
                     return@withLock PluginLoadResult(
                         pluginId = result.pluginId,
@@ -128,19 +129,19 @@ class PluginManager(
                     )
                 }
                 
-                result.plugin.descriptor.permissions.forEach { permission ->
+                loadedPlugin.descriptor.permissions.forEach { permission ->
                     _securityManager.grantPermission(result.pluginId, permission)
                 }
                 
                 val entry = PluginEntry(
-                    plugin = result.plugin,
+                    plugin = loadedPlugin,
                     state = PluginState.INSTALLED,
                     path = pluginPath
                 )
                 loadedPlugins[result.pluginId] = entry
                 updatePluginState(result.pluginId, PluginState.INSTALLED)
                 
-                lifecycleListeners.forEach { it.onPluginLoaded(result.plugin) }
+                lifecycleListeners.forEach { it.onPluginLoaded(loadedPlugin) }
                 _eventBus.emit(PluginEvent.Loaded(result.pluginId))
             }
             

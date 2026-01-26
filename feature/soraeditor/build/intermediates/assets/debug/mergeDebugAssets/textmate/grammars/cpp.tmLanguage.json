@@ -1,0 +1,107 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "C++",
+  "scopeName": "source.cpp",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#preprocessor" },
+    { "include": "#keywords" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#types" },
+    { "include": "#operators" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.cpp",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.block.cpp",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    },
+    "preprocessor": {
+      "patterns": [
+        {
+          "name": "meta.preprocessor.cpp",
+          "match": "^\\s*#\\s*(include|define|undef|if|ifdef|ifndef|else|elif|endif|pragma|error|warning|line)\\b.*$"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.cpp",
+          "match": "\\b(if|else|for|while|do|switch|case|default|break|continue|return|goto|try|catch|throw)\\b"
+        },
+        {
+          "name": "keyword.other.cpp",
+          "match": "\\b(alignas|alignof|and|and_eq|asm|auto|bitand|bitor|class|compl|concept|const|consteval|constexpr|constinit|const_cast|co_await|co_return|co_yield|decltype|delete|dynamic_cast|enum|explicit|export|extern|final|friend|inline|mutable|namespace|new|noexcept|not|not_eq|nullptr|operator|or|or_eq|override|private|protected|public|register|reinterpret_cast|requires|sizeof|static|static_assert|static_cast|struct|template|this|thread_local|typedef|typeid|typename|union|using|virtual|volatile|xor|xor_eq)\\b"
+        },
+        {
+          "name": "storage.type.cpp",
+          "match": "\\b(void|bool|char|wchar_t|char8_t|char16_t|char32_t|short|int|long|signed|unsigned|float|double|size_t)\\b"
+        },
+        {
+          "name": "constant.language.cpp",
+          "match": "\\b(true|false|nullptr|NULL)\\b"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.cpp",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.cpp",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.cpp",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.cpp",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.cpp",
+          "match": "\\b(0[xX][0-9a-fA-F']+|0[bB][01']+|0[0-7']+|[0-9][0-9']*\\.?[0-9']*([eE][+-]?[0-9']+)?[fFlLuU]*)\\b"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "name": "entity.name.type.cpp",
+          "match": "\\b([A-Z][a-zA-Z0-9_]*)\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.cpp",
+          "match": "(\\+\\+|--|\\+|-|\\*|/|%|&&|\\|\\||!|==|!=|<=|>=|<|>|&|\\||\\^|~|<<|>>|=|\\+=|-=|\\*=|/=|%=|&=|\\|=|\\^=|<<=|>>=|->|\\.|::|\\?|:)"
+        }
+      ]
+    }
+  }
+}

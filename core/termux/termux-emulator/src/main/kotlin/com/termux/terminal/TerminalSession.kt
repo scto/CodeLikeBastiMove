@@ -113,7 +113,7 @@ abstract class TerminalSession(
         }
         
         isRunning = false
-        client.onSessionFinished()
+        client.onSessionFinished(this)
     }
     
     protected fun setEmulator(emulator: TerminalEmulator) {
