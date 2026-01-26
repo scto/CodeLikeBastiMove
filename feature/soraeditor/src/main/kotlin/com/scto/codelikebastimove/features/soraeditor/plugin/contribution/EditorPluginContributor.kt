@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.feature.soraeditor.plugin.contribution
+package com.scto.codelikebastimove.features.soraeditor.plugin.contribution
 
 import com.scto.codelikebastimove.core.actions.api.action.*
 import com.scto.codelikebastimove.core.actions.api.contribution.*
@@ -7,10 +7,10 @@ import com.scto.codelikebastimove.core.actions.api.keybinding.KeybindingService
 import com.scto.codelikebastimove.core.actions.api.keybinding.ResolvedKeybinding
 import com.scto.codelikebastimove.core.actions.api.registry.ActionRegistry
 import com.scto.codelikebastimove.core.plugin.api.extension.ExtensionRegistry
-import com.scto.codelikebastimove.feature.soraeditor.plugin.action.EditorActionPlugin
-import com.scto.codelikebastimove.feature.soraeditor.plugin.action.EditorPluginAction
-import com.scto.codelikebastimove.feature.soraeditor.plugin.language.LanguagePackPlugin
-import com.scto.codelikebastimove.feature.soraeditor.plugin.theme.EditorThemePlugin
+import com.scto.codelikebastimove.features.soraeditor.plugin.action.EditorActionPlugin
+import com.scto.codelikebastimove.features.soraeditor.plugin.action.EditorPluginAction
+import com.scto.codelikebastimove.features.soraeditor.plugin.language.LanguagePackPlugin
+import com.scto.codelikebastimove.features.soraeditor.plugin.theme.EditorThemePlugin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

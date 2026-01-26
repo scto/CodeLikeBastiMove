@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.feature.soraeditor.plugin.action
+package com.scto.codelikebastimove.features.soraeditor.plugin.action
 
 import com.scto.codelikebastimove.core.actions.api.action.*
 import com.scto.codelikebastimove.core.actions.api.contribution.*

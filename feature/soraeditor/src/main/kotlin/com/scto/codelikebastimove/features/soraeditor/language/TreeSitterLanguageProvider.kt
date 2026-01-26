@@ -1,7 +1,7 @@
-package com.scto.codelikebastimove.feature.soraeditor.language
+package com.scto.codelikebastimove.features.soraeditor.language
 
 import android.content.Context
-import com.scto.codelikebastimove.feature.soraeditor.model.EditorLanguageType
+import com.scto.codelikebastimove.features.soraeditor.model.EditorLanguageType
 import io.github.rosemoe.sora.lang.EmptyLanguage
 import io.github.rosemoe.sora.lang.Language
 import io.github.rosemoe.sora.langs.treesitter.TsLanguage
@@ -111,34 +111,34 @@ class TreeSitterLanguageProvider : LanguageProvider {
     }
     
     private fun TsThemeBuilder.applyDarkTheme() {
-        sealed("keyword") { foreground = 0xFF569CD6.toInt() }
-        sealed("type") { foreground = 0xFF4EC9B0.toInt() }
-        sealed("string") { foreground = 0xFFCE9178.toInt() }
-        sealed("number") { foreground = 0xFFB5CEA8.toInt() }
-        sealed("comment") { foreground = 0xFF6A9955.toInt() }
-        sealed("function") { foreground = 0xFFDCDCAA.toInt() }
-        sealed("variable") { foreground = 0xFF9CDCFE.toInt() }
-        sealed("operator") { foreground = 0xFFD4D4D4.toInt() }
-        sealed("constant") { foreground = 0xFF4FC1FF.toInt() }
-        sealed("property") { foreground = 0xFF9CDCFE.toInt() }
-        sealed("attribute") { foreground = 0xFF9CDCFE.toInt() }
-        sealed("tag") { foreground = 0xFF569CD6.toInt() }
-        sealed("punctuation") { foreground = 0xFFD4D4D4.toInt() }
+        group("keyword", 0xFF569CD6.toInt())
+        group("type", 0xFF4EC9B0.toInt())
+        group("string", 0xFFCE9178.toInt())
+        group("number", 0xFFB5CEA8.toInt())
+        group("comment", 0xFF6A9955.toInt())
+        group("function", 0xFFDCDCAA.toInt())
+        group("variable", 0xFF9CDCFE.toInt())
+        group("operator", 0xFFD4D4D4.toInt())
+        group("constant", 0xFF4FC1FF.toInt())
+        group("property", 0xFF9CDCFE.toInt())
+        group("attribute", 0xFF9CDCFE.toInt())
+        group("tag", 0xFF569CD6.toInt())
+        group("punctuation", 0xFFD4D4D4.toInt())
     }
     
     private fun TsThemeBuilder.applyLightTheme() {
-        sealed("keyword") { foreground = 0xFF0000FF.toInt() }
-        sealed("type") { foreground = 0xFF267F99.toInt() }
-        sealed("string") { foreground = 0xFFA31515.toInt() }
-        sealed("number") { foreground = 0xFF098658.toInt() }
-        sealed("comment") { foreground = 0xFF008000.toInt() }
-        sealed("function") { foreground = 0xFF795E26.toInt() }
-        sealed("variable") { foreground = 0xFF001080.toInt() }
-        sealed("operator") { foreground = 0xFF000000.toInt() }
-        sealed("constant") { foreground = 0xFF0070C1.toInt() }
-        sealed("property") { foreground = 0xFF001080.toInt() }
-        sealed("attribute") { foreground = 0xFF001080.toInt() }
-        sealed("tag") { foreground = 0xFF800000.toInt() }
-        sealed("punctuation") { foreground = 0xFF000000.toInt() }
+        group("keyword", 0xFF0000FF.toInt())
+        group("type", 0xFF267F99.toInt())
+        group("string", 0xFFA31515.toInt())
+        group("number", 0xFF098658.toInt())
+        group("comment", 0xFF008000.toInt())
+        group("function", 0xFF795E26.toInt())
+        group("variable", 0xFF001080.toInt())
+        group("operator", 0xFF000000.toInt())
+        group("constant", 0xFF0070C1.toInt())
+        group("property", 0xFF001080.toInt())
+        group("attribute", 0xFF001080.toInt())
+        group("tag", 0xFF800000.toInt())
+        group("punctuation", 0xFF000000.toInt())
     }
 }
