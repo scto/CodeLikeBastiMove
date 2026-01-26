@@ -78,7 +78,7 @@ class SoraEditorPluginSystem(
     }
     
     fun unregisterTheme(themeId: String): Boolean {
-        extensionRegistry?.unregisterExtension(
+        extensionRegistry?.unregisterExtension<EditorThemePlugin>(
             extensionPointId = EditorThemeExtensionPoint.DESCRIPTOR.id,
             pluginId = themeId,
             extensionId = themeId
@@ -107,7 +107,7 @@ class SoraEditorPluginSystem(
     }
     
     fun unregisterLanguage(languageId: String): Boolean {
-        extensionRegistry?.unregisterExtension(
+        extensionRegistry?.unregisterExtension<LanguagePackPlugin>(
             extensionPointId = LanguagePackExtensionPoint.DESCRIPTOR.id,
             pluginId = languageId,
             extensionId = languageId
@@ -136,7 +136,7 @@ class SoraEditorPluginSystem(
     }
     
     fun unregisterActionPlugin(pluginId: String): Boolean {
-        extensionRegistry?.unregisterExtension(
+        extensionRegistry?.unregisterExtension<EditorActionPlugin>(
             extensionPointId = EditorActionExtensionPoint.DESCRIPTOR.id,
             pluginId = pluginId,
             extensionId = pluginId

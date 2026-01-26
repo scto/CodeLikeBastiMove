@@ -77,7 +77,7 @@ abstract class AbstractEditorActionPlugin : EditorActionPlugin {
                         order = action.priority
                     )
                 },
-                when = action.whenCondition
+                `when` = action.whenCondition
             )
         }
     }
@@ -102,7 +102,7 @@ abstract class AbstractEditorActionPlugin : EditorActionPlugin {
                 ResolvedKeybinding(
                     actionId = action.id,
                     keybinding = action.keybinding!!,
-                    when = action.whenCondition
+                    `when` = action.whenCondition
                 )
             }
     }
@@ -116,7 +116,7 @@ abstract class AbstractEditorActionPlugin : EditorActionPlugin {
                     MenuItemContribution(
                         commandId = action.id,
                         order = action.priority,
-                        when = action.whenCondition
+                        `when` = action.whenCondition
                     )
                 )
             }
