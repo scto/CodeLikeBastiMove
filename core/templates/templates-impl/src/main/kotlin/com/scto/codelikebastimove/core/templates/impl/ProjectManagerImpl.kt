@@ -17,7 +17,8 @@ class ProjectManagerImpl(private val context: Context) : ProjectManager {
         EmptyComposeActivityTemplate(),
         BottomNavigationTemplate(),
         NavigationDrawerTemplate(),
-        TabbedActivityTemplate()
+        TabbedActivityTemplate(),
+        MVVMCleanArchitectureTemplate()
     )
 
     override fun getAvailableTemplates(): List<ProjectTemplate> = templates

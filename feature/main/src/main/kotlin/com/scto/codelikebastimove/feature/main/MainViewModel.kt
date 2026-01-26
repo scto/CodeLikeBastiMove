@@ -333,12 +333,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     ProjectTemplateType.EMPTY_ACTIVITY -> it.name == "Empty Activity"
                     ProjectTemplateType.EMPTY_COMPOSE -> it.name == "Empty Compose Activity"
                     ProjectTemplateType.BOTTOM_NAVIGATION -> it.name == "Bottom Navigation"
-                    ProjectTemplateType.NAVIGATION_DRAWER -> it.name == "Navigation Drawer"
+                    ProjectTemplateType.NAVIGATION_DRAWER -> it.name == "Navigation Drawer Activity"
                     ProjectTemplateType.TABBED -> it.name == "Tabbed Activity"
-                    ProjectTemplateType.MULTI_MODULE -> it.name == "Multi-Module Project"
+                    ProjectTemplateType.MULTI_MODULE -> it.name == "Empty Compose Activity"
                     ProjectTemplateType.MVVM_CLEAN -> it.name == "MVVM Clean Architecture"
-                    ProjectTemplateType.WEAR_OS -> it.name == "Wear OS Activity"
-                    ProjectTemplateType.RESPONSIVE_FOLDABLE -> it.name == "Responsive Activity"
+                    ProjectTemplateType.WEAR_OS -> it.name == "Empty Compose Activity"
+                    ProjectTemplateType.RESPONSIVE_FOLDABLE -> it.name == "Empty Compose Activity"
                 }
             }
             

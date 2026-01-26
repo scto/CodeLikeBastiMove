@@ -84,6 +84,8 @@ To use Firebase Authentication, you need to:
 
 ## Recent Changes (January 2026)
 - **Build Fixes Completed:** Successfully resolved all compilation errors to achieve BUILD SUCCESSFUL
+- **Material3 Theme Fix:** Added Google Material library (`com.google.android.material:material:1.12.0`) to `core:resources` module to resolve Theme.Material3.Light.NoActionBar and Material3 color attribute errors
+- **MVVMCleanArchitectureTemplate Fix:** Renamed conflicting methods `generateRootBuildGradleKts` and `generateRootBuildGradleGroovy` to `generateMvvmRootBuildGradleKts` and `generateMvvmRootBuildGradleGroovy` to avoid hiding supertype members
 - **Kotlin Reserved Keyword Refactoring:** Renamed `when` parameters to `condition` throughout keybinding/action APIs (DefaultKeybindingService, PluginActionIntegration, EditorActionPlugin)
 - **Platform Declaration Clash Fix:** Changed EditorThemePlugin from abstract property `themeDefinition` to abstract function `createThemeDefinition()`
 - **Smart Cast Fixes:** Resolved smart cast issues in PluginManager, TerminalSession, and DefaultLogViewProvider by caching nullable values in local variables
