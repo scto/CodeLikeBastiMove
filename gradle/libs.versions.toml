@@ -6,7 +6,7 @@ kotlin = "2.2.0"
 ksp = "2.2.0-2.0.2"
 
 androidGradlePlugin = "8.11.1"
-androidTools = "31.13.1"
+androidTools = "32.0.0"
 gmsPlugin = "4.4.4"
 
 dokka = "2.1.0"

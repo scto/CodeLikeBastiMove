@@ -86,7 +86,7 @@ class MainActivity : ComponentActivity() {
                 DataStoreThemeMode.FOLLOW_SYSTEM -> ThemeMode.FOLLOW_SYSTEM
             }
             
-            CodeLikeBastiMoveTheme(
+            AppTheme(
                 themeMode = themeMode,
                 dynamicColor = userPreferences.dynamicColorsEnabled
             ) {

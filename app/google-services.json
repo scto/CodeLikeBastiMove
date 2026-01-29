@@ -12,7 +12,12 @@
           "package_name": "com.scto"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "361111288558-sd482a1opekv3n2bijkqisvoct8ovu5c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCg2y_ZcDdqi9xXbQTuEInomZPN18VQ4dI"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "361111288558-sd482a1opekv3n2bijkqisvoct8ovu5c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     },
@@ -31,7 +41,20 @@
           "package_name": "com.scto.codelikebastimove"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "361111288558-hl18r4nh3h7lurako0hvm22a5ddqs3o6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.scto.codelikebastimove",
+            "certificate_hash": "dcf8ee34c32222f7b5fede79cf5027001418af0e"
+          }
+        },
+        {
+          "client_id": "361111288558-sd482a1opekv3n2bijkqisvoct8ovu5c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCg2y_ZcDdqi9xXbQTuEInomZPN18VQ4dI"
@@ -39,7 +62,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "361111288558-sd482a1opekv3n2bijkqisvoct8ovu5c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
