@@ -4,9 +4,16 @@ plugins {
 
 android {
     namespace = "com.scto.codelikebastimove.core.resources"
+    
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.preference)
     implementation(libs.google.material)
+    implementation(libs.androidx.nav.fragment)
+    implementation(libs.androidx.nav.ui)
 }
