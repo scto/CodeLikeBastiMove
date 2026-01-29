@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 @Composable
-fun CodeLikeBastiMoveTheme(
+fun AppTheme(
     themeMode: ThemeMode = ThemeMode.FOLLOW_SYSTEM,
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit

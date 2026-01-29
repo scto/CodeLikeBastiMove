@@ -94,7 +94,7 @@ class MainActivity : ComponentActivity() {
                 dynamicColor = userPreferences.dynamicColorsEnabled
             ) {
                 // Konfiguriere die System Bars (Statusbar etc.) passend zum Theme
-                ConfigureSystemBars()
+                //ConfigureSystemBars()
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -134,6 +134,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/*
 @Composable
 fun ConfigureSystemBars() {
     val systemUiController = rememberSystemUiController()
@@ -147,3 +148,4 @@ fun ConfigureSystemBars() {
         onDispose {}
     }
 }
+*/
