@@ -12,8 +12,8 @@ android {
 
 dependencies {
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.preference)
-    implementation(libs.google.material)
     implementation(libs.androidx.nav.fragment)
     implementation(libs.androidx.nav.ui)
+    implementation(libs.androidx.preference)
+    implementation(libs.google.material)
 }

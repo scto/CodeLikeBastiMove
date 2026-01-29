@@ -28,7 +28,7 @@ kotlinxSerializationJson = "1.9.0"
 timber = "5.0.1"
 
 # ... CORE:UI ...
-androidxNavigation = "2.9.6"
+androidxNavigation = "2.9.7"
 androidxFragment = "1.8.9"
 androidxAppCompat = "1.7.1"
 googleMaterial = "1.12.0"
@@ -114,6 +114,7 @@ jgit = "7.0.0.202409031743-r"
 editor = "0.23.5"
 androidsvg = "1.4"
 android-tree-sitter = "4.3.1"
+generativeai = "0.9.0"
 
 # ... SDK-CONFIG ...
 appVersionCode = "1"
@@ -181,8 +182,6 @@ androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscree
 
 # ... LOTTIE ...
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottieCompose" }
-# ... GOOGKE MATERIAL ...
-google-material = { group = "com.google.android.material", name = "material", version.ref = "googleMaterial" }
 
 # ... NETWORK ...
 okhttp-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttp" }
@@ -237,6 +236,11 @@ koin-workmanager = { module = "io.insert-koin:koin-androidx-workmanager", versio
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 koin-test-junit = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin" }
 
+# Google
+google-generativeai = { module = "com.google.ai.client.generativeai:generativeai", version.ref = "generativeai" }
+google-guava = { module = "com.google.guava:guava", version = "33.3.1-jre" }
+google-gson = { module = "com.google.code.gson:gson", version = "2.11.0" }
+google-material = { module = "com.google.android.material:material", version = "1.12.0" }
 # ... ACCOMPANIST ...
 google-accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 google-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }

@@ -13,6 +13,9 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+        maven { url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/") }
+        maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+        }
         maven { url = uri("https://jitpack.io") }
     }
 }
@@ -26,6 +29,7 @@ include(":core:actions:actions-impl")
 include(":core:datastore:datastore")
 include(":core:datastore:datastore-proto")
 include(":core:logger")
+//include(":core:common")
 include(":core:resources")
 include(":core:ui")
 include(":core:plugin:plugin-api")

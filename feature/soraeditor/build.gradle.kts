@@ -9,7 +9,7 @@ android {
 dependencies {
     /* Project Modules */
     implementation(project(":core:actions:actions-api"))
-    implementation(project(":core:common"))
+    //implementation(project(":core:common"))
     implementation(project(":core:logger"))
     implementation(project(":core:plugin:plugin-api"))
     implementation(project(":core:resources"))
