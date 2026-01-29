@@ -5,6 +5,7 @@ import java.io.FileInputStream
 plugins {
     id("clbm.android.application")
     id("clbm.android.compose")
+    id("com.google.gms.google-services") // <--- Das hier fehlt oft!
 }
 
 val keystorePropsFile = rootProject.file("release.properties")
@@ -129,6 +130,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.coroutines.android)
 
+    implementation(libs.google.accompanist.systemuicontroller)
+    
     coreLibraryDesugaring(libs.desugaring)
     
     debugImplementation(libs.androidx.compose.ui.tooling)

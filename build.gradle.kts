@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin) apply false
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.google.protobuf) apply false
+    id("com.google.gms.google-services") version "4.4.2" apply false
 }
 
 tasks.register<Delete>("clean") {
