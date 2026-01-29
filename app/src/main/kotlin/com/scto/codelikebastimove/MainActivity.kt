@@ -32,6 +32,8 @@ import com.scto.codelikebastimove.feature.auth.navigation.AuthNavHost
 import com.scto.codelikebastimove.feature.main.MainScreen
 import com.scto.codelikebastimove.feature.onboarding.OnboardingScreen
 import kotlinx.coroutines.launch
+
+import com.scto.codelikebastimove.R
 import com.scto.codelikebastimove.core.datastore.ThemeMode as DataStoreThemeMode
 
 class MainActivity : ComponentActivity() {
