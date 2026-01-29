@@ -1,0 +1,11 @@
+(if_statement) @indent
+(elif_clause) @indent
+(else_clause) @indent
+(for_statement) @indent
+(while_statement) @indent
+(function_definition) @indent
+(case_statement) @indent
+(case_item) @indent
+(do_group) @indent
+(compound_statement) @indent
+(subshell) @indent

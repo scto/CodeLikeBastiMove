@@ -1,0 +1,162 @@
+{
+  "baseDirectory": "src/main/resources/queries",
+  "languages": [
+    {
+      "id": "aifl",
+      "extensions": ["aifl"],
+      "queries": {
+        "highlights": "aifl/highlights.scm"
+      }
+    },
+    {
+      "id": "aidl",
+      "extensions": ["aidl"],
+      "queries": {
+        "highlights": "aidl/highlights.scm",
+        "locals": "aidl/locals.scm",
+        "folds": "aidl/folds.scm",
+        "indents": "aidl/indents.scm"
+      }
+    },
+    {
+      "id": "properties",
+      "extensions": ["properties"],
+      "queries": {
+        "highlights": "properties/highlights.scm",
+        "locals": "properties/locals.scm",
+        "folds": "properties/folds.scm",
+        "indents": "properties/indents.scm"
+      }
+    },
+    {
+      "id": "cmake",
+      "extensions": ["cmake", "CMakeLists.txt"],
+      "queries": {
+        "highlights": "cmake/highlights.scm",
+        "locals": "cmake/locals.scm",
+        "folds": "cmake/folds.scm",
+        "indents": "cmake/indents.scm"
+      }
+    },
+    {
+      "id": "make",
+      "extensions": ["makefile", "mk"],
+      "queries": {
+        "highlights": "make/highlights.scm",
+        "locals": "make/locals.scm",
+        "folds": "make/folds.scm",
+        "indents": "make/indents.scm"
+      }
+    },
+    {
+      "id": "bash",
+      "extensions": ["sh", "bash"],
+      "queries": {
+        "highlights": "bash/highlights.scm",
+        "locals": "bash/locals.scm",
+        "folds": "bash/folds.scm",
+        "indents": "bash/indents.scm"
+      }
+    },
+    {
+      "id": "cpp",
+      "extensions": ["cpp", "c", "h", "hpp", "cc"],
+      "queries": {
+        "highlights": "cpp/highlights.scm",
+        "locals": "cpp/locals.scm",
+        "folds": "cpp/folds.scm",
+        "indents": "cpp/indents.scm"
+      }
+    },
+    {
+      "id": "kotlin",
+      "extensions": ["kt", "kts"],
+      "queries": {
+        "highlights": "kotlin/highlights.scm",
+        "locals": "kotlin/locals.scm",
+        "folds": "kotlin/folds.scm",
+        "indents": "kotlin/indents.scm"
+      }
+    },
+    {
+      "id": "python",
+      "extensions": ["py", "pyi"],
+      "queries": {
+        "highlights": "python/highlights.scm",
+        "locals": "python/locals.scm",
+        "folds": "python/folds.scm",
+        "indents": "python/indents.scm"
+      }
+    },
+    {
+      "id": "json",
+      "extensions": ["json"],
+      "queries": {
+        "highlights": "json/highlights.scm",
+        "locals": "json/locals.scm",
+        "folds": "json/folds.scm",
+        "indents": "json/indents.scm"
+      }
+    },
+    {
+      "id": "xml",
+      "extensions": ["xml", "xsd", "svg"],
+      "queries": {
+        "highlights": "xml/highlights.scm",
+        "locals": "xml/locals.scm",
+        "folds": "xml/folds.scm",
+        "indents": "xml/indents.scm"
+      }
+    },
+    {
+      "id": "yaml",
+      "extensions": ["yaml", "yml"],
+      "queries": {
+        "highlights": "yaml/highlights.scm",
+        "locals": "yaml/locals.scm",
+        "folds": "yaml/folds.scm",
+        "indents": "yaml/indents.scm"
+      }
+    },
+    {
+      "id": "toml",
+      "extensions": ["toml"],
+      "queries": {
+        "highlights": "toml/highlights.scm",
+        "locals": "toml/locals.scm",
+        "folds": "toml/folds.scm",
+        "indents": "toml/indents.scm"
+      }
+    },
+    {
+      "id": "git_config",
+      "extensions": ["gitconfig"],
+      "queries": {
+        "highlights": "git_config/highlights.scm",
+        "folds": "git_config/folds.scm"
+      }
+    },
+    {
+      "id": "git_attributes",
+      "extensions": ["gitattributes"],
+      "queries": {
+        "highlights": "gitattributes/highlights.scm"
+      }
+    },
+    {
+      "id": "git_commit",
+      "extensions": ["COMMIT_EDITMSG"],
+      "queries": {
+        "highlights": "git_commit/highlights.scm"
+      }
+    },
+    {
+      "id": "log",
+      "extensions": ["log"],
+      "queries": {
+        "highlights": "log/highlights.scm",
+        "folds": "log/folds.scm"
+      }
+    }
+  ]
+}
