@@ -70,7 +70,7 @@ fun SoraEditorScreen(
   onSave: (String) -> Unit,
   modifier: Modifier = Modifier,
   config: EditorConfig = EditorConfig(),
-  theme: EditorTheme = EditorThemes.DarkModern,
+  theme: EditorTheme = EditorThemes.Dracula,
   onConfigChange: (EditorConfig) -> Unit = {},
   onThemeChange: (EditorTheme) -> Unit = {},
 ) {
