@@ -48,58 +48,58 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
 
 object AppIcons {
-    val Home = Icons.Filled.Home
-    val Gallery = Icons.Filled.Photo
-    val Slideshow = Icons.Filled.Slideshow
-    val Settings = Icons.Filled.Settings
-    val SettingsOutlined = Icons.Outlined.Settings
-    
-    val Menu = Icons.Filled.Menu
-    val ArrowBack = Icons.AutoMirrored.Filled.ArrowBack
-    val Close = Icons.Filled.Close
-    val MoreVert = Icons.Filled.MoreVert
-    val Search = Icons.Filled.Search
-    
-    val Add = Icons.Filled.Add
-    val Edit = Icons.Filled.Edit
-    val Delete = Icons.Filled.Delete
-    val Save = Icons.Filled.Save
-    val Share = Icons.Filled.Share
-    val Copy = Icons.Filled.ContentCopy
-    val Refresh = Icons.Filled.Refresh
-    
-    val Check = Icons.Filled.Check
-    val Done = Icons.Filled.Done
-    val ExpandMore = Icons.Filled.ExpandMore
-    val ExpandLess = Icons.Filled.ExpandLess
-    val ChevronRight = Icons.Filled.ChevronRight
-    
-    val Folder = Icons.Filled.Folder
-    val FolderOpen = Icons.Filled.FolderOpen
-    val FolderOutlined = Icons.Outlined.Folder
-    val File = Icons.Filled.InsertDriveFile
-    val Image = Icons.Filled.Image
-    
-    val Code = Icons.Filled.Code
-    val Terminal = Icons.Filled.Terminal
-    val Build = Icons.Filled.Build
-    val Android = Icons.Filled.Android
-    val Apps = Icons.Filled.Apps
-    val GridView = Icons.Filled.GridView
-    
-    val Play = Icons.Filled.PlayArrow
-    val Create = Icons.Filled.Create
-    val List = Icons.AutoMirrored.Filled.List
-    val ExitToApp = Icons.AutoMirrored.Filled.ExitToApp
-    
-    val Person = Icons.Filled.Person
-    val Star = Icons.Filled.Star
-    val Info = Icons.Filled.Info
-    val InfoOutlined = Icons.Outlined.Info
-    
-    val LightMode = Icons.Filled.LightMode
-    val DarkMode = Icons.Filled.DarkMode
-    
-    val Visibility = Icons.Filled.Visibility
-    val VisibilityOff = Icons.Filled.VisibilityOff
+  val Home = Icons.Filled.Home
+  val Gallery = Icons.Filled.Photo
+  val Slideshow = Icons.Filled.Slideshow
+  val Settings = Icons.Filled.Settings
+  val SettingsOutlined = Icons.Outlined.Settings
+
+  val Menu = Icons.Filled.Menu
+  val ArrowBack = Icons.AutoMirrored.Filled.ArrowBack
+  val Close = Icons.Filled.Close
+  val MoreVert = Icons.Filled.MoreVert
+  val Search = Icons.Filled.Search
+
+  val Add = Icons.Filled.Add
+  val Edit = Icons.Filled.Edit
+  val Delete = Icons.Filled.Delete
+  val Save = Icons.Filled.Save
+  val Share = Icons.Filled.Share
+  val Copy = Icons.Filled.ContentCopy
+  val Refresh = Icons.Filled.Refresh
+
+  val Check = Icons.Filled.Check
+  val Done = Icons.Filled.Done
+  val ExpandMore = Icons.Filled.ExpandMore
+  val ExpandLess = Icons.Filled.ExpandLess
+  val ChevronRight = Icons.Filled.ChevronRight
+
+  val Folder = Icons.Filled.Folder
+  val FolderOpen = Icons.Filled.FolderOpen
+  val FolderOutlined = Icons.Outlined.Folder
+  val File = Icons.Filled.InsertDriveFile
+  val Image = Icons.Filled.Image
+
+  val Code = Icons.Filled.Code
+  val Terminal = Icons.Filled.Terminal
+  val Build = Icons.Filled.Build
+  val Android = Icons.Filled.Android
+  val Apps = Icons.Filled.Apps
+  val GridView = Icons.Filled.GridView
+
+  val Play = Icons.Filled.PlayArrow
+  val Create = Icons.Filled.Create
+  val List = Icons.AutoMirrored.Filled.List
+  val ExitToApp = Icons.AutoMirrored.Filled.ExitToApp
+
+  val Person = Icons.Filled.Person
+  val Star = Icons.Filled.Star
+  val Info = Icons.Filled.Info
+  val InfoOutlined = Icons.Outlined.Info
+
+  val LightMode = Icons.Filled.LightMode
+  val DarkMode = Icons.Filled.DarkMode
+
+  val Visibility = Icons.Filled.Visibility
+  val VisibilityOff = Icons.Filled.VisibilityOff
 }

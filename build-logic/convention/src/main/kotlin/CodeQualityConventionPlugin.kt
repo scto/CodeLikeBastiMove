@@ -18,12 +18,12 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 class CodeQualityConventionPlugin : Plugin<Project> {
-    override fun apply(target: Project) {
-        with(target) {
-            // Wendet die anderen Plugins an, um "Code Quality" als Bündel zu nutzen
-            pluginManager.apply("dev.scto.android.lint")
-            pluginManager.apply("dev.scto.spotless")
-            pluginManager.apply("dev.scto.detekt")
-        }
+  override fun apply(target: Project) {
+    with(target) {
+      // Wendet die anderen Plugins an, um "Code Quality" als Bündel zu nutzen
+      pluginManager.apply("dev.scto.android.lint")
+      pluginManager.apply("dev.scto.spotless")
+      pluginManager.apply("dev.scto.detekt")
     }
+  }
 }

@@ -15,46 +15,44 @@ import androidx.core.view.WindowCompat
 
 @Composable
 fun AppTheme(
-    themeMode: ThemeMode = ThemeMode.FOLLOW_SYSTEM,
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+  themeMode: ThemeMode = ThemeMode.FOLLOW_SYSTEM,
+  dynamicColor: Boolean = true,
+  content: @Composable () -> Unit,
 ) {
-    val darkTheme = when (themeMode) {
-        ThemeMode.LIGHT -> false
-        ThemeMode.DARK -> true
-        ThemeMode.FOLLOW_SYSTEM -> isSystemInDarkTheme()
-    }
-    
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-    
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
-        }
+  val darkTheme =
+    when (themeMode) {
+      ThemeMode.LIGHT -> false
+      ThemeMode.DARK -> true
+      ThemeMode.FOLLOW_SYSTEM -> isSystemInDarkTheme()
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = AppTypography,
-        content = content
-    )
+  val colorScheme =
+    when {
+      dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+        val context = LocalContext.current
+        if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+      }
+      darkTheme -> DarkColorScheme
+      else -> LightColorScheme
+    }
+
+  val view = LocalView.current
+  if (!view.isInEditMode) {
+    SideEffect {
+      val window = (view.context as Activity).window
+      window.statusBarColor = colorScheme.primary.toArgb()
+      WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+    }
+  }
+
+  MaterialTheme(colorScheme = colorScheme, typography = AppTypography, content = content)
 }
 
 @Composable
 fun isAppInDarkTheme(themeMode: ThemeMode): Boolean {
-    return when (themeMode) {
-        ThemeMode.LIGHT -> false
-        ThemeMode.DARK -> true
-        ThemeMode.FOLLOW_SYSTEM -> isSystemInDarkTheme()
-    }
+  return when (themeMode) {
+    ThemeMode.LIGHT -> false
+    ThemeMode.DARK -> true
+    ThemeMode.FOLLOW_SYSTEM -> isSystemInDarkTheme()
+  }
 }

@@ -56,278 +56,243 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OpenProjectScreen(
-    projects: List<StoredProject>,
-    onBackClick: () -> Unit,
-    onProjectSelected: (StoredProject) -> Unit,
-    onProjectDelete: (StoredProject) -> Unit,
-    onBrowseFolder: () -> Unit,
-    modifier: Modifier = Modifier
+  projects: List<StoredProject>,
+  onBackClick: () -> Unit,
+  onProjectSelected: (StoredProject) -> Unit,
+  onProjectDelete: (StoredProject) -> Unit,
+  onBrowseFolder: () -> Unit,
+  modifier: Modifier = Modifier,
 ) {
-    var searchQuery by remember { mutableStateOf("") }
-    
-    val sortedProjects = remember(projects) {
-        projects.sortedByDescending { it.lastOpenedAt }
-    }
-    
-    val filteredProjects = if (searchQuery.isBlank()) {
-        sortedProjects
+  var searchQuery by remember { mutableStateOf("") }
+
+  val sortedProjects = remember(projects) { projects.sortedByDescending { it.lastOpenedAt } }
+
+  val filteredProjects =
+    if (searchQuery.isBlank()) {
+      sortedProjects
     } else {
-        sortedProjects.filter { it.name.contains(searchQuery, ignoreCase = true) }
+      sortedProjects.filter { it.name.contains(searchQuery, ignoreCase = true) }
     }
-    
-    val recentThreshold = System.currentTimeMillis() - (7 * 24 * 60 * 60 * 1000L)
-    
+
+  val recentThreshold = System.currentTimeMillis() - (7 * 24 * 60 * 60 * 1000L)
+
+  Column(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+    AdaptiveTopAppBar(
+      title = "",
+      navigationIcon = {
+        IconButton(onClick = onBackClick) {
+          Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Zurück")
+        }
+      },
+      actions = {
+        IconButton(onClick = onBrowseFolder) {
+          Icon(
+            imageVector = Icons.Default.FolderOpen,
+            contentDescription = "Ordner durchsuchen",
+            tint = MaterialTheme.colorScheme.primary,
+          )
+        }
+      },
+      colors =
+        TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
+      modifier = Modifier.statusBarsPadding(),
+    )
+
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+      horizontalAlignment = Alignment.CenterHorizontally,
+      modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
     ) {
-        AdaptiveTopAppBar(
-            title = "",
-            navigationIcon = {
-                IconButton(onClick = onBackClick) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Zurück")
-                }
-            },
-            actions = {
-                IconButton(onClick = onBrowseFolder) {
-                    Icon(
-                        imageVector = Icons.Default.FolderOpen,
-                        contentDescription = "Ordner durchsuchen",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.background
+      Text(
+        text = "Code Like Basti Move",
+        style = MaterialTheme.typography.headlineMedium,
+        color = MaterialTheme.colorScheme.onBackground,
+        fontWeight = FontWeight.Medium,
+      )
+
+      Text(
+        text = "Your Ideas, Anywhere",
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+      )
+
+      Spacer(modifier = Modifier.height(16.dp))
+
+      Box(
+        modifier =
+          Modifier.size(80.dp)
+            .clip(RoundedCornerShape(18.dp))
+            .background(
+              Brush.linearGradient(
+                colors =
+                  listOf(Color(0xFF00D9FF), Color(0xFF00B4D8), Color(0xFF7C3AED), Color(0xFFA855F7))
+              )
             ),
-            modifier = Modifier.statusBarsPadding()
-        )
-        
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp)
-        ) {
-            Text(
-                text = "Code Like Basti Move",
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-                fontWeight = FontWeight.Medium
-            )
-            
-            Text(
-                text = "Your Ideas, Anywhere",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
-            )
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            Box(
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(18.dp))
-                    .background(
-                        Brush.linearGradient(
-                            colors = listOf(
-                                Color(0xFF00D9FF),
-                                Color(0xFF00B4D8),
-                                Color(0xFF7C3AED),
-                                Color(0xFFA855F7)
-                            )
-                        )
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = "CLBM",
-                        color = Color.White,
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 18.sp,
-                        letterSpacing = 1.sp
-                    )
-                    Text(
-                        text = "</>",
-                        color = Color.White,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
+        contentAlignment = Alignment.Center,
+      ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+          Text(
+            text = "CLBM",
+            color = Color.White,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = 18.sp,
+            letterSpacing = 1.sp,
+          )
+          Text(text = "</>", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
         }
-        
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Projekt öffnen",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.SemiBold
-            )
-        }
-        
-        Spacer(modifier = Modifier.height(12.dp))
-        
-        OutlinedTextField(
-            value = searchQuery,
-            onValueChange = { searchQuery = it },
-            placeholder = { Text("Projekte suchen...") },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "Suchen"
-                )
-            },
-            singleLine = true,
-            shape = RoundedCornerShape(12.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-                focusedBorderColor = MaterialTheme.colorScheme.primary
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        )
-        
-        Spacer(modifier = Modifier.height(16.dp))
-        
-        if (filteredProjects.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(32.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Folder,
-                        contentDescription = null,
-                        modifier = Modifier.size(64.dp),
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
-                    )
-                    Text(
-                        text = if (searchQuery.isBlank()) "Keine Projekte vorhanden" else "Keine Projekte gefunden",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                    )
-                    Text(
-                        text = if (searchQuery.isBlank()) "Erstellen Sie ein neues Projekt, um zu beginnen" else "Versuchen Sie einen anderen Suchbegriff",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
-                    )
-                }
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(filteredProjects) { project ->
-                    ProjectCard(
-                        project = project,
-                        isRecent = project.lastOpenedAt > recentThreshold,
-                        onClick = { onProjectSelected(project) },
-                        onDelete = { onProjectDelete(project) }
-                    )
-                }
-            }
-        }
+      }
     }
+
+    Row(
+      modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+      horizontalArrangement = Arrangement.SpaceBetween,
+      verticalAlignment = Alignment.CenterVertically,
+    ) {
+      Text(
+        text = "Projekt öffnen",
+        style = MaterialTheme.typography.titleLarge,
+        fontWeight = FontWeight.SemiBold,
+      )
+    }
+
+    Spacer(modifier = Modifier.height(12.dp))
+
+    OutlinedTextField(
+      value = searchQuery,
+      onValueChange = { searchQuery = it },
+      placeholder = { Text("Projekte suchen...") },
+      leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = "Suchen") },
+      singleLine = true,
+      shape = RoundedCornerShape(12.dp),
+      colors =
+        OutlinedTextFieldDefaults.colors(
+          unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+          focusedBorderColor = MaterialTheme.colorScheme.primary,
+        ),
+      modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+    )
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    if (filteredProjects.isEmpty()) {
+      Box(modifier = Modifier.fillMaxSize().padding(32.dp), contentAlignment = Alignment.Center) {
+        Column(
+          horizontalAlignment = Alignment.CenterHorizontally,
+          verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+          Icon(
+            imageVector = Icons.Default.Folder,
+            contentDescription = null,
+            modifier = Modifier.size(64.dp),
+            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+          )
+          Text(
+            text =
+              if (searchQuery.isBlank()) "Keine Projekte vorhanden" else "Keine Projekte gefunden",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+          )
+          Text(
+            text =
+              if (searchQuery.isBlank()) "Erstellen Sie ein neues Projekt, um zu beginnen"
+              else "Versuchen Sie einen anderen Suchbegriff",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+          )
+        }
+      }
+    } else {
+      LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+      ) {
+        items(filteredProjects) { project ->
+          ProjectCard(
+            project = project,
+            isRecent = project.lastOpenedAt > recentThreshold,
+            onClick = { onProjectSelected(project) },
+            onDelete = { onProjectDelete(project) },
+          )
+        }
+      }
+    }
+  }
 }
 
 @Composable
 private fun ProjectCard(
-    project: StoredProject,
-    isRecent: Boolean,
-    onClick: () -> Unit,
-    onDelete: () -> Unit,
-    modifier: Modifier = Modifier
+  project: StoredProject,
+  isRecent: Boolean,
+  onClick: () -> Unit,
+  onDelete: () -> Unit,
+  modifier: Modifier = Modifier,
 ) {
-    val dateFormat = remember { SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault()) }
-    
-    Card(
-        onClick = onClick,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-        ),
-        shape = RoundedCornerShape(12.dp),
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+  val dateFormat = remember { SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault()) }
+
+  Card(
+    onClick = onClick,
+    colors =
+      CardDefaults.cardColors(
+        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+      ),
+    shape = RoundedCornerShape(12.dp),
+    modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp),
+  ) {
+    Row(
+      modifier = Modifier.fillMaxWidth().padding(16.dp),
+      verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Default.Folder,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(40.dp)
-            )
-            
-            Spacer(modifier = Modifier.width(12.dp))
-            
-            Column(modifier = Modifier.weight(1f)) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = project.name,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Medium
-                    )
-                    
-                    if (isRecent) {
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Surface(
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = RoundedCornerShape(4.dp)
-                        ) {
-                            Text(
-                                text = "Recent",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                            )
-                        }
-                    }
-                }
-                
-                Text(
-                    text = project.path,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                
-                Text(
-                    text = "Zuletzt geöffnet: ${dateFormat.format(Date(project.lastOpenedAt))}",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
-                )
+      Icon(
+        imageVector = Icons.Default.Folder,
+        contentDescription = null,
+        tint = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.size(40.dp),
+      )
+
+      Spacer(modifier = Modifier.width(12.dp))
+
+      Column(modifier = Modifier.weight(1f)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+          Text(
+            text = project.name,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Medium,
+          )
+
+          if (isRecent) {
+            Spacer(modifier = Modifier.width(8.dp))
+            Surface(color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(4.dp)) {
+              Text(
+                text = "Recent",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+              )
             }
-            
-            IconButton(onClick = onDelete) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Projekt löschen",
-                    tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f)
-                )
-            }
+          }
         }
+
+        Text(
+          text = project.path,
+          style = MaterialTheme.typography.bodySmall,
+          color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis,
+        )
+
+        Text(
+          text = "Zuletzt geöffnet: ${dateFormat.format(Date(project.lastOpenedAt))}",
+          style = MaterialTheme.typography.labelSmall,
+          color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+        )
+      }
+
+      IconButton(onClick = onDelete) {
+        Icon(
+          imageVector = Icons.Default.Delete,
+          contentDescription = "Projekt löschen",
+          tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f),
+        )
+      }
     }
+  }
 }

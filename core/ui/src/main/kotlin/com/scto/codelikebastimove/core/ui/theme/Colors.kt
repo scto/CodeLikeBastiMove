@@ -72,7 +72,8 @@ val DarkOnSurfaceVariant = Color(0xFFCAC4D0)
 val DarkOutline = Color(0xFF938F99)
 val DarkOutlineVariant = Color(0xFF49454F)
 
-val DarkColorScheme = darkColorScheme(
+val DarkColorScheme =
+  darkColorScheme(
     primary = DarkPrimary,
     onPrimary = DarkOnPrimary,
     primaryContainer = DarkPrimaryContainer,
@@ -96,10 +97,11 @@ val DarkColorScheme = darkColorScheme(
     surfaceVariant = DarkSurfaceVariant,
     onSurfaceVariant = DarkOnSurfaceVariant,
     outline = DarkOutline,
-    outlineVariant = DarkOutlineVariant
-)
+    outlineVariant = DarkOutlineVariant,
+  )
 
-val LightColorScheme = lightColorScheme(
+val LightColorScheme =
+  lightColorScheme(
     primary = Primary,
     onPrimary = OnPrimary,
     primaryContainer = PrimaryContainer,
@@ -123,5 +125,5 @@ val LightColorScheme = lightColorScheme(
     surfaceVariant = SurfaceVariant,
     onSurfaceVariant = OnSurfaceVariant,
     outline = Outline,
-    outlineVariant = OutlineVariant
-)
+    outlineVariant = OutlineVariant,
+  )

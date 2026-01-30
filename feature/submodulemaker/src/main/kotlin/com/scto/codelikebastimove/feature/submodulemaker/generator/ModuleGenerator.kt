@@ -7,103 +7,102 @@ import java.io.File
 
 object ModuleGenerator {
 
-    fun generateModule(
-        projectRoot: File,
-        config: ModuleConfig
-    ): Result<Unit> = runCatching {
-        val moduleDir = File(projectRoot, config.directoryPath)
-        moduleDir.mkdirs()
+  fun generateModule(projectRoot: File, config: ModuleConfig): Result<Unit> = runCatching {
+    val moduleDir = File(projectRoot, config.directoryPath)
+    moduleDir.mkdirs()
 
-        generateBuildGradleKts(moduleDir, config)
-        generateAndroidManifest(moduleDir, config)
-        generateSourceDirectories(moduleDir, config)
-        generateConsumerRules(moduleDir)
+    generateBuildGradleKts(moduleDir, config)
+    generateAndroidManifest(moduleDir, config)
+    generateSourceDirectories(moduleDir, config)
+    generateConsumerRules(moduleDir)
 
-        updateSettingsGradle(projectRoot, config.toGradleNotation())
-    }
+    updateSettingsGradle(projectRoot, config.toGradleNotation())
+  }
 
-    private fun generateBuildGradleKts(moduleDir: File, config: ModuleConfig) {
-        val content = buildString {
-            appendLine("plugins {")
-            when (config.moduleType) {
-                ModuleType.APPLICATION -> {
-                    if (config.language == ProgrammingLanguage.KOTLIN) {
-                        appendLine("    id(\"codelikebastimove.android.application\")")
-                        if (config.useCompose) {
-                            appendLine("    id(\"codelikebastimove.android.application.compose\")")
-                        }
-                    } else {
-                        appendLine("    id(\"${config.moduleType.plugin}\")")
-                    }
-                }
-                ModuleType.LIBRARY -> {
-                    if (config.language == ProgrammingLanguage.KOTLIN) {
-                        appendLine("    id(\"codelikebastimove.android.library\")")
-                        if (config.useCompose) {
-                            appendLine("    id(\"codelikebastimove.android.library.compose\")")
-                        }
-                    } else {
-                        appendLine("    id(\"${config.moduleType.plugin}\")")
-                    }
-                }
+  private fun generateBuildGradleKts(moduleDir: File, config: ModuleConfig) {
+    val content = buildString {
+      appendLine("plugins {")
+      when (config.moduleType) {
+        ModuleType.APPLICATION -> {
+          if (config.language == ProgrammingLanguage.KOTLIN) {
+            appendLine("    id(\"codelikebastimove.android.application\")")
+            if (config.useCompose) {
+              appendLine("    id(\"codelikebastimove.android.application.compose\")")
             }
-            appendLine("}")
-            appendLine()
-            appendLine("android {")
-            appendLine("    namespace = \"${config.generatePackageName()}\"")
-            appendLine("}")
-            appendLine()
-            appendLine("dependencies {")
-            appendLine("}")
+          } else {
+            appendLine("    id(\"${config.moduleType.plugin}\")")
+          }
         }
-        File(moduleDir, "build.gradle.kts").writeText(content)
-    }
-
-    private fun generateAndroidManifest(moduleDir: File, config: ModuleConfig) {
-        val srcMainDir = File(moduleDir, "src/main")
-        srcMainDir.mkdirs()
-
-        val manifestContent = buildString {
-            appendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>")
-            appendLine("<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\">")
-            if (config.moduleType == ModuleType.APPLICATION) {
-                appendLine("    <application")
-                appendLine("        android:allowBackup=\"true\"")
-                appendLine("        android:label=\"${config.moduleName}\"")
-                appendLine("        android:supportsRtl=\"true\">")
-                appendLine("    </application>")
+        ModuleType.LIBRARY -> {
+          if (config.language == ProgrammingLanguage.KOTLIN) {
+            appendLine("    id(\"codelikebastimove.android.library\")")
+            if (config.useCompose) {
+              appendLine("    id(\"codelikebastimove.android.library.compose\")")
             }
-            appendLine("</manifest>")
+          } else {
+            appendLine("    id(\"${config.moduleType.plugin}\")")
+          }
         }
-        File(srcMainDir, "AndroidManifest.xml").writeText(manifestContent)
+      }
+      appendLine("}")
+      appendLine()
+      appendLine("android {")
+      appendLine("    namespace = \"${config.generatePackageName()}\"")
+      appendLine("}")
+      appendLine()
+      appendLine("dependencies {")
+      appendLine("}")
     }
+    File(moduleDir, "build.gradle.kts").writeText(content)
+  }
 
-    private fun generateSourceDirectories(moduleDir: File, config: ModuleConfig) {
-        val packagePath = config.generatePackageName().replace(".", "/")
-        val srcLang = if (config.language == ProgrammingLanguage.KOTLIN) "kotlin" else "java"
+  private fun generateAndroidManifest(moduleDir: File, config: ModuleConfig) {
+    val srcMainDir = File(moduleDir, "src/main")
+    srcMainDir.mkdirs()
 
-        val srcDir = File(moduleDir, "src/main/$srcLang/$packagePath")
-        srcDir.mkdirs()
+    val manifestContent = buildString {
+      appendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>")
+      appendLine("<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\">")
+      if (config.moduleType == ModuleType.APPLICATION) {
+        appendLine("    <application")
+        appendLine("        android:allowBackup=\"true\"")
+        appendLine("        android:label=\"${config.moduleName}\"")
+        appendLine("        android:supportsRtl=\"true\">")
+        appendLine("    </application>")
+      }
+      appendLine("</manifest>")
+    }
+    File(srcMainDir, "AndroidManifest.xml").writeText(manifestContent)
+  }
 
-        val resDir = File(moduleDir, "src/main/res/values")
-        resDir.mkdirs()
+  private fun generateSourceDirectories(moduleDir: File, config: ModuleConfig) {
+    val packagePath = config.generatePackageName().replace(".", "/")
+    val srcLang = if (config.language == ProgrammingLanguage.KOTLIN) "kotlin" else "java"
 
-        val stringsContent = """<?xml version="1.0" encoding="utf-8"?>
+    val srcDir = File(moduleDir, "src/main/$srcLang/$packagePath")
+    srcDir.mkdirs()
+
+    val resDir = File(moduleDir, "src/main/res/values")
+    resDir.mkdirs()
+
+    val stringsContent =
+      """<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="module_name">${config.moduleName}</string>
 </resources>"""
-        File(resDir, "strings.xml").writeText(stringsContent)
+    File(resDir, "strings.xml").writeText(stringsContent)
 
-        if (config.language == ProgrammingLanguage.KOTLIN) {
-            generateKotlinPlaceholder(srcDir, config)
-        } else {
-            generateJavaPlaceholder(srcDir, config)
-        }
+    if (config.language == ProgrammingLanguage.KOTLIN) {
+      generateKotlinPlaceholder(srcDir, config)
+    } else {
+      generateJavaPlaceholder(srcDir, config)
     }
+  }
 
-    private fun generateKotlinPlaceholder(srcDir: File, config: ModuleConfig) {
-        val className = config.moduleName.toPascalCase()
-        val content = """package ${config.generatePackageName()}
+  private fun generateKotlinPlaceholder(srcDir: File, config: ModuleConfig) {
+    val className = config.moduleName.toPascalCase()
+    val content =
+      """package ${config.generatePackageName()}
 
 /**
  * ${config.moduleName} module
@@ -115,12 +114,13 @@ object ${className}Module {
     const val GRADLE_PATH = "${config.toGradleNotation()}"
 }
 """
-        File(srcDir, "${className}Module.kt").writeText(content)
-    }
+    File(srcDir, "${className}Module.kt").writeText(content)
+  }
 
-    private fun generateJavaPlaceholder(srcDir: File, config: ModuleConfig) {
-        val className = config.moduleName.toPascalCase() + "Module"
-        val content = """package ${config.generatePackageName()};
+  private fun generateJavaPlaceholder(srcDir: File, config: ModuleConfig) {
+    val className = config.moduleName.toPascalCase() + "Module"
+    val content =
+      """package ${config.generatePackageName()};
 
 /**
  * ${config.moduleName} module
@@ -136,29 +136,28 @@ public final class $className {
     }
 }
 """
-        File(srcDir, "$className.java").writeText(content)
-    }
+    File(srcDir, "$className.java").writeText(content)
+  }
 
-    private fun generateConsumerRules(moduleDir: File) {
-        File(moduleDir, "consumer-rules.pro").writeText("# Consumer rules for this module\n")
-    }
+  private fun generateConsumerRules(moduleDir: File) {
+    File(moduleDir, "consumer-rules.pro").writeText("# Consumer rules for this module\n")
+  }
 
-    private fun updateSettingsGradle(projectRoot: File, gradlePath: String) {
-        val settingsFile = File(projectRoot, "settings.gradle.kts")
-        if (settingsFile.exists()) {
-            val content = settingsFile.readText()
-            val includeStatement = "include(\"$gradlePath\")"
-            if (!content.contains(includeStatement)) {
-                val updatedContent = content.trimEnd() + "\n$includeStatement\n"
-                settingsFile.writeText(updatedContent)
-            }
-        }
+  private fun updateSettingsGradle(projectRoot: File, gradlePath: String) {
+    val settingsFile = File(projectRoot, "settings.gradle.kts")
+    if (settingsFile.exists()) {
+      val content = settingsFile.readText()
+      val includeStatement = "include(\"$gradlePath\")"
+      if (!content.contains(includeStatement)) {
+        val updatedContent = content.trimEnd() + "\n$includeStatement\n"
+        settingsFile.writeText(updatedContent)
+      }
     }
+  }
 
-    private fun String.toPascalCase(): String {
-        return split("-", "_", " ")
-            .joinToString("") { word ->
-                word.lowercase().replaceFirstChar { it.uppercase() }
-            }
+  private fun String.toPascalCase(): String {
+    return split("-", "_", " ").joinToString("") { word ->
+      word.lowercase().replaceFirstChar { it.uppercase() }
     }
+  }
 }

@@ -9,90 +9,101 @@ import com.scto.codelikebastimove.core.templates.api.ProjectConfig
 import com.scto.codelikebastimove.core.templates.api.ProjectFile
 
 class TabbedActivityTemplate : BaseVersionCatalogTemplate() {
-    override val name: String = "Tabbed Activity"
-    override val description: String = "Creates a project with ViewPager2 and TabLayout"
-    override val templateId: String = "tabbed-activity"
-    override val templateVersion: String = "1.0.0"
-    override val templateType: ProjectTemplateType = ProjectTemplateType.TABBED
-    override val features: List<String> = listOf("ViewPager2", "TabLayout", "ViewBinding", "LiveData", "ViewModel")
+  override val name: String = "Tabbed Activity"
+  override val description: String = "Creates a project with ViewPager2 and TabLayout"
+  override val templateId: String = "tabbed-activity"
+  override val templateVersion: String = "1.0.0"
+  override val templateType: ProjectTemplateType = ProjectTemplateType.TABBED
+  override val features: List<String> =
+    listOf("ViewPager2", "TabLayout", "ViewBinding", "LiveData", "ViewModel")
 
-    override fun getVersionCatalog(): VersionCatalog {
-        val base = createBaseViewVersionCatalog()
-        return base.copy(
-            versions = base.versions + listOf(
-                VersionCatalogEntry("viewpager2", "1.1.0")
-            ),
-            libraries = base.libraries + listOf(
-                VersionCatalogLibrary("androidx-viewpager2", "androidx.viewpager2", "viewpager2", "viewpager2")
+  override fun getVersionCatalog(): VersionCatalog {
+    val base = createBaseViewVersionCatalog()
+    return base.copy(
+      versions = base.versions + listOf(VersionCatalogEntry("viewpager2", "1.1.0")),
+      libraries =
+        base.libraries +
+          listOf(
+            VersionCatalogLibrary(
+              "androidx-viewpager2",
+              "androidx.viewpager2",
+              "viewpager2",
+              "viewpager2",
             )
-        )
+          ),
+    )
+  }
+
+  override fun generateProject(config: ProjectConfig): List<ProjectFile> {
+    val files = mutableListOf<ProjectFile>()
+    val packagePath = config.packageName.replace(".", "/")
+
+    files.add(ProjectFile("app/src/main/java/$packagePath/ui/main", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/res/layout", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/res/values", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/res/drawable", "", isDirectory = true))
+
+    files.addAll(generateGradleWrapper(config))
+    files.add(generateVersionCatalogToml(config))
+
+    when (config.gradleLanguage) {
+      GradleLanguage.KOTLIN_DSL -> {
+        files.add(generateSettingsGradleKts(config))
+        files.add(generateRootBuildGradleKtsView(config))
+        files.add(generateAppBuildGradleKts(config))
+      }
+      GradleLanguage.GROOVY -> {
+        files.add(generateSettingsGradleGroovy(config))
+        files.add(generateRootBuildGradleGroovyView(config))
+        files.add(generateAppBuildGradleGroovy(config))
+      }
     }
 
-    override fun generateProject(config: ProjectConfig): List<ProjectFile> {
-        val files = mutableListOf<ProjectFile>()
-        val packagePath = config.packageName.replace(".", "/")
+    files.add(generateAndroidManifest(config))
+    files.add(generateMainActivity(config))
+    files.add(generateActivityMainLayout(config))
+    files.add(generateSectionsPagerAdapter(config))
+    files.add(generatePlaceholderFragment(config))
+    files.add(generatePageViewModel(config))
+    files.add(generateFragmentMainLayout(config))
+    files.add(generateStringsXml(config))
+    files.add(generateColorsXml(config))
+    files.add(generateThemesXml(config))
+    files.add(generateDimensXml(config))
+    files.add(generateGradleProperties(config))
+    files.add(generateGitignore(config))
+    files.add(generateProguardRules(config))
 
-        files.add(ProjectFile("app/src/main/java/$packagePath/ui/main", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/res/layout", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/res/values", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/res/drawable", "", isDirectory = true))
+    return files
+  }
 
-        files.addAll(generateGradleWrapper(config))
-        files.add(generateVersionCatalogToml(config))
-
-        when (config.gradleLanguage) {
-            GradleLanguage.KOTLIN_DSL -> {
-                files.add(generateSettingsGradleKts(config))
-                files.add(generateRootBuildGradleKtsView(config))
-                files.add(generateAppBuildGradleKts(config))
-            }
-            GradleLanguage.GROOVY -> {
-                files.add(generateSettingsGradleGroovy(config))
-                files.add(generateRootBuildGradleGroovyView(config))
-                files.add(generateAppBuildGradleGroovy(config))
-            }
-        }
-
-        files.add(generateAndroidManifest(config))
-        files.add(generateMainActivity(config))
-        files.add(generateActivityMainLayout(config))
-        files.add(generateSectionsPagerAdapter(config))
-        files.add(generatePlaceholderFragment(config))
-        files.add(generatePageViewModel(config))
-        files.add(generateFragmentMainLayout(config))
-        files.add(generateStringsXml(config))
-        files.add(generateColorsXml(config))
-        files.add(generateThemesXml(config))
-        files.add(generateDimensXml(config))
-        files.add(generateGradleProperties(config))
-        files.add(generateGitignore(config))
-        files.add(generateProguardRules(config))
-
-        return files
-    }
-
-    private fun generateRootBuildGradleKtsView(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateRootBuildGradleKtsView(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
 }
-""".trimIndent()
-        return ProjectFile("build.gradle.kts", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("build.gradle.kts", content)
+  }
 
-    private fun generateRootBuildGradleGroovyView(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateRootBuildGradleGroovyView(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 plugins {
     alias libs.plugins.android.application apply false
     alias libs.plugins.kotlin.android apply false
 }
-""".trimIndent()
-        return ProjectFile("build.gradle", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("build.gradle", content)
+  }
 
-    private fun generateAppBuildGradleKts(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateAppBuildGradleKts(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -142,12 +153,14 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
-""".trimIndent()
-        return ProjectFile("app/build.gradle.kts", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/build.gradle.kts", content)
+  }
 
-    private fun generateAppBuildGradleGroovy(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateAppBuildGradleGroovy(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 plugins {
     alias libs.plugins.android.application
     alias libs.plugins.kotlin.android
@@ -197,13 +210,15 @@ dependencies {
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
 }
-""".trimIndent()
-        return ProjectFile("app/build.gradle", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/build.gradle", content)
+  }
 
-    private fun generateAndroidManifest(config: ProjectConfig): ProjectFile {
-        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
-        val content = """
+  private fun generateAndroidManifest(config: ProjectConfig): ProjectFile {
+    val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -227,13 +242,15 @@ dependencies {
     </application>
 
 </manifest>
-""".trimIndent()
-        return ProjectFile("app/src/main/AndroidManifest.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/AndroidManifest.xml", content)
+  }
 
-    private fun generateMainActivity(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateMainActivity(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}
 
 import android.os.Bundle
@@ -273,13 +290,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/MainActivity.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/MainActivity.kt", content)
+  }
 
-    private fun generateActivityMainLayout(config: ProjectConfig): ProjectFile {
-        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
-        val content = """
+  private fun generateActivityMainLayout(config: ProjectConfig): ProjectFile {
+    val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -325,13 +344,15 @@ class MainActivity : AppCompatActivity() {
         android:layout_marginBottom="16dp"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/layout/activity_main.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/layout/activity_main.xml", content)
+  }
 
-    private fun generateSectionsPagerAdapter(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateSectionsPagerAdapter(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.ui.main
 
 import androidx.fragment.app.Fragment
@@ -348,13 +369,15 @@ class SectionsPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         return PlaceholderFragment.newInstance(position + 1)
     }
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/ui/main/SectionsPagerAdapter.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/ui/main/SectionsPagerAdapter.kt", content)
+  }
 
-    private fun generatePlaceholderFragment(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generatePlaceholderFragment(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.ui.main
 
 import android.os.Bundle
@@ -411,13 +434,15 @@ class PlaceholderFragment : Fragment() {
         _binding = null
     }
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/ui/main/PlaceholderFragment.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/ui/main/PlaceholderFragment.kt", content)
+  }
 
-    private fun generatePageViewModel(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generatePageViewModel(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.ui.main
 
 import androidx.lifecycle.LiveData
@@ -436,12 +461,14 @@ class PageViewModel : ViewModel() {
         _index.value = index
     }
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/ui/main/PageViewModel.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/ui/main/PageViewModel.kt", content)
+  }
 
-    private fun generateFragmentMainLayout(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateFragmentMainLayout(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -466,23 +493,27 @@ class PageViewModel : ViewModel() {
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/layout/fragment_main.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/layout/fragment_main.xml", content)
+  }
 
-    private fun generateStringsXml(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateStringsXml(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 <resources>
     <string name="app_name">${config.projectName}</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
 </resources>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/values/strings.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/values/strings.xml", content)
+  }
 
-    private fun generateColorsXml(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateColorsXml(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="purple_200">#FFBB86FC</color>
@@ -493,13 +524,15 @@ class PageViewModel : ViewModel() {
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/values/colors.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/values/colors.xml", content)
+  }
 
-    private fun generateThemesXml(config: ProjectConfig): ProjectFile {
-        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
-        val content = """
+  private fun generateThemesXml(config: ProjectConfig): ProjectFile {
+    val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.$themeName" parent="Theme.Material3.DayNight.DarkActionBar">
@@ -521,19 +554,22 @@ class PageViewModel : ViewModel() {
 
     <style name="Theme.$themeName.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/values/themes.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/values/themes.xml", content)
+  }
 
-    private fun generateDimensXml(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateDimensXml(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="appbar_padding">16dp</dimen>
 </resources>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/values/dimens.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/values/dimens.xml", content)
+  }
 }

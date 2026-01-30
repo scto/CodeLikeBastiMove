@@ -1,7 +1,7 @@
 package com.scto.codelikebastimove.core.datastore
 
 enum class ThemeMode {
-    LIGHT,
-    DARK,
-    FOLLOW_SYSTEM
+  LIGHT,
+  DARK,
+  FOLLOW_SYSTEM,
 }

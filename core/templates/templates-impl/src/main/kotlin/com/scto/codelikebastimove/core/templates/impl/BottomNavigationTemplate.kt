@@ -5,111 +5,133 @@ import com.scto.codelikebastimove.core.datastore.VersionCatalog
 import com.scto.codelikebastimove.core.datastore.VersionCatalogBundle
 import com.scto.codelikebastimove.core.datastore.VersionCatalogEntry
 import com.scto.codelikebastimove.core.datastore.VersionCatalogLibrary
-import com.scto.codelikebastimove.core.datastore.VersionCatalogPlugin
 import com.scto.codelikebastimove.core.templates.api.GradleLanguage
 import com.scto.codelikebastimove.core.templates.api.ProjectConfig
 import com.scto.codelikebastimove.core.templates.api.ProjectFile
 
 class BottomNavigationTemplate : BaseVersionCatalogTemplate() {
-    override val name: String = "Bottom Navigation Activity"
-    override val description: String = "Creates a project with Bottom Navigation and Fragments"
-    override val templateId: String = "bottom-navigation"
-    override val templateVersion: String = "1.0.0"
-    override val templateType: ProjectTemplateType = ProjectTemplateType.BOTTOM_NAVIGATION
-    override val features: List<String> = listOf("Bottom Navigation", "Navigation Component", "ViewBinding", "LiveData", "ViewModel")
+  override val name: String = "Bottom Navigation Activity"
+  override val description: String = "Creates a project with Bottom Navigation and Fragments"
+  override val templateId: String = "bottom-navigation"
+  override val templateVersion: String = "1.0.0"
+  override val templateType: ProjectTemplateType = ProjectTemplateType.BOTTOM_NAVIGATION
+  override val features: List<String> =
+    listOf("Bottom Navigation", "Navigation Component", "ViewBinding", "LiveData", "ViewModel")
 
-    override fun getVersionCatalog(): VersionCatalog {
-        val base = createBaseViewVersionCatalog()
-        return base.copy(
-            versions = base.versions + listOf(
-                VersionCatalogEntry("navigation", "2.8.5")
+  override fun getVersionCatalog(): VersionCatalog {
+    val base = createBaseViewVersionCatalog()
+    return base.copy(
+      versions = base.versions + listOf(VersionCatalogEntry("navigation", "2.8.5")),
+      libraries =
+        base.libraries +
+          listOf(
+            VersionCatalogLibrary(
+              "androidx-navigation-fragment-ktx",
+              "androidx.navigation",
+              "navigation-fragment-ktx",
+              "navigation",
             ),
-            libraries = base.libraries + listOf(
-                VersionCatalogLibrary("androidx-navigation-fragment-ktx", "androidx.navigation", "navigation-fragment-ktx", "navigation"),
-                VersionCatalogLibrary("androidx-navigation-ui-ktx", "androidx.navigation", "navigation-ui-ktx", "navigation")
+            VersionCatalogLibrary(
+              "androidx-navigation-ui-ktx",
+              "androidx.navigation",
+              "navigation-ui-ktx",
+              "navigation",
             ),
-            bundles = base.bundles + listOf(
-                VersionCatalogBundle("navigation", listOf("androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx"))
+          ),
+      bundles =
+        base.bundles +
+          listOf(
+            VersionCatalogBundle(
+              "navigation",
+              listOf("androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx"),
             )
-        )
+          ),
+    )
+  }
+
+  override fun generateProject(config: ProjectConfig): List<ProjectFile> {
+    val files = mutableListOf<ProjectFile>()
+    val packagePath = config.packageName.replace(".", "/")
+
+    files.add(ProjectFile("app/src/main/java/$packagePath/ui/home", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/java/$packagePath/ui/dashboard", "", isDirectory = true))
+    files.add(
+      ProjectFile("app/src/main/java/$packagePath/ui/notifications", "", isDirectory = true)
+    )
+    files.add(ProjectFile("app/src/main/res/layout", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/res/navigation", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/res/menu", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/res/values", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/res/drawable", "", isDirectory = true))
+
+    files.addAll(generateGradleWrapper(config))
+    files.add(generateVersionCatalogToml(config))
+
+    when (config.gradleLanguage) {
+      GradleLanguage.KOTLIN_DSL -> {
+        files.add(generateSettingsGradleKts(config))
+        files.add(generateRootBuildGradleKtsView(config))
+        files.add(generateAppBuildGradleKts(config))
+      }
+      GradleLanguage.GROOVY -> {
+        files.add(generateSettingsGradleGroovy(config))
+        files.add(generateRootBuildGradleGroovyView(config))
+        files.add(generateAppBuildGradleGroovy(config))
+      }
     }
 
-    override fun generateProject(config: ProjectConfig): List<ProjectFile> {
-        val files = mutableListOf<ProjectFile>()
-        val packagePath = config.packageName.replace(".", "/")
+    files.add(generateAndroidManifest(config))
+    files.add(generateMainActivity(config))
+    files.add(generateActivityMainLayout(config))
+    files.add(generateHomeFragment(config))
+    files.add(generateHomeViewModel(config))
+    files.add(generateFragmentHomeLayout(config))
+    files.add(generateDashboardFragment(config))
+    files.add(generateDashboardViewModel(config))
+    files.add(generateFragmentDashboardLayout(config))
+    files.add(generateNotificationsFragment(config))
+    files.add(generateNotificationsViewModel(config))
+    files.add(generateFragmentNotificationsLayout(config))
+    files.add(generateBottomNavMenu(config))
+    files.add(generateMobileNavigation(config))
+    files.add(generateStringsXml(config))
+    files.add(generateColorsXml(config))
+    files.add(generateThemesXml(config))
+    files.add(generateGradleProperties(config))
+    files.add(generateGitignore(config))
+    files.add(generateProguardRules(config))
+    files.add(generateIconDrawables(config))
 
-        files.add(ProjectFile("app/src/main/java/$packagePath/ui/home", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/java/$packagePath/ui/dashboard", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/java/$packagePath/ui/notifications", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/res/layout", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/res/navigation", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/res/menu", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/res/values", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/res/drawable", "", isDirectory = true))
+    return files
+  }
 
-        files.addAll(generateGradleWrapper(config))
-        files.add(generateVersionCatalogToml(config))
-
-        when (config.gradleLanguage) {
-            GradleLanguage.KOTLIN_DSL -> {
-                files.add(generateSettingsGradleKts(config))
-                files.add(generateRootBuildGradleKtsView(config))
-                files.add(generateAppBuildGradleKts(config))
-            }
-            GradleLanguage.GROOVY -> {
-                files.add(generateSettingsGradleGroovy(config))
-                files.add(generateRootBuildGradleGroovyView(config))
-                files.add(generateAppBuildGradleGroovy(config))
-            }
-        }
-
-        files.add(generateAndroidManifest(config))
-        files.add(generateMainActivity(config))
-        files.add(generateActivityMainLayout(config))
-        files.add(generateHomeFragment(config))
-        files.add(generateHomeViewModel(config))
-        files.add(generateFragmentHomeLayout(config))
-        files.add(generateDashboardFragment(config))
-        files.add(generateDashboardViewModel(config))
-        files.add(generateFragmentDashboardLayout(config))
-        files.add(generateNotificationsFragment(config))
-        files.add(generateNotificationsViewModel(config))
-        files.add(generateFragmentNotificationsLayout(config))
-        files.add(generateBottomNavMenu(config))
-        files.add(generateMobileNavigation(config))
-        files.add(generateStringsXml(config))
-        files.add(generateColorsXml(config))
-        files.add(generateThemesXml(config))
-        files.add(generateGradleProperties(config))
-        files.add(generateGitignore(config))
-        files.add(generateProguardRules(config))
-        files.add(generateIconDrawables(config))
-
-        return files
-    }
-
-    private fun generateRootBuildGradleKtsView(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateRootBuildGradleKtsView(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
 }
-""".trimIndent()
-        return ProjectFile("build.gradle.kts", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("build.gradle.kts", content)
+  }
 
-    private fun generateRootBuildGradleGroovyView(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateRootBuildGradleGroovyView(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 plugins {
     alias libs.plugins.android.application apply false
     alias libs.plugins.kotlin.android apply false
 }
-""".trimIndent()
-        return ProjectFile("build.gradle", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("build.gradle", content)
+  }
 
-    private fun generateAppBuildGradleKts(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateAppBuildGradleKts(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -159,12 +181,14 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
-""".trimIndent()
-        return ProjectFile("app/build.gradle.kts", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/build.gradle.kts", content)
+  }
 
-    private fun generateAppBuildGradleGroovy(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateAppBuildGradleGroovy(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 plugins {
     alias libs.plugins.android.application
     alias libs.plugins.kotlin.android
@@ -214,13 +238,15 @@ dependencies {
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
 }
-""".trimIndent()
-        return ProjectFile("app/build.gradle", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/build.gradle", content)
+  }
 
-    private fun generateAndroidManifest(config: ProjectConfig): ProjectFile {
-        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
-        val content = """
+  private fun generateAndroidManifest(config: ProjectConfig): ProjectFile {
+    val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -243,13 +269,15 @@ dependencies {
     </application>
 
 </manifest>
-""".trimIndent()
-        return ProjectFile("app/src/main/AndroidManifest.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/AndroidManifest.xml", content)
+  }
 
-    private fun generateMainActivity(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateMainActivity(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}
 
 import android.os.Bundle
@@ -283,12 +311,14 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/MainActivity.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/MainActivity.kt", content)
+  }
 
-    private fun generateActivityMainLayout(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateActivityMainLayout(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -322,13 +352,15 @@ class MainActivity : AppCompatActivity() {
         app:navGraph="@navigation/mobile_navigation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/layout/activity_main.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/layout/activity_main.xml", content)
+  }
 
-    private fun generateHomeFragment(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateHomeFragment(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.ui.home
 
 import android.os.Bundle
@@ -367,13 +399,15 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/ui/home/HomeFragment.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/ui/home/HomeFragment.kt", content)
+  }
 
-    private fun generateHomeViewModel(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateHomeViewModel(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.ui.home
 
 import androidx.lifecycle.LiveData
@@ -387,12 +421,14 @@ class HomeViewModel : ViewModel() {
     }
     val text: LiveData<String> = _text
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/ui/home/HomeViewModel.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/ui/home/HomeViewModel.kt", content)
+  }
 
-    private fun generateFragmentHomeLayout(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateFragmentHomeLayout(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -415,13 +451,15 @@ class HomeViewModel : ViewModel() {
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/layout/fragment_home.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/layout/fragment_home.xml", content)
+  }
 
-    private fun generateDashboardFragment(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateDashboardFragment(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.ui.dashboard
 
 import android.os.Bundle
@@ -460,13 +498,15 @@ class DashboardFragment : Fragment() {
         _binding = null
     }
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/ui/dashboard/DashboardFragment.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/ui/dashboard/DashboardFragment.kt", content)
+  }
 
-    private fun generateDashboardViewModel(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateDashboardViewModel(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.ui.dashboard
 
 import androidx.lifecycle.LiveData
@@ -480,12 +520,14 @@ class DashboardViewModel : ViewModel() {
     }
     val text: LiveData<String> = _text
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/ui/dashboard/DashboardViewModel.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/ui/dashboard/DashboardViewModel.kt", content)
+  }
 
-    private fun generateFragmentDashboardLayout(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateFragmentDashboardLayout(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -508,13 +550,15 @@ class DashboardViewModel : ViewModel() {
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/layout/fragment_dashboard.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/layout/fragment_dashboard.xml", content)
+  }
 
-    private fun generateNotificationsFragment(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateNotificationsFragment(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.ui.notifications
 
 import android.os.Bundle
@@ -553,13 +597,18 @@ class NotificationsFragment : Fragment() {
         _binding = null
     }
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/ui/notifications/NotificationsFragment.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile(
+      "app/src/main/java/$packagePath/ui/notifications/NotificationsFragment.kt",
+      content,
+    )
+  }
 
-    private fun generateNotificationsViewModel(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateNotificationsViewModel(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.ui.notifications
 
 import androidx.lifecycle.LiveData
@@ -573,12 +622,17 @@ class NotificationsViewModel : ViewModel() {
     }
     val text: LiveData<String> = _text
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/ui/notifications/NotificationsViewModel.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile(
+      "app/src/main/java/$packagePath/ui/notifications/NotificationsViewModel.kt",
+      content,
+    )
+  }
 
-    private fun generateFragmentNotificationsLayout(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateFragmentNotificationsLayout(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -601,12 +655,14 @@ class NotificationsViewModel : ViewModel() {
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/layout/fragment_notifications.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/layout/fragment_notifications.xml", content)
+  }
 
-    private fun generateBottomNavMenu(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateBottomNavMenu(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -626,12 +682,14 @@ class NotificationsViewModel : ViewModel() {
         android:title="@string/title_notifications" />
 
 </menu>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/menu/bottom_nav_menu.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/menu/bottom_nav_menu.xml", content)
+  }
 
-    private fun generateMobileNavigation(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateMobileNavigation(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -657,24 +715,28 @@ class NotificationsViewModel : ViewModel() {
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 </navigation>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/navigation/mobile_navigation.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/navigation/mobile_navigation.xml", content)
+  }
 
-    private fun generateStringsXml(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateStringsXml(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 <resources>
     <string name="app_name">${config.projectName}</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 </resources>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/values/strings.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/values/strings.xml", content)
+  }
 
-    private fun generateColorsXml(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateColorsXml(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="purple_200">#FFBB86FC</color>
@@ -685,13 +747,15 @@ class NotificationsViewModel : ViewModel() {
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/values/colors.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/values/colors.xml", content)
+  }
 
-    private fun generateThemesXml(config: ProjectConfig): ProjectFile {
-        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
-        val content = """
+  private fun generateThemesXml(config: ProjectConfig): ProjectFile {
+    val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.$themeName" parent="Theme.Material3.DayNight.DarkActionBar">
@@ -703,12 +767,14 @@ class NotificationsViewModel : ViewModel() {
         <item name="colorOnSecondary">@color/black</item>
     </style>
 </resources>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/values/themes.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/values/themes.xml", content)
+  }
 
-    private fun generateIconDrawables(config: ProjectConfig): ProjectFile {
-        val homeIcon = """
+  private fun generateIconDrawables(config: ProjectConfig): ProjectFile {
+    val homeIcon =
+      """
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
@@ -719,7 +785,8 @@ class NotificationsViewModel : ViewModel() {
       android:fillColor="@android:color/white"
       android:pathData="M10,20v-6h4v6h5v-8h3L12,3 2,12h3v8z"/>
 </vector>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/drawable/ic_home_24.xml", homeIcon)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/drawable/ic_home_24.xml", homeIcon)
+  }
 }

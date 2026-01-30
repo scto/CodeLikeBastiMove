@@ -4,8 +4,8 @@ import com.scto.codelikebastimove.feature.themebuilder.model.ThemeColors
 import com.scto.codelikebastimove.feature.themebuilder.util.colorToArgbHex
 
 fun generateComposeColorKt(themeName: String, colors: ThemeColors): String {
-    val packageName = themeName.lowercase().replace(" ", "").replace("-", "")
-    return """package com.example.$packageName.ui.theme
+  val packageName = themeName.lowercase().replace(" ", "").replace("-", "")
+  return """package com.example.$packageName.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
@@ -62,10 +62,10 @@ val md_theme_dark_outline = Color(0xFF938F99)
 }
 
 fun generateComposeThemeKt(themeName: String): String {
-    val packageName = themeName.lowercase().replace(" ", "").replace("-", "")
-    val className = themeName.replace(" ", "").replace("-", "")
+  val packageName = themeName.lowercase().replace(" ", "").replace("-", "")
+  val className = themeName.replace(" ", "").replace("-", "")
 
-    return """package com.example.$packageName.ui.theme
+  return """package com.example.$packageName.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -167,11 +167,13 @@ fun ${className}Theme(
 }
 
 fun generateComposeTypeKt(themeName: String, displayFont: String, bodyFont: String): String {
-    val packageName = themeName.lowercase().replace(" ", "").replace("-", "")
-    val displayFontFamily = if (displayFont == "-- System Default --") "FontFamily.Default" else "FontFamily.SansSerif"
-    val bodyFontFamily = if (bodyFont == "-- System Default --") "FontFamily.Default" else "FontFamily.SansSerif"
+  val packageName = themeName.lowercase().replace(" ", "").replace("-", "")
+  val displayFontFamily =
+    if (displayFont == "-- System Default --") "FontFamily.Default" else "FontFamily.SansSerif"
+  val bodyFontFamily =
+    if (bodyFont == "-- System Default --") "FontFamily.Default" else "FontFamily.SansSerif"
 
-    return """package com.example.$packageName.ui.theme
+  return """package com.example.$packageName.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

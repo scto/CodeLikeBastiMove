@@ -3,11 +3,19 @@ package com.scto.codelikebastimove.feature.themebuilder.export
 import com.scto.codelikebastimove.feature.themebuilder.model.ThemeColors
 import com.scto.codelikebastimove.feature.themebuilder.util.colorToHex
 
-fun generateWebCss(themeName: String, colors: ThemeColors, displayFont: String, bodyFont: String): String {
-    val displayFontStack = if (displayFont == "-- System Default --") "system-ui, sans-serif" else "'$displayFont', sans-serif"
-    val bodyFontStack = if (bodyFont == "-- System Default --") "system-ui, sans-serif" else "'$bodyFont', sans-serif"
+fun generateWebCss(
+  themeName: String,
+  colors: ThemeColors,
+  displayFont: String,
+  bodyFont: String,
+): String {
+  val displayFontStack =
+    if (displayFont == "-- System Default --") "system-ui, sans-serif"
+    else "'$displayFont', sans-serif"
+  val bodyFontStack =
+    if (bodyFont == "-- System Default --") "system-ui, sans-serif" else "'$bodyFont', sans-serif"
 
-    return """:root {
+  return """:root {
   /* ${themeName} - Material Theme */
   
   /* Colors */
@@ -56,8 +64,13 @@ h1, h2, h3 {
 """
 }
 
-fun generateThemeJson(themeName: String, colors: ThemeColors, displayFont: String, bodyFont: String): String {
-    return """{
+fun generateThemeJson(
+  themeName: String,
+  colors: ThemeColors,
+  displayFont: String,
+  bodyFont: String,
+): String {
+  return """{
   "name": "$themeName",
   "colors": {
     "primary": "${colorToHex(colors.primary)}",

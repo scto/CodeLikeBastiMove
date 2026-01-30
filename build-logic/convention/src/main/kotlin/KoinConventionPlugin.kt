@@ -13,23 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-import org.gradle.api.Plugin
-import org.gradle.api.Project
-import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
-import org.gradle.kotlin.dsl.withType
 
 import com.scto.convention.libs
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+import org.gradle.kotlin.dsl.dependencies
 
 class KoinConventionPlugin : Plugin<Project> {
-    override fun apply(target: Project) {
-        with(target) {
-            dependencies {
-                add("implementation", libs.findLibrary("koin-android").get())
-                add("implementation", libs.findLibrary("koin-compose").get())
-            }
-        }
+  override fun apply(target: Project) {
+    with(target) {
+      dependencies {
+        add("implementation", libs.findLibrary("koin-android").get())
+        add("implementation", libs.findLibrary("koin-compose").get())
+      }
     }
+  }
 }

@@ -15,41 +15,37 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
-    
-    private val userPreferencesRepository = UserPreferencesRepository(application)
-    private val authRepository = AuthRepository.getInstance()
-    
-    private val _signOutTriggered = MutableStateFlow(false)
-    val signOutTriggered: StateFlow<Boolean> = _signOutTriggered.asStateFlow()
 
-    val userPreferences: StateFlow<UserPreferences> = userPreferencesRepository.userPreferences
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = UserPreferences()
-        )
-    
-    val currentUserEmail: String?
-        get() = authRepository.currentUser?.email
+  private val userPreferencesRepository = UserPreferencesRepository(application)
+  private val authRepository = AuthRepository.getInstance()
 
-    fun setThemeMode(themeMode: ThemeMode) {
-        viewModelScope.launch {
-            userPreferencesRepository.setThemeMode(themeMode)
-        }
-    }
+  private val _signOutTriggered = MutableStateFlow(false)
+  val signOutTriggered: StateFlow<Boolean> = _signOutTriggered.asStateFlow()
 
-    fun setDynamicColorsEnabled(enabled: Boolean) {
-        viewModelScope.launch {
-            userPreferencesRepository.setDynamicColorsEnabled(enabled)
-        }
-    }
-    
-    fun signOut() {
-        authRepository.signOut()
-        _signOutTriggered.value = true
-    }
-    
-    fun resetSignOutTrigger() {
-        _signOutTriggered.value = false
-    }
+  val userPreferences: StateFlow<UserPreferences> =
+    userPreferencesRepository.userPreferences.stateIn(
+      scope = viewModelScope,
+      started = SharingStarted.WhileSubscribed(5000),
+      initialValue = UserPreferences(),
+    )
+
+  val currentUserEmail: String?
+    get() = authRepository.currentUser?.email
+
+  fun setThemeMode(themeMode: ThemeMode) {
+    viewModelScope.launch { userPreferencesRepository.setThemeMode(themeMode) }
+  }
+
+  fun setDynamicColorsEnabled(enabled: Boolean) {
+    viewModelScope.launch { userPreferencesRepository.setDynamicColorsEnabled(enabled) }
+  }
+
+  fun signOut() {
+    authRepository.signOut()
+    _signOutTriggered.value = true
+  }
+
+  fun resetSignOutTrigger() {
+    _signOutTriggered.value = false
+  }
 }

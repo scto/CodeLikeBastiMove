@@ -28,84 +28,75 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun BottomActionBar(
-    currentPage: Int,
-    totalPages: Int,
-    showExportMenu: Boolean,
-    onExportMenuToggle: (Boolean) -> Unit,
-    onBack: () -> Unit,
-    onNext: () -> Unit,
-    onExport: (String) -> Unit,
-    modifier: Modifier = Modifier
+  currentPage: Int,
+  totalPages: Int,
+  showExportMenu: Boolean,
+  onExportMenuToggle: (Boolean) -> Unit,
+  onBack: () -> Unit,
+  onNext: () -> Unit,
+  onExport: (String) -> Unit,
+  modifier: Modifier = Modifier,
 ) {
-    Surface(
-        color = MaterialTheme.colorScheme.surfaceContainer,
-        modifier = modifier.fillMaxWidth()
+  Surface(color = MaterialTheme.colorScheme.surfaceContainer, modifier = modifier.fillMaxWidth()) {
+    Row(
+      modifier = Modifier.fillMaxWidth().padding(10.dp),
+      horizontalArrangement = Arrangement.SpaceBetween,
+      verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+      Text(
+        text = "$currentPage of $totalPages",
+        style = MaterialTheme.typography.labelSmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+      )
+
+      Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+        OutlinedButton(
+          onClick = onBack,
+          enabled = currentPage > 1,
+          modifier = Modifier.height(36.dp),
         ) {
-            Text(
-                text = "$currentPage of $totalPages",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                OutlinedButton(
-                    onClick = onBack,
-                    enabled = currentPage > 1,
-                    modifier = Modifier.height(36.dp)
-                ) {
-                    Text("Back", fontSize = 13.sp)
-                }
-
-                Box {
-                    Button(
-                        onClick = {
-                            if (currentPage < totalPages) onNext()
-                            else onExportMenuToggle(true)
-                        },
-                        modifier = Modifier.height(36.dp)
-                    ) {
-                        Text(
-                            if (currentPage < totalPages) "Pick your fonts" else "Export theme",
-                            fontSize = 13.sp
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Icon(
-                            imageVector = if (currentPage < totalPages) Icons.AutoMirrored.Filled.ArrowForward else Icons.Default.ArrowDropDown,
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp)
-                        )
-                    }
-
-                    DropdownMenu(
-                        expanded = showExportMenu,
-                        onDismissRequest = { onExportMenuToggle(false) }
-                    ) {
-                        DropdownMenuItem(
-                            text = { Text("Export as ZIP (Jetpack Compose)") },
-                            onClick = { onExport("compose") }
-                        )
-                        DropdownMenuItem(
-                            text = { Text("Export as ZIP (Android XML)") },
-                            onClick = { onExport("android") }
-                        )
-                        DropdownMenuItem(
-                            text = { Text("Export as ZIP (Web/CSS)") },
-                            onClick = { onExport("web") }
-                        )
-                        DropdownMenuItem(
-                            text = { Text("Export as JSON") },
-                            onClick = { onExport("json") }
-                        )
-                    }
-                }
-            }
+          Text("Back", fontSize = 13.sp)
         }
+
+        Box {
+          Button(
+            onClick = { if (currentPage < totalPages) onNext() else onExportMenuToggle(true) },
+            modifier = Modifier.height(36.dp),
+          ) {
+            Text(
+              if (currentPage < totalPages) "Pick your fonts" else "Export theme",
+              fontSize = 13.sp,
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Icon(
+              imageVector =
+                if (currentPage < totalPages) Icons.AutoMirrored.Filled.ArrowForward
+                else Icons.Default.ArrowDropDown,
+              contentDescription = null,
+              modifier = Modifier.size(16.dp),
+            )
+          }
+
+          DropdownMenu(
+            expanded = showExportMenu,
+            onDismissRequest = { onExportMenuToggle(false) },
+          ) {
+            DropdownMenuItem(
+              text = { Text("Export as ZIP (Jetpack Compose)") },
+              onClick = { onExport("compose") },
+            )
+            DropdownMenuItem(
+              text = { Text("Export as ZIP (Android XML)") },
+              onClick = { onExport("android") },
+            )
+            DropdownMenuItem(
+              text = { Text("Export as ZIP (Web/CSS)") },
+              onClick = { onExport("web") },
+            )
+            DropdownMenuItem(text = { Text("Export as JSON") }, onClick = { onExport("json") })
+          }
+        }
+      }
     }
+  }
 }

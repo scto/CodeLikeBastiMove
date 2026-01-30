@@ -14,39 +14,37 @@
  * limitations under the License.
  */
 
+import com.scto.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.dokka.gradle.DokkaExtension
 import org.jetbrains.dokka.gradle.engine.plugins.DokkaHtmlPluginParameters
 
-import com.scto.convention.libs
-
 class DokkaConventionPlugin : Plugin<Project> {
-    override fun apply(target: Project) {
-        with(target) {
-            pluginManager.apply("org.jetbrains.dokka")
+  override fun apply(target: Project) {
+    with(target) {
+      pluginManager.apply("org.jetbrains.dokka")
 
-            // FIX: Dieser Block muss INNERHALB von with(target) sein, damit 'extensions'
-            // auf das Project bezogen wird und nicht auf die Plugin-Klasse.
-            extensions.configure<DokkaExtension> {
-                moduleName.set(path)
-                dokkaSourceSets.named("main") {
-                    includes.from("README.md")
-                    suppressGeneratedFiles.set(true)
-                }
-                pluginsConfiguration.withType<DokkaHtmlPluginParameters> {
-                    footerMessage.set("Made with ❤\uFE0F by Thomas Schmidl")
-                }
-            }
-
-            dependencies {
-                add("dokkaPlugin", libs.findLibrary("dokka.android.plugin").get())
-                add("dokkaPlugin", libs.findLibrary("dokka.mermaid.plugin").get())
-            }
+      // FIX: Dieser Block muss INNERHALB von with(target) sein, damit 'extensions'
+      // auf das Project bezogen wird und nicht auf die Plugin-Klasse.
+      extensions.configure<DokkaExtension> {
+        moduleName.set(path)
+        dokkaSourceSets.named("main") {
+          includes.from("README.md")
+          suppressGeneratedFiles.set(true)
         }
+        pluginsConfiguration.withType<DokkaHtmlPluginParameters> {
+          footerMessage.set("Made with ❤\uFE0F by Thomas Schmidl")
+        }
+      }
+
+      dependencies {
+        add("dokkaPlugin", libs.findLibrary("dokka.android.plugin").get())
+        add("dokkaPlugin", libs.findLibrary("dokka.mermaid.plugin").get())
+      }
     }
+  }
 }

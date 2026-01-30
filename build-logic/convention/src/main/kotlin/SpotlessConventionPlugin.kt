@@ -14,47 +14,52 @@
  * limitations under the License.
  */
 
+import com.diffplug.gradle.spotless.SpotlessExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 
-import com.diffplug.gradle.spotless.SpotlessExtension
-
 class SpotlessConventionPlugin : Plugin<Project> {
-    override fun apply(target: Project) {
-        with(target) {
-            pluginManager.apply("com.diffplug.spotless")
+  override fun apply(target: Project) {
+    with(target) {
+      pluginManager.apply("com.diffplug.spotless")
 
-            extensions.configure<SpotlessExtension> {
-                kotlin {
-                    target("src/**/*.kt")
-                    targetExclude("**/build/**/*.kt")
-                    ktlint()
-                    // Fix: Added delimiter argument and switched to copyright.kt
-                    licenseHeaderFile(rootProject.file("config/spotless/copyright.kt"), "^(package|import|@file|class|fun|object|interface)")
-                }
-                groovy {
-                    target("**/*.gradle")
-                    targetExclude("**/build/**/*.gradle")
-                    // Look for the first line that doesn't have a block comment (assumed to be the license)
-                    licenseHeaderFile(
-                    rootProject.file("config/spotless/copyright.gradle"),
-                    "(^(?![\\/ ]\\*).*$)",
-                    )
-                }
-                kotlinGradle {
-                    target("*.gradle.kts")
-                    ktlint()
-                    // Fix: Added delimiter argument
-                    licenseHeaderFile(rootProject.file("config/spotless/copyright.kt"), "^(package|import|@file|plugins|dependencyResolutionManagement)")
-                }
-                format("xml") {
-                    target("**/*.xml")
-                    targetExclude("**/build/**/*.xml")
-                    // Keep using copyright.xml for XML files as it has <!-- --> comments
-                    licenseHeaderFile(rootProject.file("config/spotless/copyright.xml"), "(<[^!?])")
-                }
-            }
+      extensions.configure<SpotlessExtension> {
+        kotlin {
+          target("src/**/*.kt")
+          targetExclude("**/build/**/*.kt")
+          ktlint()
+          // Fix: Added delimiter argument and switched to copyright.kt
+          licenseHeaderFile(
+            rootProject.file("config/spotless/copyright.kt"),
+            "^(package|import|@file|class|fun|object|interface)",
+          )
         }
+        groovy {
+          target("**/*.gradle")
+          targetExclude("**/build/**/*.gradle")
+          // Look for the first line that doesn't have a block comment (assumed to be the license)
+          licenseHeaderFile(
+            rootProject.file("config/spotless/copyright.gradle"),
+            "(^(?![\\/ ]\\*).*$)",
+          )
+        }
+        kotlinGradle {
+          target("*.gradle.kts")
+          ktlint()
+          // Fix: Added delimiter argument
+          licenseHeaderFile(
+            rootProject.file("config/spotless/copyright.kt"),
+            "^(package|import|@file|plugins|dependencyResolutionManagement)",
+          )
+        }
+        format("xml") {
+          target("**/*.xml")
+          targetExclude("**/build/**/*.xml")
+          // Keep using copyright.xml for XML files as it has <!-- --> comments
+          licenseHeaderFile(rootProject.file("config/spotless/copyright.xml"), "(<[^!?])")
+        }
+      }
     }
+  }
 }

@@ -40,136 +40,96 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainTopAppBar(
-    projectName: String,
-    hasUnsavedChanges: Boolean,
-    isLoading: Boolean,
-    onNavigationClick: () -> Unit,
-    onRunClick: () -> Unit,
-    onDebugClick: () -> Unit,
-    onSaveClick: () -> Unit,
-    scrollBehavior: TopAppBarScrollBehavior? = null,
-    modifier: Modifier = Modifier
+  projectName: String,
+  hasUnsavedChanges: Boolean,
+  isLoading: Boolean,
+  onNavigationClick: () -> Unit,
+  onRunClick: () -> Unit,
+  onDebugClick: () -> Unit,
+  onSaveClick: () -> Unit,
+  scrollBehavior: TopAppBarScrollBehavior? = null,
+  modifier: Modifier = Modifier,
 ) {
-    var showMoreMenu by remember { mutableStateOf(false) }
-    
-    TopAppBar(
-        title = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = projectName,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                
-                AnimatedVisibility(
-                    visible = hasUnsavedChanges,
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
-                    Text(
-                        text = " •",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-                
-                AnimatedVisibility(
-                    visible = isLoading,
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
-                    Row {
-                        Spacer(modifier = Modifier.width(8.dp))
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(16.dp),
-                            strokeWidth = 2.dp
-                        )
-                    }
-                }
+  var showMoreMenu by remember { mutableStateOf(false) }
+
+  TopAppBar(
+    title = {
+      Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+          text = projectName,
+          style = MaterialTheme.typography.titleMedium,
+          fontWeight = FontWeight.SemiBold,
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis,
+        )
+
+        AnimatedVisibility(visible = hasUnsavedChanges, enter = fadeIn(), exit = fadeOut()) {
+          Text(
+            text = " •",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary,
+          )
+        }
+
+        AnimatedVisibility(visible = isLoading, enter = fadeIn(), exit = fadeOut()) {
+          Row {
+            Spacer(modifier = Modifier.width(8.dp))
+            CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+          }
+        }
+      }
+    },
+    navigationIcon = {
+      IconButton(onClick = onNavigationClick) {
+        Icon(imageVector = Icons.Default.Menu, contentDescription = "Open navigation")
+      }
+    },
+    actions = {
+      IconButton(onClick = onSaveClick) {
+        BadgedBox(
+          badge = {
+            if (hasUnsavedChanges) {
+              Badge(
+                containerColor = MaterialTheme.colorScheme.error,
+                modifier = Modifier.size(6.dp),
+              )
             }
-        },
-        navigationIcon = {
-            IconButton(onClick = onNavigationClick) {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = "Open navigation"
-                )
-            }
-        },
-        actions = {
-            IconButton(onClick = onSaveClick) {
-                BadgedBox(
-                    badge = {
-                        if (hasUnsavedChanges) {
-                            Badge(
-                                containerColor = MaterialTheme.colorScheme.error,
-                                modifier = Modifier.size(6.dp)
-                            )
-                        }
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Save,
-                        contentDescription = "Save"
-                    )
-                }
-            }
-            
-            IconButton(onClick = onRunClick) {
-                Icon(
-                    imageVector = Icons.Default.PlayArrow,
-                    contentDescription = "Run",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
-            
-            IconButton(onClick = onDebugClick) {
-                Icon(
-                    imageVector = Icons.Outlined.BugReport,
-                    contentDescription = "Debug"
-                )
-            }
-            
-            IconButton(onClick = { showMoreMenu = true }) {
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = "More options"
-                )
-            }
-            
-            DropdownMenu(
-                expanded = showMoreMenu,
-                onDismissRequest = { showMoreMenu = false }
-            ) {
-                DropdownMenuItem(
-                    text = { Text("Build APK") },
-                    onClick = { showMoreMenu = false }
-                )
-                DropdownMenuItem(
-                    text = { Text("Build Bundle") },
-                    onClick = { showMoreMenu = false }
-                )
-                DropdownMenuItem(
-                    text = { Text("Clean Project") },
-                    onClick = { showMoreMenu = false }
-                )
-                DropdownMenuItem(
-                    text = { Text("Rebuild Project") },
-                    onClick = { showMoreMenu = false }
-                )
-                DropdownMenuItem(
-                    text = { Text("Project Settings") },
-                    onClick = { showMoreMenu = false }
-                )
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            titleContentColor = MaterialTheme.colorScheme.onSurface
-        ),
-        scrollBehavior = scrollBehavior,
-        modifier = modifier
-    )
+          }
+        ) {
+          Icon(imageVector = Icons.Default.Save, contentDescription = "Save")
+        }
+      }
+
+      IconButton(onClick = onRunClick) {
+        Icon(
+          imageVector = Icons.Default.PlayArrow,
+          contentDescription = "Run",
+          tint = MaterialTheme.colorScheme.primary,
+        )
+      }
+
+      IconButton(onClick = onDebugClick) {
+        Icon(imageVector = Icons.Outlined.BugReport, contentDescription = "Debug")
+      }
+
+      IconButton(onClick = { showMoreMenu = true }) {
+        Icon(imageVector = Icons.Default.MoreVert, contentDescription = "More options")
+      }
+
+      DropdownMenu(expanded = showMoreMenu, onDismissRequest = { showMoreMenu = false }) {
+        DropdownMenuItem(text = { Text("Build APK") }, onClick = { showMoreMenu = false })
+        DropdownMenuItem(text = { Text("Build Bundle") }, onClick = { showMoreMenu = false })
+        DropdownMenuItem(text = { Text("Clean Project") }, onClick = { showMoreMenu = false })
+        DropdownMenuItem(text = { Text("Rebuild Project") }, onClick = { showMoreMenu = false })
+        DropdownMenuItem(text = { Text("Project Settings") }, onClick = { showMoreMenu = false })
+      }
+    },
+    colors =
+      TopAppBarDefaults.topAppBarColors(
+        containerColor = MaterialTheme.colorScheme.surface,
+        titleContentColor = MaterialTheme.colorScheme.onSurface,
+      ),
+    scrollBehavior = scrollBehavior,
+    modifier = modifier,
+  )
 }

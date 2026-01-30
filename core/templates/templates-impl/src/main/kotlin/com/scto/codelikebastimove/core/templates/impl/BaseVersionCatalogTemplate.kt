@@ -8,65 +8,67 @@ import com.scto.codelikebastimove.core.datastore.VersionCatalogBundle
 import com.scto.codelikebastimove.core.datastore.VersionCatalogEntry
 import com.scto.codelikebastimove.core.datastore.VersionCatalogLibrary
 import com.scto.codelikebastimove.core.datastore.VersionCatalogPlugin
-import com.scto.codelikebastimove.core.templates.api.GradleLanguage
 import com.scto.codelikebastimove.core.templates.api.ProjectConfig
 import com.scto.codelikebastimove.core.templates.api.ProjectFile
 import com.scto.codelikebastimove.core.templates.api.ProjectTemplate
 
 abstract class BaseVersionCatalogTemplate : ProjectTemplate {
 
-    abstract val templateId: String
-    abstract val templateVersion: String
-    abstract val templateType: ProjectTemplateType
-    abstract val features: List<String>
+  abstract val templateId: String
+  abstract val templateVersion: String
+  abstract val templateType: ProjectTemplateType
+  abstract val features: List<String>
 
-    open val gradleInfo: GradleInfo = GradleInfo(
-        gradleVersion = "8.10.2",
-        distributionUrl = "https://services.gradle.org/distributions/gradle-8.10.2-bin.zip",
-        agpVersion = "8.7.3",
-        kotlinVersion = "2.1.0",
-        composeBomVersion = "2024.12.01",
-        usesVersionCatalog = true
+  open val gradleInfo: GradleInfo =
+    GradleInfo(
+      gradleVersion = "8.10.2",
+      distributionUrl = "https://services.gradle.org/distributions/gradle-8.10.2-bin.zip",
+      agpVersion = "8.7.3",
+      kotlinVersion = "2.1.0",
+      composeBomVersion = "2024.12.01",
+      usesVersionCatalog = true,
     )
 
-    open val minSdk: Int = 24
-    open val targetSdk: Int = 35
-    open val compileSdk: Int = 35
+  open val minSdk: Int = 24
+  open val targetSdk: Int = 35
+  open val compileSdk: Int = 35
 
-    abstract fun getVersionCatalog(): VersionCatalog
+  abstract fun getVersionCatalog(): VersionCatalog
 
-    fun getTemplateInfo(): TemplateInfo = TemplateInfo(
-        id = templateId,
-        name = name,
-        description = description,
-        version = templateVersion,
-        lastUpdated = System.currentTimeMillis(),
-        templateType = templateType,
-        gradleInfo = gradleInfo,
-        versionCatalog = getVersionCatalog(),
-        supportedLanguages = listOf("Kotlin", "Java"),
-        features = features,
-        minSdk = minSdk,
-        targetSdk = targetSdk,
-        compileSdk = compileSdk
+  fun getTemplateInfo(): TemplateInfo =
+    TemplateInfo(
+      id = templateId,
+      name = name,
+      description = description,
+      version = templateVersion,
+      lastUpdated = System.currentTimeMillis(),
+      templateType = templateType,
+      gradleInfo = gradleInfo,
+      versionCatalog = getVersionCatalog(),
+      supportedLanguages = listOf("Kotlin", "Java"),
+      features = features,
+      minSdk = minSdk,
+      targetSdk = targetSdk,
+      compileSdk = compileSdk,
     )
 
-    protected fun generateVersionCatalogToml(config: ProjectConfig): ProjectFile {
-        val catalog = getVersionCatalog()
-        return ProjectFile("gradle/libs.versions.toml", catalog.toTomlContent())
-    }
+  protected fun generateVersionCatalogToml(config: ProjectConfig): ProjectFile {
+    val catalog = getVersionCatalog()
+    return ProjectFile("gradle/libs.versions.toml", catalog.toTomlContent())
+  }
 
-    protected fun generateGradleWrapper(config: ProjectConfig): List<ProjectFile> {
-        return listOf(
-            ProjectFile("gradle/wrapper", "", isDirectory = true),
-            generateGradleWrapperProperties(config),
-            generateGradlewScript(),
-            generateGradlewBatScript()
-        )
-    }
+  protected fun generateGradleWrapper(config: ProjectConfig): List<ProjectFile> {
+    return listOf(
+      ProjectFile("gradle/wrapper", "", isDirectory = true),
+      generateGradleWrapperProperties(config),
+      generateGradlewScript(),
+      generateGradlewBatScript(),
+    )
+  }
 
-    protected fun generateGradleWrapperProperties(config: ProjectConfig): ProjectFile {
-        val content = """
+  protected fun generateGradleWrapperProperties(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 distributionBase=GRADLE_USER_HOME
 distributionPath=wrapper/dists
 distributionUrl=https\://services.gradle.org/distributions/gradle-${gradleInfo.gradleVersion}-bin.zip
@@ -74,12 +76,14 @@ networkTimeout=10000
 validateDistributionUrl=true
 zipStoreBase=GRADLE_USER_HOME
 zipStorePath=wrapper/dists
-""".trimIndent()
-        return ProjectFile("gradle/wrapper/gradle-wrapper.properties", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("gradle/wrapper/gradle-wrapper.properties", content)
+  }
 
-    protected fun generateGradlewScript(): ProjectFile {
-        val content = """
+  protected fun generateGradlewScript(): ProjectFile {
+    val content =
+      """
 #!/bin/sh
 
 #
@@ -305,12 +309,14 @@ eval "set -- $(
     )" '"${'$'}@"'
 
 exec "${'$'}JAVACMD" "${'$'}@"
-""".trimIndent()
-        return ProjectFile("gradlew", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("gradlew", content)
+  }
 
-    protected fun generateGradlewBatScript(): ProjectFile {
-        val content = """
+  protected fun generateGradlewBatScript(): ProjectFile {
+    val content =
+      """
 @rem
 @rem Copyright 2015 the original author or authors.
 @rem
@@ -403,12 +409,14 @@ exit /b %EXIT_CODE%
 if "%OS%"=="Windows_NT" endlocal
 
 :omega
-""".trimIndent()
-        return ProjectFile("gradlew.bat", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("gradlew.bat", content)
+  }
 
-    protected fun generateSettingsGradleKts(config: ProjectConfig): ProjectFile {
-        val content = """
+  protected fun generateSettingsGradleKts(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 pluginManagement {
     repositories {
         google {
@@ -433,12 +441,14 @@ dependencyResolutionManagement {
 
 rootProject.name = "${config.projectName}"
 include(":app")
-""".trimIndent()
-        return ProjectFile("settings.gradle.kts", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("settings.gradle.kts", content)
+  }
 
-    protected fun generateSettingsGradleGroovy(config: ProjectConfig): ProjectFile {
-        val content = """
+  protected fun generateSettingsGradleGroovy(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 pluginManagement {
     repositories {
         google {
@@ -463,45 +473,53 @@ dependencyResolutionManagement {
 
 rootProject.name = '${config.projectName}'
 include ':app'
-""".trimIndent()
-        return ProjectFile("settings.gradle", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("settings.gradle", content)
+  }
 
-    protected fun generateRootBuildGradleKts(config: ProjectConfig): ProjectFile {
-        val content = """
+  protected fun generateRootBuildGradleKts(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.compose) apply false
 }
-""".trimIndent()
-        return ProjectFile("build.gradle.kts", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("build.gradle.kts", content)
+  }
 
-    protected fun generateRootBuildGradleGroovy(config: ProjectConfig): ProjectFile {
-        val content = """
+  protected fun generateRootBuildGradleGroovy(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 plugins {
     alias libs.plugins.android.application apply false
     alias libs.plugins.kotlin.android apply false
     alias libs.plugins.kotlin.compose apply false
 }
-""".trimIndent()
-        return ProjectFile("build.gradle", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("build.gradle", content)
+  }
 
-    protected fun generateGradleProperties(config: ProjectConfig): ProjectFile {
-        val content = """
+  protected fun generateGradleProperties(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
 android.useAndroidX=true
 kotlin.code.style=official
 android.nonTransitiveRClass=true
 android.defaults.buildfeature.buildconfig=true
-""".trimIndent()
-        return ProjectFile("gradle.properties", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("gradle.properties", content)
+  }
 
-    protected fun generateGitignore(config: ProjectConfig): ProjectFile {
-        val content = """
+  protected fun generateGitignore(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 *.iml
 .gradle
 /local.properties
@@ -512,12 +530,14 @@ android.defaults.buildfeature.buildconfig=true
 .externalNativeBuild
 .cxx
 local.properties
-""".trimIndent()
-        return ProjectFile(".gitignore", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile(".gitignore", content)
+  }
 
-    protected fun generateProguardRules(config: ProjectConfig): ProjectFile {
-        val content = """
+  protected fun generateProguardRules(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 # Add project specific ProGuard rules here.
 # You can control the set of applied configuration files using the
 # proguardFiles setting in build.gradle.
@@ -539,87 +559,207 @@ local.properties
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
-""".trimIndent()
-        return ProjectFile("app/proguard-rules.pro", content)
+"""
+        .trimIndent()
+    return ProjectFile("app/proguard-rules.pro", content)
+  }
+
+  companion object {
+    fun createBaseComposeVersionCatalog(): VersionCatalog {
+      return VersionCatalog(
+        versions =
+          listOf(
+            VersionCatalogEntry("agp", "8.7.3"),
+            VersionCatalogEntry("kotlin", "2.1.0"),
+            VersionCatalogEntry("coreKtx", "1.15.0"),
+            VersionCatalogEntry("lifecycleRuntimeKtx", "2.8.7"),
+            VersionCatalogEntry("activityCompose", "1.9.3"),
+            VersionCatalogEntry("composeBom", "2024.12.01"),
+            VersionCatalogEntry("junit", "4.13.2"),
+            VersionCatalogEntry("junitVersion", "1.2.1"),
+            VersionCatalogEntry("espressoCore", "3.6.1"),
+          ),
+        libraries =
+          listOf(
+            VersionCatalogLibrary("androidx-core-ktx", "androidx.core", "core-ktx", "coreKtx"),
+            VersionCatalogLibrary(
+              "androidx-lifecycle-runtime-ktx",
+              "androidx.lifecycle",
+              "lifecycle-runtime-ktx",
+              "lifecycleRuntimeKtx",
+            ),
+            VersionCatalogLibrary(
+              "androidx-activity-compose",
+              "androidx.activity",
+              "activity-compose",
+              "activityCompose",
+            ),
+            VersionCatalogLibrary(
+              "androidx-compose-bom",
+              "androidx.compose",
+              "compose-bom",
+              "composeBom",
+            ),
+            VersionCatalogLibrary("androidx-ui", "androidx.compose.ui", "ui", "composeBom"),
+            VersionCatalogLibrary(
+              "androidx-ui-graphics",
+              "androidx.compose.ui",
+              "ui-graphics",
+              "composeBom",
+            ),
+            VersionCatalogLibrary(
+              "androidx-ui-tooling",
+              "androidx.compose.ui",
+              "ui-tooling",
+              "composeBom",
+            ),
+            VersionCatalogLibrary(
+              "androidx-ui-tooling-preview",
+              "androidx.compose.ui",
+              "ui-tooling-preview",
+              "composeBom",
+            ),
+            VersionCatalogLibrary(
+              "androidx-ui-test-manifest",
+              "androidx.compose.ui",
+              "ui-test-manifest",
+              "composeBom",
+            ),
+            VersionCatalogLibrary(
+              "androidx-ui-test-junit4",
+              "androidx.compose.ui",
+              "ui-test-junit4",
+              "composeBom",
+            ),
+            VersionCatalogLibrary(
+              "androidx-material3",
+              "androidx.compose.material3",
+              "material3",
+              "composeBom",
+            ),
+            VersionCatalogLibrary("junit", "junit", "junit", "junit"),
+            VersionCatalogLibrary("androidx-junit", "androidx.test.ext", "junit", "junitVersion"),
+            VersionCatalogLibrary(
+              "androidx-espresso-core",
+              "androidx.test.espresso",
+              "espresso-core",
+              "espressoCore",
+            ),
+          ),
+        plugins =
+          listOf(
+            VersionCatalogPlugin("android-application", "com.android.application", "agp"),
+            VersionCatalogPlugin("kotlin-android", "org.jetbrains.kotlin.android", "kotlin"),
+            VersionCatalogPlugin("kotlin-compose", "org.jetbrains.kotlin.plugin.compose", "kotlin"),
+          ),
+        bundles =
+          listOf(
+            VersionCatalogBundle(
+              "compose",
+              listOf(
+                "androidx-ui",
+                "androidx-ui-graphics",
+                "androidx-ui-tooling-preview",
+                "androidx-material3",
+              ),
+            ),
+            VersionCatalogBundle(
+              "compose-debug",
+              listOf("androidx-ui-tooling", "androidx-ui-test-manifest"),
+            ),
+          ),
+      )
     }
 
-    companion object {
-        fun createBaseComposeVersionCatalog(): VersionCatalog {
-            return VersionCatalog(
-                versions = listOf(
-                    VersionCatalogEntry("agp", "8.7.3"),
-                    VersionCatalogEntry("kotlin", "2.1.0"),
-                    VersionCatalogEntry("coreKtx", "1.15.0"),
-                    VersionCatalogEntry("lifecycleRuntimeKtx", "2.8.7"),
-                    VersionCatalogEntry("activityCompose", "1.9.3"),
-                    VersionCatalogEntry("composeBom", "2024.12.01"),
-                    VersionCatalogEntry("junit", "4.13.2"),
-                    VersionCatalogEntry("junitVersion", "1.2.1"),
-                    VersionCatalogEntry("espressoCore", "3.6.1")
-                ),
-                libraries = listOf(
-                    VersionCatalogLibrary("androidx-core-ktx", "androidx.core", "core-ktx", "coreKtx"),
-                    VersionCatalogLibrary("androidx-lifecycle-runtime-ktx", "androidx.lifecycle", "lifecycle-runtime-ktx", "lifecycleRuntimeKtx"),
-                    VersionCatalogLibrary("androidx-activity-compose", "androidx.activity", "activity-compose", "activityCompose"),
-                    VersionCatalogLibrary("androidx-compose-bom", "androidx.compose", "compose-bom", "composeBom"),
-                    VersionCatalogLibrary("androidx-ui", "androidx.compose.ui", "ui", "composeBom"),
-                    VersionCatalogLibrary("androidx-ui-graphics", "androidx.compose.ui", "ui-graphics", "composeBom"),
-                    VersionCatalogLibrary("androidx-ui-tooling", "androidx.compose.ui", "ui-tooling", "composeBom"),
-                    VersionCatalogLibrary("androidx-ui-tooling-preview", "androidx.compose.ui", "ui-tooling-preview", "composeBom"),
-                    VersionCatalogLibrary("androidx-ui-test-manifest", "androidx.compose.ui", "ui-test-manifest", "composeBom"),
-                    VersionCatalogLibrary("androidx-ui-test-junit4", "androidx.compose.ui", "ui-test-junit4", "composeBom"),
-                    VersionCatalogLibrary("androidx-material3", "androidx.compose.material3", "material3", "composeBom"),
-                    VersionCatalogLibrary("junit", "junit", "junit", "junit"),
-                    VersionCatalogLibrary("androidx-junit", "androidx.test.ext", "junit", "junitVersion"),
-                    VersionCatalogLibrary("androidx-espresso-core", "androidx.test.espresso", "espresso-core", "espressoCore")
-                ),
-                plugins = listOf(
-                    VersionCatalogPlugin("android-application", "com.android.application", "agp"),
-                    VersionCatalogPlugin("kotlin-android", "org.jetbrains.kotlin.android", "kotlin"),
-                    VersionCatalogPlugin("kotlin-compose", "org.jetbrains.kotlin.plugin.compose", "kotlin")
-                ),
-                bundles = listOf(
-                    VersionCatalogBundle("compose", listOf("androidx-ui", "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-material3")),
-                    VersionCatalogBundle("compose-debug", listOf("androidx-ui-tooling", "androidx-ui-test-manifest"))
-                )
-            )
-        }
-
-        fun createBaseViewVersionCatalog(): VersionCatalog {
-            return VersionCatalog(
-                versions = listOf(
-                    VersionCatalogEntry("agp", "8.7.3"),
-                    VersionCatalogEntry("kotlin", "2.1.0"),
-                    VersionCatalogEntry("coreKtx", "1.15.0"),
-                    VersionCatalogEntry("appcompat", "1.7.0"),
-                    VersionCatalogEntry("material", "1.12.0"),
-                    VersionCatalogEntry("constraintlayout", "2.2.0"),
-                    VersionCatalogEntry("lifecycle", "2.8.7"),
-                    VersionCatalogEntry("junit", "4.13.2"),
-                    VersionCatalogEntry("junitVersion", "1.2.1"),
-                    VersionCatalogEntry("espressoCore", "3.6.1")
-                ),
-                libraries = listOf(
-                    VersionCatalogLibrary("androidx-core-ktx", "androidx.core", "core-ktx", "coreKtx"),
-                    VersionCatalogLibrary("androidx-appcompat", "androidx.appcompat", "appcompat", "appcompat"),
-                    VersionCatalogLibrary("material", "com.google.android.material", "material", "material"),
-                    VersionCatalogLibrary("androidx-constraintlayout", "androidx.constraintlayout", "constraintlayout", "constraintlayout"),
-                    VersionCatalogLibrary("androidx-lifecycle-runtime-ktx", "androidx.lifecycle", "lifecycle-runtime-ktx", "lifecycle"),
-                    VersionCatalogLibrary("androidx-lifecycle-livedata-ktx", "androidx.lifecycle", "lifecycle-livedata-ktx", "lifecycle"),
-                    VersionCatalogLibrary("androidx-lifecycle-viewmodel-ktx", "androidx.lifecycle", "lifecycle-viewmodel-ktx", "lifecycle"),
-                    VersionCatalogLibrary("junit", "junit", "junit", "junit"),
-                    VersionCatalogLibrary("androidx-junit", "androidx.test.ext", "junit", "junitVersion"),
-                    VersionCatalogLibrary("androidx-espresso-core", "androidx.test.espresso", "espresso-core", "espressoCore")
-                ),
-                plugins = listOf(
-                    VersionCatalogPlugin("android-application", "com.android.application", "agp"),
-                    VersionCatalogPlugin("kotlin-android", "org.jetbrains.kotlin.android", "kotlin")
-                ),
-                bundles = listOf(
-                    VersionCatalogBundle("android-core", listOf("androidx-core-ktx", "androidx-appcompat", "material", "androidx-constraintlayout")),
-                    VersionCatalogBundle("lifecycle", listOf("androidx-lifecycle-livedata-ktx", "androidx-lifecycle-viewmodel-ktx", "androidx-lifecycle-runtime-ktx"))
-                )
-            )
-        }
+    fun createBaseViewVersionCatalog(): VersionCatalog {
+      return VersionCatalog(
+        versions =
+          listOf(
+            VersionCatalogEntry("agp", "8.7.3"),
+            VersionCatalogEntry("kotlin", "2.1.0"),
+            VersionCatalogEntry("coreKtx", "1.15.0"),
+            VersionCatalogEntry("appcompat", "1.7.0"),
+            VersionCatalogEntry("material", "1.12.0"),
+            VersionCatalogEntry("constraintlayout", "2.2.0"),
+            VersionCatalogEntry("lifecycle", "2.8.7"),
+            VersionCatalogEntry("junit", "4.13.2"),
+            VersionCatalogEntry("junitVersion", "1.2.1"),
+            VersionCatalogEntry("espressoCore", "3.6.1"),
+          ),
+        libraries =
+          listOf(
+            VersionCatalogLibrary("androidx-core-ktx", "androidx.core", "core-ktx", "coreKtx"),
+            VersionCatalogLibrary(
+              "androidx-appcompat",
+              "androidx.appcompat",
+              "appcompat",
+              "appcompat",
+            ),
+            VersionCatalogLibrary(
+              "material",
+              "com.google.android.material",
+              "material",
+              "material",
+            ),
+            VersionCatalogLibrary(
+              "androidx-constraintlayout",
+              "androidx.constraintlayout",
+              "constraintlayout",
+              "constraintlayout",
+            ),
+            VersionCatalogLibrary(
+              "androidx-lifecycle-runtime-ktx",
+              "androidx.lifecycle",
+              "lifecycle-runtime-ktx",
+              "lifecycle",
+            ),
+            VersionCatalogLibrary(
+              "androidx-lifecycle-livedata-ktx",
+              "androidx.lifecycle",
+              "lifecycle-livedata-ktx",
+              "lifecycle",
+            ),
+            VersionCatalogLibrary(
+              "androidx-lifecycle-viewmodel-ktx",
+              "androidx.lifecycle",
+              "lifecycle-viewmodel-ktx",
+              "lifecycle",
+            ),
+            VersionCatalogLibrary("junit", "junit", "junit", "junit"),
+            VersionCatalogLibrary("androidx-junit", "androidx.test.ext", "junit", "junitVersion"),
+            VersionCatalogLibrary(
+              "androidx-espresso-core",
+              "androidx.test.espresso",
+              "espresso-core",
+              "espressoCore",
+            ),
+          ),
+        plugins =
+          listOf(
+            VersionCatalogPlugin("android-application", "com.android.application", "agp"),
+            VersionCatalogPlugin("kotlin-android", "org.jetbrains.kotlin.android", "kotlin"),
+          ),
+        bundles =
+          listOf(
+            VersionCatalogBundle(
+              "android-core",
+              listOf(
+                "androidx-core-ktx",
+                "androidx-appcompat",
+                "material",
+                "androidx-constraintlayout",
+              ),
+            ),
+            VersionCatalogBundle(
+              "lifecycle",
+              listOf(
+                "androidx-lifecycle-livedata-ktx",
+                "androidx-lifecycle-viewmodel-ktx",
+                "androidx-lifecycle-runtime-ktx",
+              ),
+            ),
+          ),
+      )
     }
+  }
 }

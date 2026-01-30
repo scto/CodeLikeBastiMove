@@ -50,182 +50,159 @@ import com.scto.codelikebastimove.feature.auth.viewmodel.AuthViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
-    onRegistrationSuccess: () -> Unit,
-    onNavigateBack: () -> Unit,
-    viewModel: AuthViewModel = viewModel()
+  onRegistrationSuccess: () -> Unit,
+  onNavigateBack: () -> Unit,
+  viewModel: AuthViewModel = viewModel(),
 ) {
-    val registerState by viewModel.registerState.collectAsState()
-    var passwordVisible by remember { mutableStateOf(false) }
-    var confirmPasswordVisible by remember { mutableStateOf(false) }
-    val snackbarHostState = remember { SnackbarHostState() }
+  val registerState by viewModel.registerState.collectAsState()
+  var passwordVisible by remember { mutableStateOf(false) }
+  var confirmPasswordVisible by remember { mutableStateOf(false) }
+  val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(registerState.isRegistrationSuccessful) {
-        if (registerState.isRegistrationSuccessful) {
-            viewModel.resetRegistrationSuccess()
-            onRegistrationSuccess()
-        }
+  LaunchedEffect(registerState.isRegistrationSuccessful) {
+    if (registerState.isRegistrationSuccessful) {
+      viewModel.resetRegistrationSuccess()
+      onRegistrationSuccess()
     }
+  }
 
-    LaunchedEffect(registerState.errorMessage) {
-        registerState.errorMessage?.let { message ->
-            snackbarHostState.showSnackbar(message)
-            viewModel.clearRegisterError()
-        }
+  LaunchedEffect(registerState.errorMessage) {
+    registerState.errorMessage?.let { message ->
+      snackbarHostState.showSnackbar(message)
+      viewModel.clearRegisterError()
     }
+  }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
-                }
-            )
+  Scaffold(
+    topBar = {
+      TopAppBar(
+        title = {},
+        navigationIcon = {
+          IconButton(onClick = onNavigateBack) {
+            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+          }
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 24.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            Spacer(modifier = Modifier.height(24.dp))
+      )
+    },
+    snackbarHost = { SnackbarHost(snackbarHostState) },
+  ) { paddingValues ->
+    Column(
+      modifier =
+        Modifier.fillMaxSize()
+          .padding(paddingValues)
+          .padding(horizontal = 24.dp)
+          .verticalScroll(rememberScrollState()),
+      horizontalAlignment = Alignment.CenterHorizontally,
+      verticalArrangement = Arrangement.Top,
+    ) {
+      Spacer(modifier = Modifier.height(24.dp))
 
-            Text(
-                text = "Create Account",
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+      Text(
+        text = "Create Account",
+        style = MaterialTheme.typography.headlineLarge,
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.primary,
+      )
+
+      Text(
+        text = "Sign up to get started",
+        style = MaterialTheme.typography.bodyLarge,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(top = 8.dp),
+      )
+
+      Spacer(modifier = Modifier.height(48.dp))
+
+      OutlinedTextField(
+        value = registerState.email,
+        onValueChange = { viewModel.updateRegisterEmail(it) },
+        label = { Text("Email") },
+        leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email") },
+        keyboardOptions =
+          KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+        enabled = !registerState.isLoading,
+      )
+
+      Spacer(modifier = Modifier.height(16.dp))
+
+      OutlinedTextField(
+        value = registerState.password,
+        onValueChange = { viewModel.updateRegisterPassword(it) },
+        label = { Text("Password") },
+        leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "Password") },
+        trailingIcon = {
+          IconButton(onClick = { passwordVisible = !passwordVisible }) {
+            Icon(
+              imageVector =
+                if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+              contentDescription = if (passwordVisible) "Hide password" else "Show password",
             )
+          }
+        },
+        visualTransformation =
+          if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        keyboardOptions =
+          KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+        enabled = !registerState.isLoading,
+        supportingText = { Text("Password must be at least 6 characters") },
+      )
 
-            Text(
-                text = "Sign up to get started",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(top = 8.dp)
+      Spacer(modifier = Modifier.height(16.dp))
+
+      OutlinedTextField(
+        value = registerState.confirmPassword,
+        onValueChange = { viewModel.updateRegisterConfirmPassword(it) },
+        label = { Text("Confirm Password") },
+        leadingIcon = {
+          Icon(imageVector = Icons.Default.Lock, contentDescription = "Confirm Password")
+        },
+        trailingIcon = {
+          IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
+            Icon(
+              imageVector =
+                if (confirmPasswordVisible) Icons.Default.Visibility
+                else Icons.Default.VisibilityOff,
+              contentDescription = if (confirmPasswordVisible) "Hide password" else "Show password",
             )
+          }
+        },
+        visualTransformation =
+          if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        keyboardOptions =
+          KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+        enabled = !registerState.isLoading,
+      )
 
-            Spacer(modifier = Modifier.height(48.dp))
+      Spacer(modifier = Modifier.height(32.dp))
 
-            OutlinedTextField(
-                value = registerState.email,
-                onValueChange = { viewModel.updateRegisterEmail(it) },
-                label = { Text("Email") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Email,
-                        contentDescription = "Email"
-                    )
-                },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next
-                ),
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-                enabled = !registerState.isLoading
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = registerState.password,
-                onValueChange = { viewModel.updateRegisterPassword(it) },
-                label = { Text("Password") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Lock,
-                        contentDescription = "Password"
-                    )
-                },
-                trailingIcon = {
-                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(
-                            imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                            contentDescription = if (passwordVisible) "Hide password" else "Show password"
-                        )
-                    }
-                },
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Next
-                ),
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-                enabled = !registerState.isLoading,
-                supportingText = {
-                    Text("Password must be at least 6 characters")
-                }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = registerState.confirmPassword,
-                onValueChange = { viewModel.updateRegisterConfirmPassword(it) },
-                label = { Text("Confirm Password") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Lock,
-                        contentDescription = "Confirm Password"
-                    )
-                },
-                trailingIcon = {
-                    IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
-                        Icon(
-                            imageVector = if (confirmPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                            contentDescription = if (confirmPasswordVisible) "Hide password" else "Show password"
-                        )
-                    }
-                },
-                visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done
-                ),
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-                enabled = !registerState.isLoading
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Button(
-                onClick = { viewModel.register() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                enabled = !registerState.isLoading
-            ) {
-                if (registerState.isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.padding(end = 8.dp),
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-                Text(
-                    text = if (registerState.isLoading) "Creating Account..." else "Create Account",
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            TextButton(onClick = onNavigateBack) {
-                Text("Already have an account? Sign In")
-            }
-
-            Spacer(modifier = Modifier.height(48.dp))
+      Button(
+        onClick = { viewModel.register() },
+        modifier = Modifier.fillMaxWidth().height(50.dp),
+        enabled = !registerState.isLoading,
+      ) {
+        if (registerState.isLoading) {
+          CircularProgressIndicator(
+            modifier = Modifier.padding(end = 8.dp),
+            color = MaterialTheme.colorScheme.onPrimary,
+          )
         }
+        Text(
+          text = if (registerState.isLoading) "Creating Account..." else "Create Account",
+          style = MaterialTheme.typography.titleMedium,
+        )
+      }
+
+      Spacer(modifier = Modifier.height(24.dp))
+
+      TextButton(onClick = onNavigateBack) { Text("Already have an account? Sign In") }
+
+      Spacer(modifier = Modifier.height(48.dp))
     }
+  }
 }

@@ -1,18 +1,15 @@
 package com.scto.codelikebastimove.core.common.utils
 
 import androidx.compose.runtime.MutableState
-
 import com.blankj.utilcode.util.ThreadUtils.runOnUiThread
-
 import com.scto.codelikebastimove.core.logger.logE
 import com.scto.codelikebastimove.core.ui.components.ProgressDialogState
-
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * Calls [CoroutineScope.cancel] only if a job is active in the scope.
@@ -23,7 +20,7 @@ import kotlin.coroutines.EmptyCoroutineContext
  * @author Akash Yadav
  */
 fun CoroutineScope.cancelIfActive(message: String, cause: Throwable? = null) =
-cancelIfActive(CancellationException(message, cause))
+  cancelIfActive(CancellationException(message, cause))
 
 /**
  * Calls [CoroutineScope.cancel] only if a job is active in the scope.
@@ -32,13 +29,13 @@ cancelIfActive(CancellationException(message, cause))
  * @author Akash Yadav
  */
 fun CoroutineScope.cancelIfActive(exception: CancellationException? = null) {
-    val job = coroutineContext[Job]
-    job?.cancel(exception)
+  val job = coroutineContext[Job]
+  job?.cancel(exception)
 }
 
 /**
- * Startet eine neue Coroutine und steuert dabei die Sichtbarkeit eines Compose-ProgressDialogs.
- * Der Dialog wird automatisch ausgeblendet, wenn die Aktion beendet ist.
+ * Startet eine neue Coroutine und steuert dabei die Sichtbarkeit eines Compose-ProgressDialogs. Der
+ * Dialog wird automatisch ausgeblendet, wenn die Aktion beendet ist.
  *
  * @param dialogState Der MutableState des Compose-Dialogs (muss aus dem UI-Code übergeben werden).
  * @param title Optional: Überschreibt den Titel des Dialogs für diese Aktion.
@@ -48,42 +45,37 @@ fun CoroutineScope.cancelIfActive(exception: CancellationException? = null) {
  * @param action Die auszuführende Aktion.
  */
 inline fun CoroutineScope.launchWithProgressDialog(
-    dialogState: MutableState<ProgressDialogState>,
-    title: String? = null,
-    message: String? = null,
-    context: CoroutineContext = EmptyCoroutineContext,
-    crossinline invokeOnCompletion: (throwable: Throwable?) -> Unit = {},
-    crossinline action: suspend CoroutineScope.() -> Unit,
+  dialogState: MutableState<ProgressDialogState>,
+  title: String? = null,
+  message: String? = null,
+  context: CoroutineContext = EmptyCoroutineContext,
+  crossinline invokeOnCompletion: (throwable: Throwable?) -> Unit = {},
+  crossinline action: suspend CoroutineScope.() -> Unit,
 ): Job {
 
-    // Dialog anzeigen (State Update)
-    runOnUiThread {
-        dialogState.value = dialogState.value.copy(
-            isVisible = true,
-            title = title ?: dialogState.value.title,
-            message = message ?: dialogState.value.message,
-            isIndeterminate = true // Standardmäßig indeterminate bei einfachen Launches
-        )
-    }
+  // Dialog anzeigen (State Update)
+  runOnUiThread {
+    dialogState.value =
+      dialogState.value.copy(
+        isVisible = true,
+        title = title ?: dialogState.value.title,
+        message = message ?: dialogState.value.message,
+        isIndeterminate = true, // Standardmäßig indeterminate bei einfachen Launches
+      )
+  }
 
-    return launch(context) {
-        action()
-    }
-    .also {
-        job ->
-        job.invokeOnCompletion {
-            throwable ->
-            // Dialog ausblenden
-            runOnUiThread {
-                dialogState.value = dialogState.value.copy(isVisible = false)
-            }
+  return launch(context) { action() }
+    .also { job ->
+      job.invokeOnCompletion { throwable ->
+        // Dialog ausblenden
+        runOnUiThread { dialogState.value = dialogState.value.copy(isVisible = false) }
 
-            // Fehler logging mit dem neuen CLBMLogger
-            if (throwable != null && throwable !is CancellationException) {
-                logE("Coroutine failed with error", throwable)
-            }
-
-            invokeOnCompletion(throwable)
+        // Fehler logging mit dem neuen CLBMLogger
+        if (throwable != null && throwable !is CancellationException) {
+          logE("Coroutine failed with error", throwable)
         }
+
+        invokeOnCompletion(throwable)
+      }
     }
 }

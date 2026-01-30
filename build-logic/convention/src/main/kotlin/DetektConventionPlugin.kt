@@ -13,51 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
+import com.scto.convention.javaVersion
+import com.scto.convention.libs
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 
-import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-
-import com.scto.convention.libs
-import com.scto.convention.javaVersion
-import com.scto.convention.version
-import com.scto.convention.versionInt
-
 class DetektConventionPlugin : Plugin<Project> {
-    override fun apply(target: Project) {
-        with(target) {
-            pluginManager.apply("io.gitlab.arturbosch.detekt")
+  override fun apply(target: Project) {
+    with(target) {
+      pluginManager.apply("io.gitlab.arturbosch.detekt")
 
-            val javaVersion = javaVersion("java")
-            
-            extensions.configure<DetektExtension> {
-                toolVersion = libs.findVersion("detekt").get().toString()
-                source.setFrom(files("src/main/kotlin", "src/main/java"))
-                config.setFrom(files("${project.rootDir}/config/detekt/detekt.yml"))
-                buildUponDefaultConfig = true
-                autoCorrect = true
-            }
+      val javaVersion = javaVersion("java")
 
-            dependencies {
-                // Fügt das Detekt Formatting Plugin (Wrapper um ktlint) hinzu
-                add("detektPlugins", libs.findLibrary("detektFormatting").get())
-            }
+      extensions.configure<DetektExtension> {
+        toolVersion = libs.findVersion("detekt").get().toString()
+        source.setFrom(files("src/main/kotlin", "src/main/java"))
+        config.setFrom(files("${project.rootDir}/config/detekt/detekt.yml"))
+        buildUponDefaultConfig = true
+        autoCorrect = true
+      }
 
-            tasks.withType<Detekt>().configureEach {
-                jvmTarget = javaVersion.toString()
-                reports {
-                    html.required.set(true)
-                    xml.required.set(true)
-                    txt.required.set(false)
-                    sarif.required.set(true)
-                }
-            }
+      dependencies {
+        // Fügt das Detekt Formatting Plugin (Wrapper um ktlint) hinzu
+        add("detektPlugins", libs.findLibrary("detektFormatting").get())
+      }
+
+      tasks.withType<Detekt>().configureEach {
+        jvmTarget = javaVersion.toString()
+        reports {
+          html.required.set(true)
+          xml.required.set(true)
+          txt.required.set(false)
+          sarif.required.set(true)
         }
+      }
     }
+  }
 }

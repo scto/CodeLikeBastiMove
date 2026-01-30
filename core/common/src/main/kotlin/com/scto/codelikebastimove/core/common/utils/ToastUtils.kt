@@ -2,7 +2,6 @@ package com.scto.codelikebastimove.core.common.utils
 
 import android.content.Context
 import android.widget.Toast
-
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,19 +12,19 @@ import androidx.compose.ui.platform.LocalContext
 // -----------------------------------------------------------------------------
 
 fun Context.showShortToast(text: CharSequence) {
-    Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+  Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 }
 
 fun Context.showShortToast(@StringRes resId: Int) {
-    Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
+  Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
 }
 
 fun Context.showLongToast(text: CharSequence) {
-    Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+  Toast.makeText(this, text, Toast.LENGTH_LONG).show()
 }
 
 fun Context.showLongToast(@StringRes resId: Int) {
-    Toast.makeText(this, resId, Toast.LENGTH_LONG).show()
+  Toast.makeText(this, resId, Toast.LENGTH_LONG).show()
 }
 
 // -----------------------------------------------------------------------------
@@ -33,8 +32,8 @@ fun Context.showLongToast(@StringRes resId: Int) {
 // -----------------------------------------------------------------------------
 
 /**
- * Ein Composable-Effekt, der einen Toast anzeigt, wenn sich [message] ändert.
- * Ideal für Fehlermeldungen aus einem ViewModel.
+ * Ein Composable-Effekt, der einen Toast anzeigt, wenn sich [message] ändert. Ideal für
+ * Fehlermeldungen aus einem ViewModel.
  *
  * Verwendung:
  * ```
@@ -44,40 +43,34 @@ fun Context.showLongToast(@StringRes resId: Int) {
  * ```
  */
 @Composable
-fun ToastEffect(
-    message: String?,
-    duration: Int = Toast.LENGTH_SHORT,
-    onShown: () -> Unit = {}
-) {
-    val context = LocalContext.current
-    LaunchedEffect(message) {
-        if (!message.isNullOrEmpty()) {
-            context.showShortToast(message) // Nutzt Extension von oben
-            onShown()
-        }
+fun ToastEffect(message: String?, duration: Int = Toast.LENGTH_SHORT, onShown: () -> Unit = {}) {
+  val context = LocalContext.current
+  LaunchedEffect(message) {
+    if (!message.isNullOrEmpty()) {
+      context.showShortToast(message) // Nutzt Extension von oben
+      onShown()
     }
+  }
 }
 
-/**
- * Überladung für String-Resources (Int IDs).
- */
+/** Überladung für String-Resources (Int IDs). */
 @Composable
 fun ToastEffect(
-    @StringRes messageResId: Int?,
-    duration: Int = Toast.LENGTH_SHORT,
-    onShown: () -> Unit = {}
+  @StringRes messageResId: Int?,
+  duration: Int = Toast.LENGTH_SHORT,
+  onShown: () -> Unit = {},
 ) {
-    val context = LocalContext.current
-    LaunchedEffect(messageResId) {
-        if (messageResId != null && messageResId != 0) {
-            if (duration == Toast.LENGTH_LONG) {
-                context.showLongToast(messageResId)
-            } else {
-                context.showShortToast(messageResId)
-            }
-            onShown()
-        }
+  val context = LocalContext.current
+  LaunchedEffect(messageResId) {
+    if (messageResId != null && messageResId != 0) {
+      if (duration == Toast.LENGTH_LONG) {
+        context.showLongToast(messageResId)
+      } else {
+        context.showShortToast(messageResId)
+      }
+      onShown()
     }
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -85,9 +78,9 @@ fun ToastEffect(
 // -----------------------------------------------------------------------------
 
 fun showShortToast(context: Context, text: CharSequence) {
-    context.showShortToast(text)
+  context.showShortToast(text)
 }
 
 fun showLongToast(context: Context, text: CharSequence) {
-    context.showLongToast(text)
+  context.showLongToast(text)
 }

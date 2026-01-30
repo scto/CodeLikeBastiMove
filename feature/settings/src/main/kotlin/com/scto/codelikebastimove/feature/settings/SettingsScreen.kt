@@ -1,7 +1,6 @@
 package com.scto.codelikebastimove.feature.settings
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -38,288 +37,252 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-
 import com.scto.codelikebastimove.core.datastore.ThemeMode
 
 @Composable
-fun SettingsScreen(
-    viewModel: SettingsViewModel = viewModel(),
-    onSignOut: () -> Unit = {}
-) {
-    val userPreferences by viewModel.userPreferences.collectAsState()
-    val signOutTriggered by viewModel.signOutTriggered.collectAsState()
-    
-    LaunchedEffect(signOutTriggered) {
-        if (signOutTriggered) {
-            viewModel.resetSignOutTrigger()
-            onSignOut()
-        }
+fun SettingsScreen(viewModel: SettingsViewModel = viewModel(), onSignOut: () -> Unit = {}) {
+  val userPreferences by viewModel.userPreferences.collectAsState()
+  val signOutTriggered by viewModel.signOutTriggered.collectAsState()
+
+  LaunchedEffect(signOutTriggered) {
+    if (signOutTriggered) {
+      viewModel.resetSignOutTrigger()
+      onSignOut()
     }
-    
-    GeneralSettings(
-        selectedThemeMode = userPreferences.themeMode,
-        dynamicColorsEnabled = userPreferences.dynamicColorsEnabled,
-        onThemeModeSelected = { viewModel.setThemeMode(it) },
-        onDynamicColorsChanged = { viewModel.setDynamicColorsEnabled(it) },
-        currentUserEmail = viewModel.currentUserEmail,
-        onSignOut = { viewModel.signOut() }
-    )
+  }
+
+  GeneralSettings(
+    selectedThemeMode = userPreferences.themeMode,
+    dynamicColorsEnabled = userPreferences.dynamicColorsEnabled,
+    onThemeModeSelected = { viewModel.setThemeMode(it) },
+    onDynamicColorsChanged = { viewModel.setDynamicColorsEnabled(it) },
+    currentUserEmail = viewModel.currentUserEmail,
+    onSignOut = { viewModel.signOut() },
+  )
 }
 
 @Composable
 fun GeneralSettings(
-    selectedThemeMode: ThemeMode,
-    dynamicColorsEnabled: Boolean,
-    onThemeModeSelected: (ThemeMode) -> Unit,
-    onDynamicColorsChanged: (Boolean) -> Unit,
-    currentUserEmail: String? = null,
-    onSignOut: () -> Unit = {}
+  selectedThemeMode: ThemeMode,
+  dynamicColorsEnabled: Boolean,
+  onThemeModeSelected: (ThemeMode) -> Unit,
+  onDynamicColorsChanged: (Boolean) -> Unit,
+  currentUserEmail: String? = null,
+  onSignOut: () -> Unit = {},
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
+  Column(modifier = Modifier.fillMaxSize().padding(16.dp).verticalScroll(rememberScrollState())) {
+    Text(
+      text = "Allgemeine Einstellungen",
+      style = MaterialTheme.typography.headlineMedium,
+      color = MaterialTheme.colorScheme.onBackground,
+    )
+
+    Spacer(modifier = Modifier.height(24.dp))
+
+    AccountSection(currentUserEmail = currentUserEmail, onSignOut = onSignOut)
+
+    Spacer(modifier = Modifier.height(24.dp))
+
+    ThemeSection(selectedThemeMode = selectedThemeMode, onThemeModeSelected = onThemeModeSelected)
+
+    Spacer(modifier = Modifier.height(24.dp))
+
+    DynamicColorsSection(
+      dynamicColorsEnabled = dynamicColorsEnabled,
+      onDynamicColorsChanged = onDynamicColorsChanged,
+    )
+  }
+}
+
+@Composable
+private fun AccountSection(currentUserEmail: String?, onSignOut: () -> Unit) {
+  Column {
+    Text(
+      text = "Account",
+      style = MaterialTheme.typography.titleMedium,
+      color = MaterialTheme.colorScheme.primary,
+    )
+
+    Spacer(modifier = Modifier.height(12.dp))
+
+    Card(
+      modifier = Modifier.fillMaxWidth(),
+      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
     ) {
-        Text(
-            text = "Allgemeine Einstellungen",
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-        
-        Spacer(modifier = Modifier.height(24.dp))
-        
-        AccountSection(
-            currentUserEmail = currentUserEmail,
-            onSignOut = onSignOut
-        )
-        
-        Spacer(modifier = Modifier.height(24.dp))
-        
-        ThemeSection(
-            selectedThemeMode = selectedThemeMode,
-            onThemeModeSelected = onThemeModeSelected
-        )
-        
-        Spacer(modifier = Modifier.height(24.dp))
-        
-        DynamicColorsSection(
-            dynamicColorsEnabled = dynamicColorsEnabled,
-            onDynamicColorsChanged = onDynamicColorsChanged
-        )
+      Column(modifier = Modifier.padding(16.dp)) {
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+          Icon(
+            imageVector = Icons.Default.Person,
+            contentDescription = "User",
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(24.dp),
+          )
+
+          Spacer(modifier = Modifier.width(16.dp))
+
+          Column(modifier = Modifier.weight(1f)) {
+            Text(
+              text = "Signed in as",
+              style = MaterialTheme.typography.bodySmall,
+              color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+            )
+            Text(
+              text = currentUserEmail ?: "Not signed in",
+              style = MaterialTheme.typography.bodyLarge,
+              color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+          }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+          onClick = onSignOut,
+          modifier = Modifier.fillMaxWidth(),
+          colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+        ) {
+          Icon(
+            imageVector = Icons.Default.Logout,
+            contentDescription = "Sign Out",
+            modifier = Modifier.size(18.dp),
+          )
+          Spacer(modifier = Modifier.width(8.dp))
+          Text("Sign Out")
+        }
+      }
     }
+  }
 }
 
 @Composable
-private fun AccountSection(
-    currentUserEmail: String?,
-    onSignOut: () -> Unit
-) {
-    Column {
-        Text(
-            text = "Account",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary
-        )
-        
-        Spacer(modifier = Modifier.height(12.dp))
-        
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
-            )
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Person,
-                        contentDescription = "User",
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    
-                    Spacer(modifier = Modifier.width(16.dp))
-                    
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = "Signed in as",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                        )
-                        Text(
-                            text = currentUserEmail ?: "Not signed in",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                Button(
-                    onClick = onSignOut,
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Logout,
-                        contentDescription = "Sign Out",
-                        modifier = Modifier.size(18.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Sign Out")
-                }
-            }
-        }
-    }
-}
+private fun ThemeSection(selectedThemeMode: ThemeMode, onThemeModeSelected: (ThemeMode) -> Unit) {
+  Column {
+    Text(
+      text = "Design",
+      style = MaterialTheme.typography.titleMedium,
+      color = MaterialTheme.colorScheme.primary,
+    )
 
-@Composable
-private fun ThemeSection(
-    selectedThemeMode: ThemeMode,
-    onThemeModeSelected: (ThemeMode) -> Unit
-) {
-    Column {
-        Text(
-            text = "Design",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary
+    Spacer(modifier = Modifier.height(12.dp))
+
+    Card(
+      modifier = Modifier.fillMaxWidth(),
+      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+    ) {
+      Column(modifier = Modifier.padding(8.dp)) {
+        ThemeOption(
+          icon = Icons.Default.LightMode,
+          title = "Hell",
+          isSelected = selectedThemeMode == ThemeMode.LIGHT,
+          onClick = { onThemeModeSelected(ThemeMode.LIGHT) },
         )
-        
-        Spacer(modifier = Modifier.height(12.dp))
-        
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
-            )
-        ) {
-            Column(modifier = Modifier.padding(8.dp)) {
-                ThemeOption(
-                    icon = Icons.Default.LightMode,
-                    title = "Hell",
-                    isSelected = selectedThemeMode == ThemeMode.LIGHT,
-                    onClick = { onThemeModeSelected(ThemeMode.LIGHT) }
-                )
-                
-                ThemeOption(
-                    icon = Icons.Default.DarkMode,
-                    title = "Dunkel",
-                    isSelected = selectedThemeMode == ThemeMode.DARK,
-                    onClick = { onThemeModeSelected(ThemeMode.DARK) }
-                )
-                
-                ThemeOption(
-                    icon = Icons.Default.BrightnessAuto,
-                    title = "System folgen",
-                    isSelected = selectedThemeMode == ThemeMode.FOLLOW_SYSTEM,
-                    onClick = { onThemeModeSelected(ThemeMode.FOLLOW_SYSTEM) }
-                )
-            }
-        }
+
+        ThemeOption(
+          icon = Icons.Default.DarkMode,
+          title = "Dunkel",
+          isSelected = selectedThemeMode == ThemeMode.DARK,
+          onClick = { onThemeModeSelected(ThemeMode.DARK) },
+        )
+
+        ThemeOption(
+          icon = Icons.Default.BrightnessAuto,
+          title = "System folgen",
+          isSelected = selectedThemeMode == ThemeMode.FOLLOW_SYSTEM,
+          onClick = { onThemeModeSelected(ThemeMode.FOLLOW_SYSTEM) },
+        )
+      }
     }
+  }
 }
 
 @Composable
 private fun ThemeOption(
-    icon: ImageVector,
-    title: String,
-    isSelected: Boolean,
-    onClick: () -> Unit
+  icon: ImageVector,
+  title: String,
+  isSelected: Boolean,
+  onClick: () -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = title,
-            tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(24.dp)
-        )
-        
-        Spacer(modifier = Modifier.width(16.dp))
-        
-        Text(
-            text = title,
-            style = MaterialTheme.typography.bodyLarge,
-            color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.weight(1f)
-        )
-        
-        if (isSelected) {
-            Icon(
-                imageVector = Icons.Default.Check,
-                contentDescription = "Ausgewählt",
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(24.dp)
-            )
-        }
+  Row(
+    modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).padding(12.dp),
+    verticalAlignment = Alignment.CenterVertically,
+  ) {
+    Icon(
+      imageVector = icon,
+      contentDescription = title,
+      tint =
+        if (isSelected) MaterialTheme.colorScheme.primary
+        else MaterialTheme.colorScheme.onSurfaceVariant,
+      modifier = Modifier.size(24.dp),
+    )
+
+    Spacer(modifier = Modifier.width(16.dp))
+
+    Text(
+      text = title,
+      style = MaterialTheme.typography.bodyLarge,
+      color =
+        if (isSelected) MaterialTheme.colorScheme.primary
+        else MaterialTheme.colorScheme.onSurfaceVariant,
+      modifier = Modifier.weight(1f),
+    )
+
+    if (isSelected) {
+      Icon(
+        imageVector = Icons.Default.Check,
+        contentDescription = "Ausgewählt",
+        tint = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.size(24.dp),
+      )
     }
+  }
 }
 
 @Composable
 private fun DynamicColorsSection(
-    dynamicColorsEnabled: Boolean,
-    onDynamicColorsChanged: (Boolean) -> Unit
+  dynamicColorsEnabled: Boolean,
+  onDynamicColorsChanged: (Boolean) -> Unit,
 ) {
-    Column {
-        Text(
-            text = "Dynamische Farben",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary
+  Column {
+    Text(
+      text = "Dynamische Farben",
+      style = MaterialTheme.typography.titleMedium,
+      color = MaterialTheme.colorScheme.primary,
+    )
+
+    Spacer(modifier = Modifier.height(12.dp))
+
+    Card(
+      modifier = Modifier.fillMaxWidth(),
+      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+    ) {
+      Row(
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+      ) {
+        Icon(
+          imageVector = Icons.Default.Palette,
+          contentDescription = "Dynamische Farben",
+          tint = MaterialTheme.colorScheme.primary,
+          modifier = Modifier.size(24.dp),
         )
-        
-        Spacer(modifier = Modifier.height(12.dp))
-        
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
-            )
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Palette,
-                    contentDescription = "Dynamische Farben",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(24.dp)
-                )
-                
-                Spacer(modifier = Modifier.width(16.dp))
-                
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = "Dynamische Farben verwenden",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Text(
-                        text = "Farben aus Hintergrundbild verwenden",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                    )
-                }
-                
-                Switch(
-                    checked = dynamicColorsEnabled,
-                    onCheckedChange = onDynamicColorsChanged
-                )
-            }
+
+        Spacer(modifier = Modifier.width(16.dp))
+
+        Column(modifier = Modifier.weight(1f)) {
+          Text(
+            text = "Dynamische Farben verwenden",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+          )
+          Text(
+            text = "Farben aus Hintergrundbild verwenden",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+          )
         }
+
+        Switch(checked = dynamicColorsEnabled, onCheckedChange = onDynamicColorsChanged)
+      }
     }
+  }
 }

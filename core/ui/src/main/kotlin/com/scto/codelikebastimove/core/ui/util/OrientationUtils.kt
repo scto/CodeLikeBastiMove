@@ -8,20 +8,20 @@ import androidx.compose.ui.platform.LocalConfiguration
 @Composable
 @ReadOnlyComposable
 fun isLandscape(): Boolean {
-    val configuration = LocalConfiguration.current
-    return configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+  val configuration = LocalConfiguration.current
+  return configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 }
 
 @Composable
 @ReadOnlyComposable
 fun isCompactHeight(): Boolean {
-    val configuration = LocalConfiguration.current
-    return configuration.screenHeightDp < 480
+  val configuration = LocalConfiguration.current
+  return configuration.screenHeightDp < 480
 }
 
 @Composable
 @ReadOnlyComposable
 fun isTablet(): Boolean {
-    val configuration = LocalConfiguration.current
-    return configuration.smallestScreenWidthDp >= 600
+  val configuration = LocalConfiguration.current
+  return configuration.smallestScreenWidthDp >= 600
 }

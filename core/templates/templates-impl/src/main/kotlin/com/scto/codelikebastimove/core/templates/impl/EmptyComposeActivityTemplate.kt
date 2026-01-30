@@ -7,57 +7,58 @@ import com.scto.codelikebastimove.core.templates.api.ProjectConfig
 import com.scto.codelikebastimove.core.templates.api.ProjectFile
 
 class EmptyComposeActivityTemplate : BaseVersionCatalogTemplate() {
-    override val name: String = "Empty Compose Activity"
-    override val description: String = "Creates a new project with Jetpack Compose"
-    override val templateId: String = "empty-compose-activity"
-    override val templateVersion: String = "1.0.0"
-    override val templateType: ProjectTemplateType = ProjectTemplateType.EMPTY_COMPOSE
-    override val features: List<String> = listOf("Jetpack Compose", "Material 3", "Dynamic Colors")
+  override val name: String = "Empty Compose Activity"
+  override val description: String = "Creates a new project with Jetpack Compose"
+  override val templateId: String = "empty-compose-activity"
+  override val templateVersion: String = "1.0.0"
+  override val templateType: ProjectTemplateType = ProjectTemplateType.EMPTY_COMPOSE
+  override val features: List<String> = listOf("Jetpack Compose", "Material 3", "Dynamic Colors")
 
-    override fun getVersionCatalog(): VersionCatalog = createBaseComposeVersionCatalog()
+  override fun getVersionCatalog(): VersionCatalog = createBaseComposeVersionCatalog()
 
-    override fun generateProject(config: ProjectConfig): List<ProjectFile> {
-        val files = mutableListOf<ProjectFile>()
-        val packagePath = config.packageName.replace(".", "/")
+  override fun generateProject(config: ProjectConfig): List<ProjectFile> {
+    val files = mutableListOf<ProjectFile>()
+    val packagePath = config.packageName.replace(".", "/")
 
-        files.add(ProjectFile("app/src/main/java/$packagePath", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/java/$packagePath/ui/theme", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/res/values", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/res/drawable", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/java/$packagePath", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/java/$packagePath/ui/theme", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/res/values", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/res/drawable", "", isDirectory = true))
 
-        files.addAll(generateGradleWrapper(config))
-        files.add(generateVersionCatalogToml(config))
+    files.addAll(generateGradleWrapper(config))
+    files.add(generateVersionCatalogToml(config))
 
-        when (config.gradleLanguage) {
-            GradleLanguage.KOTLIN_DSL -> {
-                files.add(generateSettingsGradleKts(config))
-                files.add(generateRootBuildGradleKts(config))
-                files.add(generateAppBuildGradleKts(config))
-            }
-            GradleLanguage.GROOVY -> {
-                files.add(generateSettingsGradleGroovy(config))
-                files.add(generateRootBuildGradleGroovy(config))
-                files.add(generateAppBuildGradleGroovy(config))
-            }
-        }
-
-        files.add(generateAndroidManifest(config))
-        files.add(generateMainActivity(config))
-        files.add(generateThemeKt(config))
-        files.add(generateColorKt(config))
-        files.add(generateTypeKt(config))
-        files.add(generateStringsXml(config))
-        files.add(generateColorsXml(config))
-        files.add(generateThemesXml(config))
-        files.add(generateGradleProperties(config))
-        files.add(generateGitignore(config))
-        files.add(generateProguardRules(config))
-
-        return files
+    when (config.gradleLanguage) {
+      GradleLanguage.KOTLIN_DSL -> {
+        files.add(generateSettingsGradleKts(config))
+        files.add(generateRootBuildGradleKts(config))
+        files.add(generateAppBuildGradleKts(config))
+      }
+      GradleLanguage.GROOVY -> {
+        files.add(generateSettingsGradleGroovy(config))
+        files.add(generateRootBuildGradleGroovy(config))
+        files.add(generateAppBuildGradleGroovy(config))
+      }
     }
 
-    private fun generateAppBuildGradleKts(config: ProjectConfig): ProjectFile {
-        val content = """
+    files.add(generateAndroidManifest(config))
+    files.add(generateMainActivity(config))
+    files.add(generateThemeKt(config))
+    files.add(generateColorKt(config))
+    files.add(generateTypeKt(config))
+    files.add(generateStringsXml(config))
+    files.add(generateColorsXml(config))
+    files.add(generateThemesXml(config))
+    files.add(generateGradleProperties(config))
+    files.add(generateGitignore(config))
+    files.add(generateProguardRules(config))
+
+    return files
+  }
+
+  private fun generateAppBuildGradleKts(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -113,12 +114,14 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.bundles.compose.debug)
 }
-""".trimIndent()
-        return ProjectFile("app/build.gradle.kts", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/build.gradle.kts", content)
+  }
 
-    private fun generateAppBuildGradleGroovy(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateAppBuildGradleGroovy(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 plugins {
     alias libs.plugins.android.application
     alias libs.plugins.kotlin.android
@@ -174,13 +177,15 @@ dependencies {
     androidTestImplementation libs.androidx.ui.test.junit4
     debugImplementation libs.bundles.compose.debug
 }
-""".trimIndent()
-        return ProjectFile("app/build.gradle", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/build.gradle", content)
+  }
 
-    private fun generateAndroidManifest(config: ProjectConfig): ProjectFile {
-        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
-        val content = """
+  private fun generateAndroidManifest(config: ProjectConfig): ProjectFile {
+    val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -203,14 +208,16 @@ dependencies {
     </application>
 
 </manifest>
-""".trimIndent()
-        return ProjectFile("app/src/main/AndroidManifest.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/AndroidManifest.xml", content)
+  }
 
-    private fun generateMainActivity(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
-        val content = """
+  private fun generateMainActivity(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
+    val content =
+      """
 package ${config.packageName}
 
 import android.os.Bundle
@@ -258,14 +265,16 @@ fun GreetingPreview() {
         Greeting("Android")
     }
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/MainActivity.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/MainActivity.kt", content)
+  }
 
-    private fun generateThemeKt(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
-        val content = """
+  private fun generateThemeKt(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
+    val content =
+      """
 package ${config.packageName}.ui.theme
 
 import android.os.Build
@@ -311,13 +320,15 @@ fun ${themeName}Theme(
         content = content
     )
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/ui/theme/Theme.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/ui/theme/Theme.kt", content)
+  }
 
-    private fun generateColorKt(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateColorKt(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.ui.theme
 
 import androidx.compose.ui.graphics.Color
@@ -329,13 +340,15 @@ val Pink80 = Color(0xFFEFB8C8)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/ui/theme/Color.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/ui/theme/Color.kt", content)
+  }
 
-    private fun generateTypeKt(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateTypeKt(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.ui.theme
 
 import androidx.compose.material3.Typography
@@ -353,21 +366,25 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     )
 )
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/ui/theme/Type.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/ui/theme/Type.kt", content)
+  }
 
-    private fun generateStringsXml(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateStringsXml(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 <resources>
     <string name="app_name">${config.projectName}</string>
 </resources>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/values/strings.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/values/strings.xml", content)
+  }
 
-    private fun generateColorsXml(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateColorsXml(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="purple_200">#FFBB86FC</color>
@@ -378,18 +395,21 @@ val Typography = Typography(
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/values/colors.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/values/colors.xml", content)
+  }
 
-    private fun generateThemesXml(config: ProjectConfig): ProjectFile {
-        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
-        val content = """
+  private fun generateThemesXml(config: ProjectConfig): ProjectFile {
+    val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.$themeName" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/values/themes.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/values/themes.xml", content)
+  }
 }

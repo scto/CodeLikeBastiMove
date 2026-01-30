@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of Visual Code Space.
   ~
   ~ Visual Code Space is free software: you can redistribute it and/or modify it under the terms of
@@ -12,8 +13,8 @@
   ~ You should have received a copy of the GNU General Public License along with Visual Code Space.
   ~ If not, see <https://www.gnu.org/licenses/>.
   -->
-
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
     android:autoMirrored="true"

@@ -16,7 +16,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
@@ -35,212 +34,172 @@ import com.scto.codelikebastimove.core.datastore.OpenJdkVersion
 
 @Composable
 fun InstallationOptionsPage(
-    onboardingConfig: OnboardingConfig,
-    onOpenJdkVersionChange: (OpenJdkVersion) -> Unit,
-    onBuildToolsVersionChange: (BuildToolsVersion) -> Unit,
-    onGitEnabledChange: (Boolean) -> Unit,
-    onGitLfsEnabledChange: (Boolean) -> Unit,
-    onSshEnabledChange: (Boolean) -> Unit,
-    onNextClick: () -> Unit,
-    onBackClick: () -> Unit
+  onboardingConfig: OnboardingConfig,
+  onOpenJdkVersionChange: (OpenJdkVersion) -> Unit,
+  onBuildToolsVersionChange: (BuildToolsVersion) -> Unit,
+  onGitEnabledChange: (Boolean) -> Unit,
+  onGitLfsEnabledChange: (Boolean) -> Unit,
+  onSshEnabledChange: (Boolean) -> Unit,
+  onNextClick: () -> Unit,
+  onBackClick: () -> Unit,
 ) {
-    Box(
-        modifier = Modifier.fillMaxSize()
+  Box(modifier = Modifier.fillMaxSize()) {
+    Card(
+      modifier = Modifier.fillMaxSize().padding(16.dp).padding(bottom = 80.dp),
+      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
     ) {
+      Column(
+        modifier = Modifier.fillMaxSize().padding(16.dp).verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+      ) {
+        Text(
+          text = "Für die manuelle Installation können Sie das Script idesetup ausführen.",
+          style = MaterialTheme.typography.bodyMedium,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
         Card(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-                .padding(bottom = 80.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
+          modifier = Modifier.fillMaxWidth(),
+          colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        ) {
+          Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+              text = "Bitte wählen Sie die Version des OpenJDK aus:",
+              style = MaterialTheme.typography.titleSmall,
+              color = MaterialTheme.colorScheme.onSurface,
             )
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OpenJdkVersion.entries.forEach { version ->
+              Row(
+                modifier =
+                  Modifier.fillMaxWidth()
+                    .clickable { onOpenJdkVersionChange(version) }
+                    .padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+              ) {
+                RadioButton(
+                  selected = onboardingConfig.selectedOpenJdkVersion == version,
+                  onClick = { onOpenJdkVersionChange(version) },
+                )
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Für die manuelle Installation können Sie das Script idesetup ausführen.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                  text = version.displayName,
+                  style = MaterialTheme.typography.bodyMedium,
+                  color = MaterialTheme.colorScheme.onSurface,
                 )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surface
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text(
-                            text = "Bitte wählen Sie die Version des OpenJDK aus:",
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        OpenJdkVersion.entries.forEach { version ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable { onOpenJdkVersionChange(version) }
-                                    .padding(vertical = 8.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                RadioButton(
-                                    selected = onboardingConfig.selectedOpenJdkVersion == version,
-                                    onClick = { onOpenJdkVersionChange(version) }
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(
-                                    text = version.displayName,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-                        }
-                    }
-                }
-
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surface
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text(
-                            text = "Bitte wählen Sie die Version der Android Build Tools aus:",
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        BuildToolsVersion.entries.forEach { version ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable { onBuildToolsVersionChange(version) }
-                                    .padding(vertical = 8.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                RadioButton(
-                                    selected = onboardingConfig.selectedBuildToolsVersion == version,
-                                    onClick = { onBuildToolsVersionChange(version) }
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(
-                                    text = version.displayName,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-                        }
-                    }
-                }
-
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surface
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text(
-                            text = "Bitte wählen Sie die optimalen Tools:",
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        SwitchOption(
-                            label = "git",
-                            isChecked = onboardingConfig.gitEnabled,
-                            onCheckedChange = onGitEnabledChange
-                        )
-
-                        SwitchOption(
-                            label = "git-lfs",
-                            isChecked = onboardingConfig.gitLfsEnabled,
-                            onCheckedChange = onGitLfsEnabledChange
-                        )
-
-                        SwitchOption(
-                            label = "ssh",
-                            isChecked = onboardingConfig.sshEnabled,
-                            onCheckedChange = onSshEnabledChange
-                        )
-                    }
-                }
+              }
             }
+          }
         }
 
-        Row(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(24.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+        Card(
+          modifier = Modifier.fillMaxWidth(),
+          colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         ) {
-            FloatingActionButton(
-                onClick = onBackClick,
-                containerColor = MaterialTheme.colorScheme.secondary
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Zurück"
-                )
-            }
+          Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+              text = "Bitte wählen Sie die Version der Android Build Tools aus:",
+              style = MaterialTheme.typography.titleSmall,
+              color = MaterialTheme.colorScheme.onSurface,
+            )
 
-            FloatingActionButton(
-                onClick = onNextClick,
-                containerColor = MaterialTheme.colorScheme.primary
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                    contentDescription = "Weiter"
+            Spacer(modifier = Modifier.height(12.dp))
+
+            BuildToolsVersion.entries.forEach { version ->
+              Row(
+                modifier =
+                  Modifier.fillMaxWidth()
+                    .clickable { onBuildToolsVersionChange(version) }
+                    .padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+              ) {
+                RadioButton(
+                  selected = onboardingConfig.selectedBuildToolsVersion == version,
+                  onClick = { onBuildToolsVersionChange(version) },
                 )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                  text = version.displayName,
+                  style = MaterialTheme.typography.bodyMedium,
+                  color = MaterialTheme.colorScheme.onSurface,
+                )
+              }
             }
+          }
         }
+
+        Card(
+          modifier = Modifier.fillMaxWidth(),
+          colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        ) {
+          Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+              text = "Bitte wählen Sie die optimalen Tools:",
+              style = MaterialTheme.typography.titleSmall,
+              color = MaterialTheme.colorScheme.onSurface,
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            SwitchOption(
+              label = "git",
+              isChecked = onboardingConfig.gitEnabled,
+              onCheckedChange = onGitEnabledChange,
+            )
+
+            SwitchOption(
+              label = "git-lfs",
+              isChecked = onboardingConfig.gitLfsEnabled,
+              onCheckedChange = onGitLfsEnabledChange,
+            )
+
+            SwitchOption(
+              label = "ssh",
+              isChecked = onboardingConfig.sshEnabled,
+              onCheckedChange = onSshEnabledChange,
+            )
+          }
+        }
+      }
     }
+
+    Row(
+      modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(24.dp),
+      horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+      FloatingActionButton(
+        onClick = onBackClick,
+        containerColor = MaterialTheme.colorScheme.secondary,
+      ) {
+        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Zurück")
+      }
+
+      FloatingActionButton(
+        onClick = onNextClick,
+        containerColor = MaterialTheme.colorScheme.primary,
+      ) {
+        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Weiter")
+      }
+    }
+  }
 }
 
 @Composable
-private fun SwitchOption(
-    label: String,
-    isChecked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        Switch(
-            checked = isChecked,
-            onCheckedChange = onCheckedChange
-        )
-    }
+private fun SwitchOption(label: String, isChecked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+  Row(
+    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+    horizontalArrangement = Arrangement.SpaceBetween,
+    verticalAlignment = Alignment.CenterVertically,
+  ) {
+    Text(
+      text = label,
+      style = MaterialTheme.typography.bodyMedium,
+      color = MaterialTheme.colorScheme.onSurface,
+    )
+    Switch(checked = isChecked, onCheckedChange = onCheckedChange)
+  }
 }

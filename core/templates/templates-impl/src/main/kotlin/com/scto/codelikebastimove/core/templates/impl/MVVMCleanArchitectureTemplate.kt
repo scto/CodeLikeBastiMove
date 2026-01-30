@@ -10,106 +10,147 @@ import com.scto.codelikebastimove.core.templates.api.ProjectConfig
 import com.scto.codelikebastimove.core.templates.api.ProjectFile
 
 class MVVMCleanArchitectureTemplate : BaseVersionCatalogTemplate() {
-    override val name: String = "MVVM Clean Architecture"
-    override val description: String = "Creates a project with MVVM pattern and Clean Architecture layers"
-    override val templateId: String = "mvvm-clean-architecture"
-    override val templateVersion: String = "1.0.0"
-    override val templateType: ProjectTemplateType = ProjectTemplateType.MVVM_CLEAN
-    override val features: List<String> = listOf(
-        "MVVM Architecture",
-        "Clean Architecture",
-        "Jetpack Compose",
-        "ViewModel",
-        "StateFlow",
-        "Coroutines",
-        "Hilt DI",
-        "Repository Pattern"
+  override val name: String = "MVVM Clean Architecture"
+  override val description: String =
+    "Creates a project with MVVM pattern and Clean Architecture layers"
+  override val templateId: String = "mvvm-clean-architecture"
+  override val templateVersion: String = "1.0.0"
+  override val templateType: ProjectTemplateType = ProjectTemplateType.MVVM_CLEAN
+  override val features: List<String> =
+    listOf(
+      "MVVM Architecture",
+      "Clean Architecture",
+      "Jetpack Compose",
+      "ViewModel",
+      "StateFlow",
+      "Coroutines",
+      "Hilt DI",
+      "Repository Pattern",
     )
 
-    override fun getVersionCatalog(): VersionCatalog {
-        val base = createBaseComposeVersionCatalog()
-        return base.copy(
-            versions = base.versions + listOf(
-                VersionCatalogEntry("hilt", "2.51.1"),
-                VersionCatalogEntry("hiltNavigation", "1.2.0"),
-                VersionCatalogEntry("coroutines", "1.8.1"),
-                VersionCatalogEntry("navigationCompose", "2.8.5")
+  override fun getVersionCatalog(): VersionCatalog {
+    val base = createBaseComposeVersionCatalog()
+    return base.copy(
+      versions =
+        base.versions +
+          listOf(
+            VersionCatalogEntry("hilt", "2.51.1"),
+            VersionCatalogEntry("hiltNavigation", "1.2.0"),
+            VersionCatalogEntry("coroutines", "1.8.1"),
+            VersionCatalogEntry("navigationCompose", "2.8.5"),
+          ),
+      libraries =
+        base.libraries +
+          listOf(
+            VersionCatalogLibrary("hilt-android", "com.google.dagger", "hilt-android", "hilt"),
+            VersionCatalogLibrary(
+              "hilt-android-compiler",
+              "com.google.dagger",
+              "hilt-android-compiler",
+              "hilt",
             ),
-            libraries = base.libraries + listOf(
-                VersionCatalogLibrary("hilt-android", "com.google.dagger", "hilt-android", "hilt"),
-                VersionCatalogLibrary("hilt-android-compiler", "com.google.dagger", "hilt-android-compiler", "hilt"),
-                VersionCatalogLibrary("androidx-hilt-navigation-compose", "androidx.hilt", "hilt-navigation-compose", "hiltNavigation"),
-                VersionCatalogLibrary("kotlinx-coroutines-core", "org.jetbrains.kotlinx", "kotlinx-coroutines-core", "coroutines"),
-                VersionCatalogLibrary("kotlinx-coroutines-android", "org.jetbrains.kotlinx", "kotlinx-coroutines-android", "coroutines"),
-                VersionCatalogLibrary("androidx-navigation-compose", "androidx.navigation", "navigation-compose", "navigationCompose")
+            VersionCatalogLibrary(
+              "androidx-hilt-navigation-compose",
+              "androidx.hilt",
+              "hilt-navigation-compose",
+              "hiltNavigation",
             ),
-            bundles = base.bundles + listOf(
-                VersionCatalogBundle("coroutines", listOf("kotlinx-coroutines-core", "kotlinx-coroutines-android")),
-                VersionCatalogBundle("hilt", listOf("hilt-android", "androidx-hilt-navigation-compose"))
-            )
-        )
+            VersionCatalogLibrary(
+              "kotlinx-coroutines-core",
+              "org.jetbrains.kotlinx",
+              "kotlinx-coroutines-core",
+              "coroutines",
+            ),
+            VersionCatalogLibrary(
+              "kotlinx-coroutines-android",
+              "org.jetbrains.kotlinx",
+              "kotlinx-coroutines-android",
+              "coroutines",
+            ),
+            VersionCatalogLibrary(
+              "androidx-navigation-compose",
+              "androidx.navigation",
+              "navigation-compose",
+              "navigationCompose",
+            ),
+          ),
+      bundles =
+        base.bundles +
+          listOf(
+            VersionCatalogBundle(
+              "coroutines",
+              listOf("kotlinx-coroutines-core", "kotlinx-coroutines-android"),
+            ),
+            VersionCatalogBundle("hilt", listOf("hilt-android", "androidx-hilt-navigation-compose")),
+          ),
+    )
+  }
+
+  override fun generateProject(config: ProjectConfig): List<ProjectFile> {
+    val files = mutableListOf<ProjectFile>()
+    val packagePath = config.packageName.replace(".", "/")
+
+    files.add(ProjectFile("app/src/main/java/$packagePath", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/java/$packagePath/data", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/java/$packagePath/data/repository", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/java/$packagePath/domain", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/java/$packagePath/domain/model", "", isDirectory = true))
+    files.add(
+      ProjectFile("app/src/main/java/$packagePath/domain/repository", "", isDirectory = true)
+    )
+    files.add(ProjectFile("app/src/main/java/$packagePath/domain/usecase", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/java/$packagePath/presentation", "", isDirectory = true))
+    files.add(
+      ProjectFile("app/src/main/java/$packagePath/presentation/home", "", isDirectory = true)
+    )
+    files.add(ProjectFile("app/src/main/java/$packagePath/ui/theme", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/java/$packagePath/di", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/res/values", "", isDirectory = true))
+    files.add(ProjectFile("app/src/main/res/drawable", "", isDirectory = true))
+
+    files.addAll(generateGradleWrapper(config))
+    files.add(generateVersionCatalogToml(config))
+
+    when (config.gradleLanguage) {
+      GradleLanguage.KOTLIN_DSL -> {
+        files.add(generateSettingsGradleKts(config))
+        files.add(generateMvvmRootBuildGradleKts(config))
+        files.add(generateAppBuildGradleKts(config))
+      }
+      GradleLanguage.GROOVY -> {
+        files.add(generateSettingsGradleGroovy(config))
+        files.add(generateMvvmRootBuildGradleGroovy(config))
+        files.add(generateAppBuildGradleGroovy(config))
+      }
     }
 
-    override fun generateProject(config: ProjectConfig): List<ProjectFile> {
-        val files = mutableListOf<ProjectFile>()
-        val packagePath = config.packageName.replace(".", "/")
+    files.add(generateAndroidManifest(config))
+    files.add(generateMainActivity(config))
+    files.add(generateApplication(config))
+    files.add(generateAppModule(config))
+    files.add(generateHomeScreen(config))
+    files.add(generateHomeViewModel(config))
+    files.add(generateHomeUiState(config))
+    files.add(generateItemRepository(config))
+    files.add(generateItemRepositoryImpl(config))
+    files.add(generateItem(config))
+    files.add(generateGetItemsUseCase(config))
+    files.add(generateThemeKt(config))
+    files.add(generateColorKt(config))
+    files.add(generateTypeKt(config))
+    files.add(generateStringsXml(config))
+    files.add(generateColorsXml(config))
+    files.add(generateThemesXml(config))
+    files.add(generateGradleProperties(config))
+    files.add(generateGitignore(config))
+    files.add(generateProguardRules(config))
 
-        files.add(ProjectFile("app/src/main/java/$packagePath", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/java/$packagePath/data", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/java/$packagePath/data/repository", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/java/$packagePath/domain", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/java/$packagePath/domain/model", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/java/$packagePath/domain/repository", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/java/$packagePath/domain/usecase", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/java/$packagePath/presentation", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/java/$packagePath/presentation/home", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/java/$packagePath/ui/theme", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/java/$packagePath/di", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/res/values", "", isDirectory = true))
-        files.add(ProjectFile("app/src/main/res/drawable", "", isDirectory = true))
+    return files
+  }
 
-        files.addAll(generateGradleWrapper(config))
-        files.add(generateVersionCatalogToml(config))
-
-        when (config.gradleLanguage) {
-            GradleLanguage.KOTLIN_DSL -> {
-                files.add(generateSettingsGradleKts(config))
-                files.add(generateMvvmRootBuildGradleKts(config))
-                files.add(generateAppBuildGradleKts(config))
-            }
-            GradleLanguage.GROOVY -> {
-                files.add(generateSettingsGradleGroovy(config))
-                files.add(generateMvvmRootBuildGradleGroovy(config))
-                files.add(generateAppBuildGradleGroovy(config))
-            }
-        }
-
-        files.add(generateAndroidManifest(config))
-        files.add(generateMainActivity(config))
-        files.add(generateApplication(config))
-        files.add(generateAppModule(config))
-        files.add(generateHomeScreen(config))
-        files.add(generateHomeViewModel(config))
-        files.add(generateHomeUiState(config))
-        files.add(generateItemRepository(config))
-        files.add(generateItemRepositoryImpl(config))
-        files.add(generateItem(config))
-        files.add(generateGetItemsUseCase(config))
-        files.add(generateThemeKt(config))
-        files.add(generateColorKt(config))
-        files.add(generateTypeKt(config))
-        files.add(generateStringsXml(config))
-        files.add(generateColorsXml(config))
-        files.add(generateThemesXml(config))
-        files.add(generateGradleProperties(config))
-        files.add(generateGitignore(config))
-        files.add(generateProguardRules(config))
-
-        return files
-    }
-
-    private fun generateMvvmRootBuildGradleKts(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateMvvmRootBuildGradleKts(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
@@ -117,12 +158,14 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.ksp) apply false
 }
-""".trimIndent()
-        return ProjectFile("build.gradle.kts", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("build.gradle.kts", content)
+  }
 
-    private fun generateMvvmRootBuildGradleGroovy(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateMvvmRootBuildGradleGroovy(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 plugins {
     alias libs.plugins.android.application apply false
     alias libs.plugins.kotlin.android apply false
@@ -130,12 +173,14 @@ plugins {
     alias libs.plugins.hilt apply false
     alias libs.plugins.ksp apply false
 }
-""".trimIndent()
-        return ProjectFile("build.gradle", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("build.gradle", content)
+  }
 
-    private fun generateAppBuildGradleKts(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateAppBuildGradleKts(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -198,12 +243,14 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.bundles.compose.debug)
 }
-""".trimIndent()
-        return ProjectFile("app/build.gradle.kts", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/build.gradle.kts", content)
+  }
 
-    private fun generateAppBuildGradleGroovy(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateAppBuildGradleGroovy(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 plugins {
     alias libs.plugins.android.application
     alias libs.plugins.kotlin.android
@@ -266,13 +313,15 @@ dependencies {
     androidTestImplementation libs.androidx.ui.test.junit4
     debugImplementation libs.bundles.compose.debug
 }
-""".trimIndent()
-        return ProjectFile("app/build.gradle", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/build.gradle", content)
+  }
 
-    private fun generateAndroidManifest(config: ProjectConfig): ProjectFile {
-        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
-        val content = """
+  private fun generateAndroidManifest(config: ProjectConfig): ProjectFile {
+    val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -296,14 +345,16 @@ dependencies {
     </application>
 
 </manifest>
-""".trimIndent()
-        return ProjectFile("app/src/main/AndroidManifest.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/AndroidManifest.xml", content)
+  }
 
-    private fun generateMainActivity(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
-        val content = """
+  private fun generateMainActivity(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
+    val content =
+      """
 package ${config.packageName}
 
 import android.os.Bundle
@@ -335,14 +386,16 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/MainActivity.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/MainActivity.kt", content)
+  }
 
-    private fun generateApplication(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
-        val content = """
+  private fun generateApplication(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
+    val content =
+      """
 package ${config.packageName}
 
 import android.app.Application
@@ -350,13 +403,15 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class ${themeName}Application : Application()
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/${themeName}Application.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/${themeName}Application.kt", content)
+  }
 
-    private fun generateAppModule(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateAppModule(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.di
 
 import ${config.packageName}.data.repository.ItemRepositoryImpl
@@ -377,13 +432,15 @@ abstract class AppModule {
         itemRepositoryImpl: ItemRepositoryImpl
     ): ItemRepository
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/di/AppModule.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/di/AppModule.kt", content)
+  }
 
-    private fun generateHomeScreen(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateHomeScreen(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.presentation.home
 
 import androidx.compose.foundation.layout.Arrangement
@@ -486,13 +543,15 @@ private fun ItemCard(item: Item) {
         }
     }
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/presentation/home/HomeScreen.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/presentation/home/HomeScreen.kt", content)
+  }
 
-    private fun generateHomeViewModel(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateHomeViewModel(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.presentation.home
 
 import androidx.lifecycle.ViewModel
@@ -534,13 +593,15 @@ class HomeViewModel @Inject constructor(
         loadItems()
     }
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/presentation/home/HomeViewModel.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/presentation/home/HomeViewModel.kt", content)
+  }
 
-    private fun generateHomeUiState(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateHomeUiState(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.presentation.home
 
 import ${config.packageName}.domain.model.Item
@@ -550,13 +611,15 @@ data class HomeUiState(
     val isLoading: Boolean = false,
     val error: String? = null
 )
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/presentation/home/HomeUiState.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/presentation/home/HomeUiState.kt", content)
+  }
 
-    private fun generateItemRepository(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateItemRepository(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.domain.repository
 
 import ${config.packageName}.domain.model.Item
@@ -567,13 +630,18 @@ interface ItemRepository {
     suspend fun saveItem(item: Item)
     suspend fun deleteItem(id: String)
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/domain/repository/ItemRepository.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile(
+      "app/src/main/java/$packagePath/domain/repository/ItemRepository.kt",
+      content,
+    )
+  }
 
-    private fun generateItemRepositoryImpl(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateItemRepositoryImpl(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.data.repository
 
 import ${config.packageName}.domain.model.Item
@@ -614,13 +682,18 @@ class ItemRepositoryImpl @Inject constructor() : ItemRepository {
         items.removeAll { it.id == id }
     }
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/data/repository/ItemRepositoryImpl.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile(
+      "app/src/main/java/$packagePath/data/repository/ItemRepositoryImpl.kt",
+      content,
+    )
+  }
 
-    private fun generateItem(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateItem(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.domain.model
 
 data class Item(
@@ -628,13 +701,15 @@ data class Item(
     val title: String,
     val description: String
 )
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/domain/model/Item.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/domain/model/Item.kt", content)
+  }
 
-    private fun generateGetItemsUseCase(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateGetItemsUseCase(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.domain.usecase
 
 import ${config.packageName}.domain.model.Item
@@ -648,14 +723,16 @@ class GetItemsUseCase @Inject constructor(
         return repository.getItems()
     }
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/domain/usecase/GetItemsUseCase.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/domain/usecase/GetItemsUseCase.kt", content)
+  }
 
-    private fun generateThemeKt(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
-        val content = """
+  private fun generateThemeKt(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
+    val content =
+      """
 package ${config.packageName}.ui.theme
 
 import android.os.Build
@@ -701,13 +778,15 @@ fun ${themeName}Theme(
         content = content
     )
 }
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/ui/theme/Theme.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/ui/theme/Theme.kt", content)
+  }
 
-    private fun generateColorKt(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateColorKt(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.ui.theme
 
 import androidx.compose.ui.graphics.Color
@@ -719,13 +798,15 @@ val Pink80 = Color(0xFFEFB8C8)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/ui/theme/Color.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/ui/theme/Color.kt", content)
+  }
 
-    private fun generateTypeKt(config: ProjectConfig): ProjectFile {
-        val packagePath = config.packageName.replace(".", "/")
-        val content = """
+  private fun generateTypeKt(config: ProjectConfig): ProjectFile {
+    val packagePath = config.packageName.replace(".", "/")
+    val content =
+      """
 package ${config.packageName}.ui.theme
 
 import androidx.compose.material3.Typography
@@ -743,21 +824,25 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     )
 )
-""".trimIndent()
-        return ProjectFile("app/src/main/java/$packagePath/ui/theme/Type.kt", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/java/$packagePath/ui/theme/Type.kt", content)
+  }
 
-    private fun generateStringsXml(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateStringsXml(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 <resources>
     <string name="app_name">${config.projectName}</string>
 </resources>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/values/strings.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/values/strings.xml", content)
+  }
 
-    private fun generateColorsXml(config: ProjectConfig): ProjectFile {
-        val content = """
+  private fun generateColorsXml(config: ProjectConfig): ProjectFile {
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="purple_200">#FFBB86FC</color>
@@ -768,18 +853,21 @@ val Typography = Typography(
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/values/colors.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/values/colors.xml", content)
+  }
 
-    private fun generateThemesXml(config: ProjectConfig): ProjectFile {
-        val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
-        val content = """
+  private fun generateThemesXml(config: ProjectConfig): ProjectFile {
+    val themeName = config.projectName.replace(" ", "").replace("-", "").replace("_", "")
+    val content =
+      """
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.$themeName" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>
-""".trimIndent()
-        return ProjectFile("app/src/main/res/values/themes.xml", content)
-    }
+"""
+        .trimIndent()
+    return ProjectFile("app/src/main/res/values/themes.xml", content)
+  }
 }

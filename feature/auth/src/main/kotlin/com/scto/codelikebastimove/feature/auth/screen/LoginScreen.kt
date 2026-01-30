@@ -48,160 +48,138 @@ import com.scto.codelikebastimove.feature.auth.viewmodel.AuthViewModel
 
 @Composable
 fun LoginScreen(
-    onLoginSuccess: () -> Unit,
-    onNavigateToRegister: () -> Unit,
-    viewModel: AuthViewModel = viewModel()
+  onLoginSuccess: () -> Unit,
+  onNavigateToRegister: () -> Unit,
+  viewModel: AuthViewModel = viewModel(),
 ) {
-    val loginState by viewModel.loginState.collectAsState()
-    var passwordVisible by remember { mutableStateOf(false) }
-    val snackbarHostState = remember { SnackbarHostState() }
+  val loginState by viewModel.loginState.collectAsState()
+  var passwordVisible by remember { mutableStateOf(false) }
+  val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(loginState.isLoginSuccessful) {
-        if (loginState.isLoginSuccessful) {
-            viewModel.resetLoginSuccess()
-            onLoginSuccess()
-        }
+  LaunchedEffect(loginState.isLoginSuccessful) {
+    if (loginState.isLoginSuccessful) {
+      viewModel.resetLoginSuccess()
+      onLoginSuccess()
     }
+  }
 
-    LaunchedEffect(loginState.errorMessage) {
-        loginState.errorMessage?.let { message ->
-            snackbarHostState.showSnackbar(message)
-            viewModel.clearLoginError()
-        }
+  LaunchedEffect(loginState.errorMessage) {
+    loginState.errorMessage?.let { message ->
+      snackbarHostState.showSnackbar(message)
+      viewModel.clearLoginError()
     }
+  }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 24.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Spacer(modifier = Modifier.height(48.dp))
+  Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }) { paddingValues ->
+    Column(
+      modifier =
+        Modifier.fillMaxSize()
+          .padding(paddingValues)
+          .padding(horizontal = 24.dp)
+          .verticalScroll(rememberScrollState()),
+      horizontalAlignment = Alignment.CenterHorizontally,
+      verticalArrangement = Arrangement.Center,
+    ) {
+      Spacer(modifier = Modifier.height(48.dp))
 
-            Text(
-                text = "Welcome Back",
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+      Text(
+        text = "Welcome Back",
+        style = MaterialTheme.typography.headlineLarge,
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.primary,
+      )
+
+      Text(
+        text = "Sign in to continue",
+        style = MaterialTheme.typography.bodyLarge,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(top = 8.dp),
+      )
+
+      Spacer(modifier = Modifier.height(48.dp))
+
+      OutlinedTextField(
+        value = loginState.email,
+        onValueChange = { viewModel.updateLoginEmail(it) },
+        label = { Text("Email") },
+        leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email") },
+        keyboardOptions =
+          KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+        enabled = !loginState.isLoading,
+      )
+
+      Spacer(modifier = Modifier.height(16.dp))
+
+      OutlinedTextField(
+        value = loginState.password,
+        onValueChange = { viewModel.updateLoginPassword(it) },
+        label = { Text("Password") },
+        leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "Password") },
+        trailingIcon = {
+          IconButton(onClick = { passwordVisible = !passwordVisible }) {
+            Icon(
+              imageVector =
+                if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+              contentDescription = if (passwordVisible) "Hide password" else "Show password",
             )
+          }
+        },
+        visualTransformation =
+          if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        keyboardOptions =
+          KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+        enabled = !loginState.isLoading,
+      )
 
-            Text(
-                text = "Sign in to continue",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(top = 8.dp)
-            )
+      TextButton(
+        onClick = { viewModel.sendPasswordResetEmail(loginState.email) },
+        modifier = Modifier.align(Alignment.End),
+        enabled = !loginState.isLoading,
+      ) {
+        Text("Forgot Password?")
+      }
 
-            Spacer(modifier = Modifier.height(48.dp))
+      Spacer(modifier = Modifier.height(24.dp))
 
-            OutlinedTextField(
-                value = loginState.email,
-                onValueChange = { viewModel.updateLoginEmail(it) },
-                label = { Text("Email") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Email,
-                        contentDescription = "Email"
-                    )
-                },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next
-                ),
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-                enabled = !loginState.isLoading
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = loginState.password,
-                onValueChange = { viewModel.updateLoginPassword(it) },
-                label = { Text("Password") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Lock,
-                        contentDescription = "Password"
-                    )
-                },
-                trailingIcon = {
-                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(
-                            imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                            contentDescription = if (passwordVisible) "Hide password" else "Show password"
-                        )
-                    }
-                },
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done
-                ),
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-                enabled = !loginState.isLoading
-            )
-
-            TextButton(
-                onClick = { viewModel.sendPasswordResetEmail(loginState.email) },
-                modifier = Modifier.align(Alignment.End),
-                enabled = !loginState.isLoading
-            ) {
-                Text("Forgot Password?")
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Button(
-                onClick = { viewModel.login() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                enabled = !loginState.isLoading
-            ) {
-                if (loginState.isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.padding(end = 8.dp),
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-                Text(
-                    text = if (loginState.isLoading) "Signing in..." else "Sign In",
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text(
-                text = "Don't have an account?",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
-            )
-
-            OutlinedButton(
-                onClick = onNavigateToRegister,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp)
-                    .height(50.dp),
-                enabled = !loginState.isLoading
-            ) {
-                Text(
-                    text = "Create Account",
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
-            Spacer(modifier = Modifier.height(48.dp))
+      Button(
+        onClick = { viewModel.login() },
+        modifier = Modifier.fillMaxWidth().height(50.dp),
+        enabled = !loginState.isLoading,
+      ) {
+        if (loginState.isLoading) {
+          CircularProgressIndicator(
+            modifier = Modifier.padding(end = 8.dp),
+            color = MaterialTheme.colorScheme.onPrimary,
+          )
         }
+        Text(
+          text = if (loginState.isLoading) "Signing in..." else "Sign In",
+          style = MaterialTheme.typography.titleMedium,
+        )
+      }
+
+      Spacer(modifier = Modifier.height(24.dp))
+
+      Text(
+        text = "Don't have an account?",
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        textAlign = TextAlign.Center,
+      )
+
+      OutlinedButton(
+        onClick = onNavigateToRegister,
+        modifier = Modifier.fillMaxWidth().padding(top = 8.dp).height(50.dp),
+        enabled = !loginState.isLoading,
+      ) {
+        Text(text = "Create Account", style = MaterialTheme.typography.titleMedium)
+      }
+
+      Spacer(modifier = Modifier.height(48.dp))
     }
+  }
 }

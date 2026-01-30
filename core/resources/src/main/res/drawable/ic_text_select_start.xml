@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<?xml version="1.0" encoding="utf-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ~    sora-editor - the awesome code editor for Android
   ~    https://github.com/Rosemoe/sora-editor
   ~    Copyright (C) 2020-2023  Rosemoe
@@ -21,7 +22,8 @@
   ~     Please contact Rosemoe by email 2073412493@qq.com if you need
   ~     additional information or have any questions
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="20dp"
     android:height="20dp"
     android:tint="?android:colorControlNormal"

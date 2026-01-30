@@ -15,54 +15,47 @@
  */
 
 import com.android.build.gradle.LibraryExtension
-
+import com.scto.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.kotlin
 
-import com.scto.convention.libs
-
-/**
- * Standardisiertes Plugin für Feature-Module.
- * Kombiniert Library, Koin und Compose.
- */
+/** Standardisiertes Plugin für Feature-Module. Kombiniert Library, Koin und Compose. */
 class FeatureConventionPlugin : Plugin<Project> {
-    override fun apply(target: Project) {
-        with(target) {
-            pluginManager.apply {
-                apply("clbm.android.library")
-                apply("clbm.android.compose")
-            }
+  override fun apply(target: Project) {
+    with(target) {
+      pluginManager.apply {
+        apply("clbm.android.library")
+        apply("clbm.android.compose")
+      }
 
-            extensions.configure<LibraryExtension> {
-                defaultConfig {
-                    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-                }
-            }
+      extensions.configure<LibraryExtension> {
+        defaultConfig { testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner" }
+      }
 
-            dependencies {
-                add("api", project(":core:ui"))
-                add("api", project(":core:resources"))
+      dependencies {
+        add("api", project(":core:ui"))
+        add("api", project(":core:resources"))
 
-                add("testImplementation", kotlin("test"))
-                add("androidTestImplementation", kotlin("test"))
+        add("testImplementation", kotlin("test"))
+        add("androidTestImplementation", kotlin("test"))
 
-                add("api", libs.findLibrary("androidx-core-ktx").get())
-                add("api", libs.findLibrary("kotlinx-coroutines-android").get())
-                
-                add("api", platform(libs.findLibrary("androidx-compose-bom").get()))
-                add("api", libs.findLibrary("androidx-compose-material3").get())
-                add("api", libs.findLibrary("androidx-compose-foundation").get())
-                add("api", libs.findLibrary("androidx-compose-ui-tooling-preview").get())
-                add("api", libs.findLibrary("androidx-lifecycle-runtime-ktx").get())
-                add("api", libs.findLibrary("androidx-lifecycle-viewModelCompose").get())
-                
-                add("api", libs.findLibrary("androidx-activity-compose").get())
-                
-                add("debugImplementation", libs.findLibrary("androidx-compose-ui-tooling").get())
-            }
-        }
+        add("api", libs.findLibrary("androidx-core-ktx").get())
+        add("api", libs.findLibrary("kotlinx-coroutines-android").get())
+
+        add("api", platform(libs.findLibrary("androidx-compose-bom").get()))
+        add("api", libs.findLibrary("androidx-compose-material3").get())
+        add("api", libs.findLibrary("androidx-compose-foundation").get())
+        add("api", libs.findLibrary("androidx-compose-ui-tooling-preview").get())
+        add("api", libs.findLibrary("androidx-lifecycle-runtime-ktx").get())
+        add("api", libs.findLibrary("androidx-lifecycle-viewModelCompose").get())
+
+        add("api", libs.findLibrary("androidx-activity-compose").get())
+
+        add("debugImplementation", libs.findLibrary("androidx-compose-ui-tooling").get())
+      }
     }
+  }
 }

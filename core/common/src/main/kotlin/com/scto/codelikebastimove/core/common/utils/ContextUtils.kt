@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
-
 import androidx.appcompat.widget.TintTypedArray
 
 /**
@@ -15,7 +14,7 @@ import androidx.appcompat.widget.TintTypedArray
 @SuppressLint("RestrictedApi")
 @ColorInt
 fun Context.getAttrColor(@AttrRes attr: Int): Int {
-    return TintTypedArray.obtainStyledAttributes(this, null, intArrayOf(attr), 0, 0)
-        .getColorStateList(0)
-        .defaultColor
+  return TintTypedArray.obtainStyledAttributes(this, null, intArrayOf(attr), 0, 0)
+    .getColorStateList(0)
+    .defaultColor
 }

@@ -4,7 +4,7 @@ import com.scto.codelikebastimove.feature.themebuilder.model.ThemeColors
 import com.scto.codelikebastimove.feature.themebuilder.util.colorToHex
 
 fun generateAndroidColorsXml(colors: ThemeColors): String {
-    return """<?xml version="1.0" encoding="utf-8"?>
+  return """<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="md_theme_primary">${colorToHex(colors.primary)}</color>
     <color name="md_theme_secondary">${colorToHex(colors.secondary)}</color>
@@ -22,8 +22,8 @@ fun generateAndroidColorsXml(colors: ThemeColors): String {
 }
 
 fun generateAndroidThemeXml(themeName: String): String {
-    val safeName = themeName.replace(" ", "").replace("-", "")
-    return """<?xml version="1.0" encoding="utf-8"?>
+  val safeName = themeName.replace(" ", "").replace("-", "")
+  return """<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.$safeName" parent="Theme.Material3.DayNight">
         <item name="colorPrimary">@color/md_theme_primary</item>
@@ -43,10 +43,13 @@ fun generateAndroidThemeXml(themeName: String): String {
 }
 
 fun generateAndroidTypeXml(displayFont: String, bodyFont: String): String {
-    val displayFontFamily = if (displayFont == "-- System Default --") "sans-serif" else displayFont.lowercase().replace(" ", "_")
-    val bodyFontFamily = if (bodyFont == "-- System Default --") "sans-serif" else bodyFont.lowercase().replace(" ", "_")
+  val displayFontFamily =
+    if (displayFont == "-- System Default --") "sans-serif"
+    else displayFont.lowercase().replace(" ", "_")
+  val bodyFontFamily =
+    if (bodyFont == "-- System Default --") "sans-serif" else bodyFont.lowercase().replace(" ", "_")
 
-    return """<?xml version="1.0" encoding="utf-8"?>
+  return """<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="TextAppearance.Display" parent="TextAppearance.Material3.DisplayLarge">
         <item name="fontFamily">$displayFontFamily</item>
