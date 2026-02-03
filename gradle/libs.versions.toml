@@ -70,7 +70,7 @@ robolectric = "4.16"
 
 # ... STORAGE:PREFERENCES ...
 androidxDataStore = "1.1.7"
-plugin-protobuf = "0.9.5"
+plugin-protobuf = "0.9.6"
 # keep 4.26.1 version , otherwise there is a duplicated classes in Firebase Firestore
 protobuf = "4.33.2"
 androidx-documentfile = "1.1.0"
