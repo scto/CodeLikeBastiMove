@@ -76,7 +76,7 @@ protobuf = "4.33.2"
 security-crypto = "1.1.0"
 
 # ... STORAGE:ROOM ...
-room = "2.8.3"
+room = "2.8.4"
 
 # ... AUTH ...
 playServicesAuth = "21.4.0"
