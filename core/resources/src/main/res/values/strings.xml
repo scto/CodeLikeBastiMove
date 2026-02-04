@@ -1685,4 +1685,48 @@ Aktiviert detailliertes Logging für Debugging-Zwecke</string>
     <string name="refresh">Refresh</string>
     <string name="create_new_project">Neues Projekt erstellen</string>
 
+    <!-- File Tree View Strings -->
+    <string name="file_view">Files</string>
+    <string name="package_view">Packages</string>
+    <string name="module_view">Modules</string>
+    <string name="project_view">Project</string>
+    <string name="file_view_description">Standard file system view</string>
+    <string name="package_view_description">Group files by package structure</string>
+    <string name="module_view_description">View by Gradle modules</string>
+    <string name="project_view_description">Android Studio-style project view</string>
+    <string name="new_file">New File</string>
+    <string name="new_folder">New Folder</string>
+    <string name="rename">Rename</string>
+    <string name="cut">Cut</string>
+    <string name="paste">Paste</string>
+    <string name="show_hidden_files">Show Hidden Files</string>
+    <string name="hide_hidden_files">Hide Hidden Files</string>
+    <string name="search_files">Search files...</string>
+    <string name="no_project_opened">No project opened</string>
+    <string name="no_files_found">No files found</string>
+    <string name="create_new_file">Create New File</string>
+    <string name="create_new_folder">Create New Folder</string>
+    <string name="file_name">File name</string>
+    <string name="folder_name">Folder name</string>
+    <string name="new_name">New name</string>
+    <string name="delete_file">Delete File?</string>
+    <string name="delete_folder">Delete Folder?</string>
+    <string name="delete_file_confirm">Are you sure you want to delete \"%1$s\"? This action cannot be undone.</string>
+    <string name="delete_folder_confirm">Are you sure you want to delete \"%1$s\" and all its contents? This action cannot be undone.</string>
+    <string name="cancel">Cancel</string>
+    <string name="name_cannot_contain_slashes">Name cannot contain slashes</string>
+    <string name="name_cannot_contain_colons">Name cannot contain colons</string>
+    <string name="name_too_long">Name is too long</string>
+    <string name="name_contains_invalid_chars">Name contains invalid characters</string>
+    <string name="file_already_exists">File already exists</string>
+    <string name="folder_already_exists">Folder already exists</string>
+    <string name="parent_dir_not_exist">Parent directory does not exist</string>
+    <string name="file_not_exist">File does not exist</string>
+    <string name="failed_create_file">Failed to create file</string>
+    <string name="failed_create_folder">Failed to create folder</string>
+    <string name="failed_rename">Failed to rename file</string>
+    <string name="failed_delete">Failed to delete</string>
+    <string name="failed_copy">Failed to copy</string>
+    <string name="failed_move">Failed to move</string>
+
 </resources>

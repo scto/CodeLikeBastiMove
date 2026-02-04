@@ -43,11 +43,11 @@ import com.scto.codelikebastimove.feature.main.components.BottomSheetBar
 import com.scto.codelikebastimove.feature.main.components.ContentNavigationRail
 import com.scto.codelikebastimove.feature.main.content.AssetsStudioContent
 import com.scto.codelikebastimove.feature.main.content.EditorContent
-import com.scto.codelikebastimove.feature.main.content.FileTreeDrawerContent
 import com.scto.codelikebastimove.feature.main.content.LayoutDesignerContent
 import com.scto.codelikebastimove.feature.main.content.ProjectContent
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 import com.scto.codelikebastimove.feature.themebuilder.ThemeBuilderContent
+import com.scto.codelikebastimove.feature.treeview.FileTreeDrawer
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,15 +75,18 @@ fun IDEWorkspaceScreen(
     drawerState = drawerState,
     drawerContent = {
       ModalDrawerSheet {
-        FileTreeDrawerContent(
+        FileTreeDrawer(
           projectName = projectName,
           projectPath = projectPath,
           fileSystemVersion = fileSystemVersion,
-          onFileClick = { file ->
-            if (!file.isDirectory) {
-              viewModel.openFile(file.path)
+          onFileClick = { fileNode ->
+            if (!fileNode.isDirectory) {
+              viewModel.openFile(fileNode.path)
               scope.launch { drawerState.close() }
             }
+          },
+          onFileOperationComplete = {
+            viewModel.refreshFileSystem()
           },
           onOpenTerminalSheet = {
             onBottomSheetContentChanged(BottomSheetContentType.TERMINAL)

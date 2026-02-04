@@ -514,6 +514,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     _uiState.update { it.copy(lastFileSystemUpdate = System.currentTimeMillis()) }
   }
 
+  fun refreshFileSystem() {
+    notifyFileSystemChanged()
+  }
+
   companion object {
     private const val TAG = "MainViewModel"
   }
