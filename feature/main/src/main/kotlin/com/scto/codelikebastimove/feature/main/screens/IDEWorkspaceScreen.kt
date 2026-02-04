@@ -39,11 +39,11 @@ import com.scto.codelikebastimove.feature.git.ui.screens.GitScreen
 import com.scto.codelikebastimove.feature.main.BottomSheetContentType
 import com.scto.codelikebastimove.feature.main.MainContentType
 import com.scto.codelikebastimove.feature.main.MainViewModel
+import com.scto.codelikebastimove.feature.assetstudio.ui.AssetsStudioContent
+import com.scto.codelikebastimove.feature.designer.ui.LayoutDesignerContent
 import com.scto.codelikebastimove.feature.main.components.BottomSheetBar
 import com.scto.codelikebastimove.feature.main.components.ContentNavigationRail
-import com.scto.codelikebastimove.feature.main.content.AssetsStudioContent
 import com.scto.codelikebastimove.feature.main.content.EditorContent
-import com.scto.codelikebastimove.feature.main.content.LayoutDesignerContent
 import com.scto.codelikebastimove.feature.main.content.ProjectContent
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 import com.scto.codelikebastimove.feature.themebuilder.ThemeBuilderContent
