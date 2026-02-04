@@ -83,6 +83,13 @@ To use Firebase Authentication, you need to:
 4. For Google Sign-In, configure OAuth consent screen and add Web Client ID to `GoogleSignInHelper`
 
 ## Recent Changes (February 2026)
+- **Editor Settings Architecture:** Comprehensive EditorSettings system with 17 configurable options (font size, font family, tab size, soft tabs, line numbers, word wrap, highlight current line, auto-indent, whitespace display, bracket matching, auto-close brackets/quotes, editor theme, minimap, sticky scroll, cursor blink rate, smooth scrolling)
+- **Settings Module Refactoring:** Moved IDESettingsScreen from feature/main to dedicated feature/settings module with proper ViewModel integration
+- **EditorSettingsScreen:** New comprehensive UI for editor preferences with sliders, toggles, and selection dialogs
+- **Proto DataStore Extension:** Added EditorSettingsProto message with proper defaults and type-safe persistence
+- **UserPreferencesRepository Enhancement:** Added toEditorSettings/toProto conversion functions and individual setter methods for each editor setting
+- **SettingsViewModel:** Wraps repository methods with proper coroutine scoping for thread-safe preference updates
+- **Navigation Integration:** EditorSettings destination added to MainNavigation, accessible from IDE Settings screen
 - **SoraEditor TreeSitter Implementation:** TreeSitterLanguageProvider now properly implements LanguageProvider interface with full support for Kotlin, Java, XML, JSON, C/C++, and Log languages via AndroidIDE tree-sitter grammars
 - **TextMate YAML/TOML Support:** Added complete TextMate grammar configurations for YAML and TOML file types (note: tree-sitter grammars not available for these in AndroidIDE library)
 - **EditorThemeProvider Enhancement:** Comprehensive color scheme mappings for text visibility including TEXT_NORMAL, LINE_NUMBER, COMPLETION_WND colors, and all syntax highlighting tokens
