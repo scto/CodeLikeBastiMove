@@ -167,6 +167,13 @@ data class EditorSettings(
   val smoothScrolling: Boolean = true,
 )
 
+data class BuildSettings(
+  val parallelBuildEnabled: Boolean = true,
+  val cleanBeforeBuildEnabled: Boolean = false,
+  val offlineModeEnabled: Boolean = false,
+  val autoRunEnabled: Boolean = true,
+)
+
 data class UserPreferences(
   val themeMode: ThemeMode = ThemeMode.FOLLOW_SYSTEM,
   val dynamicColorsEnabled: Boolean = true,
@@ -179,4 +186,6 @@ data class UserPreferences(
   val loggingEnabled: Boolean = true,
   val loggingInitialized: Boolean = false,
   val editorSettings: EditorSettings = EditorSettings(),
+  val buildSettings: BuildSettings = BuildSettings(),
+  val updateCheckIntervalHours: Long = 24,
 )

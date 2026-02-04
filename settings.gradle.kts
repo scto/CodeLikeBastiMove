@@ -46,6 +46,7 @@ include(":core:termux:termux-app")
 include(":core:firebase:analytics")
 include(":core:firebase:firestore")
 include(":core:project-manager")
+include(":core:updater")
 
 //include(":feature")
 include(":feature:assetstudio")

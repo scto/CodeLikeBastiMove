@@ -44,6 +44,13 @@ class UserPreferencesRepository(private val context: Context) {
         loggingEnabled = proto.loggingEnabled,
         loggingInitialized = proto.loggingInitialized,
         editorSettings = proto.editorSettings.toEditorSettings(),
+        buildSettings = BuildSettings(
+          parallelBuildEnabled = proto.parallelBuildEnabled,
+          cleanBeforeBuildEnabled = proto.cleanBeforeBuildEnabled,
+          offlineModeEnabled = proto.offlineModeEnabled,
+          autoRunEnabled = proto.autoRunEnabled,
+        ),
+        updateCheckIntervalHours = proto.updateCheckIntervalHours,
       )
     }
 
@@ -786,5 +793,46 @@ class UserPreferencesRepository(private val context: Context) {
       .setCursorBlinkRate(cursorBlinkRate)
       .setSmoothScrolling(smoothScrolling)
       .build()
+  }
+
+  suspend fun setParallelBuildEnabled(enabled: Boolean) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      currentPrefs.toBuilder().setParallelBuildEnabled(enabled).build()
+    }
+  }
+
+  suspend fun setCleanBeforeBuildEnabled(enabled: Boolean) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      currentPrefs.toBuilder().setCleanBeforeBuildEnabled(enabled).build()
+    }
+  }
+
+  suspend fun setOfflineModeEnabled(enabled: Boolean) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      currentPrefs.toBuilder().setOfflineModeEnabled(enabled).build()
+    }
+  }
+
+  suspend fun setAutoRunEnabled(enabled: Boolean) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      currentPrefs.toBuilder().setAutoRunEnabled(enabled).build()
+    }
+  }
+
+  suspend fun updateBuildSettings(settings: BuildSettings) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      currentPrefs.toBuilder()
+        .setParallelBuildEnabled(settings.parallelBuildEnabled)
+        .setCleanBeforeBuildEnabled(settings.cleanBeforeBuildEnabled)
+        .setOfflineModeEnabled(settings.offlineModeEnabled)
+        .setAutoRunEnabled(settings.autoRunEnabled)
+        .build()
+    }
+  }
+
+  suspend fun setUpdateCheckIntervalHours(hours: Long) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      currentPrefs.toBuilder().setUpdateCheckIntervalHours(hours).build()
+    }
   }
 }

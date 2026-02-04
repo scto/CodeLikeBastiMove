@@ -1751,4 +1751,117 @@ Aktiviert detailliertes Logging für Debugging-Zwecke</string>
     <string name="link_in_place">Link in place</string>
     <string name="link_in_place_description">Open the project from its current location</string>
 
+    <!-- Settings Screens -->
+    <string name="settings_category_app">Application</string>
+    <string name="settings_category_support">Support</string>
+    <string name="settings_category_about">About</string>
+    <string name="settings_category_developer">Developer</string>
+
+    <string name="settings_general">General</string>
+    <string name="settings_general_subtitle">Theme, appearance, and display settings</string>
+    <string name="settings_editor">Editor</string>
+    <string name="settings_editor_subtitle">Font, tabs, and code editing preferences</string>
+    <string name="settings_build_and_run">Build &amp; Run</string>
+    <string name="settings_build_and_run_subtitle">Build configuration and run options</string>
+    <string name="settings_documentation">Documentation</string>
+    <string name="settings_documentation_subtitle">Access Android and Kotlin documentation</string>
+    <string name="settings_help">Help</string>
+    <string name="settings_help_subtitle">FAQs, support, and reporting issues</string>
+    <string name="settings_about">About</string>
+    <string name="settings_about_subtitle">App info, version, and links</string>
+    <string name="settings_debug">Debug</string>
+    <string name="settings_debug_subtitle">Logging, update checking, and developer options</string>
+
+    <string name="settings_github_project">GitHub Project</string>
+    <string name="settings_github_project_subtitle">View source code on GitHub</string>
+    <string name="settings_github_releases">GitHub Releases</string>
+    <string name="settings_github_releases_subtitle">Download latest releases</string>
+
+    <!-- General Settings -->
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_system">Follow system</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_dynamic_colors">Dynamic Colors</string>
+    <string name="settings_dynamic_colors_subtitle">Use colors from your wallpaper</string>
+
+    <!-- Editor Settings -->
+    <string name="settings_editor_font">Font</string>
+    <string name="settings_font_size">Font Size</string>
+    <string name="settings_tab_size">Tab Size</string>
+    <string name="settings_spaces">spaces</string>
+    <string name="settings_editor_display">Display</string>
+    <string name="settings_show_line_numbers">Show Line Numbers</string>
+    <string name="settings_show_line_numbers_subtitle">Display line numbers in the gutter</string>
+    <string name="settings_word_wrap">Word Wrap</string>
+    <string name="settings_word_wrap_subtitle">Wrap long lines to fit the screen</string>
+    <string name="settings_highlight_current_line">Highlight Current Line</string>
+    <string name="settings_highlight_current_line_subtitle">Highlight the line with the cursor</string>
+    <string name="settings_editor_behavior">Behavior</string>
+    <string name="settings_use_soft_tabs">Use Soft Tabs</string>
+    <string name="settings_use_soft_tabs_subtitle">Insert spaces instead of tab characters</string>
+    <string name="settings_auto_indent">Auto Indent</string>
+    <string name="settings_auto_indent_subtitle">Automatically indent new lines</string>
+
+    <!-- Build and Run Settings -->
+    <string name="settings_build_options">Build Options</string>
+    <string name="settings_parallel_build">Parallel Build</string>
+    <string name="settings_parallel_build_subtitle">Build modules in parallel for faster builds</string>
+    <string name="settings_clean_before_build">Clean Before Build</string>
+    <string name="settings_clean_before_build_subtitle">Run clean task before every build</string>
+    <string name="settings_offline_mode">Offline Mode</string>
+    <string name="settings_offline_mode_subtitle">Use cached dependencies only</string>
+    <string name="settings_run_options">Run Options</string>
+    <string name="settings_auto_run">Auto Run After Build</string>
+    <string name="settings_auto_run_subtitle">Automatically run app after successful build</string>
+
+    <!-- Documentation Settings -->
+    <string name="settings_android_docs">Android Documentation</string>
+    <string name="settings_android_developers">Android Developers</string>
+    <string name="settings_jetpack_compose">Jetpack Compose</string>
+    <string name="settings_material_design">Material Design 3</string>
+    <string name="settings_kotlin_docs">Kotlin Documentation</string>
+    <string name="settings_kotlin_lang">Kotlin Language</string>
+    <string name="settings_kotlin_coroutines">Kotlin Coroutines</string>
+
+    <!-- Help Settings -->
+    <string name="settings_get_help">Get Help</string>
+    <string name="settings_faq">FAQ</string>
+    <string name="settings_faq_subtitle">Frequently asked questions</string>
+    <string name="settings_discussions">Discussions</string>
+    <string name="settings_discussions_subtitle">Join the community discussions</string>
+    <string name="settings_report_issue">Report Issues</string>
+    <string name="settings_report_bug">Report a Bug</string>
+    <string name="settings_report_bug_subtitle">Open an issue on GitHub</string>
+    <string name="settings_contact">Contact Support</string>
+    <string name="settings_contact_subtitle">Send us an email</string>
+
+    <!-- About Screen -->
+    <string name="settings_version">Version %1$s</string>
+    <string name="settings_updates">Updates</string>
+    <string name="settings_check_for_updates">Tap to check for updates</string>
+    <string name="settings_checking_updates">Checking for updates...</string>
+    <string name="settings_up_to_date">You have the latest version</string>
+    <string name="settings_update_available">Update available: %1$s</string>
+    <string name="settings_update_error">Failed to check for updates</string>
+    <string name="settings_check">Check</string>
+    <string name="settings_links">Links</string>
+    <string name="settings_app_description">Code Like Basti Move is an Android IDE application that enables you to create, edit, and manage Android projects directly on your mobile device.</string>
+
+    <!-- Debug Settings -->
+    <string name="settings_debug_logging">Logging</string>
+    <string name="settings_enable_logging">Enable Logging</string>
+    <string name="settings_enable_logging_subtitle">Write debug logs to console</string>
+    <string name="settings_update_check_interval">Update Check Interval</string>
+    <string name="settings_interval_never">Never</string>
+    <string name="settings_interval_hourly">Every Hour</string>
+    <string name="settings_interval_6_hours">Every 6 Hours</string>
+    <string name="settings_interval_12_hours">Every 12 Hours</string>
+    <string name="settings_interval_daily">Daily</string>
+    <string name="settings_interval_weekly">Weekly</string>
+    <string name="settings_debug_actions">Debug Actions</string>
+    <string name="settings_reset_onboarding">Reset Onboarding</string>
+    <string name="settings_reset_onboarding_subtitle">Show the welcome screens again</string>
+
 </resources>

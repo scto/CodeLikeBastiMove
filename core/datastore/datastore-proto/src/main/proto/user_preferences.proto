@@ -166,4 +166,9 @@ message UserPreferencesProto {
     bool logging_initialized = 10;
     TemplateRegistryProto template_registry = 11;
     EditorSettingsProto editor_settings = 12;
+    bool parallel_build_enabled = 13;
+    bool clean_before_build_enabled = 14;
+    bool offline_mode_enabled = 15;
+    bool auto_run_enabled = 16;
+    int64 update_check_interval_hours = 17;
 }

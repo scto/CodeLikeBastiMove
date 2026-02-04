@@ -3,10 +3,15 @@ package com.scto.codelikebastimove.feature.settings
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.scto.codelikebastimove.core.datastore.BuildSettings
 import com.scto.codelikebastimove.core.datastore.EditorSettings
 import com.scto.codelikebastimove.core.datastore.ThemeMode
 import com.scto.codelikebastimove.core.datastore.UserPreferences
 import com.scto.codelikebastimove.core.datastore.UserPreferencesRepository
+import com.scto.codelikebastimove.core.updater.UpdateCheckInterval
+import com.scto.codelikebastimove.core.updater.UpdateRepository
+import com.scto.codelikebastimove.core.updater.UpdateState
+import com.scto.codelikebastimove.core.updater.UpdateWorker
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -15,12 +20,20 @@ import kotlinx.coroutines.launch
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
 
   private val userPreferencesRepository = UserPreferencesRepository(application)
+  val updateRepository = UpdateRepository(application)
 
   val userPreferences: StateFlow<UserPreferences> =
     userPreferencesRepository.userPreferences.stateIn(
       scope = viewModelScope,
       started = SharingStarted.WhileSubscribed(5000),
       initialValue = UserPreferences(),
+    )
+
+  val updateState: StateFlow<UpdateState> =
+    updateRepository.updateState.stateIn(
+      scope = viewModelScope,
+      started = SharingStarted.WhileSubscribed(5000),
+      initialValue = UpdateState.Idle
     )
 
   fun setThemeMode(themeMode: ThemeMode) {
@@ -126,5 +139,46 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
   fun updateEditorSettings(settings: EditorSettings) {
     viewModelScope.launch { userPreferencesRepository.updateEditorSettings(settings) }
+  }
+
+  fun setParallelBuildEnabled(enabled: Boolean) {
+    viewModelScope.launch { userPreferencesRepository.setParallelBuildEnabled(enabled) }
+  }
+
+  fun setCleanBeforeBuildEnabled(enabled: Boolean) {
+    viewModelScope.launch { userPreferencesRepository.setCleanBeforeBuildEnabled(enabled) }
+  }
+
+  fun setOfflineModeEnabled(enabled: Boolean) {
+    viewModelScope.launch { userPreferencesRepository.setOfflineModeEnabled(enabled) }
+  }
+
+  fun setAutoRunEnabled(enabled: Boolean) {
+    viewModelScope.launch { userPreferencesRepository.setAutoRunEnabled(enabled) }
+  }
+
+  fun updateBuildSettings(settings: BuildSettings) {
+    viewModelScope.launch { userPreferencesRepository.updateBuildSettings(settings) }
+  }
+
+  fun setUpdateCheckInterval(interval: UpdateCheckInterval) {
+    viewModelScope.launch {
+      userPreferencesRepository.setUpdateCheckIntervalHours(interval.hours)
+      if (interval.hours <= 0) {
+        UpdateWorker.cancelPeriodicCheck(getApplication())
+      } else {
+        UpdateWorker.schedulePeriodicCheck(getApplication(), interval.hours)
+      }
+    }
+  }
+
+  fun checkForUpdates() {
+    viewModelScope.launch {
+      updateRepository.checkForUpdates()
+    }
+  }
+
+  fun getUpdateCheckInterval(): UpdateCheckInterval {
+    return UpdateCheckInterval.fromHours(userPreferences.value.updateCheckIntervalHours)
   }
 }
