@@ -87,9 +87,3 @@ data class ValidationError(
 )
 
 data class ValidationWarning(val line: Int?, val message: String)
-
-enum class ErrorSeverity {
-  ERROR,
-  WARNING,
-  INFO,
-}

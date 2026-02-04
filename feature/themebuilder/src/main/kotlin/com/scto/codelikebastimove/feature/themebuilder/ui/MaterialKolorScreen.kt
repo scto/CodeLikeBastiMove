@@ -893,4 +893,4 @@ private fun Color.luminance(): Float {
     return 0.2126f * r + 0.7152f * g + 0.0722f * b
 }
 
-private fun Float.pow(exp: Float): Float = kotlin.math.pow(this.toDouble(), exp.toDouble()).toFloat()
+private fun Float.pow(exponent: Float): Float = java.lang.Math.pow(this.toDouble(), exponent.toDouble()).toFloat()

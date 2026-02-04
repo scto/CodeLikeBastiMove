@@ -197,6 +197,7 @@ data class ParseError(
 )
 
 enum class ErrorSeverity {
+    INFO,
     WARNING,
     ERROR,
 }
