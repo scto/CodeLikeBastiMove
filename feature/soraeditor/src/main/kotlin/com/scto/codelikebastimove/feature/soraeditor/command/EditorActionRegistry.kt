@@ -28,6 +28,11 @@ object EditorActionRegistry {
         register(ToggleReadOnlyAction())
         register(SaveAction())
         register(RefreshAction())
+        register(FormatDocumentAction())
+        register(FormatSelectionAction())
+        register(GoToDefinitionAction())
+        register(GoToReferencesAction())
+        register(RenameSymbolAction())
     }
 
     fun register(action: EditorAction) {

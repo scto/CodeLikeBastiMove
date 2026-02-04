@@ -87,6 +87,36 @@ object EditorActionContribution : ActionContribution {
                 group = "file",
                 order = 2
             ))
+            add(MenuContribution(
+                actionId = "lsp.formatDocument",
+                menuId = MenuIds.EDITOR_CONTEXT,
+                group = "5_lsp",
+                order = 1
+            ))
+            add(MenuContribution(
+                actionId = "lsp.formatSelection",
+                menuId = MenuIds.EDITOR_CONTEXT,
+                group = "5_lsp",
+                order = 2
+            ))
+            add(MenuContribution(
+                actionId = "lsp.goToDefinition",
+                menuId = MenuIds.EDITOR_CONTEXT,
+                group = "6_navigation",
+                order = 1
+            ))
+            add(MenuContribution(
+                actionId = "lsp.goToReferences",
+                menuId = MenuIds.EDITOR_CONTEXT,
+                group = "6_navigation",
+                order = 2
+            ))
+            add(MenuContribution(
+                actionId = "lsp.renameSymbol",
+                menuId = MenuIds.EDITOR_CONTEXT,
+                group = "7_refactor",
+                order = 1
+            ))
             EditorActionRegistry.allActions.forEach { action ->
                 add(MenuContribution(
                     actionId = action.id,
