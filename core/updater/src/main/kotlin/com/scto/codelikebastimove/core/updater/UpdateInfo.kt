@@ -38,17 +38,3 @@ data class UpdateInfo(
     val publishedAt: String
 )
 
-enum class UpdateCheckInterval(val hours: Long) {
-    NEVER(0),
-    HOURLY(1),
-    EVERY_6_HOURS(6),
-    EVERY_12_HOURS(12),
-    DAILY(24),
-    WEEKLY(168);
-
-    companion object {
-        fun fromHours(hours: Long): UpdateCheckInterval {
-            return entries.find { it.hours == hours } ?: DAILY
-        }
-    }
-}
