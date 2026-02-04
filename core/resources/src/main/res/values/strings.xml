@@ -1712,7 +1712,6 @@ Aktiviert detailliertes Logging für Debugging-Zwecke</string>
     <string name="delete_folder">Delete Folder?</string>
     <string name="delete_file_confirm">Are you sure you want to delete \"%1$s\"? This action cannot be undone.</string>
     <string name="delete_folder_confirm">Are you sure you want to delete \"%1$s\" and all its contents? This action cannot be undone.</string>
-    <string name="cancel">Cancel</string>
     <string name="name_cannot_contain_slashes">Name cannot contain slashes</string>
     <string name="name_cannot_contain_colons">Name cannot contain colons</string>
     <string name="name_too_long">Name is too long</string>
