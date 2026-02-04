@@ -51,7 +51,7 @@ include(":core:project-manager")
 include(":feature:assetstudio")
 include(":feature:designer")
 include(":feature:explorer")
-// feature:home removed - functionality moved to core:project-manager and feature:git
+include(":feature:home")
 include(":feature:main")
 include(":feature:onboarding")
 include(":feature:settings")

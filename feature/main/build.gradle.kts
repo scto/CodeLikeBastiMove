@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":core:templates:templates-impl"))
     api(project(":core:project-manager"))
     
+    api(project(":feature:home"))
     api(project(":feature:soraeditor"))
     api(project(":feature:git"))
     api(project(":feature:treeview"))

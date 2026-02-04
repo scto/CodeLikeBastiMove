@@ -33,12 +33,14 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 
 **System Design Choices:**
 - **Modular Architecture:** Organized into `core/` and `feature/` directories with grouped submodules for actions, plugins, templates, tooling, terminal, datastore, UI, resources, and logging.
+- **Home Module (`feature/home`):** Dedicated module for home screen, project creation wizard, and project list management. Contains HomeViewModel for project-related operations (create, delete, open, clone) and HomeScreen, CreateProjectScreen, OpenProjectScreen UI components.
 - **Git Module (`feature/git`):** Comprehensive Git version control integration with AndroidIDE-inspired UI, including GitOperations interface, data models, repository for binary interaction, ViewModel, and dedicated UI screens for changes, history, branches, remotes, and settings. Supports repository cloning with recursive submodules, stashing, and tagging.
 - **Theme Builder Module (`feature/themebuilder`):** Dedicated module for Material Theme Builder functionality.
 - **Sub-Module Maker (`feature/submodulemaker`):** Dedicated module for creating new Gradle sub-modules (Kotlin/Java) with automatic settings.gradle.kts updates.
-- **Asset Studio (`feature/assetstudio`):** Dedicated module for Vector Asset Studio functionality.
+- **Asset Studio (`feature/assetstudio`):** Dedicated module for Vector Asset Studio functionality with AssetsStudioContent UI component for icon generation.
+- **Designer Module (`feature/designer`):** Dedicated module for visual layout designer with LayoutDesignerContent providing drag-and-drop UI component design.
 - **Tree View (`feature/treeview`):** Enhanced file tree view with 4 view modes (File, Package, Module, Project), file operations, context menus, search, hidden file toggle, and animated expand/collapse indicators.
-- **Sora Editor (`feature/soraeditor`):** Advanced code editor module using Rosemoe's sora-editor library, with language support, theming, UI widgets, Jetpack Compose integration, and a plugin system.
+- **Sora Editor (`feature/soraeditor`):** Advanced code editor module using Rosemoe's sora-editor library, with language support, theming, UI widgets, Jetpack Compose integration, plugin system, and EditorContent UI component for tabbed file editing.
 - **Action System (`core/actions/`):** VS Code-style command/action system for event-driven architecture.
 - **Plugin System (`core/plugin/`):** Core modules for Android Studio/VS Code style extensibility with plugin manager, dynamic loader, and security manager.
 - **Termux Terminal System (`core/termux/`)::** Termux-inspired terminal emulator modules providing core utilities, emulation engine, and UI components.
