@@ -11,6 +11,7 @@ dependencies {
     api(project(":core:datastore:datastore"))
     api(project(":core:templates:templates-api"))
     implementation(project(":core:templates:templates-impl"))
+    api(project(":core:project-manager"))
     
     api(project(":feature:soraeditor"))
     api(project(":feature:git"))

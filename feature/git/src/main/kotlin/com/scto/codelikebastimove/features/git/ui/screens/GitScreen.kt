@@ -30,6 +30,8 @@ enum class GitSection {
   HISTORY,
   BRANCHES,
   REMOTES,
+  STASH,
+  TAGS,
   SETTINGS,
 }
 
@@ -52,6 +54,8 @@ fun GitScreen(
   val branches by viewModel.branches.collectAsState()
   val commits by viewModel.commits.collectAsState()
   val remotes by viewModel.remotes.collectAsState()
+  val stashes by viewModel.stashes.collectAsState()
+  val tags by viewModel.tags.collectAsState()
   val repository by viewModel.currentRepository.collectAsState()
   val isOperationInProgress by viewModel.isOperationInProgress.collectAsState()
 
@@ -127,7 +131,25 @@ fun GitScreen(
               onPush = { viewModel.push() },
               onPull = { viewModel.pull() },
               onFetch = { viewModel.fetch() },
-              onRemoveRemote = {},
+              onRemoveRemote = { viewModel.removeRemote(it) },
+            )
+          GitSection.STASH ->
+            GitStashContent(
+              stashes = stashes,
+              isLoading = isOperationInProgress,
+              onRefresh = { viewModel.refresh() },
+              onStash = { viewModel.stash(it) },
+              onStashPop = { viewModel.stashPop(it) },
+              onStashApply = { viewModel.stashApply(it) },
+              onStashDrop = { viewModel.stashDrop(it) },
+            )
+          GitSection.TAGS ->
+            GitTagsContent(
+              tags = tags,
+              isLoading = isOperationInProgress,
+              onRefresh = { viewModel.refresh() },
+              onCreateTag = { name, message -> viewModel.createTag(name, message) },
+              onDeleteTag = { viewModel.deleteTag(it) },
             )
           GitSection.SETTINGS -> SettingsContent(repository = repository)
         }
@@ -183,6 +205,20 @@ private fun GitNavigationRail(
       label = "Remotes",
       selected = selectedSection == GitSection.REMOTES,
       onClick = { onSectionSelected(GitSection.REMOTES) },
+    )
+
+    GitNavItem(
+      icon = Icons.Outlined.Archive,
+      label = "Stash",
+      selected = selectedSection == GitSection.STASH,
+      onClick = { onSectionSelected(GitSection.STASH) },
+    )
+
+    GitNavItem(
+      icon = Icons.Outlined.LocalOffer,
+      label = "Tags",
+      selected = selectedSection == GitSection.TAGS,
+      onClick = { onSectionSelected(GitSection.TAGS) },
     )
 
     GitNavItem(

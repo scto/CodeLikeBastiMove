@@ -1660,4 +1660,29 @@ Debug-Logging</string>
         name="debug_logging_description">
 Aktiviert detailliertes Logging für Debugging-Zwecke</string>
 
+    <!-- Git UI Strings -->
+    <string name="target_directory">Target Directory</string>
+    <string name="recursive_submodules">Recursive Submodules</string>
+    <string name="clone_depth">Clone Depth</string>
+    <string name="diff_viewer">Diff Viewer</string>
+    <string name="no_changes">No changes</string>
+    <string name="stash_management">Stash Management</string>
+    <string name="no_stashes">No stashes</string>
+    <string name="stash_changes">Stash Changes</string>
+    <string name="message_optional">Message (optional)</string>
+    <string name="stash">Stash</string>
+    <string name="pop">Pop</string>
+    <string name="apply">Apply</string>
+    <string name="drop">Drop</string>
+    <string name="tag_management">Tag Management</string>
+    <string name="no_tags">No tags</string>
+    <string name="create_tag">Create Tag</string>
+    <string name="tag_name">Tag Name</string>
+    <string name="annotated_tag">Annotated Tag</string>
+    <string name="tag_message">Tag Message</string>
+    <string name="create">Create</string>
+    <string name="delete">Delete</string>
+    <string name="refresh">Refresh</string>
+    <string name="create_new_project">Neues Projekt erstellen</string>
+
 </resources>

@@ -359,6 +359,69 @@ class GitViewModel : ViewModel() {
   fun selectTab(tab: GitTab) {
     _uiState.update { it.copy(selectedTab = tab) }
   }
+
+  fun cloneRepository(
+    url: String,
+    directory: String,
+    branch: String? = null,
+    depth: Int? = null,
+    recursive: Boolean = true,
+  ) {
+    viewModelScope.launch {
+      _uiState.update { it.copy(isLoading = true) }
+      when (val result = repository.cloneRepository(
+        GitCloneOptions(
+          url = url,
+          directory = directory,
+          branch = branch,
+          depth = depth,
+          recursive = recursive,
+        )
+      )) {
+        is GitOperationResult.Success -> {
+          loadAllData()
+          _success.emit("Repository cloned: ${result.data.name}")
+        }
+        is GitOperationResult.Error -> _error.emit(result.message)
+      }
+      _uiState.update { it.copy(isLoading = false) }
+    }
+  }
+
+  fun addRemote(name: String, url: String) {
+    viewModelScope.launch {
+      when (val result = repository.addRemote(name, url)) {
+        is GitOperationResult.Success -> {
+          loadRemotes()
+          _success.emit("Remote added: $name")
+        }
+        is GitOperationResult.Error -> _error.emit(result.message)
+      }
+    }
+  }
+
+  fun removeRemote(name: String) {
+    viewModelScope.launch {
+      when (val result = repository.removeRemote(name)) {
+        is GitOperationResult.Success -> {
+          loadRemotes()
+          _success.emit("Remote removed: $name")
+        }
+        is GitOperationResult.Error -> _error.emit(result.message)
+      }
+    }
+  }
+
+  fun getDiff(path: String, staged: Boolean = false) {
+    viewModelScope.launch {
+      when (val result = repository.getDiff(path, staged)) {
+        is GitOperationResult.Success -> {
+          _uiState.update { it.copy(currentDiff = result.data) }
+        }
+        is GitOperationResult.Error -> _error.emit(result.message)
+      }
+    }
+  }
 }
 
 data class GitUiState(
@@ -366,6 +429,7 @@ data class GitUiState(
   val selectedTab: GitTab = GitTab.CHANGES,
   val commitMessage: String = "",
   val selectedFile: String? = null,
+  val currentDiff: com.scto.codelikebastimove.feature.git.model.GitDiff? = null,
 )
 
 enum class GitTab {

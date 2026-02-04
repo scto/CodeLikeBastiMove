@@ -83,9 +83,14 @@ To use Firebase Authentication, you need to:
 4. For Google Sign-In, configure OAuth consent screen and add Web Client ID to `GoogleSignInHelper`
 
 ## Recent Changes (February 2026)
+- **Major Module Restructuring:** Removed feature/home submodule; functionality moved to core/project-manager (project creation) and feature/git (clone repository)
+- **New core/project-manager Module:** Contains ProjectManager interface, ProjectCreationOptions model, and CreateProjectScreen UI for project creation wizard
+- **Enhanced feature/git Module:** Comprehensive Git UI with 7 sections: Changes, History, Branches, Remotes, Stash, Tags, Settings
+- **New Git UI Screens:** GitCloneScreen (with recursive submodules support), GitStashScreen, GitTagsScreen, GitDiffScreen
+- **GitViewModel Extensions:** Added cloneRepository, addRemote, removeRemote, getDiff methods
+- **Navigation Updates:** MainDestination.CloneRepository replaced with MainDestination.GitClone and GitPanel
 - **Complete Resource Centralization:** All UI strings in 9 feature modules now use stringResource(R.string.xxx) pattern instead of hardcoded text
-- **Extended String Resources:** Added 50+ new string resources to core/resources/src/main/res/values/strings.xml covering German and English text for project management, editor actions, designer, settings, theme builder, asset studio, and sub-module maker
-- **Modules Updated:** HomeScreen, CreateProjectScreen, OpenProjectScreen, CloneRepositoryScreen, SoraEditorScreen, IDESettingsScreen, ThemeBuilderScreen, VectorAssetStudioScreen, SubModuleMakerScreen all use centralized string resources
+- **Extended String Resources:** Added 50+ new string resources to core/resources/src/main/res/values/strings.xml covering German and English text for project management, editor actions, designer, settings, theme builder, asset studio, sub-module maker, and Git UI
 - **Resource Access Pattern:** All feature modules access core:resources via FeatureConventionPlugin's api dependency
 
 ## Previous Changes (February 2026)

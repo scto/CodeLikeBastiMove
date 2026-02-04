@@ -15,10 +15,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.scto.codelikebastimove.feature.assetstudio.screen.AssetStudioScreen
 import com.scto.codelikebastimove.feature.assetstudio.screen.VectorAssetStudioScreen
 import com.scto.codelikebastimove.feature.designer.ui.screen.DesignerScreen
+import com.scto.codelikebastimove.feature.git.ui.screens.GitCloneScreen
+import com.scto.codelikebastimove.feature.git.ui.screens.GitScreen
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 import com.scto.codelikebastimove.feature.main.screens.AIAgentScreen
 import com.scto.codelikebastimove.feature.main.screens.BuildVariantsScreen
-import com.scto.codelikebastimove.feature.main.screens.CloneRepositoryScreen
 import com.scto.codelikebastimove.feature.main.screens.ConsoleScreen
 import com.scto.codelikebastimove.feature.main.screens.CreateProjectScreen
 import com.scto.codelikebastimove.feature.main.screens.HomeScreen
@@ -65,7 +66,7 @@ fun MainScreen(
           onNavigate = { viewModel.onNavigate(it) },
           onCreateProject = { viewModel.onNavigate(MainDestination.CreateProject) },
           onOpenProject = { viewModel.onNavigate(MainDestination.OpenProject) },
-          onCloneRepository = { viewModel.onNavigate(MainDestination.CloneRepository) },
+          onCloneRepository = { viewModel.onNavigate(MainDestination.GitClone) },
         )
       }
 
@@ -95,14 +96,18 @@ fun MainScreen(
         )
       }
 
-      MainDestination.CloneRepository -> {
-        CloneRepositoryScreen(
+      MainDestination.GitClone -> {
+        GitCloneScreen(
           onBackClick = { viewModel.onBackPressed() },
-          onClone = { url, branch, shallowClone, singleBranch ->
-            viewModel.cloneRepository(url, branch, shallowClone, singleBranch)
+          onCloneSuccess = { projectPath ->
+            viewModel.onOpenProject(projectPath, projectPath.substringAfterLast("/"))
           },
-          isLoading = uiState.isLoading,
-          cloneProgress = uiState.cloneProgress,
+        )
+      }
+
+      MainDestination.GitPanel -> {
+        GitScreen(
+          projectPath = uiState.projectPath,
         )
       }
 
@@ -178,7 +183,7 @@ fun MainScreen(
           onNavigate = { viewModel.onNavigate(it) },
           onCreateProject = { viewModel.onNavigate(MainDestination.CreateProject) },
           onOpenProject = { viewModel.onNavigate(MainDestination.OpenProject) },
-          onCloneRepository = { viewModel.onNavigate(MainDestination.CloneRepository) },
+          onCloneRepository = { viewModel.onNavigate(MainDestination.GitClone) },
         )
       }
 

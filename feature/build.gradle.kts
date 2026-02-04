@@ -17,7 +17,7 @@ dependencies {
     api(project(":feature:designer"))
     api(project(":feature:explorer"))
     api(project(":feature:git"))
-    api(project(":feature:home"))
+    // feature:home removed - functionality moved to core:project-manager and feature:git
     api(project(":feature:main"))
     api(project(":feature:onboarding"))
     api(project(":feature:settings"))

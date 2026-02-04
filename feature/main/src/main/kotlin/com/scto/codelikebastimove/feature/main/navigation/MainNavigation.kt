@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.DesignServices
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Source
 import androidx.compose.material.icons.filled.Terminal
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.outlined.CloudDownload
@@ -20,7 +21,9 @@ sealed class MainDestination(val route: String, val title: String) {
 
   data object OpenProject : MainDestination("open_project", "Projekt öffnen")
 
-  data object CloneRepository : MainDestination("clone_repository", "Repository klonen")
+  data object GitClone : MainDestination("git_clone", "Repository klonen")
+
+  data object GitPanel : MainDestination("git_panel", "Git")
 
   data object IDE : MainDestination("ide", "IDE")
 
@@ -67,7 +70,12 @@ val homeActions =
     HomeAction(
       title = "Repository klonen",
       icon = Icons.Outlined.CloudDownload,
-      destination = MainDestination.CloneRepository,
+      destination = MainDestination.GitClone,
+    ),
+    HomeAction(
+      title = "Git",
+      icon = Icons.Default.Source,
+      destination = MainDestination.GitPanel,
     ),
     HomeAction(
       title = "Konsole",
