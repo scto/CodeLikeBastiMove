@@ -30,7 +30,23 @@ class LibraryConventionPlugin : Plugin<Project> {
         apply("org.jetbrains.kotlin.android")
       }
 
-      extensions.configure<LibraryExtension> { configureKotlinAndroid(this) }
+      extensions.configure<LibraryExtension> { 
+        configureKotlinAndroid(this) 
+        
+        buildFeatures {
+          buildConfig = true
+        }
+        
+        defaultConfig {
+          buildConfigField("boolean", "DEBUG_LOGGING_ENABLED", "true")
+        }
+        
+        buildTypes {
+          getByName("release") {
+            buildConfigField("boolean", "DEBUG_LOGGING_ENABLED", "false")
+          }
+        }
+      }
 
       dependencies { add("testImplementation", kotlin("test")) }
     }

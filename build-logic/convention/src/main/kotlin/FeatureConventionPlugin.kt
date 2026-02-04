@@ -38,6 +38,7 @@ class FeatureConventionPlugin : Plugin<Project> {
       dependencies {
         add("api", project(":core:ui"))
         add("api", project(":core:resources"))
+        add("api", project(":core:logger"))
 
         add("testImplementation", kotlin("test"))
         add("androidTestImplementation", kotlin("test"))
