@@ -14,8 +14,6 @@ import com.scto.codelikebastimove.feature.soraeditor.model.EditorTheme
 import com.scto.codelikebastimove.feature.soraeditor.model.EditorThemes
 import io.github.rosemoe.sora.editor.ts.TsLanguage
 import io.github.rosemoe.sora.editor.ts.TsLanguageSpec
-import io.github.rosemoe.sora.editor.ts.TsTheme
-import io.github.rosemoe.sora.editor.ts.TsThemeBuilder
 import io.github.rosemoe.sora.lang.EmptyLanguage
 import io.github.rosemoe.sora.lang.Language
 import io.github.rosemoe.sora.lang.styling.TextStyle.makeStyle
@@ -61,12 +59,73 @@ class TreeSitterLanguageProvider : LanguageProvider {
             val languageSpec = TsLanguageSpec(
                 language = tsLanguage,
                 highlightScmSource = highlightsScm,
-                codeBlocksScmSource = blocksScm,
-                bracketsScmSource = bracketsScm,
-                localsScmSource = localsScm
+                codeBlocksScmSource = blocksScm ?: "",
+                bracketsScmSource = bracketsScm ?: "",
+                localsScmSource = localsScm ?: ""
             )
 
-            TsLanguage(languageSpec, createTsTheme())
+            val syntax = currentEditorTheme.syntaxColors
+
+            TsLanguage(languageSpec, false) {
+                makeStyle(syntax.keyword.toArgb()) applyTo "keyword"
+                makeStyle(syntax.keyword.toArgb()) applyTo "keyword.function"
+                makeStyle(syntax.keyword.toArgb()) applyTo "keyword.import"
+                makeStyle(syntax.keyword.toArgb()) applyTo "keyword.type"
+                makeStyle(syntax.keyword.toArgb()) applyTo "keyword.return"
+                makeStyle(syntax.keyword.toArgb()) applyTo "keyword.conditional"
+                makeStyle(syntax.keyword.toArgb()) applyTo "keyword.repeat"
+                makeStyle(syntax.keyword.toArgb()) applyTo "keyword.exception"
+                makeStyle(syntax.keyword.toArgb()) applyTo "keyword.modifier"
+                makeStyle(syntax.keyword.toArgb()) applyTo "keyword.coroutine"
+                makeStyle(syntax.keyword.toArgb()) applyTo "keyword.directive"
+
+                makeStyle(syntax.string.toArgb()) applyTo "string"
+                makeStyle(syntax.string.toArgb()) applyTo "string.escape"
+                makeStyle(syntax.string.toArgb()) applyTo "string.special"
+                makeStyle(syntax.string.toArgb()) applyTo "string.regexp"
+                makeStyle(syntax.string.toArgb()) applyTo "character"
+
+                makeStyle(syntax.number.toArgb()) applyTo "number"
+                makeStyle(syntax.number.toArgb()) applyTo "number.float"
+                makeStyle(syntax.number.toArgb()) applyTo "boolean"
+
+                makeStyle(syntax.comment.toArgb()) applyTo "comment"
+
+                makeStyle(syntax.type.toArgb()) applyTo "type"
+                makeStyle(syntax.type.toArgb()) applyTo "type.builtin"
+                makeStyle(syntax.type.toArgb()) applyTo "type.definition"
+
+                makeStyle(syntax.function.toArgb()) applyTo "function"
+                makeStyle(syntax.function.toArgb()) applyTo "function.call"
+                makeStyle(syntax.function.toArgb()) applyTo "function.method"
+                makeStyle(syntax.function.toArgb()) applyTo "function.builtin"
+                makeStyle(syntax.function.toArgb()) applyTo "constructor"
+
+                makeStyle(syntax.variable.toArgb()) applyTo "variable"
+                makeStyle(syntax.variable.toArgb()) applyTo "variable.builtin"
+                makeStyle(syntax.parameter.toArgb()) applyTo "variable.parameter"
+                makeStyle(syntax.property.toArgb()) applyTo "variable.member"
+                makeStyle(syntax.property.toArgb()) applyTo "variable.field"
+
+                makeStyle(syntax.constant.toArgb()) applyTo "constant"
+                makeStyle(syntax.constant.toArgb()) applyTo "constant.builtin"
+
+                makeStyle(syntax.operator.toArgb()) applyTo "operator"
+
+                makeStyle(syntax.annotation.toArgb()) applyTo "attribute"
+
+                makeStyle(syntax.keyword.toArgb()) applyTo "tag"
+                makeStyle(syntax.property.toArgb()) applyTo "property"
+                makeStyle(syntax.annotation.toArgb()) applyTo "label"
+                makeStyle(syntax.type.toArgb()) applyTo "namespace"
+                makeStyle(syntax.type.toArgb()) applyTo "module"
+
+                makeStyle(syntax.punctuation.toArgb()) applyTo "punctuation.bracket"
+                makeStyle(syntax.punctuation.toArgb()) applyTo "punctuation.delimiter"
+                makeStyle(syntax.punctuation.toArgb()) applyTo "punctuation.special"
+
+                makeStyle(syntax.error.toArgb()) applyTo "error"
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             EmptyLanguage()
@@ -109,72 +168,6 @@ class TreeSitterLanguageProvider : LanguageProvider {
         } catch (e: Exception) {
             null
         }
-    }
-
-    private fun createTsTheme(): TsTheme {
-        val theme = currentEditorTheme
-        val syntax = theme.syntaxColors
-
-        return TsThemeBuilder().apply {
-            applyTo("keyword") { makeStyle(syntax.keyword.toArgb()) }
-            applyTo("keyword.function") { makeStyle(syntax.keyword.toArgb()) }
-            applyTo("keyword.import") { makeStyle(syntax.keyword.toArgb()) }
-            applyTo("keyword.type") { makeStyle(syntax.keyword.toArgb()) }
-            applyTo("keyword.return") { makeStyle(syntax.keyword.toArgb()) }
-            applyTo("keyword.conditional") { makeStyle(syntax.keyword.toArgb()) }
-            applyTo("keyword.repeat") { makeStyle(syntax.keyword.toArgb()) }
-            applyTo("keyword.exception") { makeStyle(syntax.keyword.toArgb()) }
-            applyTo("keyword.modifier") { makeStyle(syntax.keyword.toArgb()) }
-            applyTo("keyword.coroutine") { makeStyle(syntax.keyword.toArgb()) }
-            applyTo("keyword.directive") { makeStyle(syntax.keyword.toArgb()) }
-
-            applyTo("string") { makeStyle(syntax.string.toArgb()) }
-            applyTo("string.escape") { makeStyle(syntax.string.toArgb()) }
-            applyTo("string.special") { makeStyle(syntax.string.toArgb()) }
-            applyTo("string.regexp") { makeStyle(syntax.string.toArgb()) }
-            applyTo("character") { makeStyle(syntax.string.toArgb()) }
-
-            applyTo("number") { makeStyle(syntax.number.toArgb()) }
-            applyTo("number.float") { makeStyle(syntax.number.toArgb()) }
-            applyTo("boolean") { makeStyle(syntax.number.toArgb()) }
-
-            applyTo("comment") { makeStyle(syntax.comment.toArgb()) }
-
-            applyTo("type") { makeStyle(syntax.type.toArgb()) }
-            applyTo("type.builtin") { makeStyle(syntax.type.toArgb()) }
-            applyTo("type.definition") { makeStyle(syntax.type.toArgb()) }
-
-            applyTo("function") { makeStyle(syntax.function.toArgb()) }
-            applyTo("function.call") { makeStyle(syntax.function.toArgb()) }
-            applyTo("function.method") { makeStyle(syntax.function.toArgb()) }
-            applyTo("function.builtin") { makeStyle(syntax.function.toArgb()) }
-            applyTo("constructor") { makeStyle(syntax.function.toArgb()) }
-
-            applyTo("variable") { makeStyle(syntax.variable.toArgb()) }
-            applyTo("variable.builtin") { makeStyle(syntax.variable.toArgb()) }
-            applyTo("variable.parameter") { makeStyle(syntax.parameter.toArgb()) }
-            applyTo("variable.member") { makeStyle(syntax.property.toArgb()) }
-            applyTo("variable.field") { makeStyle(syntax.property.toArgb()) }
-
-            applyTo("constant") { makeStyle(syntax.constant.toArgb()) }
-            applyTo("constant.builtin") { makeStyle(syntax.constant.toArgb()) }
-
-            applyTo("operator") { makeStyle(syntax.operator.toArgb()) }
-
-            applyTo("attribute") { makeStyle(syntax.annotation.toArgb()) }
-
-            applyTo("tag") { makeStyle(syntax.keyword.toArgb()) }
-            applyTo("property") { makeStyle(syntax.property.toArgb()) }
-            applyTo("label") { makeStyle(syntax.annotation.toArgb()) }
-            applyTo("namespace") { makeStyle(syntax.type.toArgb()) }
-            applyTo("module") { makeStyle(syntax.type.toArgb()) }
-
-            applyTo("punctuation.bracket") { makeStyle(syntax.punctuation.toArgb()) }
-            applyTo("punctuation.delimiter") { makeStyle(syntax.punctuation.toArgb()) }
-            applyTo("punctuation.special") { makeStyle(syntax.punctuation.toArgb()) }
-
-            applyTo("error") { makeStyle(syntax.error.toArgb()) }
-        }.build()
     }
 
     override fun supportsLanguage(languageType: EditorLanguageType): Boolean {

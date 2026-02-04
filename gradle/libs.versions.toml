@@ -123,7 +123,7 @@ jgit = "7.5.0.202512021534-r"
 #editor = "0.23.5"
 androidsvg = "1.4"
 
-tree-sitter = "1.0.1"
+tree-sitter = "4.3.2"
 
 generativeai = "0.9.0"
 
@@ -289,15 +289,14 @@ aboutlibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref
 aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutLibraries" }
 
 # ... TREESITTER ...
-# AndroidIDE
-# RENAMED to avoid conflict with androidide-ts-java etc.
-androidide-ts-core = { module = "io.github.mohammed-baqer-null:android-tree-sitter", version.ref = "tree-sitter" }
-androidide-ts-java = { module = "io.github.mohammed-baqer-null:tree-sitter-java", version.ref = "tree-sitter" }
-androidide-ts-json = { module = "io.github.mohammed-baqer-null:tree-sitter-json", version.ref = "tree-sitter" }
-androidide-ts-kotlin = { module = "io.github.mohammed-baqer-null:tree-sitter-kotlin", version.ref = "tree-sitter" }
-androidide-ts-cpp = { module = "io.github.mohammed-baqer-null:tree-sitter-cpp", version.ref = "tree-sitter" }
-androidide-ts-log = { module = "io.github.mohammed-baqer-null:tree-sitter-log", version.ref = "tree-sitter" }
-androidide-ts-xml = { module = "io.github.mohammed-baqer-null:tree-sitter-xml", version.ref = "tree-sitter" }
+# AndroidIDE official packages
+androidide-ts-core = { module = "com.itsaky.androidide.treesitter:android-tree-sitter", version.ref = "tree-sitter" }
+androidide-ts-java = { module = "com.itsaky.androidide.treesitter:tree-sitter-java", version.ref = "tree-sitter" }
+androidide-ts-json = { module = "com.itsaky.androidide.treesitter:tree-sitter-json", version.ref = "tree-sitter" }
+androidide-ts-kotlin = { module = "com.itsaky.androidide.treesitter:tree-sitter-kotlin", version.ref = "tree-sitter" }
+androidide-ts-cpp = { module = "com.itsaky.androidide.treesitter:tree-sitter-cpp", version.ref = "tree-sitter" }
+androidide-ts-log = { module = "com.itsaky.androidide.treesitter:tree-sitter-log", version.ref = "tree-sitter" }
+androidide-ts-xml = { module = "com.itsaky.androidide.treesitter:tree-sitter-xml", version.ref = "tree-sitter" }
 
 jcodings = { module = "org.jruby.jcodings:jcodings", version = "1.0.63" }
 joni = { module = "org.jruby.joni:joni", version = "2.2.6" }

@@ -22,7 +22,6 @@ dependencies {
 
     /* Android Tree-Sitter (AndroidIDE) */
     implementation(libs.androidide.ts.core)
-    runtimeOnly("com.itsaky.androidide.treesitter:annotations:4.3.2")
 
     // Languages
     implementation(libs.androidide.ts.java)
