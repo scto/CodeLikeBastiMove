@@ -1,0 +1,517 @@
+﻿2026-02-04T07:30:24.6014422Z ##[group]Run ./gradlew assembleDebug
+2026-02-04T07:30:24.6014959Z [36;1m./gradlew assembleDebug[0m
+2026-02-04T07:30:24.6060272Z shell: /usr/bin/bash -e {0}
+2026-02-04T07:30:24.6060664Z env:
+2026-02-04T07:30:24.6061151Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.18-8/x64
+2026-02-04T07:30:24.6062240Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.18-8/x64
+2026-02-04T07:30:24.6062960Z   ANDROID_HOME: /usr/local/lib/android/sdk
+2026-02-04T07:30:24.6063475Z   ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+2026-02-04T07:30:24.6063955Z ##[endgroup]
+2026-02-04T07:30:24.6973626Z Downloading https://services.gradle.org/distributions/gradle-9.2.1-bin.zip
+2026-02-04T07:30:26.1578591Z ............10%.............20%.............30%.............40%.............50%.............60%.............70%.............80%.............90%.............100%
+2026-02-04T07:30:27.4489654Z 
+2026-02-04T07:30:27.4490599Z Welcome to Gradle 9.2.1!
+2026-02-04T07:30:27.4491100Z 
+2026-02-04T07:30:27.4491978Z Here are the highlights of this release:
+2026-02-04T07:30:27.4492749Z  - Windows ARM support
+2026-02-04T07:30:27.4493283Z  - Improved publishing APIs
+2026-02-04T07:30:27.4494036Z  - Better guidance for dependency verification failures
+2026-02-04T07:30:27.4494509Z 
+2026-02-04T07:30:27.4497487Z For more details see https://docs.gradle.org/9.2.1/release-notes.html
+2026-02-04T07:30:27.4498111Z 
+2026-02-04T07:30:27.5476600Z Starting a Gradle Daemon (subsequent builds will be faster)
+2026-02-04T07:31:29.4492235Z > Task :build-logic:convention:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-02-04T07:31:38.8506835Z > Task :build-logic:convention:pluginDescriptors
+2026-02-04T07:31:38.8507658Z > Task :build-logic:convention:processResources
+2026-02-04T07:31:46.5495469Z > Task :build-logic:convention:compileKotlin
+2026-02-04T07:31:46.5496845Z > Task :build-logic:convention:compileJava NO-SOURCE
+2026-02-04T07:31:46.5498770Z > Task :build-logic:convention:classes
+2026-02-04T07:31:46.6480429Z 
+2026-02-04T07:31:46.6482298Z > Task :build-logic:convention:jar
+2026-02-04T07:31:46.6484055Z :convention:jar: A valid plugin descriptor was found for clbm.android.lint.properties but the implementation class LintConventionPlugin was not found in the jar.
+2026-02-04T07:32:12.2542163Z 
+2026-02-04T07:32:12.2564211Z > Task :app:preBuild UP-TO-DATE
+2026-02-04T07:32:12.2565495Z > Task :app:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.2566444Z > Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+2026-02-04T07:32:12.2567591Z > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-02-04T07:32:12.2568795Z > Task :feature:preBuild UP-TO-DATE
+2026-02-04T07:32:12.2569751Z > Task :feature:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.2570557Z > Task :core:logger:preBuild UP-TO-DATE
+2026-02-04T07:32:12.2572391Z > Task :core:logger:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.2612330Z > Task :feature:writeDebugAarMetadata
+2026-02-04T07:32:12.2613002Z > Task :core:project-manager:preBuild UP-TO-DATE
+2026-02-04T07:32:12.2613660Z > Task :core:logger:writeDebugAarMetadata
+2026-02-04T07:32:12.2614342Z > Task :core:project-manager:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.2614986Z > Task :core:resources:preBuild UP-TO-DATE
+2026-02-04T07:32:12.2615595Z > Task :core:resources:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.2616258Z > Task :core:project-manager:writeDebugAarMetadata
+2026-02-04T07:32:12.2616884Z > Task :core:ui:preBuild UP-TO-DATE
+2026-02-04T07:32:12.2617434Z > Task :core:ui:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.3529294Z > Task :core:resources:writeDebugAarMetadata
+2026-02-04T07:32:12.3557676Z > Task :core:ui:writeDebugAarMetadata
+2026-02-04T07:32:12.3558370Z > Task :feature:assetstudio:preBuild UP-TO-DATE
+2026-02-04T07:32:12.3559036Z > Task :feature:assetstudio:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.3559678Z > Task :feature:designer:preBuild UP-TO-DATE
+2026-02-04T07:32:12.3560324Z > Task :feature:assetstudio:writeDebugAarMetadata
+2026-02-04T07:32:12.3560969Z > Task :feature:designer:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.3562192Z > Task :feature:explorer:preBuild UP-TO-DATE
+2026-02-04T07:32:12.3562812Z > Task :feature:explorer:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.3563485Z > Task :feature:designer:writeDebugAarMetadata
+2026-02-04T07:32:12.3564084Z > Task :feature:git:preBuild UP-TO-DATE
+2026-02-04T07:32:12.3564669Z > Task :feature:git:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.3565280Z > Task :feature:explorer:writeDebugAarMetadata
+2026-02-04T07:32:12.3565878Z > Task :feature:home:preBuild UP-TO-DATE
+2026-02-04T07:32:12.3566455Z > Task :feature:git:writeDebugAarMetadata
+2026-02-04T07:32:12.3567031Z > Task :feature:home:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.3567601Z > Task :feature:main:preBuild UP-TO-DATE
+2026-02-04T07:32:12.3568174Z > Task :feature:main:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.3568767Z > Task :feature:home:writeDebugAarMetadata
+2026-02-04T07:32:12.3569615Z > Task :feature:main:writeDebugAarMetadata
+2026-02-04T07:32:12.3570224Z > Task :feature:onboarding:preBuild UP-TO-DATE
+2026-02-04T07:32:12.3570890Z > Task :feature:onboarding:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.3571743Z > Task :feature:settings:preBuild UP-TO-DATE
+2026-02-04T07:32:12.3572320Z > Task :feature:settings:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.3573011Z > Task :feature:onboarding:writeDebugAarMetadata
+2026-02-04T07:32:12.3573694Z > Task :feature:soraeditor:preBuild UP-TO-DATE
+2026-02-04T07:32:12.3574380Z > Task :feature:soraeditor:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.3575057Z > Task :feature:settings:writeDebugAarMetadata
+2026-02-04T07:32:12.4489320Z > Task :feature:submodulemaker:preBuild UP-TO-DATE
+2026-02-04T07:32:12.4495778Z > Task :feature:submodulemaker:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.4500812Z > Task :feature:soraeditor:writeDebugAarMetadata
+2026-02-04T07:32:12.4506054Z > Task :feature:themebuilder:preBuild UP-TO-DATE
+2026-02-04T07:32:12.4511235Z > Task :feature:themebuilder:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.4516587Z > Task :feature:submodulemaker:writeDebugAarMetadata
+2026-02-04T07:32:12.4522280Z > Task :feature:treeview:preBuild UP-TO-DATE
+2026-02-04T07:32:12.4528947Z > Task :feature:themebuilder:writeDebugAarMetadata
+2026-02-04T07:32:12.4530861Z > Task :feature:treeview:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.4533133Z > Task :core:datastore:datastore:preBuild UP-TO-DATE
+2026-02-04T07:32:12.4547224Z > Task :core:datastore:datastore:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.4547968Z > Task :feature:treeview:writeDebugAarMetadata
+2026-02-04T07:32:12.4548684Z > Task :core:datastore:datastore-proto:preBuild UP-TO-DATE
+2026-02-04T07:32:12.4549434Z > Task :core:datastore:datastore:writeDebugAarMetadata
+2026-02-04T07:32:12.4566380Z > Task :core:datastore:datastore-proto:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.4568861Z > Task :core:templates:templates-api:preBuild UP-TO-DATE
+2026-02-04T07:32:12.4570286Z > Task :core:templates:templates-api:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.4572004Z > Task :core:datastore:datastore-proto:writeDebugAarMetadata
+2026-02-04T07:32:12.4573245Z > Task :core:templates:templates-impl:preBuild UP-TO-DATE
+2026-02-04T07:32:12.4580641Z > Task :core:templates:templates-impl:preDebugBuild UP-TO-DATE
+2026-02-04T07:32:12.4592776Z > Task :core:templates:templates-api:writeDebugAarMetadata
+2026-02-04T07:32:12.4598198Z > Task :core:templates:templates-impl:writeDebugAarMetadata
+2026-02-04T07:32:12.4600930Z > Task :app:generateDebugResValues
+2026-02-04T07:32:29.9490599Z > Task :feature:generateDebugResValues
+2026-02-04T07:32:29.9494893Z > Task :feature:generateDebugResources
+2026-02-04T07:32:30.0475795Z > Task :app:checkDebugAarMetadata
+2026-02-04T07:32:30.0481893Z > Task :feature:packageDebugResources
+2026-02-04T07:32:30.0482524Z > Task :core:logger:generateDebugResValues
+2026-02-04T07:32:30.0483105Z > Task :core:logger:generateDebugResources
+2026-02-04T07:32:30.0483662Z > Task :core:logger:packageDebugResources
+2026-02-04T07:32:30.0484322Z > Task :core:project-manager:generateDebugResValues
+2026-02-04T07:32:30.0484987Z > Task :core:project-manager:generateDebugResources
+2026-02-04T07:32:30.0485976Z > Task :core:project-manager:packageDebugResources
+2026-02-04T07:32:30.0486641Z > Task :core:resources:generateDebugResValues
+2026-02-04T07:32:30.1489603Z > Task :core:resources:generateDebugResources
+2026-02-04T07:32:30.3483349Z > Task :core:resources:packageDebugResources
+2026-02-04T07:32:30.3484096Z > Task :core:ui:generateDebugResValues
+2026-02-04T07:32:30.3484709Z > Task :core:ui:generateDebugResources
+2026-02-04T07:32:30.3485297Z > Task :core:ui:packageDebugResources
+2026-02-04T07:32:30.4485236Z > Task :feature:assetstudio:generateDebugResValues
+2026-02-04T07:32:30.4499897Z > Task :feature:assetstudio:generateDebugResources
+2026-02-04T07:32:30.4503339Z > Task :feature:assetstudio:packageDebugResources
+2026-02-04T07:32:30.4505914Z > Task :feature:designer:generateDebugResValues
+2026-02-04T07:32:30.4506871Z > Task :feature:designer:generateDebugResources
+2026-02-04T07:32:30.4507511Z > Task :feature:designer:packageDebugResources
+2026-02-04T07:32:30.4508295Z > Task :feature:explorer:generateDebugResValues
+2026-02-04T07:32:30.4536242Z > Task :feature:explorer:generateDebugResources
+2026-02-04T07:32:30.4557832Z > Task :feature:explorer:packageDebugResources
+2026-02-04T07:32:30.4558525Z > Task :feature:git:generateDebugResValues
+2026-02-04T07:32:30.4559119Z > Task :feature:git:generateDebugResources
+2026-02-04T07:32:30.4559701Z > Task :feature:git:packageDebugResources
+2026-02-04T07:32:30.4560283Z > Task :feature:home:generateDebugResValues
+2026-02-04T07:32:30.4560858Z > Task :feature:home:generateDebugResources
+2026-02-04T07:32:30.4561642Z > Task :feature:home:packageDebugResources
+2026-02-04T07:32:30.4562227Z > Task :feature:main:generateDebugResValues
+2026-02-04T07:32:30.4562793Z > Task :feature:main:generateDebugResources
+2026-02-04T07:32:30.4563353Z > Task :feature:main:packageDebugResources
+2026-02-04T07:32:30.4563989Z > Task :feature:onboarding:generateDebugResValues
+2026-02-04T07:32:30.4564626Z > Task :feature:onboarding:generateDebugResources
+2026-02-04T07:32:30.4565279Z > Task :feature:onboarding:packageDebugResources
+2026-02-04T07:32:30.4565927Z > Task :feature:settings:generateDebugResValues
+2026-02-04T07:32:30.4566558Z > Task :feature:settings:generateDebugResources
+2026-02-04T07:32:30.4567186Z > Task :feature:settings:packageDebugResources
+2026-02-04T07:32:30.4567819Z > Task :feature:soraeditor:generateDebugResValues
+2026-02-04T07:32:30.5476046Z > Task :feature:soraeditor:generateDebugResources
+2026-02-04T07:32:30.5477003Z > Task :feature:soraeditor:packageDebugResources
+2026-02-04T07:32:30.5477893Z > Task :feature:submodulemaker:generateDebugResValues
+2026-02-04T07:32:30.5478727Z > Task :feature:submodulemaker:generateDebugResources
+2026-02-04T07:32:30.5479466Z > Task :feature:submodulemaker:packageDebugResources
+2026-02-04T07:32:30.5480302Z > Task :feature:themebuilder:generateDebugResValues
+2026-02-04T07:32:30.5481061Z > Task :feature:themebuilder:generateDebugResources
+2026-02-04T07:32:30.5481932Z > Task :feature:themebuilder:packageDebugResources
+2026-02-04T07:32:30.5490787Z > Task :feature:treeview:generateDebugResValues
+2026-02-04T07:32:30.5491671Z > Task :feature:treeview:generateDebugResources
+2026-02-04T07:32:30.5492287Z > Task :feature:treeview:packageDebugResources
+2026-02-04T07:32:30.5492972Z > Task :core:datastore:datastore:generateDebugResValues
+2026-02-04T07:32:30.5493666Z > Task :core:datastore:datastore:generateDebugResources
+2026-02-04T07:32:30.5494343Z > Task :core:datastore:datastore:packageDebugResources
+2026-02-04T07:32:30.5495060Z > Task :core:datastore:datastore-proto:generateDebugResValues
+2026-02-04T07:32:30.5495530Z > Task :core:datastore:datastore-proto:generateDebugResources
+2026-02-04T07:32:30.5495988Z > Task :core:datastore:datastore-proto:packageDebugResources
+2026-02-04T07:32:30.5496426Z > Task :core:templates:templates-api:generateDebugResValues
+2026-02-04T07:32:30.5496871Z > Task :core:templates:templates-api:generateDebugResources
+2026-02-04T07:32:30.5497315Z > Task :core:templates:templates-api:packageDebugResources
+2026-02-04T07:32:30.6475681Z > Task :core:templates:templates-impl:generateDebugResValues
+2026-02-04T07:32:30.6494574Z > Task :core:templates:templates-impl:generateDebugResources
+2026-02-04T07:32:30.6495413Z > Task :core:templates:templates-impl:packageDebugResources
+2026-02-04T07:32:30.7486194Z > Task :app:mapDebugSourceSetPaths
+2026-02-04T07:32:30.7490537Z > Task :app:generateDebugResources
+2026-02-04T07:32:32.3477159Z > Task :app:packageDebugResources
+2026-02-04T07:32:33.4493101Z > Task :app:createDebugCompatibleScreenManifests
+2026-02-04T07:32:33.4494159Z > Task :app:extractDeepLinksDebug
+2026-02-04T07:32:33.4494883Z > Task :feature:extractDeepLinksDebug
+2026-02-04T07:32:33.4495634Z > Task :core:logger:extractDeepLinksDebug
+2026-02-04T07:32:33.5474902Z > Task :app:parseDebugLocalResources
+2026-02-04T07:32:33.5476149Z > Task :core:project-manager:extractDeepLinksDebug
+2026-02-04T07:32:33.5477491Z > Task :core:logger:processDebugManifest
+2026-02-04T07:32:33.5478656Z > Task :feature:processDebugManifest
+2026-02-04T07:32:33.5479586Z > Task :core:project-manager:processDebugManifest
+2026-02-04T07:32:33.5480452Z > Task :core:resources:extractDeepLinksDebug
+2026-02-04T07:32:33.6479136Z > Task :core:resources:processDebugManifest
+2026-02-04T07:32:33.6485502Z > Task :core:ui:extractDeepLinksDebug
+2026-02-04T07:32:33.6486516Z > Task :core:ui:processDebugManifest
+2026-02-04T07:32:33.6488285Z > Task :feature:assetstudio:extractDeepLinksDebug
+2026-02-04T07:32:33.6489325Z > Task :feature:designer:extractDeepLinksDebug
+2026-02-04T07:32:33.6490349Z > Task :feature:assetstudio:processDebugManifest
+2026-02-04T07:32:33.6491146Z > Task :feature:explorer:extractDeepLinksDebug
+2026-02-04T07:32:33.6492048Z > Task :feature:designer:processDebugManifest
+2026-02-04T07:32:33.6492683Z > Task :feature:explorer:processDebugManifest
+2026-02-04T07:32:33.6493308Z > Task :feature:git:extractDeepLinksDebug
+2026-02-04T07:32:33.6494025Z > Task :feature:home:extractDeepLinksDebug
+2026-02-04T07:32:33.6494686Z > Task :feature:git:processDebugManifest
+2026-02-04T07:32:33.6495361Z > Task :feature:main:extractDeepLinksDebug
+2026-02-04T07:32:33.6496008Z > Task :feature:home:processDebugManifest
+2026-02-04T07:32:33.6496700Z > Task :feature:onboarding:extractDeepLinksDebug
+2026-02-04T07:32:33.6497401Z > Task :feature:main:processDebugManifest
+2026-02-04T07:32:33.7477254Z > Task :feature:settings:extractDeepLinksDebug
+2026-02-04T07:32:33.7484660Z > Task :feature:onboarding:processDebugManifest
+2026-02-04T07:32:33.7485437Z > Task :feature:settings:processDebugManifest
+2026-02-04T07:32:33.7486087Z > Task :feature:soraeditor:extractDeepLinksDebug
+2026-02-04T07:32:33.7486815Z > Task :feature:soraeditor:processDebugManifest
+2026-02-04T07:32:33.7487448Z > Task :feature:submodulemaker:extractDeepLinksDebug
+2026-02-04T07:32:33.7488095Z > Task :feature:themebuilder:extractDeepLinksDebug
+2026-02-04T07:32:33.7488860Z > Task :feature:submodulemaker:processDebugManifest
+2026-02-04T07:32:33.7489581Z > Task :feature:themebuilder:processDebugManifest
+2026-02-04T07:32:33.7490304Z > Task :feature:treeview:extractDeepLinksDebug
+2026-02-04T07:32:33.7490969Z > Task :feature:treeview:processDebugManifest
+2026-02-04T07:32:33.7491904Z > Task :core:datastore:datastore:extractDeepLinksDebug
+2026-02-04T07:32:33.8505278Z > Task :app:mergeDebugResources
+2026-02-04T07:32:33.8506714Z > Task :core:datastore:datastore-proto:extractDeepLinksDebug
+2026-02-04T07:32:33.8508507Z > Task :core:datastore:datastore:processDebugManifest
+2026-02-04T07:32:33.8509248Z > Task :core:templates:templates-api:extractDeepLinksDebug
+2026-02-04T07:32:33.8510015Z > Task :core:datastore:datastore-proto:processDebugManifest
+2026-02-04T07:32:33.8510741Z > Task :core:templates:templates-api:processDebugManifest
+2026-02-04T07:32:33.8511685Z > Task :core:templates:templates-impl:extractDeepLinksDebug
+2026-02-04T07:32:33.8512422Z > Task :core:templates:templates-impl:processDebugManifest
+2026-02-04T07:32:34.2475420Z > Task :feature:compileDebugLibraryResources
+2026-02-04T07:32:34.7499489Z > Task :app:processDebugMainManifest
+2026-02-04T07:32:34.9476083Z > Task :app:processDebugManifest
+2026-02-04T07:32:34.9482964Z > Task :app:processDebugManifestForPackage
+2026-02-04T07:32:34.9483527Z > Task :core:logger:compileDebugLibraryResources
+2026-02-04T07:32:34.9484047Z > Task :feature:parseDebugLocalResources
+2026-02-04T07:32:34.9484525Z > Task :core:logger:parseDebugLocalResources
+2026-02-04T07:32:34.9485085Z > Task :core:project-manager:compileDebugLibraryResources
+2026-02-04T07:32:34.9485691Z > Task :core:project-manager:parseDebugLocalResources
+2026-02-04T07:32:35.0479487Z > Task :core:logger:generateDebugRFile
+2026-02-04T07:32:35.0480510Z > Task :feature:generateDebugRFile
+2026-02-04T07:32:35.0481698Z > Task :core:project-manager:generateDebugRFile
+2026-02-04T07:32:35.0482616Z > Task :core:resources:compileDebugLibraryResources
+2026-02-04T07:32:35.0483863Z > Task :core:ui:compileDebugLibraryResources
+2026-02-04T07:32:35.0485246Z > Task :core:ui:parseDebugLocalResources
+2026-02-04T07:32:35.0486171Z > Task :feature:assetstudio:compileDebugLibraryResources
+2026-02-04T07:32:35.0487016Z > Task :core:ui:generateDebugRFile
+2026-02-04T07:32:35.1480464Z > Task :feature:designer:compileDebugLibraryResources
+2026-02-04T07:32:35.1485849Z > Task :feature:assetstudio:parseDebugLocalResources
+2026-02-04T07:32:35.1493255Z > Task :core:resources:parseDebugLocalResources
+2026-02-04T07:32:35.1497806Z > Task :feature:explorer:compileDebugLibraryResources
+2026-02-04T07:32:35.1502401Z > Task :feature:designer:parseDebugLocalResources
+2026-02-04T07:32:35.1534872Z > Task :feature:assetstudio:generateDebugRFile
+2026-02-04T07:32:35.1535892Z > Task :feature:designer:generateDebugRFile
+2026-02-04T07:32:35.1536794Z > Task :feature:explorer:parseDebugLocalResources
+2026-02-04T07:32:35.1537742Z > Task :feature:git:compileDebugLibraryResources
+2026-02-04T07:32:35.1545699Z > Task :core:resources:generateDebugRFile
+2026-02-04T07:32:35.1549204Z > Task :feature:explorer:generateDebugRFile
+2026-02-04T07:32:35.1550339Z > Task :feature:home:compileDebugLibraryResources
+2026-02-04T07:32:35.1551237Z > Task :feature:git:parseDebugLocalResources
+2026-02-04T07:32:35.1554480Z > Task :feature:main:compileDebugLibraryResources
+2026-02-04T07:32:35.1555109Z > Task :feature:home:parseDebugLocalResources
+2026-02-04T07:32:35.2485769Z > Task :feature:git:generateDebugRFile
+2026-02-04T07:32:35.2486496Z > Task :feature:home:generateDebugRFile
+2026-02-04T07:32:35.2487190Z > Task :feature:onboarding:compileDebugLibraryResources
+2026-02-04T07:32:35.2487891Z > Task :feature:main:parseDebugLocalResources
+2026-02-04T07:32:35.2488568Z > Task :feature:onboarding:parseDebugLocalResources
+2026-02-04T07:32:35.2497300Z > Task :feature:settings:compileDebugLibraryResources
+2026-02-04T07:32:35.2499762Z > Task :feature:main:generateDebugRFile
+2026-02-04T07:32:35.2502014Z > Task :feature:settings:parseDebugLocalResources
+2026-02-04T07:32:35.2503043Z > Task :feature:onboarding:generateDebugRFile
+2026-02-04T07:32:35.2504505Z > Task :feature:soraeditor:compileDebugLibraryResources
+2026-02-04T07:32:35.2505443Z > Task :feature:soraeditor:parseDebugLocalResources
+2026-02-04T07:32:35.2506240Z > Task :feature:settings:generateDebugRFile
+2026-02-04T07:32:35.2507173Z > Task :feature:submodulemaker:compileDebugLibraryResources
+2026-02-04T07:32:35.2508053Z > Task :feature:soraeditor:generateDebugRFile
+2026-02-04T07:32:35.2508960Z > Task :feature:themebuilder:compileDebugLibraryResources
+2026-02-04T07:32:35.2510144Z > Task :feature:submodulemaker:parseDebugLocalResources
+2026-02-04T07:32:35.3484895Z > Task :feature:treeview:compileDebugLibraryResources
+2026-02-04T07:32:35.3485905Z > Task :feature:themebuilder:parseDebugLocalResources
+2026-02-04T07:32:35.3486977Z > Task :feature:submodulemaker:generateDebugRFile
+2026-02-04T07:32:35.3510895Z > Task :feature:treeview:parseDebugLocalResources
+2026-02-04T07:32:35.3513403Z > Task :core:datastore:datastore:compileDebugLibraryResources
+2026-02-04T07:32:35.3517032Z > Task :feature:themebuilder:generateDebugRFile
+2026-02-04T07:32:35.3518008Z > Task :feature:treeview:generateDebugRFile
+2026-02-04T07:32:35.3520482Z > Task :core:datastore:datastore:parseDebugLocalResources
+2026-02-04T07:32:35.3522775Z > Task :core:datastore:datastore-proto:compileDebugLibraryResources
+2026-02-04T07:32:35.3523949Z > Task :core:datastore:datastore:generateDebugRFile
+2026-02-04T07:32:35.3525071Z > Task :core:datastore:datastore-proto:parseDebugLocalResources
+2026-02-04T07:32:35.3526337Z > Task :core:templates:templates-api:compileDebugLibraryResources
+2026-02-04T07:32:35.3527375Z > Task :core:datastore:datastore-proto:generateDebugRFile
+2026-02-04T07:32:35.3529375Z > Task :core:templates:templates-api:parseDebugLocalResources
+2026-02-04T07:32:35.3532541Z > Task :core:templates:templates-impl:compileDebugLibraryResources
+2026-02-04T07:32:35.3533456Z > Task :core:templates:templates-impl:parseDebugLocalResources
+2026-02-04T07:32:35.3534596Z > Task :feature:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-02-04T07:32:35.3535557Z > Task :core:logger:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-02-04T07:32:35.3536436Z > Task :core:templates:templates-api:generateDebugRFile
+2026-02-04T07:32:35.3537183Z > Task :core:templates:templates-impl:generateDebugRFile
+2026-02-04T07:32:35.4542829Z > Task :core:logger:generateDebugBuildConfig
+2026-02-04T07:32:36.9475652Z > Task :app:processDebugResources
+2026-02-04T07:32:41.3475970Z > Task :core:project-manager:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-02-04T07:32:41.3477895Z > Task :core:resources:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-02-04T07:32:41.3478929Z > Task :core:logger:javaPreCompileDebug
+2026-02-04T07:32:45.9476002Z > Task :core:ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-02-04T07:32:45.9477101Z > Task :core:resources:dataBindingMergeDependencyArtifactsDebug
+2026-02-04T07:32:45.9477866Z > Task :core:resources:javaPreCompileDebug
+2026-02-04T07:32:45.9478486Z > Task :core:ui:javaPreCompileDebug
+2026-02-04T07:32:46.1475182Z 
+2026-02-04T07:32:46.1478503Z > Task :core:logger:compileDebugKotlin
+2026-02-04T07:32:46.1483964Z w: Opt-in requirement marker androidx.compose.material3.ExperimentalMaterial3Api is unresolved. Please make sure it's present in the module dependencies
+2026-02-04T07:32:46.1489733Z w: Opt-in requirement marker androidx.compose.foundation.layout.ExperimentalLayoutApi is unresolved. Please make sure it's present in the module dependencies
+2026-02-04T07:32:46.2531582Z 
+2026-02-04T07:32:46.2562618Z > Task :core:resources:dataBindingGenBaseClassesDebug
+2026-02-04T07:32:51.0475295Z > Task :core:logger:compileDebugJavaWithJavac
+2026-02-04T07:32:51.0476790Z > Task :core:datastore:datastore:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-02-04T07:32:51.0479146Z > Task :core:datastore:datastore-proto:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-02-04T07:32:51.0480303Z > Task :core:datastore:datastore-proto:protobufDummy UP-TO-DATE
+2026-02-04T07:32:51.0481190Z > Task :core:datastore:datastore-proto:extractDebugProto
+2026-02-04T07:32:51.0482067Z > Task :core:logger:processDebugJavaRes
+2026-02-04T07:32:51.0482741Z > Task :core:datastore:datastore-proto:extractProto
+2026-02-04T07:32:51.0483317Z > Task :core:datastore:datastore:javaPreCompileDebug
+2026-02-04T07:32:51.0484112Z > Task :core:templates:templates-api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-02-04T07:32:51.0485137Z > Task :core:datastore:datastore-proto:javaPreCompileDebug
+2026-02-04T07:32:51.0485929Z > Task :core:templates:templates-api:javaPreCompileDebug
+2026-02-04T07:32:51.0486891Z > Task :feature:assetstudio:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-02-04T07:32:51.0487808Z > Task :core:project-manager:javaPreCompileDebug
+2026-02-04T07:32:51.0488745Z > Task :feature:designer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-02-04T07:32:51.0489938Z > Task :core:actions:actions-api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-02-04T07:32:51.0490867Z > Task :core:logger:bundleLibRuntimeToJarDebug
+2026-02-04T07:32:51.0491733Z > Task :core:logger:bundleLibCompileToJarDebug
+2026-02-04T07:32:51.1514498Z > Task :feature:assetstudio:javaPreCompileDebug
+2026-02-04T07:32:51.1515675Z > Task :core:resources:compileDebugKotlin NO-SOURCE
+2026-02-04T07:32:53.2481578Z > Task :core:resources:compileDebugJavaWithJavac
+2026-02-04T07:32:53.2487190Z > Task :core:resources:bundleLibCompileToJarDebug
+2026-02-04T07:32:53.2493516Z > Task :core:logger:createFullJarDebug
+2026-02-04T07:32:57.2487066Z > Task :core:datastore:datastore-proto:extractIncludeDebugProto
+2026-02-04T07:32:57.6486739Z > Task :core:datastore:datastore-proto:generateDebugProto
+2026-02-04T07:32:57.6492176Z > Task :core:datastore:datastore-proto:compileDebugKotlin NO-SOURCE
+2026-02-04T07:33:00.8502811Z > Task :core:datastore:datastore-proto:compileDebugJavaWithJavac
+2026-02-04T07:33:00.9475538Z > Task :core:datastore:datastore-proto:bundleLibCompileToJarDebug
+2026-02-04T07:33:03.7492020Z 
+2026-02-04T07:33:03.7492851Z > Task :core:templates:templates-api:compileDebugKotlin
+2026-02-04T07:33:03.7494734Z w: Opt-in requirement marker androidx.compose.material3.ExperimentalMaterial3Api is unresolved. Please make sure it's present in the module dependencies
+2026-02-04T07:33:03.7497101Z w: Opt-in requirement marker androidx.compose.foundation.layout.ExperimentalLayoutApi is unresolved. Please make sure it's present in the module dependencies
+2026-02-04T07:33:03.8481098Z 
+2026-02-04T07:33:03.8496035Z > Task :core:templates:templates-api:compileDebugJavaWithJavac NO-SOURCE
+2026-02-04T07:33:03.8539298Z > Task :core:templates:templates-api:bundleLibCompileToJarDebug
+2026-02-04T07:33:03.8540259Z > Task :core:actions:actions-api:processResources NO-SOURCE
+2026-02-04T07:33:03.8541271Z > Task :core:plugin:plugin-api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-02-04T07:33:05.8475698Z 
+2026-02-04T07:33:05.8476654Z > Task :core:ui:compileDebugKotlin
+2026-02-04T07:33:05.8478429Z w: Stability configuration file not found at /home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/compose_compiler_config.conf
+2026-02-04T07:33:05.8482207Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/ui/src/main/kotlin/com/scto/codelikebastimove/core/ui/theme/Icons.kt:80:27 'val Icons.Filled.InsertDriveFile: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.InsertDriveFile.
+2026-02-04T07:33:05.8486100Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/ui/src/main/kotlin/com/scto/codelikebastimove/core/ui/theme/Theme.kt:43:14 'var statusBarColor: Int' is deprecated. Deprecated in Java.
+2026-02-04T07:33:05.9474340Z 
+2026-02-04T07:33:05.9475581Z > Task :core:ui:compileDebugJavaWithJavac NO-SOURCE
+2026-02-04T07:33:05.9476602Z > Task :core:ui:bundleLibCompileToJarDebug
+2026-02-04T07:33:09.4504953Z > Task :core:plugin:plugin-api:compileKotlin
+2026-02-04T07:33:09.4506153Z > Task :core:plugin:plugin-api:compileJava NO-SOURCE
+2026-02-04T07:33:09.4507355Z > Task :core:plugin:plugin-api:processResources NO-SOURCE
+2026-02-04T07:33:09.4508304Z > Task :core:plugin:plugin-api:classes UP-TO-DATE
+2026-02-04T07:33:09.5476088Z > Task :core:plugin:plugin-api:jar
+2026-02-04T07:33:09.5477586Z > Task :feature:soraeditor:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-02-04T07:33:09.5478820Z > Task :feature:soraeditor:javaPreCompileDebug
+2026-02-04T07:33:09.5479771Z > Task :feature:designer:javaPreCompileDebug
+2026-02-04T07:33:09.5480879Z > Task :feature:explorer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-02-04T07:33:09.5482206Z > Task :feature:explorer:javaPreCompileDebug
+2026-02-04T07:33:09.5483380Z > Task :feature:git:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-02-04T07:33:09.7479009Z > Task :core:actions:actions-api:compileKotlin
+2026-02-04T07:33:13.2502781Z > Task :core:actions:actions-api:compileJava NO-SOURCE
+2026-02-04T07:33:13.2532603Z > Task :core:actions:actions-api:classes UP-TO-DATE
+2026-02-04T07:33:13.2533268Z > Task :core:actions:actions-api:jar
+2026-02-04T07:33:13.5477377Z 
+2026-02-04T07:33:13.5478493Z > Task :core:datastore:datastore:compileDebugKotlin
+2026-02-04T07:33:13.5480509Z w: Opt-in requirement marker androidx.compose.material3.ExperimentalMaterial3Api is unresolved. Please make sure it's present in the module dependencies
+2026-02-04T07:33:13.5483785Z w: Opt-in requirement marker androidx.compose.foundation.layout.ExperimentalLayoutApi is unresolved. Please make sure it's present in the module dependencies
+2026-02-04T07:33:13.5487678Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/datastore/datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:5:8 'class EncryptedSharedPreferences : Any, SharedPreferences' is deprecated. Deprecated in Java.
+2026-02-04T07:33:13.5492248Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/datastore/datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:6:8 'class MasterKey : Any' is deprecated. Deprecated in Java.
+2026-02-04T07:33:13.5496595Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/datastore/datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:14:26 'class MasterKey : Any' is deprecated. Deprecated in Java.
+2026-02-04T07:33:13.5500648Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/datastore/datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:15:5 'class MasterKey : Any' is deprecated. Deprecated in Java.
+2026-02-04T07:33:13.5505208Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/datastore/datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:15:15 'constructor(p0: @NonNull() Context): MasterKey.Builder' is deprecated. Deprecated in Java.
+2026-02-04T07:33:13.5509432Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/datastore/datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:15:45 'class MasterKey : Any' is deprecated. Deprecated in Java.
+2026-02-04T07:33:13.5514043Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/datastore/datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:15:55 'enum class KeyScheme : Enum<MasterKey.KeyScheme!>' is deprecated. Deprecated in Java.
+2026-02-04T07:33:13.5518683Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/datastore/datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:19:5 'class EncryptedSharedPreferences : Any, SharedPreferences' is deprecated. Deprecated in Java.
+2026-02-04T07:33:13.5523697Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/datastore/datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:23:7 'class EncryptedSharedPreferences : Any, SharedPreferences' is deprecated. Deprecated in Java.
+2026-02-04T07:33:13.5528980Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/datastore/datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:23:34 'enum class PrefKeyEncryptionScheme : Enum<EncryptedSharedPreferences.PrefKeyEncryptionScheme!>' is deprecated. Deprecated in Java.
+2026-02-04T07:33:13.5534180Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/datastore/datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:24:7 'class EncryptedSharedPreferences : Any, SharedPreferences' is deprecated. Deprecated in Java.
+2026-02-04T07:33:13.5539376Z w: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/datastore/datastore/src/main/kotlin/com/scto/codelikebastimove/core/datastore/GitCredentialsStore.kt:24:34 'enum class PrefValueEncryptionScheme : Enum<EncryptedSharedPreferences.PrefValueEncryptionScheme!>' is deprecated. Deprecated in Java.
+2026-02-04T07:33:15.9475137Z 
+2026-02-04T07:33:15.9476332Z > Task :core:datastore:datastore:compileDebugJavaWithJavac NO-SOURCE
+2026-02-04T07:33:15.9477447Z > Task :core:datastore:datastore:bundleLibCompileToJarDebug
+2026-02-04T07:33:18.1475159Z 
+2026-02-04T07:33:18.1476187Z > Task :core:project-manager:compileDebugKotlin FAILED
+2026-02-04T07:33:18.1478836Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/core/project-manager/src/main/kotlin/com/scto/codelikebastimove/core/projectmanager/ui/CreateProjectScreen.kt:86:108 Unresolved reference 'back'.
+2026-02-04T07:33:18.4474531Z 
+2026-02-04T07:33:18.4479617Z > Task :feature:assetstudio:compileDebugKotlin FAILED
+2026-02-04T07:33:18.4491849Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:7:17 Unresolved reference 'documentfile'.
+2026-02-04T07:33:18.4495209Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:29:26 Unresolved reference 'DocumentFile'.
+2026-02-04T07:33:18.4499181Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:43:44 Unresolved reference 'createFile'.
+2026-02-04T07:33:18.4503158Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:45:71 Unresolved reference 'uri'.
+2026-02-04T07:33:18.4506823Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:76:26 Unresolved reference 'DocumentFile'.
+2026-02-04T07:33:18.4510523Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:91:38 Unresolved reference 'createFile'.
+2026-02-04T07:33:18.4515190Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:93:67 Unresolved reference 'uri'.
+2026-02-04T07:33:18.4518689Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:106:42 Unresolved reference 'createFile'.
+2026-02-04T07:33:18.4522294Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:108:71 Unresolved reference 'uri'.
+2026-02-04T07:33:18.4525583Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:128:26 Unresolved reference 'DocumentFile'.
+2026-02-04T07:33:18.4528868Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:140:40 Unresolved reference 'createFile'.
+2026-02-04T07:33:18.4532279Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:142:63 Unresolved reference 'uri'.
+2026-02-04T07:33:18.4535528Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:149:49 Unresolved reference 'createFile'.
+2026-02-04T07:33:18.4538746Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:151:72 Unresolved reference 'uri'.
+2026-02-04T07:33:18.4551001Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:163:42 Unresolved reference 'createFile'.
+2026-02-04T07:33:18.4554718Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:165:69 Unresolved reference 'uri'.
+2026-02-04T07:33:18.4558585Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:177:38 Unresolved reference 'createFile'.
+2026-02-04T07:33:18.4562249Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:179:65 Unresolved reference 'uri'.
+2026-02-04T07:33:18.4565706Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:190:38 Unresolved reference 'createFile'.
+2026-02-04T07:33:18.4569417Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:192:67 Unresolved reference 'uri'.
+2026-02-04T07:33:18.4573085Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:213:26 Unresolved reference 'DocumentFile'.
+2026-02-04T07:33:18.4576611Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:226:40 Unresolved reference 'createFile'.
+2026-02-04T07:33:18.4580013Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:228:67 Unresolved reference 'uri'.
+2026-02-04T07:33:18.4583669Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:247:17 Unresolved reference 'DocumentFile'.
+2026-02-04T07:33:18.4587027Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:269:32 Unresolved reference 'createFile'.
+2026-02-04T07:33:18.4590242Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:271:67 Unresolved reference 'uri'.
+2026-02-04T07:33:18.4593645Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:284:17 Unresolved reference 'DocumentFile'.
+2026-02-04T07:33:18.4597083Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:301:32 Unresolved reference 'createFile'.
+2026-02-04T07:33:18.4600510Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:303:67 Unresolved reference 'uri'.
+2026-02-04T07:33:18.4604038Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:314:54 Unresolved reference 'DocumentFile'.
+2026-02-04T07:33:18.4607558Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:314:69 Unresolved reference 'DocumentFile'.
+2026-02-04T07:33:18.4611094Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:327:34 Unresolved reference 'findFile'.
+2026-02-04T07:33:18.4614842Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:328:42 Unresolved reference 'isDirectory'.
+2026-02-04T07:33:18.4618733Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:338:33 Unresolved reference 'findFile'.
+2026-02-04T07:33:18.4622463Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:338:63 Unresolved reference 'createDirectory'.
+2026-02-04T07:33:18.4625828Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:339:30 Unresolved reference 'findFile'.
+2026-02-04T07:33:18.4629387Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:339:57 Unresolved reference 'createDirectory'.
+2026-02-04T07:33:18.4632857Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:340:31 Unresolved reference 'findFile'.
+2026-02-04T07:33:18.4636172Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:340:59 Unresolved reference 'createDirectory'.
+2026-02-04T07:33:18.4639472Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:341:25 Unresolved reference 'findFile'.
+2026-02-04T07:33:18.4643084Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:341:53 Unresolved reference 'createDirectory'.
+2026-02-04T07:33:18.4646432Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:344:47 Unresolved reference 'DocumentFile'.
+2026-02-04T07:33:18.4650075Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:344:76 Unresolved reference 'DocumentFile'.
+2026-02-04T07:33:18.4653492Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:345:23 Unresolved reference 'findFile'.
+2026-02-04T07:33:18.4656800Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/assetstudio/src/main/kotlin/com/scto/codelikebastimove/feature/assetstudio/export/AssetExporter.kt:345:48 Unresolved reference 'createDirectory'.
+2026-02-04T07:33:20.0477390Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/git/src/main/kotlin/com/scto/codelikebastimove/features/git/ui/screens/GitCloneScreen.kt:116:74 Unresolved reference 'back'.
+2026-02-04T07:33:20.0481864Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/git/src/main/kotlin/com/scto/codelikebastimove/features/git/ui/screens/GitDiffScreen.kt:87:74 Unresolved reference 'back'.
+2026-02-04T07:33:20.0483294Z 
+2026-02-04T07:33:20.0483624Z > Task :feature:git:compileDebugKotlin FAILED
+2026-02-04T07:33:20.6478614Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/feature/soraeditor/language/TreeSitterLanguageProvider.kt:7:41 Unresolved reference 'languages'.
+2026-02-04T07:33:20.6480276Z 
+2026-02-04T07:33:20.6483334Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/feature/soraeditor/language/TreeSitterLanguageProvider.kt:8:41 Unresolved reference 'languages'.
+2026-02-04T07:33:20.6485633Z > Task :feature:soraeditor:compileDebugKotlin FAILED
+2026-02-04T07:33:20.6488277Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/feature/soraeditor/language/TreeSitterLanguageProvider.kt:9:41 Unresolved reference 'languages'.
+2026-02-04T07:33:20.6492126Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/feature/soraeditor/language/TreeSitterLanguageProvider.kt:10:41 Unresolved reference 'languages'.
+2026-02-04T07:33:20.6495931Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/feature/soraeditor/language/TreeSitterLanguageProvider.kt:11:41 Unresolved reference 'languages'.
+2026-02-04T07:33:20.6500859Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/feature/soraeditor/language/TreeSitterLanguageProvider.kt:12:41 Unresolved reference 'languages'.
+2026-02-04T07:33:20.6504211Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/feature/soraeditor/language/TreeSitterLanguageProvider.kt:20:37 Unresolved reference 'treesitter'.
+2026-02-04T07:33:20.6507891Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/feature/soraeditor/language/TreeSitterLanguageProvider.kt:21:37 Unresolved reference 'treesitter'.
+2026-02-04T07:33:20.6511825Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/feature/soraeditor/language/TreeSitterLanguageProvider.kt:45:44 Unresolved reference 'JavaLanguage'.
+2026-02-04T07:33:20.6515577Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/feature/soraeditor/language/TreeSitterLanguageProvider.kt:46:46 Unresolved reference 'KotlinLanguage'.
+2026-02-04T07:33:20.6519294Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/feature/soraeditor/language/TreeSitterLanguageProvider.kt:47:43 Unresolved reference 'XmlLanguage'.
+2026-02-04T07:33:20.6523237Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/feature/soraeditor/language/TreeSitterLanguageProvider.kt:48:44 Unresolved reference 'JsonLanguage'.
+2026-02-04T07:33:20.6526942Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/feature/soraeditor/language/TreeSitterLanguageProvider.kt:49:65 Unresolved reference 'CppLanguage'.
+2026-02-04T07:33:20.6530642Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/feature/soraeditor/language/TreeSitterLanguageProvider.kt:50:43 Unresolved reference 'LogLanguage'.
+2026-02-04T07:33:20.6534460Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/feature/soraeditor/language/TreeSitterLanguageProvider.kt:59:32 Unresolved reference 'TreeLanguage'.
+2026-02-04T07:33:20.6538098Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/feature/soraeditor/language/TreeSitterLanguageProvider.kt:82:66 Unresolved reference 'Theme'.
+2026-02-04T07:33:20.6541936Z e: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/feature/soraeditor/src/main/kotlin/com/scto/codelikebastimove/feature/soraeditor/language/TreeSitterLanguageProvider.kt:83:21 Unresolved reference 'Theme'.
+2026-02-04T07:33:20.7474171Z 
+2026-02-04T07:33:20.7479942Z 
+2026-02-04T07:33:20.7485566Z [Incubating] Problems report is available at: file:///home/runner/work/CodeLikeBastiMove/CodeLikeBastiMove/build/reports/problems/problems-report.html
+2026-02-04T07:33:20.7489912Z FAILURE: Build completed with 4 failures.
+2026-02-04T07:33:20.7494015Z 
+2026-02-04T07:33:20.7504003Z 1: Task failed with an exception.
+2026-02-04T07:33:20.7508048Z -----------
+2026-02-04T07:33:20.7508786Z * What went wrong:
+2026-02-04T07:33:20.7509713Z Execution failed for task ':core:project-manager:compileDebugKotlin'.
+2026-02-04T07:33:20.7511356Z > A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+2026-02-04T07:33:20.7512861Z    > Compilation error. See log for more details
+2026-02-04T07:33:20.7513363Z 
+2026-02-04T07:33:20.7513481Z * Try:
+2026-02-04T07:33:20.7513945Z > Run with --stacktrace option to get the stack trace.
+2026-02-04T07:33:20.7514945Z > Run with --info or --debug option to get more log output.
+2026-02-04T07:33:20.7515750Z > Run with --scan to generate a Build Scan (powered by Develocity).
+2026-02-04T07:33:20.7516480Z > Get more help at https://help.gradle.org.
+2026-02-04T07:33:20.7517131Z ==============================================================================
+2026-02-04T07:33:20.7517511Z 
+2026-02-04T07:33:20.7517733Z 2: Task failed with an exception.
+2026-02-04T07:33:20.7518114Z -----------
+2026-02-04T07:33:20.7518427Z * What went wrong:
+2026-02-04T07:33:20.7519055Z Execution failed for task ':feature:assetstudio:compileDebugKotlin'.
+2026-02-04T07:33:20.7520588Z > A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+2026-02-04T07:33:20.7522032Z    > Compilation error. See log for more details
+2026-02-04T07:33:20.7522376Z 
+2026-02-04T07:33:20.7522491Z * Try:
+2026-02-04T07:33:20.7522949Z > Run with --stacktrace option to get the stack trace.
+2026-02-04T07:33:20.7523700Z > Run with --info or --debug option to get more log output.
+2026-02-04T07:33:20.7524499Z > Run with --scan to generate a Build Scan (powered by Develocity).
+2026-02-04T07:33:20.7525213Z > Get more help at https://help.gradle.org.
+2026-02-04T07:33:20.7525856Z ==============================================================================
+2026-02-04T07:33:20.7526243Z 
+2026-02-04T07:33:20.7526462Z 3: Task failed with an exception.
+2026-02-04T07:33:20.7526837Z -----------
+2026-02-04T07:33:20.7527158Z * What went wrong:
+2026-02-04T07:33:20.7527717Z Execution failed for task ':feature:git:compileDebugKotlin'.
+2026-02-04T07:33:20.7529310Z > A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+2026-02-04T07:33:20.7530555Z    > Compilation error. See log for more details
+2026-02-04T07:33:20.7530904Z 
+2026-02-04T07:33:20.7531012Z * Try:
+2026-02-04T07:33:20.7531621Z > Run with --stacktrace option to get the stack trace.
+2026-02-04T07:33:20.7532354Z > Run with --info or --debug option to get more log output.
+2026-02-04T07:33:20.7533149Z > Run with --scan to generate a Build Scan (powered by Develocity).
+2026-02-04T07:33:20.7533856Z > Get more help at https://help.gradle.org.
+2026-02-04T07:33:20.7534503Z ==============================================================================
+2026-02-04T07:33:20.7534869Z 
+2026-02-04T07:33:20.7535093Z 4: Task failed with an exception.
+2026-02-04T07:33:20.7535465Z -----------
+2026-02-04T07:33:20.7535782Z * What went wrong:
+2026-02-04T07:33:20.7536391Z Execution failed for task ':feature:soraeditor:compileDebugKotlin'.
+2026-02-04T07:33:20.7537956Z > A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+2026-02-04T07:33:20.7539252Z    > Compilation error. See log for more details
+2026-02-04T07:33:20.7539607Z 
+2026-02-04T07:33:20.7539714Z * Try:
+2026-02-04T07:33:20.7540184Z > Run with --stacktrace option to get the stack trace.
+2026-02-04T07:33:20.7540910Z > Run with --info or --debug option to get more log output.
+2026-02-04T07:33:20.7541884Z > Run with --scan to generate a Build Scan (powered by Develocity).
+2026-02-04T07:33:20.7542831Z > Get more help at https://help.gradle.org.
+2026-02-04T07:33:20.7543500Z ==============================================================================
+2026-02-04T07:33:20.7543874Z 
+2026-02-04T07:33:20.7544063Z BUILD FAILED in 2m 56s
+2026-02-04T07:33:20.7544302Z 
+2026-02-04T07:33:20.7544907Z Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+2026-02-04T07:33:20.7545526Z 
+2026-02-04T07:33:20.7546513Z You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+2026-02-04T07:33:20.7547398Z 
+2026-02-04T07:33:20.7548545Z For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+2026-02-04T07:33:20.7549930Z 248 actionable tasks: 248 executed
+2026-02-04T07:33:21.3501274Z ##[error]Process completed with exit code 1.
