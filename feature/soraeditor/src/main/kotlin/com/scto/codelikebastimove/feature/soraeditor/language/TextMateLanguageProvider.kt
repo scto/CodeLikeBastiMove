@@ -31,6 +31,8 @@ class TextMateLanguageProvider : LanguageProvider {
       EditorLanguageType.LOG,
       EditorLanguageType.PROPERTIES,
       EditorLanguageType.JSON,
+      EditorLanguageType.YAML,
+      EditorLanguageType.TOML,
     )
 
   private fun initializeIfNeeded(context: Context) {
@@ -118,6 +120,8 @@ class TextMateLanguageProvider : LanguageProvider {
       EditorLanguageType.LOG -> "text.log"
       EditorLanguageType.PROPERTIES -> "source.ini"
       EditorLanguageType.JSON -> "source.json"
+      EditorLanguageType.YAML -> "source.yaml"
+      EditorLanguageType.TOML -> "source.toml"
       EditorLanguageType.PLAIN_TEXT -> "text.plain"
     }
   }

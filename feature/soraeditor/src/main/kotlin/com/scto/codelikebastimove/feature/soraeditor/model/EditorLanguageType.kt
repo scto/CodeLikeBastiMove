@@ -78,6 +78,18 @@ enum class EditorLanguageType(
     textMateScopeName = "source.json",
     mimeType = "application/json",
   ),
+  YAML(
+    displayName = "YAML",
+    fileExtensions = listOf("yaml", "yml"),
+    textMateScopeName = "source.yaml",
+    mimeType = "text/x-yaml",
+  ),
+  TOML(
+    displayName = "TOML",
+    fileExtensions = listOf("toml"),
+    textMateScopeName = "source.toml",
+    mimeType = "application/toml",
+  ),
   PLAIN_TEXT(
     displayName = "Plain Text",
     fileExtensions = listOf("txt", "text"),

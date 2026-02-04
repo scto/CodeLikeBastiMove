@@ -68,6 +68,9 @@ test-android-core = "1.7.0"
 espresso-core = "3.7.0"
 robolectric = "4.16"
 
+# ... SORA EDITOR ...
+editor = "0.23.5"
+
 # ... STORAGE:PREFERENCES ...
 androidxDataStore = "1.1.7"
 plugin-protobuf = "0.9.5"
@@ -261,9 +264,9 @@ google-accompanist-systemuicontroller = { module = "com.google.accompanist:accom
 #termux-app-termux-shared = { module = "com.github.termux.termux-app:termux-shared", version.ref = "termux-shared" }
 
 # ... COMMON ...
-#common-editor = { module = "io.github.Rosemoe.sora-editor:editor", version.ref = "editor" }
-#common-editor-textmate = { module = "io.github.Rosemoe.sora-editor:language-textmate", version.ref = "editor" }
-#common-editor-treesitter = { module = "io.github.Rosemoe.sora-editor:language-treesitter", version.ref = "editor" }
+common-editor = { module = "io.github.Rosemoe.sora-editor:editor", version.ref = "editor" }
+common-editor-textmate = { module = "io.github.Rosemoe.sora-editor:language-textmate", version.ref = "editor" }
+common-editor-treesitter = { module = "io.github.Rosemoe.sora-editor:language-treesitter", version.ref = "editor" }
 common-eventbus = { module = "org.greenrobot:eventbus", version = "3.3.1" }
 common-jsoup = { module = "org.jsoup:jsoup", version = "1.18.1" }
 common-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = "2.13" }

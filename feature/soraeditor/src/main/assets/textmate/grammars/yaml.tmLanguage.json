@@ -1,0 +1,125 @@
+{
+  "name": "YAML",
+  "scopeName": "source.yaml",
+  "fileTypes": ["yaml", "yml"],
+  "patterns": [
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#key-value"
+    },
+    {
+      "include": "#document"
+    },
+    {
+      "include": "#block-sequence"
+    },
+    {
+      "include": "#flow-scalar"
+    },
+    {
+      "include": "#flow-sequence"
+    },
+    {
+      "include": "#flow-mapping"
+    }
+  ],
+  "repository": {
+    "comment": {
+      "match": "#.*$",
+      "name": "comment.line.number-sign.yaml"
+    },
+    "document": {
+      "match": "^(---|\\.\\.\\.)",
+      "name": "punctuation.definition.document.yaml"
+    },
+    "key-value": {
+      "patterns": [
+        {
+          "match": "([^:{}\\[\\],&*#?|\\-<>=!%@`]+)\\s*(:)(?=\\s|$)",
+          "captures": {
+            "1": {
+              "name": "entity.name.tag.yaml"
+            },
+            "2": {
+              "name": "punctuation.separator.key-value.yaml"
+            }
+          }
+        },
+        {
+          "match": "(\"[^\"]*\"|'[^']*')\\s*(:)(?=\\s|$)",
+          "captures": {
+            "1": {
+              "name": "entity.name.tag.yaml"
+            },
+            "2": {
+              "name": "punctuation.separator.key-value.yaml"
+            }
+          }
+        }
+      ]
+    },
+    "block-sequence": {
+      "match": "^\\s*(-)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.block.sequence.item.yaml"
+        }
+      }
+    },
+    "flow-scalar": {
+      "patterns": [
+        {
+          "match": "\"([^\"]*)\"",
+          "name": "string.quoted.double.yaml"
+        },
+        {
+          "match": "'([^']*)'",
+          "name": "string.quoted.single.yaml"
+        },
+        {
+          "match": "\\b(true|false|yes|no|on|off)\\b",
+          "name": "constant.language.boolean.yaml"
+        },
+        {
+          "match": "\\b(null|~)\\b",
+          "name": "constant.language.null.yaml"
+        },
+        {
+          "match": "\\b[0-9]+\\.?[0-9]*([eE][+-]?[0-9]+)?\\b",
+          "name": "constant.numeric.yaml"
+        }
+      ]
+    },
+    "flow-sequence": {
+      "begin": "\\[",
+      "end": "\\]",
+      "name": "meta.flow-sequence.yaml",
+      "patterns": [
+        {
+          "include": "#flow-scalar"
+        },
+        {
+          "include": "#comment"
+        }
+      ]
+    },
+    "flow-mapping": {
+      "begin": "\\{",
+      "end": "\\}",
+      "name": "meta.flow-mapping.yaml",
+      "patterns": [
+        {
+          "include": "#key-value"
+        },
+        {
+          "include": "#flow-scalar"
+        },
+        {
+          "include": "#comment"
+        }
+      ]
+    }
+  }
+}

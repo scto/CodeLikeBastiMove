@@ -1,0 +1,89 @@
+{
+  "name": "TOML",
+  "scopeName": "source.toml",
+  "fileTypes": ["toml"],
+  "patterns": [
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#table"
+    },
+    {
+      "include": "#key-value"
+    }
+  ],
+  "repository": {
+    "comment": {
+      "match": "#.*$",
+      "name": "comment.line.number-sign.toml"
+    },
+    "table": {
+      "patterns": [
+        {
+          "match": "^\\s*(\\[\\[)([^\\]]+)(\\]\\])",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.table.array.toml"
+            },
+            "2": {
+              "name": "entity.name.section.toml"
+            },
+            "3": {
+              "name": "punctuation.definition.table.array.toml"
+            }
+          }
+        },
+        {
+          "match": "^\\s*(\\[)([^\\]]+)(\\])",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.table.toml"
+            },
+            "2": {
+              "name": "entity.name.section.toml"
+            },
+            "3": {
+              "name": "punctuation.definition.table.toml"
+            }
+          }
+        }
+      ]
+    },
+    "key-value": {
+      "patterns": [
+        {
+          "match": "([A-Za-z0-9_\\-\\.]+)\\s*(=)",
+          "captures": {
+            "1": {
+              "name": "variable.other.key.toml"
+            },
+            "2": {
+              "name": "keyword.operator.assignment.toml"
+            }
+          }
+        },
+        {
+          "match": "\"([^\"]*)\"",
+          "name": "string.quoted.double.toml"
+        },
+        {
+          "match": "'([^']*)'",
+          "name": "string.quoted.single.toml"
+        },
+        {
+          "match": "\\b(true|false)\\b",
+          "name": "constant.language.boolean.toml"
+        },
+        {
+          "match": "\\b[0-9]+\\.?[0-9]*([eE][+-]?[0-9]+)?\\b",
+          "name": "constant.numeric.toml"
+        },
+        {
+          "match": "\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})?)?",
+          "name": "constant.other.datetime.toml"
+        }
+      ]
+    }
+  }
+}

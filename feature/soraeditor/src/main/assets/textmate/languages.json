@@ -74,6 +74,20 @@
       "scopeName": "source.ini",
       "grammar": "textmate/grammars/properties.tmLanguage.json",
       "fileTypes": ["properties", "ini"]
+    },
+    {
+      "name": "yaml",
+      "scopeName": "source.yaml",
+      "grammar": "textmate/grammars/yaml.tmLanguage.json",
+      "languageConfiguration": "textmate/configurations/yaml.language-configuration.json",
+      "fileTypes": ["yaml", "yml"]
+    },
+    {
+      "name": "toml",
+      "scopeName": "source.toml",
+      "grammar": "textmate/grammars/toml.tmLanguage.json",
+      "languageConfiguration": "textmate/configurations/toml.language-configuration.json",
+      "fileTypes": ["toml"]
     }
   ]
 }

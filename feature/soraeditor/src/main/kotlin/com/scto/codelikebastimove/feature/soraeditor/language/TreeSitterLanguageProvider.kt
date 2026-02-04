@@ -8,6 +8,7 @@ import com.itsaky.androidide.treesitter.languages.cpp.CppLanguage
 import com.itsaky.androidide.treesitter.languages.java.JavaLanguage
 import com.itsaky.androidide.treesitter.languages.json.JsonLanguage
 import com.itsaky.androidide.treesitter.languages.kotlin.KotlinLanguage
+import com.itsaky.androidide.treesitter.languages.log.LogLanguage
 import com.itsaky.androidide.treesitter.languages.xml.XmlLanguage
 
 import com.scto.codelikebastimove.feature.soraeditor.model.EditorLanguageType
@@ -20,19 +21,18 @@ import io.github.rosemoe.sora.langs.treesitter.TreeLanguage
 import io.github.rosemoe.sora.langs.treesitter.theme.Theme
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
 
-class TreeSitterLanguageProvider {
+class TreeSitterLanguageProvider : LanguageProvider {
 
-    // Aktuelles Theme speichern, damit wir es beim Sprachwechsel anwenden können
     private var currentEditorTheme: EditorTheme = EditorThemes.DarkModern
 
-    private val supportedLanguages =
-    setOf(
+    private val supportedLanguages = setOf(
         EditorLanguageType.JAVA,
         EditorLanguageType.KOTLIN,
         EditorLanguageType.XML,
         EditorLanguageType.CPP,
-        EditorLanguageType.C, // CppLanguage parst meist auch C
+        EditorLanguageType.C,
         EditorLanguageType.JSON,
+        EditorLanguageType.LOG,
     )
 
     fun setTheme(theme: EditorTheme) {
@@ -47,6 +47,7 @@ class TreeSitterLanguageProvider {
                 EditorLanguageType.XML -> XmlLanguage.INSTANCE
                 EditorLanguageType.JSON -> JsonLanguage.INSTANCE
                 EditorLanguageType.CPP, EditorLanguageType.C -> CppLanguage.INSTANCE
+                EditorLanguageType.LOG -> LogLanguage.INSTANCE
                 else -> null
             }
 
