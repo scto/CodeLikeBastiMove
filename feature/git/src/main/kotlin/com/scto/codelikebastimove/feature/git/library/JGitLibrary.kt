@@ -27,6 +27,12 @@ sealed class JGitResult<T> {
     data class Error<T>(val message: String, val exception: Exception? = null) : JGitResult<T>()
 }
 
+enum class ResetMode {
+    SOFT,
+    MIXED,
+    HARD,
+}
+
 class JGitLibrary {
     private var currentGit: Git? = null
     private var currentRepo: Repository? = null
@@ -564,7 +570,7 @@ class JGitLibrary {
         }
     }
 
-    suspend fun revert(commitHash: String): JGitResult<Unit> = withContext(Dispatchers.IO) {
+    suspend fun revert(commitHash: String): JGitResult<GitCommit> = withContext(Dispatchers.IO) {
         val git = currentGit ?: return@withContext JGitResult.Error("No repository open")
         val repo = currentRepo ?: return@withContext JGitResult.Error("No repository open")
 
@@ -573,10 +579,269 @@ class JGitLibrary {
             if (objectId == null) {
                 return@withContext JGitResult.Error("Commit not found: $commitHash")
             }
-            git.revert().include(objectId).call()
-            JGitResult.Success(Unit)
+            val revertResult = git.revert().include(objectId).call()
+            val headCommit = git.log().setMaxCount(1).call().firstOrNull()
+            if (headCommit != null) {
+                JGitResult.Success(
+                    GitCommit(
+                        hash = headCommit.name,
+                        shortHash = headCommit.abbreviate(7).name(),
+                        message = headCommit.fullMessage,
+                        author = headCommit.authorIdent.name,
+                        authorEmail = headCommit.authorIdent.emailAddress,
+                        date = headCommit.commitTime.toLong() * 1000,
+                        parents = headCommit.parents.map { it.name },
+                    )
+                )
+            } else {
+                JGitResult.Error("Revert successful but could not retrieve commit details")
+            }
         } catch (e: Exception) {
             JGitResult.Error("Failed to revert: ${e.message}", e)
+        }
+    }
+
+    suspend fun discardChanges(paths: List<String>): JGitResult<Unit> = withContext(Dispatchers.IO) {
+        val git = currentGit ?: return@withContext JGitResult.Error("No repository open")
+
+        try {
+            val checkoutCommand = git.checkout()
+            paths.forEach { checkoutCommand.addPath(it) }
+            checkoutCommand.call()
+            JGitResult.Success(Unit)
+        } catch (e: Exception) {
+            JGitResult.Error("Failed to discard changes: ${e.message}", e)
+        }
+    }
+
+    suspend fun discardAllChanges(): JGitResult<Unit> = withContext(Dispatchers.IO) {
+        val git = currentGit ?: return@withContext JGitResult.Error("No repository open")
+
+        try {
+            git.checkout().setAllPaths(true).call()
+            JGitResult.Success(Unit)
+        } catch (e: Exception) {
+            JGitResult.Error("Failed to discard all changes: ${e.message}", e)
+        }
+    }
+
+    suspend fun renameBranch(oldName: String, newName: String): JGitResult<Unit> =
+        withContext(Dispatchers.IO) {
+            val git = currentGit ?: return@withContext JGitResult.Error("No repository open")
+
+            try {
+                git.branchRename()
+                    .setOldName(oldName)
+                    .setNewName(newName)
+                    .call()
+                JGitResult.Success(Unit)
+            } catch (e: Exception) {
+                JGitResult.Error("Failed to rename branch: ${e.message}", e)
+            }
+        }
+
+    suspend fun rebase(branch: String): JGitResult<Unit> = withContext(Dispatchers.IO) {
+        val git = currentGit ?: return@withContext JGitResult.Error("No repository open")
+
+        try {
+            git.rebase().setUpstream(branch).call()
+            JGitResult.Success(Unit)
+        } catch (e: Exception) {
+            JGitResult.Error("Failed to rebase: ${e.message}", e)
+        }
+    }
+
+    suspend fun abortRebase(): JGitResult<Unit> = withContext(Dispatchers.IO) {
+        val git = currentGit ?: return@withContext JGitResult.Error("No repository open")
+
+        try {
+            git.rebase().setOperation(org.eclipse.jgit.api.RebaseCommand.Operation.ABORT).call()
+            JGitResult.Success(Unit)
+        } catch (e: Exception) {
+            JGitResult.Error("Failed to abort rebase: ${e.message}", e)
+        }
+    }
+
+    suspend fun continueRebase(): JGitResult<Unit> = withContext(Dispatchers.IO) {
+        val git = currentGit ?: return@withContext JGitResult.Error("No repository open")
+
+        try {
+            git.rebase().setOperation(org.eclipse.jgit.api.RebaseCommand.Operation.CONTINUE).call()
+            JGitResult.Success(Unit)
+        } catch (e: Exception) {
+            JGitResult.Error("Failed to continue rebase: ${e.message}", e)
+        }
+    }
+
+    suspend fun getStashes(): JGitResult<List<GitStash>> = withContext(Dispatchers.IO) {
+        val git = currentGit ?: return@withContext JGitResult.Error("No repository open")
+
+        try {
+            val stashes = git.stashList().call().mapIndexed { index, revCommit ->
+                GitStash(
+                    index = index,
+                    message = revCommit.shortMessage,
+                    branch = "",
+                    hash = revCommit.name,
+                )
+            }
+            JGitResult.Success(stashes)
+        } catch (e: Exception) {
+            JGitResult.Error("Failed to get stashes: ${e.message}", e)
+        }
+    }
+
+    suspend fun stashApply(index: Int): JGitResult<Unit> = withContext(Dispatchers.IO) {
+        val git = currentGit ?: return@withContext JGitResult.Error("No repository open")
+
+        try {
+            val stashRef = "stash@{$index}"
+            git.stashApply().setStashRef(stashRef).call()
+            JGitResult.Success(Unit)
+        } catch (e: Exception) {
+            JGitResult.Error("Failed to apply stash: ${e.message}", e)
+        }
+    }
+
+    suspend fun stashDrop(index: Int): JGitResult<Unit> = withContext(Dispatchers.IO) {
+        val git = currentGit ?: return@withContext JGitResult.Error("No repository open")
+
+        try {
+            git.stashDrop().setStashRef(index).call()
+            JGitResult.Success(Unit)
+        } catch (e: Exception) {
+            JGitResult.Error("Failed to drop stash: ${e.message}", e)
+        }
+    }
+
+    suspend fun stashClear(): JGitResult<Unit> = withContext(Dispatchers.IO) {
+        val git = currentGit ?: return@withContext JGitResult.Error("No repository open")
+
+        try {
+            val stashList = git.stashList().call()
+            repeat(stashList.size) {
+                git.stashDrop().setStashRef(0).call()
+            }
+            JGitResult.Success(Unit)
+        } catch (e: Exception) {
+            JGitResult.Error("Failed to clear stashes: ${e.message}", e)
+        }
+    }
+
+    suspend fun getCommitDetails(hash: String): JGitResult<GitCommit> = withContext(Dispatchers.IO) {
+        val git = currentGit ?: return@withContext JGitResult.Error("No repository open")
+        val repo = currentRepo ?: return@withContext JGitResult.Error("No repository open")
+
+        try {
+            val objectId = repo.resolve(hash) ?: return@withContext JGitResult.Error("Commit not found: $hash")
+            RevWalk(repo).use { revWalk ->
+                val commit = revWalk.parseCommit(objectId)
+                JGitResult.Success(
+                    GitCommit(
+                        hash = commit.name,
+                        shortHash = commit.abbreviate(7).name(),
+                        message = commit.fullMessage,
+                        author = commit.authorIdent.name,
+                        authorEmail = commit.authorIdent.emailAddress,
+                        date = commit.commitTime.toLong() * 1000,
+                        parents = commit.parents.map { it.name },
+                    )
+                )
+            }
+        } catch (e: Exception) {
+            JGitResult.Error("Failed to get commit details: ${e.message}", e)
+        }
+    }
+
+    suspend fun getDiff(path: String, staged: Boolean): JGitResult<String> = withContext(Dispatchers.IO) {
+        val git = currentGit ?: return@withContext JGitResult.Error("No repository open")
+        val repo = currentRepo ?: return@withContext JGitResult.Error("No repository open")
+
+        try {
+            val outputStream = java.io.ByteArrayOutputStream()
+            val diffCommand = git.diff().setOutputStream(outputStream)
+
+            if (staged) {
+                diffCommand.setCached(true)
+            }
+
+            diffCommand.setPathFilter(org.eclipse.jgit.treewalk.filter.PathFilter.create(path))
+            diffCommand.call()
+
+            JGitResult.Success(outputStream.toString())
+        } catch (e: Exception) {
+            JGitResult.Error("Failed to get diff: ${e.message}", e)
+        }
+    }
+
+    suspend fun getCommitDiff(commitHash: String): JGitResult<String> = withContext(Dispatchers.IO) {
+        val git = currentGit ?: return@withContext JGitResult.Error("No repository open")
+        val repo = currentRepo ?: return@withContext JGitResult.Error("No repository open")
+
+        try {
+            val objectId = repo.resolve(commitHash) ?: return@withContext JGitResult.Error("Commit not found")
+            RevWalk(repo).use { revWalk ->
+                val commit = revWalk.parseCommit(objectId)
+                val parentId = if (commit.parentCount > 0) commit.getParent(0) else null
+
+                val outputStream = java.io.ByteArrayOutputStream()
+                val diffCommand = git.diff().setOutputStream(outputStream)
+
+                if (parentId != null) {
+                    val parentCommit = revWalk.parseCommit(parentId)
+                    diffCommand.setOldTree(prepareTreeParser(repo, parentCommit))
+                }
+                diffCommand.setNewTree(prepareTreeParser(repo, commit))
+                diffCommand.call()
+
+                JGitResult.Success(outputStream.toString())
+            }
+        } catch (e: Exception) {
+            JGitResult.Error("Failed to get commit diff: ${e.message}", e)
+        }
+    }
+
+    private fun prepareTreeParser(repo: Repository, commit: RevCommit): org.eclipse.jgit.treewalk.AbstractTreeIterator {
+        val treeWalk = TreeWalk(repo)
+        treeWalk.addTree(commit.tree)
+        treeWalk.isRecursive = true
+        return org.eclipse.jgit.treewalk.CanonicalTreeParser().apply {
+            reset(repo.newObjectReader(), commit.tree)
+        }
+    }
+
+    suspend fun getCurrentBranch(): String? = withContext(Dispatchers.IO) {
+        currentRepo?.branch
+    }
+
+    suspend fun isGitRepository(path: String): Boolean = withContext(Dispatchers.IO) {
+        val gitDir = File(path, ".git")
+        gitDir.exists() && gitDir.isDirectory
+    }
+
+    suspend fun getRepositoryRoot(): String? = withContext(Dispatchers.IO) {
+        currentRepo?.directory?.parentFile?.absolutePath
+    }
+
+    suspend fun renameRemote(oldName: String, newName: String): JGitResult<Unit> = withContext(Dispatchers.IO) {
+        val git = currentGit ?: return@withContext JGitResult.Error("No repository open")
+
+        try {
+            val remotes = git.remoteList().call()
+            val remote = remotes.find { it.name == oldName }
+                ?: return@withContext JGitResult.Error("Remote not found: $oldName")
+
+            val url = remote.urIs.firstOrNull()?.toString() ?: ""
+
+            git.remoteRemove().setRemoteName(oldName).call()
+            git.remoteAdd()
+                .setName(newName)
+                .setUri(org.eclipse.jgit.transport.URIish(url))
+                .call()
+
+            JGitResult.Success(Unit)
+        } catch (e: Exception) {
+            JGitResult.Error("Failed to rename remote: ${e.message}", e)
         }
     }
 

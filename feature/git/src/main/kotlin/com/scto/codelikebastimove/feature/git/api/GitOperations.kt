@@ -130,6 +130,24 @@ interface GitOperations {
     path: String,
     resolution: ConflictResolution,
   ): GitOperationResult<Unit>
+
+  suspend fun getConfig(key: String): GitOperationResult<String?>
+
+  suspend fun setConfig(
+    key: String,
+    value: String,
+    global: Boolean = false,
+  ): GitOperationResult<Unit>
+
+  suspend fun clean(
+    directories: Boolean = false,
+    force: Boolean = false,
+    dryRun: Boolean = false,
+  ): GitOperationResult<List<String>>
+
+  suspend fun setCredentials(username: String, password: String)
+
+  suspend fun clearCredentials()
 }
 
 enum class ResetMode {

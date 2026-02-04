@@ -5,10 +5,10 @@ import com.scto.codelikebastimove.feature.git.library.JGitLibrary
 import com.scto.codelikebastimove.feature.git.library.JGitResult
 import com.scto.codelikebastimove.feature.git.model.*
 import kotlinx.coroutines.flow.*
+import com.scto.codelikebastimove.feature.git.library.ResetMode as JGitResetMode
 
 class DefaultGitRepository : GitOperations {
 
-  private val executor = GitCommandExecutor()
   private val jgitLibrary = JGitLibrary()
 
   private val _currentRepository = MutableStateFlow<GitRepository?>(null)
@@ -24,41 +24,41 @@ class DefaultGitRepository : GitOperations {
   override val operationProgress: Flow<GitOperationProgress> = _operationProgress.asSharedFlow()
 
   override suspend fun openRepository(path: String): GitOperationResult<GitRepository> {
-    executor.setWorkingDirectory(path)
+    val result = jgitLibrary.openRepository(path)
 
-    if (!executor.isGitRepository()) {
-      return GitOperationResult.Error("Not a git repository: $path")
+    return when (result) {
+      is JGitResult.Success -> {
+        val branch = jgitLibrary.getCurrentBranch() ?: "HEAD"
+        val remotesResult = jgitLibrary.getRemotes()
+        val remoteUrl = when (remotesResult) {
+          is JGitResult.Success -> remotesResult.data.firstOrNull()?.fetchUrl
+          is JGitResult.Error -> null
+        }
+
+        val repo = GitRepository(
+          path = jgitLibrary.getRepositoryRoot() ?: path,
+          name = path.substringAfterLast("/"),
+          currentBranch = branch,
+          isDetachedHead = branch == "HEAD",
+          remoteName = "origin",
+          remoteUrl = remoteUrl,
+        )
+
+        _currentRepository.value = repo
+        refresh()
+
+        GitOperationResult.Success(repo)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
-
-    val rootPath = executor.getRepositoryRoot() ?: path
-    val branch = executor.getCurrentBranch() ?: "HEAD"
-
-    val remoteResult = executor.execute("remote", "get-url", "origin")
-
-    val repo =
-      GitRepository(
-        path = rootPath,
-        name = rootPath.substringAfterLast("/"),
-        currentBranch = branch,
-        isDetachedHead = branch == "HEAD",
-        remoteName = "origin".takeIf { remoteResult.success },
-        remoteUrl = remoteResult.stdout.takeIf { remoteResult.success },
-      )
-
-    _currentRepository.value = repo
-    refresh()
-
-    return GitOperationResult.Success(repo)
   }
 
   override suspend fun initRepository(path: String): GitOperationResult<GitRepository> {
-    executor.setWorkingDirectory(path)
-    val result = executor.execute("init")
+    val result = jgitLibrary.initRepository(path)
 
-    return if (result.success) {
-      openRepository(path)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (result) {
+      is JGitResult.Success -> openRepository(path)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
@@ -91,102 +91,96 @@ class DefaultGitRepository : GitOperations {
   }
 
   override suspend fun getStatus(): GitOperationResult<GitStatus> {
-    return executor.getStatus()
+    return when (val result = jgitLibrary.getStatus()) {
+      is JGitResult.Success -> GitOperationResult.Success(result.data)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
+    }
   }
 
   override suspend fun refresh(): GitOperationResult<Unit> {
-    val statusResult = executor.getStatus()
-    if (statusResult is GitOperationResult.Success) {
+    val statusResult = jgitLibrary.getStatus()
+    if (statusResult is JGitResult.Success) {
       _status.value = statusResult.data
-      _currentRepository.value =
-        _currentRepository.value?.copy(
-          hasUncommittedChanges =
-            statusResult.data.stagedChanges.isNotEmpty() ||
-              statusResult.data.unstagedChanges.isNotEmpty() ||
-              statusResult.data.untrackedFiles.isNotEmpty()
-        )
+      _currentRepository.value = _currentRepository.value?.copy(
+        hasUncommittedChanges =
+          statusResult.data.stagedChanges.isNotEmpty() ||
+            statusResult.data.unstagedChanges.isNotEmpty() ||
+            statusResult.data.untrackedFiles.isNotEmpty()
+      )
     }
     return GitOperationResult.Success(Unit)
   }
 
   override suspend fun stage(paths: List<String>): GitOperationResult<Unit> {
-    val result = executor.execute("add", *paths.toTypedArray())
-    return if (result.success) {
-      refresh()
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.stage(paths)) {
+      is JGitResult.Success -> {
+        refresh()
+        GitOperationResult.Success(Unit)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun stageAll(): GitOperationResult<Unit> {
-    val result = executor.execute("add", "-A")
-    return if (result.success) {
-      refresh()
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.stageAll()) {
+      is JGitResult.Success -> {
+        refresh()
+        GitOperationResult.Success(Unit)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun unstage(paths: List<String>): GitOperationResult<Unit> {
-    val result = executor.execute("restore", "--staged", *paths.toTypedArray())
-    return if (result.success) {
-      refresh()
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.unstage(paths)) {
+      is JGitResult.Success -> {
+        refresh()
+        GitOperationResult.Success(Unit)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun unstageAll(): GitOperationResult<Unit> {
-    val result = executor.execute("reset", "HEAD")
-    return if (result.success) {
-      refresh()
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.reset(ResetMode.MIXED, "HEAD")) {
+      is JGitResult.Success -> {
+        refresh()
+        GitOperationResult.Success(Unit)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun discardChanges(paths: List<String>): GitOperationResult<Unit> {
-    val result = executor.execute("checkout", "--", *paths.toTypedArray())
-    return if (result.success) {
-      refresh()
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.discardChanges(paths)) {
+      is JGitResult.Success -> {
+        refresh()
+        GitOperationResult.Success(Unit)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun discardAllChanges(): GitOperationResult<Unit> {
-    val result = executor.execute("checkout", "--", ".")
-    return if (result.success) {
-      refresh()
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.discardAllChanges()) {
+      is JGitResult.Success -> {
+        refresh()
+        GitOperationResult.Success(Unit)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun commit(options: GitCommitOptions): GitOperationResult<GitCommit> {
-    val args = mutableListOf("commit", "-m", options.message)
-    if (options.amend) args.add("--amend")
-    if (options.allowEmpty) args.add("--allow-empty")
-    if (options.signoff) args.add("--signoff")
-
-    val result = executor.execute(*args.toTypedArray())
-
-    return if (result.success) {
-      val logResult = executor.getLog(null, 1, 0)
-      if (logResult is GitOperationResult.Success && logResult.data.commits.isNotEmpty()) {
+    return when (val result = jgitLibrary.commit(
+      message = options.message,
+      amend = options.amend,
+    )) {
+      is JGitResult.Success -> {
         refresh()
-        GitOperationResult.Success(logResult.data.commits.first())
-      } else {
-        GitOperationResult.Error("Commit successful but could not retrieve commit details")
+        GitOperationResult.Success(result.data)
       }
-    } else {
-      GitOperationResult.Error(result.stderr)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
@@ -195,39 +189,27 @@ class DefaultGitRepository : GitOperations {
     maxCount: Int,
     skip: Int,
   ): GitOperationResult<GitLog> {
-    return executor.getLog(branch, maxCount, skip)
+    return when (val result = jgitLibrary.getLog(maxCount)) {
+      is JGitResult.Success -> {
+        val commits = if (skip > 0) result.data.drop(skip) else result.data
+        GitOperationResult.Success(GitLog(commits = commits, hasMore = false))
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
+    }
   }
 
   override suspend fun getCommitDetails(hash: String): GitOperationResult<GitCommit> {
-    val result = executor.execute("show", "-s", "--format=%H|%h|%s|%an|%ae|%at|%P|%B", hash)
-
-    return if (result.success) {
-      val lines = result.stdout.lines()
-      val firstLine = lines.firstOrNull() ?: return GitOperationResult.Error("Empty commit")
-      val parts = firstLine.split("|", limit = 8)
-
-      if (parts.size >= 6) {
-        GitOperationResult.Success(
-          GitCommit(
-            hash = parts[0],
-            shortHash = parts[1],
-            message = parts.getOrNull(7) ?: parts[2],
-            author = parts[3],
-            authorEmail = parts[4],
-            date = parts[5].toLongOrNull()?.times(1000) ?: 0L,
-            parents = parts.getOrNull(6)?.split(" ")?.filter { it.isNotBlank() } ?: emptyList(),
-          )
-        )
-      } else {
-        GitOperationResult.Error("Could not parse commit")
-      }
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.getCommitDetails(hash)) {
+      is JGitResult.Success -> GitOperationResult.Success(result.data)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun getBranches(): GitOperationResult<List<GitBranch>> {
-    return executor.getBranches()
+    return when (val result = jgitLibrary.getBranches()) {
+      is JGitResult.Success -> GitOperationResult.Success(result.data)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
+    }
   }
 
   override suspend fun createBranch(
@@ -235,48 +217,29 @@ class DefaultGitRepository : GitOperations {
     startPoint: String?,
     checkout: Boolean,
   ): GitOperationResult<GitBranch> {
-    val args = mutableListOf(if (checkout) "checkout" else "branch")
-    if (checkout) args.add("-b")
-    args.add(name)
-    startPoint?.let { args.add(it) }
-
-    val result = executor.execute(*args.toTypedArray())
-
-    return if (result.success) {
-      refresh()
-      GitOperationResult.Success(
-        GitBranch(
-          name = name,
-          isLocal = true,
-          isRemote = false,
-          isCurrent = checkout,
-          lastCommitHash = null,
-          lastCommitMessage = null,
-        )
-      )
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.createBranch(name, checkout)) {
+      is JGitResult.Success -> {
+        refresh()
+        GitOperationResult.Success(result.data)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun deleteBranch(name: String, force: Boolean): GitOperationResult<Unit> {
-    val flag = if (force) "-D" else "-d"
-    val result = executor.execute("branch", flag, name)
-
-    return if (result.success) {
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.deleteBranch(name, force)) {
+      is JGitResult.Success -> GitOperationResult.Success(Unit)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun renameBranch(oldName: String, newName: String): GitOperationResult<Unit> {
-    val result = executor.execute("branch", "-m", oldName, newName)
-    return if (result.success) {
-      refresh()
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.renameBranch(oldName, newName)) {
+      is JGitResult.Success -> {
+        refresh()
+        GitOperationResult.Success(Unit)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
@@ -284,22 +247,16 @@ class DefaultGitRepository : GitOperations {
     branchOrCommit: String,
     createNew: Boolean,
   ): GitOperationResult<Unit> {
-    val args = mutableListOf("checkout")
-    if (createNew) args.add("-b")
-    args.add(branchOrCommit)
-
-    val result = executor.execute(*args.toTypedArray())
-
-    return if (result.success) {
-      refresh()
-      _currentRepository.value =
-        _currentRepository.value?.copy(
+    return when (val result = jgitLibrary.checkout(branchOrCommit, createNew)) {
+      is JGitResult.Success -> {
+        refresh()
+        _currentRepository.value = _currentRepository.value?.copy(
           currentBranch = branchOrCommit,
           isDetachedHead = !createNew && branchOrCommit.length == 40,
         )
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+        GitOperationResult.Success(Unit)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
@@ -308,103 +265,90 @@ class DefaultGitRepository : GitOperations {
     message: String?,
     noFastForward: Boolean,
   ): GitOperationResult<Unit> {
-    val args = mutableListOf("merge", branch)
-    if (noFastForward) args.add("--no-ff")
-    message?.let { args.addAll(listOf("-m", it)) }
-
-    val result = executor.execute(*args.toTypedArray())
-
-    return if (result.success) {
-      refresh()
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.merge(branch)) {
+      is JGitResult.Success -> {
+        refresh()
+        GitOperationResult.Success(Unit)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun rebase(branch: String, interactive: Boolean): GitOperationResult<Unit> {
-    val args = mutableListOf("rebase")
-    if (interactive) args.add("-i")
-    args.add(branch)
-
-    val result = executor.execute(*args.toTypedArray())
-
-    return if (result.success) {
-      refresh()
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.rebase(branch)) {
+      is JGitResult.Success -> {
+        refresh()
+        GitOperationResult.Success(Unit)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun abortMerge(): GitOperationResult<Unit> {
-    val result = executor.execute("merge", "--abort")
-    return if (result.success) {
-      refresh()
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.reset(ResetMode.HARD, "HEAD")) {
+      is JGitResult.Success -> {
+        refresh()
+        GitOperationResult.Success(Unit)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun abortRebase(): GitOperationResult<Unit> {
-    val result = executor.execute("rebase", "--abort")
-    return if (result.success) {
-      refresh()
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.abortRebase()) {
+      is JGitResult.Success -> {
+        refresh()
+        GitOperationResult.Success(Unit)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun continueMerge(): GitOperationResult<Unit> {
-    val result = executor.execute("merge", "--continue")
-    return if (result.success) {
-      refresh()
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.commit("Merge commit")) {
+      is JGitResult.Success -> {
+        refresh()
+        GitOperationResult.Success(Unit)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun continueRebase(): GitOperationResult<Unit> {
-    val result = executor.execute("rebase", "--continue")
-    return if (result.success) {
-      refresh()
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.continueRebase()) {
+      is JGitResult.Success -> {
+        refresh()
+        GitOperationResult.Success(Unit)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun getRemotes(): GitOperationResult<List<GitRemote>> {
-    return executor.getRemotes()
+    return when (val result = jgitLibrary.getRemotes()) {
+      is JGitResult.Success -> GitOperationResult.Success(result.data)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
+    }
   }
 
   override suspend fun addRemote(name: String, url: String): GitOperationResult<Unit> {
-    val result = executor.execute("remote", "add", name, url)
-    return if (result.success) {
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.addRemote(name, url)) {
+      is JGitResult.Success -> GitOperationResult.Success(Unit)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun removeRemote(name: String): GitOperationResult<Unit> {
-    val result = executor.execute("remote", "remove", name)
-    return if (result.success) {
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.removeRemote(name)) {
+      is JGitResult.Success -> GitOperationResult.Success(Unit)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun renameRemote(oldName: String, newName: String): GitOperationResult<Unit> {
-    val result = executor.execute("remote", "rename", oldName, newName)
-    return if (result.success) {
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.renameRemote(oldName, newName)) {
+      is JGitResult.Success -> GitOperationResult.Success(Unit)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
@@ -413,16 +357,12 @@ class DefaultGitRepository : GitOperations {
     emitProgress("Fetch", "Fetching from $remote...", 0f, true)
 
     try {
-      val args = mutableListOf("fetch", remote)
-      if (prune) args.add("--prune")
-
-      val result = executor.execute(*args.toTypedArray())
-
-      return if (result.success) {
-        refresh()
-        GitOperationResult.Success(Unit)
-      } else {
-        GitOperationResult.Error(result.stderr)
+      return when (val result = jgitLibrary.fetch(remote)) {
+        is JGitResult.Success -> {
+          refresh()
+          GitOperationResult.Success(Unit)
+        }
+        is JGitResult.Error -> GitOperationResult.Error(result.message)
       }
     } finally {
       _isOperationInProgress.value = false
@@ -434,18 +374,12 @@ class DefaultGitRepository : GitOperations {
     emitProgress("Pull", "Pulling from ${options.remote}...", 0f, true)
 
     try {
-      val args = mutableListOf("pull", options.remote)
-      options.branch?.let { args.add(it) }
-      if (options.rebase) args.add("--rebase")
-      if (options.autostash) args.add("--autostash")
-
-      val result = executor.execute(*args.toTypedArray())
-
-      return if (result.success) {
-        refresh()
-        GitOperationResult.Success(Unit)
-      } else {
-        GitOperationResult.Error(result.stderr)
+      return when (val result = jgitLibrary.pull(options.remote, options.rebase)) {
+        is JGitResult.Success -> {
+          refresh()
+          GitOperationResult.Success(Unit)
+        }
+        is JGitResult.Error -> GitOperationResult.Error(result.message)
       }
     } finally {
       _isOperationInProgress.value = false
@@ -457,19 +391,12 @@ class DefaultGitRepository : GitOperations {
     emitProgress("Push", "Pushing to ${options.remote}...", 0f, true)
 
     try {
-      val args = mutableListOf("push", options.remote)
-      options.branch?.let { args.add(it) }
-      if (options.force) args.add("--force")
-      if (options.setUpstream) args.add("--set-upstream")
-      if (options.tags) args.add("--tags")
-
-      val result = executor.execute(*args.toTypedArray())
-
-      return if (result.success) {
-        refresh()
-        GitOperationResult.Success(Unit)
-      } else {
-        GitOperationResult.Error(result.stderr)
+      return when (val result = jgitLibrary.push(options.remote, options.force)) {
+        is JGitResult.Success -> {
+          refresh()
+          GitOperationResult.Success(Unit)
+        }
+        is JGitResult.Error -> GitOperationResult.Error(result.message)
       }
     } finally {
       _isOperationInProgress.value = false
@@ -477,72 +404,74 @@ class DefaultGitRepository : GitOperations {
   }
 
   override suspend fun getStashes(): GitOperationResult<List<GitStash>> {
-    return executor.getStashes()
+    return when (val result = jgitLibrary.getStashes()) {
+      is JGitResult.Success -> GitOperationResult.Success(result.data)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
+    }
   }
 
   override suspend fun stash(
     message: String?,
     includeUntracked: Boolean,
   ): GitOperationResult<GitStash> {
-    val args = mutableListOf("stash", "push")
-    message?.let { args.addAll(listOf("-m", it)) }
-    if (includeUntracked) args.add("-u")
-
-    val result = executor.execute(*args.toTypedArray())
-
-    return if (result.success) {
-      refresh()
-      val stashesResult = getStashes()
-      if (stashesResult is GitOperationResult.Success && stashesResult.data.isNotEmpty()) {
-        GitOperationResult.Success(stashesResult.data.first())
-      } else {
-        GitOperationResult.Success(GitStash(0, message ?: "WIP", "", ""))
+    return when (val result = jgitLibrary.stash(message)) {
+      is JGitResult.Success -> {
+        refresh()
+        val stashesResult = getStashes()
+        if (stashesResult is GitOperationResult.Success && stashesResult.data.isNotEmpty()) {
+          GitOperationResult.Success(stashesResult.data.first())
+        } else {
+          GitOperationResult.Success(GitStash(0, message ?: "WIP", "", ""))
+        }
       }
-    } else {
-      GitOperationResult.Error(result.stderr)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun stashPop(index: Int): GitOperationResult<Unit> {
-    val result = executor.execute("stash", "pop", "stash@{$index}")
-    return if (result.success) {
-      refresh()
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val applyResult = jgitLibrary.stashApply(index)) {
+      is JGitResult.Success -> {
+        when (val dropResult = jgitLibrary.stashDrop(index)) {
+          is JGitResult.Success -> {
+            refresh()
+            GitOperationResult.Success(Unit)
+          }
+          is JGitResult.Error -> GitOperationResult.Error(dropResult.message)
+        }
+      }
+      is JGitResult.Error -> GitOperationResult.Error(applyResult.message)
     }
   }
 
   override suspend fun stashApply(index: Int): GitOperationResult<Unit> {
-    val result = executor.execute("stash", "apply", "stash@{$index}")
-    return if (result.success) {
-      refresh()
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.stashApply(index)) {
+      is JGitResult.Success -> {
+        refresh()
+        GitOperationResult.Success(Unit)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun stashDrop(index: Int): GitOperationResult<Unit> {
-    val result = executor.execute("stash", "drop", "stash@{$index}")
-    return if (result.success) {
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.stashDrop(index)) {
+      is JGitResult.Success -> GitOperationResult.Success(Unit)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun stashClear(): GitOperationResult<Unit> {
-    val result = executor.execute("stash", "clear")
-    return if (result.success) {
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.stashClear()) {
+      is JGitResult.Success -> GitOperationResult.Success(Unit)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun getTags(): GitOperationResult<List<GitTag>> {
-    return executor.getTags()
+    return when (val result = jgitLibrary.getTags()) {
+      is JGitResult.Success -> GitOperationResult.Success(result.data)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
+    }
   }
 
   override suspend fun createTag(
@@ -550,81 +479,54 @@ class DefaultGitRepository : GitOperations {
     message: String?,
     commitHash: String?,
   ): GitOperationResult<GitTag> {
-    val args = mutableListOf("tag")
-    if (message != null) {
-      args.addAll(listOf("-a", name, "-m", message))
-    } else {
-      args.add(name)
-    }
-    commitHash?.let { args.add(it) }
-
-    val result = executor.execute(*args.toTypedArray())
-
-    return if (result.success) {
-      GitOperationResult.Success(
-        GitTag(
-          name = name,
-          commitHash = commitHash ?: "",
-          message = message,
-          isAnnotated = message != null,
-        )
-      )
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.createTag(name, message)) {
+      is JGitResult.Success -> GitOperationResult.Success(result.data)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun deleteTag(name: String): GitOperationResult<Unit> {
-    val result = executor.execute("tag", "-d", name)
-    return if (result.success) {
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.deleteTag(name)) {
+      is JGitResult.Success -> GitOperationResult.Success(Unit)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun getDiff(path: String, staged: Boolean): GitOperationResult<GitDiff> {
-    val args = mutableListOf("diff")
-    if (staged) args.add("--cached")
-    args.add("--")
-    args.add(path)
-
-    val result = executor.execute(*args.toTypedArray())
-
-    return if (result.success) {
-      GitOperationResult.Success(parseDiff(path, result.stdout))
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.getDiff(path, staged)) {
+      is JGitResult.Success -> GitOperationResult.Success(parseDiff(path, result.data))
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun getFileDiff(commitHash: String, path: String): GitOperationResult<GitDiff> {
-    val result = executor.execute("show", "--format=", commitHash, "--", path)
-
-    return if (result.success) {
-      GitOperationResult.Success(parseDiff(path, result.stdout))
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.getCommitDiff(commitHash)) {
+      is JGitResult.Success -> GitOperationResult.Success(parseDiff(path, result.data))
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun getCommitDiff(commitHash: String): GitOperationResult<List<GitDiff>> {
-    val result = executor.execute("show", "--format=", "--name-only", commitHash)
+    return when (val result = jgitLibrary.getCommitDiff(commitHash)) {
+      is JGitResult.Success -> {
+        val diffs = parseDiffs(result.data)
+        GitOperationResult.Success(diffs)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
+    }
+  }
 
-    if (!result.success) {
-      return GitOperationResult.Error(result.stderr)
+  private fun parseDiffs(diffOutput: String): List<GitDiff> {
+    val diffs = mutableListOf<GitDiff>()
+    val diffSections = diffOutput.split(Regex("(?=diff --git)")).filter { it.isNotBlank() }
+
+    for (section in diffSections) {
+      val pathMatch = Regex("diff --git a/(.*?) b/(.*)").find(section)
+      val path = pathMatch?.groupValues?.get(2) ?: "unknown"
+      diffs.add(parseDiff(path, section))
     }
 
-    val files = result.stdout.lines().filter { it.isNotBlank() }
-    val diffs =
-      files.mapNotNull { file ->
-        when (val diffResult = getFileDiff(commitHash, file)) {
-          is GitOperationResult.Success -> diffResult.data
-          is GitOperationResult.Error -> null
-        }
-      }
-
-    return GitOperationResult.Success(diffs)
+    return diffs
   }
 
   private fun parseDiff(path: String, diffOutput: String): GitDiff {
@@ -685,117 +587,89 @@ class DefaultGitRepository : GitOperations {
   }
 
   override suspend fun cherryPick(commitHash: String): GitOperationResult<Unit> {
-    val result = executor.execute("cherry-pick", commitHash)
-    return if (result.success) {
-      refresh()
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+    return when (val result = jgitLibrary.cherryPick(commitHash)) {
+      is JGitResult.Success -> {
+        refresh()
+        GitOperationResult.Success(Unit)
+      }
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun revert(commitHash: String): GitOperationResult<GitCommit> {
-    val result = executor.execute("revert", "--no-edit", commitHash)
-
-    return if (result.success) {
-      val logResult = getLog(null, 1, 0)
-      if (logResult is GitOperationResult.Success && logResult.data.commits.isNotEmpty()) {
+    return when (val result = jgitLibrary.revert(commitHash)) {
+      is JGitResult.Success -> {
         refresh()
-        GitOperationResult.Success(logResult.data.commits.first())
-      } else {
-        GitOperationResult.Error("Revert successful but could not retrieve commit details")
+        GitOperationResult.Success(result.data)
       }
-    } else {
-      GitOperationResult.Error(result.stderr)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
-  override suspend fun reset(commitHash: String, mode: ResetMode): GitOperationResult<Unit> {
-    val modeFlag =
-      when (mode) {
-        ResetMode.SOFT -> "--soft"
-        ResetMode.MIXED -> "--mixed"
-        ResetMode.HARD -> "--hard"
+  override suspend fun reset(
+    commitHash: String,
+    mode: ResetMode,
+  ): GitOperationResult<Unit> {
+    val resetMode = when (mode) {
+      ResetMode.SOFT -> JGitResetMode.SOFT
+      ResetMode.MIXED -> JGitResetMode.MIXED
+      ResetMode.HARD -> JGitResetMode.HARD
+    }
+
+    return when (val result = jgitLibrary.reset(resetMode, commitHash)) {
+      is JGitResult.Success -> {
+        refresh()
+        GitOperationResult.Success(Unit)
       }
-
-    val result = executor.execute("reset", modeFlag, commitHash)
-
-    return if (result.success) {
-      refresh()
-      GitOperationResult.Success(Unit)
-    } else {
-      GitOperationResult.Error(result.stderr)
+      is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
   }
 
   override suspend fun blame(path: String): GitOperationResult<List<BlameLine>> {
-    val result = executor.execute("blame", "--line-porcelain", path)
-
-    if (!result.success) {
-      return GitOperationResult.Error(result.stderr)
-    }
-
-    val blameLines = mutableListOf<BlameLine>()
-    val lines = result.stdout.lines()
-    var lineNumber = 0
-    var currentHash = ""
-    var currentAuthor = ""
-    var currentDate = 0L
-    var currentContent = ""
-
-    for (line in lines) {
-      when {
-        line.matches(Regex("^[a-f0-9]{40}.*")) -> {
-          currentHash = line.take(40)
-          lineNumber++
-        }
-        line.startsWith("author ") -> currentAuthor = line.removePrefix("author ")
-        line.startsWith("author-time ") ->
-          currentDate = line.removePrefix("author-time ").toLongOrNull()?.times(1000) ?: 0L
-        line.startsWith("\t") -> {
-          currentContent = line.removePrefix("\t")
-          blameLines.add(
-            BlameLine(
-              lineNumber = lineNumber,
-              content = currentContent,
-              commitHash = currentHash,
-              author = currentAuthor,
-              date = currentDate,
-            )
-          )
-        }
-      }
-    }
-
-    return GitOperationResult.Success(blameLines)
+    return GitOperationResult.Error("Blame operation not yet supported with JGit")
   }
 
   override suspend fun resolveConflict(
     path: String,
     resolution: ConflictResolution,
   ): GitOperationResult<Unit> {
-    val args =
-      when (resolution) {
-        ConflictResolution.OURS -> arrayOf("checkout", "--ours", path)
-        ConflictResolution.THEIRS -> arrayOf("checkout", "--theirs", path)
-        ConflictResolution.MANUAL -> return GitOperationResult.Success(Unit)
-      }
+    return GitOperationResult.Error("Conflict resolution not yet supported with JGit")
+  }
 
-    val result = executor.execute(*args)
+  override suspend fun getConfig(key: String): GitOperationResult<String?> {
+    return GitOperationResult.Error("Config retrieval not yet supported with JGit")
+  }
 
-    return if (result.success) {
-      stage(listOf(path))
-    } else {
-      GitOperationResult.Error(result.stderr)
-    }
+  override suspend fun setConfig(
+    key: String,
+    value: String,
+    global: Boolean,
+  ): GitOperationResult<Unit> {
+    return GitOperationResult.Error("Config setting not yet supported with JGit")
+  }
+
+  override suspend fun clean(
+    directories: Boolean,
+    force: Boolean,
+    dryRun: Boolean,
+  ): GitOperationResult<List<String>> {
+    return GitOperationResult.Error("Clean operation not yet supported with JGit")
+  }
+
+  override suspend fun setCredentials(username: String, password: String) {
+    jgitLibrary.setCredentials(username, password)
+  }
+
+  override suspend fun clearCredentials() {
+    jgitLibrary.clearCredentials()
   }
 
   private suspend fun emitProgress(
     operation: String,
     message: String,
     progress: Float,
-    isIndeterminate: Boolean = false,
+    indeterminate: Boolean
   ) {
-    _operationProgress.emit(GitOperationProgress(operation, message, progress, isIndeterminate))
+    _operationProgress.emit(GitOperationProgress(operation, message, progress, indeterminate))
   }
 }
