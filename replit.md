@@ -38,7 +38,7 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 - **Theme Builder Module (`feature/themebuilder`):** Dedicated module for Material Theme Builder functionality.
 - **Sub-Module Maker (`feature/submodulemaker`):** Dedicated module for creating new Gradle sub-modules (Kotlin/Java) with automatic settings.gradle.kts updates.
 - **Asset Studio (`feature/assetstudio`):** Dedicated module for Vector Asset Studio functionality with AssetsStudioContent UI component for icon generation.
-- **Designer Module (`feature/designer`):** Dedicated module for visual layout designer with LayoutDesignerContent providing drag-and-drop UI component design.
+- **Designer Module (`feature/designer`):** Dedicated module for Jetpack Compose live preview with ComposeParser for extracting @Composable functions, LivePreviewRenderer for visual rendering, CodeSynchronizer for bidirectional code updates, and ComposePreviewScreen with split view (code/preview/properties). Supports 40+ Material3 components including Column, Row, Box, Card, Text, Button, TextField, NavigationBar, etc.
 - **Tree View (`feature/treeview`):** Enhanced file tree view with 4 view modes (File, Package, Module, Project), file operations, context menus, search, hidden file toggle, and animated expand/collapse indicators.
 - **Sora Editor (`feature/soraeditor`):** Advanced code editor module using Rosemoe's sora-editor library, with language support, theming, UI widgets, Jetpack Compose integration, plugin system, and EditorContent UI component for tabbed file editing.
 - **Action System (`core/actions/`):** VS Code-style command/action system for event-driven architecture.
