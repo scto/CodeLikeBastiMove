@@ -113,4 +113,23 @@ object TreeViewUtils {
       children = children,
     )
   }
+
+  fun convertToFileTreeNode(node: TreeNodeData): FileTreeNode {
+    return FileTreeNode(
+      file = if (node.path.startsWith("/")) File(node.path) else null,
+      name = node.name,
+      path = node.path,
+      isDirectory = node.isDirectory,
+      children = node.children.map { convertToFileTreeNode(it) },
+    )
+  }
+
+  fun convertFromFileTreeNode(node: FileTreeNode): TreeNodeData {
+    return TreeNodeData(
+      name = node.name,
+      path = node.path,
+      isDirectory = node.isDirectory,
+      children = node.children.map { convertFromFileTreeNode(it) },
+    )
+  }
 }
