@@ -598,6 +598,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     _uiState.update { it.copy(errorMessage = null) }
   }
 
+  fun updateSelectedImportPath(path: String) {
+    _uiState.update { it.copy(selectedImportPath = path) }
+  }
+
+  fun clearImportState() {
+    _uiState.update { it.copy(selectedImportPath = "", importProgress = "") }
+  }
+
   fun createFolder(folderName: String) {
     viewModelScope.launch {
       val rootDir = _uiState.value.rootDirectory

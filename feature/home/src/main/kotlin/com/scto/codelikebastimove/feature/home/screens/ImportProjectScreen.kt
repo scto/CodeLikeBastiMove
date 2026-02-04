@@ -60,12 +60,12 @@ fun ImportProjectScreen(
     onBackClick: () -> Unit,
     onBrowseClick: () -> Unit,
     onImportProject: (path: String, copyToWorkspace: Boolean) -> Unit,
+    onPathChanged: (String) -> Unit,
     selectedPath: String,
     isLoading: Boolean,
     importProgress: String,
     modifier: Modifier = Modifier,
 ) {
-    var projectPath by remember(selectedPath) { mutableStateOf(selectedPath) }
     var copyToWorkspace by remember { mutableStateOf(true) }
 
     Column(
@@ -143,8 +143,8 @@ fun ImportProjectScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 OutlinedTextField(
-                    value = projectPath,
-                    onValueChange = { projectPath = it },
+                    value = selectedPath,
+                    onValueChange = onPathChanged,
                     label = { Text(stringResource(R.string.selected_path)) },
                     placeholder = { Text(stringResource(R.string.no_path_selected)) },
                     singleLine = true,
@@ -214,11 +214,11 @@ fun ImportProjectScreen(
             } else {
                 Button(
                     onClick = {
-                        if (projectPath.isNotBlank()) {
-                            onImportProject(projectPath, copyToWorkspace)
+                        if (selectedPath.isNotBlank()) {
+                            onImportProject(selectedPath, copyToWorkspace)
                         }
                     },
-                    enabled = projectPath.isNotBlank(),
+                    enabled = selectedPath.isNotBlank(),
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .fillMaxWidth()

@@ -21,6 +21,7 @@ import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 import com.scto.codelikebastimove.feature.main.screens.AIAgentScreen
 import com.scto.codelikebastimove.feature.main.screens.BuildVariantsScreen
 import com.scto.codelikebastimove.feature.main.screens.ConsoleScreen
+import com.scto.codelikebastimove.feature.home.navigation.HomeDestination
 import com.scto.codelikebastimove.feature.home.screens.CreateProjectScreen
 import com.scto.codelikebastimove.feature.home.screens.HomeScreen
 import com.scto.codelikebastimove.feature.home.screens.ImportProjectScreen
@@ -64,7 +65,15 @@ fun MainScreen(
     when (destination) {
       MainDestination.Home -> {
         HomeScreen(
-          onNavigate = { viewModel.onNavigate(it) },
+          onNavigate = { homeDestination ->
+            val mainDestination = when (homeDestination) {
+              HomeDestination.Console -> MainDestination.Console
+              HomeDestination.Settings -> MainDestination.Settings
+              HomeDestination.Documentation -> MainDestination.Documentation
+              else -> MainDestination.Home
+            }
+            viewModel.onNavigate(mainDestination)
+          },
           onCreateProject = { viewModel.onNavigate(MainDestination.CreateProject) },
           onImportProject = { viewModel.onNavigate(MainDestination.ImportProject) },
           onOpenProject = { viewModel.onNavigate(MainDestination.OpenProject) },
@@ -100,12 +109,21 @@ fun MainScreen(
 
       MainDestination.ImportProject -> {
         ImportProjectScreen(
-          onBackClick = { viewModel.onBackPressed() },
-          onBrowseClick = {},
+          onBackClick = {
+            viewModel.clearImportState()
+            viewModel.onBackPressed()
+          },
+          onBrowseClick = {
+            // Note: File picker integration requires Activity result handling
+            // Users can manually enter/paste the project path in the text field
+          },
           onImportProject = { path, copyToWorkspace ->
             viewModel.importProject(path, copyToWorkspace)
           },
-          selectedPath = "",
+          onPathChanged = { path ->
+            viewModel.updateSelectedImportPath(path)
+          },
+          selectedPath = uiState.selectedImportPath,
           isLoading = uiState.isLoading,
           importProgress = uiState.importProgress,
         )
@@ -195,7 +213,15 @@ fun MainScreen(
 
       MainDestination.Documentation -> {
         HomeScreen(
-          onNavigate = { viewModel.onNavigate(it) },
+          onNavigate = { homeDestination ->
+            val mainDestination = when (homeDestination) {
+              HomeDestination.Console -> MainDestination.Console
+              HomeDestination.Settings -> MainDestination.Settings
+              HomeDestination.Documentation -> MainDestination.Documentation
+              else -> MainDestination.Home
+            }
+            viewModel.onNavigate(mainDestination)
+          },
           onCreateProject = { viewModel.onNavigate(MainDestination.CreateProject) },
           onImportProject = { viewModel.onNavigate(MainDestination.ImportProject) },
           onOpenProject = { viewModel.onNavigate(MainDestination.OpenProject) },
