@@ -103,7 +103,7 @@ fun MainScreen(
           onBackClick = { viewModel.onBackPressed() },
           onProjectSelected = { project -> viewModel.onOpenProject(project.path, project.name) },
           onProjectDelete = { project -> viewModel.deleteProject(project.path) },
-          onBrowseFolder = {},
+          onBrowseFolder = { viewModel.onNavigate(MainDestination.ImportProject) },
         )
       }
 
@@ -131,6 +131,7 @@ fun MainScreen(
 
       MainDestination.GitClone -> {
         GitCloneScreen(
+          rootDirectory = uiState.rootDirectory,
           onBackClick = { viewModel.onBackPressed() },
           onCloneSuccess = { projectPath ->
             viewModel.onOpenProject(projectPath, projectPath.substringAfterLast("/"))
