@@ -30,11 +30,13 @@ fun SoraEditor(
 
   val editorView = remember {
     SoraEditorView(context).apply {
-      layoutParams =
-        ViewGroup.LayoutParams(
-          ViewGroup.LayoutParams.MATCH_PARENT,
-          ViewGroup.LayoutParams.MATCH_PARENT,
-        )
+      layoutParams = ViewGroup.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT,
+      )
+      isFocusable = true
+      isFocusableInTouchMode = true
+      isClickable = true
     }
   }
 
@@ -62,7 +64,14 @@ fun SoraEditor(
 
   DisposableEffect(Unit) { onDispose { editorView.release() } }
 
-  AndroidView(factory = { editorView }, modifier = modifier.fillMaxSize())
+  AndroidView(
+    factory = { editorView },
+    modifier = modifier.fillMaxSize(),
+    update = { view ->
+      view.requestLayout()
+      view.invalidate()
+    }
+  )
 }
 
 @Composable

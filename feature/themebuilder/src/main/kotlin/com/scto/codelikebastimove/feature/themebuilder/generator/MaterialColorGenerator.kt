@@ -9,6 +9,7 @@ import kotlin.math.pow
 import kotlin.math.round
 import kotlin.math.sin
 import kotlin.math.sqrt
+import kotlin.random.Random
 
 data class TonalPalette(
     val tone0: Color,
@@ -137,11 +138,32 @@ class MaterialColorGenerator {
         val hue = hct[0]
         val chroma = hct[1]
 
-        val primaryPalette = generateTonalPalette(hue, adjustChroma(chroma, style, isPrimary = true))
-        val secondaryPalette = generateTonalPalette(hue, adjustChroma(chroma * 0.33f, style, isPrimary = false))
-        val tertiaryPalette = generateTonalPalette(hue + 60f, adjustChroma(chroma * 0.5f, style, isPrimary = false))
-        val neutralPalette = generateTonalPalette(hue, adjustChroma(chroma * 0.04f, style, isPrimary = false))
-        val neutralVariantPalette = generateTonalPalette(hue, adjustChroma(chroma * 0.08f, style, isPrimary = false))
+        val seedHash = (seedColor.red * 1000 + seedColor.green * 100 + seedColor.blue * 10).toInt()
+        val deterministicRandom = Random(seedHash + style.ordinal)
+        val randomOffset = deterministicRandom.nextFloat() * 10f - 5f
+
+        val schemeConfig = getSchemeConfig(style, hue, chroma, randomOffset)
+
+        val primaryPalette = generateTonalPalette(
+            schemeConfig.primaryHue,
+            schemeConfig.primaryChroma
+        )
+        val secondaryPalette = generateTonalPalette(
+            schemeConfig.secondaryHue,
+            schemeConfig.secondaryChroma
+        )
+        val tertiaryPalette = generateTonalPalette(
+            schemeConfig.tertiaryHue,
+            schemeConfig.tertiaryChroma
+        )
+        val neutralPalette = generateTonalPalette(
+            schemeConfig.neutralHue,
+            schemeConfig.neutralChroma
+        )
+        val neutralVariantPalette = generateTonalPalette(
+            schemeConfig.neutralVariantHue,
+            schemeConfig.neutralVariantChroma
+        )
         val errorPalette = generateTonalPalette(25f, 84f)
 
         val lightScheme = generateLightScheme(
@@ -167,16 +189,110 @@ class MaterialColorGenerator {
         )
     }
 
-    private fun adjustChroma(baseChroma: Float, style: SchemeStyle, isPrimary: Boolean): Float {
+    private data class SchemeConfig(
+        val primaryHue: Float,
+        val primaryChroma: Float,
+        val secondaryHue: Float,
+        val secondaryChroma: Float,
+        val tertiaryHue: Float,
+        val tertiaryChroma: Float,
+        val neutralHue: Float,
+        val neutralChroma: Float,
+        val neutralVariantHue: Float,
+        val neutralVariantChroma: Float,
+    )
+
+    private fun getSchemeConfig(style: SchemeStyle, hue: Float, chroma: Float, randomOffset: Float): SchemeConfig {
         return when (style) {
-            SchemeStyle.VIBRANT -> if (isPrimary) max(baseChroma, 48f) else baseChroma * 1.2f
-            SchemeStyle.EXPRESSIVE -> if (isPrimary) max(baseChroma, 64f) else baseChroma * 1.5f
-            SchemeStyle.FIDELITY -> baseChroma
-            SchemeStyle.MONOCHROME -> 0f
-            SchemeStyle.NEUTRAL -> baseChroma * 0.12f
-            SchemeStyle.CONTENT -> baseChroma * 0.8f
-            SchemeStyle.TONAL_SPOT -> if (isPrimary) max(baseChroma, 36f) else baseChroma
+            SchemeStyle.TONAL_SPOT -> SchemeConfig(
+                primaryHue = normalizeHue(hue + randomOffset),
+                primaryChroma = max(chroma, 36f),
+                secondaryHue = normalizeHue(hue + randomOffset),
+                secondaryChroma = max(chroma * 0.33f, 16f),
+                tertiaryHue = normalizeHue(hue + 60f + randomOffset),
+                tertiaryChroma = max(chroma * 0.5f, 24f),
+                neutralHue = normalizeHue(hue),
+                neutralChroma = chroma * 0.04f + 4f,
+                neutralVariantHue = normalizeHue(hue),
+                neutralVariantChroma = chroma * 0.08f + 8f,
+            )
+            SchemeStyle.VIBRANT -> SchemeConfig(
+                primaryHue = normalizeHue(hue + randomOffset * 1.5f),
+                primaryChroma = max(chroma * 1.4f, 60f),
+                secondaryHue = normalizeHue(hue + 30f + randomOffset),
+                secondaryChroma = max(chroma * 0.6f, 40f),
+                tertiaryHue = normalizeHue(hue + 90f + randomOffset * 2f),
+                tertiaryChroma = max(chroma * 0.8f, 50f),
+                neutralHue = normalizeHue(hue),
+                neutralChroma = chroma * 0.08f + 6f,
+                neutralVariantHue = normalizeHue(hue),
+                neutralVariantChroma = chroma * 0.12f + 10f,
+            )
+            SchemeStyle.EXPRESSIVE -> SchemeConfig(
+                primaryHue = normalizeHue(hue + 15f + randomOffset * 2f),
+                primaryChroma = max(chroma * 1.6f, 70f),
+                secondaryHue = normalizeHue(hue + 120f + randomOffset),
+                secondaryChroma = max(chroma * 0.5f, 45f),
+                tertiaryHue = normalizeHue(hue + 240f + randomOffset * 2f),
+                tertiaryChroma = max(chroma * 0.6f, 55f),
+                neutralHue = normalizeHue(hue + 15f),
+                neutralChroma = chroma * 0.1f + 8f,
+                neutralVariantHue = normalizeHue(hue + 15f),
+                neutralVariantChroma = chroma * 0.15f + 12f,
+            )
+            SchemeStyle.FIDELITY -> SchemeConfig(
+                primaryHue = normalizeHue(hue + randomOffset * 0.5f),
+                primaryChroma = chroma,
+                secondaryHue = normalizeHue(hue),
+                secondaryChroma = max(chroma * 0.4f, 12f),
+                tertiaryHue = normalizeHue(hue + 40f + randomOffset),
+                tertiaryChroma = max(chroma * 0.5f, 16f),
+                neutralHue = normalizeHue(hue),
+                neutralChroma = max(chroma * 0.03f, 4f),
+                neutralVariantHue = normalizeHue(hue),
+                neutralVariantChroma = max(chroma * 0.06f, 6f),
+            )
+            SchemeStyle.MONOCHROME -> SchemeConfig(
+                primaryHue = normalizeHue(hue + randomOffset * 0.3f),
+                primaryChroma = 0f,
+                secondaryHue = normalizeHue(hue),
+                secondaryChroma = 0f,
+                tertiaryHue = normalizeHue(hue),
+                tertiaryChroma = 0f,
+                neutralHue = normalizeHue(hue),
+                neutralChroma = 0f,
+                neutralVariantHue = normalizeHue(hue),
+                neutralVariantChroma = 0f,
+            )
+            SchemeStyle.NEUTRAL -> SchemeConfig(
+                primaryHue = normalizeHue(hue + randomOffset * 0.5f),
+                primaryChroma = max(chroma * 0.15f, 12f),
+                secondaryHue = normalizeHue(hue),
+                secondaryChroma = max(chroma * 0.08f, 6f),
+                tertiaryHue = normalizeHue(hue + 45f + randomOffset),
+                tertiaryChroma = max(chroma * 0.12f, 10f),
+                neutralHue = normalizeHue(hue),
+                neutralChroma = chroma * 0.02f + 2f,
+                neutralVariantHue = normalizeHue(hue),
+                neutralVariantChroma = chroma * 0.04f + 4f,
+            )
+            SchemeStyle.CONTENT -> SchemeConfig(
+                primaryHue = normalizeHue(hue + randomOffset),
+                primaryChroma = chroma * 0.85f,
+                secondaryHue = normalizeHue(hue),
+                secondaryChroma = max(chroma * 0.35f, 18f),
+                tertiaryHue = normalizeHue(hue + 75f + randomOffset),
+                tertiaryChroma = max(chroma * 0.45f, 22f),
+                neutralHue = normalizeHue(hue),
+                neutralChroma = chroma * 0.05f + 5f,
+                neutralVariantHue = normalizeHue(hue),
+                neutralVariantChroma = chroma * 0.1f + 9f,
+            )
         }
+    }
+
+    private fun normalizeHue(hue: Float): Float {
+        return ((hue % 360f) + 360f) % 360f
     }
 
     private fun generateTonalPalette(hue: Float, chroma: Float): TonalPalette {

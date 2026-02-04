@@ -58,6 +58,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
   }
 
   init {
+    isFocusable = true
+    isFocusableInTouchMode = true
+    isClickable = true
     addView(codeEditor, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
     setupEditor()
     setupEventListeners()
@@ -75,9 +78,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
       tabWidth = currentConfig.tabSize
       lineNumberMarginLeft = currentConfig.lineNumberMarginLeft
 
-      isNestedScrollingEnabled = true
+      isNestedScrollingEnabled = false
       isVerticalScrollBarEnabled = true
       isHorizontalScrollBarEnabled = true
+      isFocusable = true
+      isFocusableInTouchMode = true
+      isClickable = true
+      isEditable = true
 
       getComponent(EditorAutoCompletion::class.java)?.apply {
         isEnabled = currentConfig.autoComplete
@@ -89,6 +96,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     applyTheme(currentTheme)
+  }
+
+  override fun onInterceptTouchEvent(ev: android.view.MotionEvent?): Boolean {
+    parent?.requestDisallowInterceptTouchEvent(true)
+    return false
   }
 
   private fun setupEventListeners() {
@@ -228,9 +240,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
       isHighlightBracketPair = config.highlightBrackets
       lineNumberMarginLeft = config.lineNumberMarginLeft
 
-      isNestedScrollingEnabled = true
+      isNestedScrollingEnabled = false
       isVerticalScrollBarEnabled = true
       isHorizontalScrollBarEnabled = true
+      isFocusable = true
+      isFocusableInTouchMode = true
+      isEditable = true
 
       setPinLineNumber(config.pinLineNumber)
       setFastDelete(config.fastDelete)
