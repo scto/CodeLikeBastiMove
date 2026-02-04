@@ -22,6 +22,10 @@ data class EditorConfig(
   val useTabCharacter: Boolean = false,
   val fontFamily: String = "JetBrains Mono",
   val highlightingMode: HighlightingMode = HighlightingMode.TEXTMATE,
+  val lineNumberMarginLeft: Float = 9f,
+  val autoCompletionAnimation: Boolean = true,
+  val trimTrailingWhitespace: Boolean = false,
+  val insertFinalNewline: Boolean = false,
 )
 
 enum class HighlightingMode {

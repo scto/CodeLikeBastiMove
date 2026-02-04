@@ -66,13 +66,19 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
       isLineNumberEnabled = true
       isWordwrap = currentConfig.wordWrap
       tabWidth = currentConfig.tabSize
+      lineNumberMarginLeft = currentConfig.lineNumberMarginLeft
 
       isNestedScrollingEnabled = true
       isVerticalScrollBarEnabled = true
       isHorizontalScrollBarEnabled = true
 
-      getComponent(EditorAutoCompletion::class.java)?.isEnabled = currentConfig.autoComplete
+      getComponent(EditorAutoCompletion::class.java)?.apply {
+        isEnabled = currentConfig.autoComplete
+        runCatching { setEnabledAnimation(currentConfig.autoCompletionAnimation) }
+      }
       getComponent(Magnifier::class.java)?.isEnabled = true
+
+      runCatching { props.stickyScroll = currentConfig.stickyScroll }
     }
 
     applyTheme(currentTheme)
@@ -169,6 +175,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
       tabWidth = config.tabSize
       isHighlightCurrentLine = config.highlightCurrentLine
       isHighlightBracketPair = config.highlightBrackets
+      lineNumberMarginLeft = config.lineNumberMarginLeft
 
       isNestedScrollingEnabled = true
       isVerticalScrollBarEnabled = true
@@ -181,8 +188,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
       setLineSpacing(config.lineSpacing)
       setRenderWhitespace(config.renderWhitespace)
       setHideSoftKeyboard(config.hideSoftKbd)
+      setStickyScroll(config.stickyScroll)
 
-      getComponent(EditorAutoCompletion::class.java)?.isEnabled = config.autoComplete
+      getComponent(EditorAutoCompletion::class.java)?.apply {
+        isEnabled = config.autoComplete
+        runCatching { setEnabledAnimation(config.autoCompletionAnimation) }
+      }
     }
 
     if (previousMode != config.highlightingMode) {
@@ -243,6 +254,28 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     if (hide) {
       hideEditorWindows()
     }
+  }
+
+  private fun CodeEditor.setStickyScroll(enabled: Boolean) {
+    runCatching { props.stickyScroll = enabled }
+  }
+
+  fun trimTrailingWhitespace(): String {
+    val text = getText()
+    return text.lines().joinToString(getLineEndingString()) { line ->
+      line.trimEnd()
+    }
+  }
+
+  fun getTextForSave(): String {
+    var text = getText()
+    if (currentConfig.trimTrailingWhitespace) {
+      text = trimTrailingWhitespace()
+    }
+    if (currentConfig.insertFinalNewline && text.isNotEmpty() && !text.endsWith("\n")) {
+      text += getLineEndingString()
+    }
+    return normalizeLineEndings(text)
   }
 
   fun getLineEnding(): LineEndingType {

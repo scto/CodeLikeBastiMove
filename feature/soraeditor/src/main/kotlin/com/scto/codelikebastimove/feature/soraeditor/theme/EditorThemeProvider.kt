@@ -23,19 +23,24 @@ class EditorThemeProvider {
                 val foreground = theme.foregroundColor.toArgb()
                 val background = theme.backgroundColor.toArgb()
                 val syntax = theme.syntaxColors
+                val lineNumber = theme.lineNumberColor.toArgb()
+                val selection = theme.selectionColor.toArgb()
+                val cursor = theme.cursorColor.toArgb()
+                val divider = theme.gutterDividerColor.toArgb()
 
                 setColor(WHOLE_BACKGROUND, background)
                 setColor(TEXT_NORMAL, foreground)
-                setColor(LINE_NUMBER, theme.lineNumberColor.toArgb())
+                setColor(LINE_NUMBER, lineNumber)
                 setColor(LINE_NUMBER_BACKGROUND, theme.lineNumberBackgroundColor.toArgb())
-                setColor(LINE_NUMBER_CURRENT, theme.lineNumberColor.toArgb())
+                setColor(LINE_NUMBER_CURRENT, lineNumber)
+                setColor(LINE_NUMBER_PANEL, theme.lineNumberBackgroundColor.toArgb())
                 setColor(CURRENT_LINE, theme.currentLineColor.toArgb())
-                setColor(SELECTION_INSERT, theme.cursorColor.toArgb())
-                setColor(SELECTION_HANDLE, theme.cursorColor.toArgb())
-                setColor(SELECTED_TEXT_BACKGROUND, theme.selectionColor.toArgb())
-                setColor(LINE_DIVIDER, theme.gutterDividerColor.toArgb())
-                setColor(BLOCK_LINE, theme.gutterDividerColor.toArgb())
-                setColor(BLOCK_LINE_CURRENT, theme.cursorColor.toArgb())
+                setColor(SELECTION_INSERT, cursor)
+                setColor(SELECTION_HANDLE, cursor)
+                setColor(SELECTED_TEXT_BACKGROUND, selection)
+                setColor(LINE_DIVIDER, divider)
+                setColor(BLOCK_LINE, setAlpha(foreground, 0.4f))
+                setColor(BLOCK_LINE_CURRENT, setAlpha(foreground, 0.6f))
 
                 setColor(KEYWORD, syntax.keyword.toArgb())
                 setColor(LITERAL, syntax.string.toArgb())
@@ -51,24 +56,56 @@ class EditorThemeProvider {
 
                 setColor(COMPLETION_WND_BACKGROUND, background)
                 setColor(COMPLETION_WND_TEXT_PRIMARY, foreground)
-                setColor(COMPLETION_WND_TEXT_SECONDARY, theme.lineNumberColor.toArgb())
-                setColor(COMPLETION_WND_ITEM_CURRENT, theme.selectionColor.toArgb())
-                setColor(COMPLETION_WND_CORNER, theme.gutterDividerColor.toArgb())
+                setColor(COMPLETION_WND_TEXT_SECONDARY, lineNumber)
+                setColor(COMPLETION_WND_ITEM_CURRENT, selection)
+                setColor(COMPLETION_WND_CORNER, divider)
+                setColor(COMPLETION_WND_TEXT_MATCHED, cursor)
 
-                setColor(MATCHED_TEXT_BACKGROUND, theme.selectionColor.toArgb())
-                setColor(NON_PRINTABLE_CHAR, theme.lineNumberColor.toArgb())
+                setColor(TEXT_ACTION_WINDOW_BACKGROUND, background)
+                setColor(TEXT_ACTION_WINDOW_ICON_COLOR, foreground)
+
+                setColor(DIAGNOSTIC_TOOLTIP_BACKGROUND, background)
+                setColor(DIAGNOSTIC_TOOLTIP_BRIEF_MSG, foreground)
+                setColor(DIAGNOSTIC_TOOLTIP_DETAILED_MSG, foreground)
+                setColor(DIAGNOSTIC_TOOLTIP_ACTION, cursor)
+
+                setColor(SIGNATURE_BACKGROUND, background)
+                setColor(SIGNATURE_TEXT_NORMAL, foreground)
+                setColor(SIGNATURE_TEXT_HIGHLIGHTED_PARAMETER, cursor)
+                setColor(SIGNATURE_BORDER, divider)
+
+                setColor(HOVER_BACKGROUND, background)
+                setColor(HOVER_TEXT_NORMAL, foreground)
+                setColor(HOVER_TEXT_HIGHLIGHTED, cursor)
+                setColor(HOVER_BORDER, divider)
+
+                setColor(STICKY_SCROLL_DIVIDER, divider)
+
+                setColor(MATCHED_TEXT_BACKGROUND, selection)
+                setColor(NON_PRINTABLE_CHAR, setAlpha(foreground, 0.4f))
                 setColor(PROBLEM_ERROR, syntax.error.toArgb())
                 setColor(PROBLEM_WARNING, syntax.annotation.toArgb())
 
-                setColor(SIDE_BLOCK_LINE, theme.gutterDividerColor.toArgb())
-                setColor(SCROLL_BAR_THUMB, theme.lineNumberColor.toArgb())
-                setColor(SCROLL_BAR_THUMB_PRESSED, foreground)
+                setColor(SIDE_BLOCK_LINE, divider)
+                setColor(SCROLL_BAR_THUMB, setAlpha(foreground, 0.3f))
+                setColor(SCROLL_BAR_THUMB_PRESSED, setAlpha(foreground, 0.2f))
                 setColor(SCROLL_BAR_TRACK, background)
 
                 setColor(TEXT_SELECTED, foreground)
                 setColor(UNDERLINE, foreground)
-                setColor(HIGHLIGHTED_DELIMITERS_FOREGROUND, syntax.operator.toArgb())
+                setColor(HIGHLIGHTED_DELIMITERS_FOREGROUND, cursor)
                 setColor(HIGHLIGHTED_DELIMITERS_BACKGROUND, theme.currentLineColor.toArgb())
+                setColor(HIGHLIGHTED_DELIMITERS_UNDERLINE, android.graphics.Color.TRANSPARENT)
+                setColor(HIGHLIGHTED_DELIMITERS_BORDER, cursor)
+            }
+
+            private fun setAlpha(color: Int, factor: Float): Int {
+                val a = android.graphics.Color.alpha(color)
+                val r = android.graphics.Color.red(color)
+                val g = android.graphics.Color.green(color)
+                val b = android.graphics.Color.blue(color)
+                val newAlpha = (a * factor).toInt().coerceIn(0, 255)
+                return android.graphics.Color.argb(newAlpha, r, g, b)
             }
         }
     }
