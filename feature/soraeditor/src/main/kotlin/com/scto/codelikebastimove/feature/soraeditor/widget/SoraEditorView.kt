@@ -5,11 +5,14 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import com.scto.codelikebastimove.feature.soraeditor.language.LanguageRegistry
+import com.scto.codelikebastimove.feature.soraeditor.model.CursorAnimationType
 import com.scto.codelikebastimove.feature.soraeditor.model.EditorConfig
 import com.scto.codelikebastimove.feature.soraeditor.model.EditorLanguageType
 import com.scto.codelikebastimove.feature.soraeditor.model.EditorTheme
 import com.scto.codelikebastimove.feature.soraeditor.model.EditorThemes
 import com.scto.codelikebastimove.feature.soraeditor.model.HighlightingMode
+import com.scto.codelikebastimove.feature.soraeditor.model.LineEndingType
+import com.scto.codelikebastimove.feature.soraeditor.model.RenderWhitespaceMode
 import com.scto.codelikebastimove.feature.soraeditor.theme.EditorThemeProvider
 import io.github.rosemoe.sora.event.ContentChangeEvent
 import io.github.rosemoe.sora.event.SelectionChangeEvent
@@ -44,9 +47,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
       typefaceText = Typeface.MONOSPACE
       typefaceLineNumber = Typeface.MONOSPACE
 
-      isLineNumberEnabled = currentConfig.showLineNumbers
+      isLineNumberEnabled = currentConfig.showLineNumber
       isWordwrap = currentConfig.wordWrap
-      tabWidth = currentConfig.tabWidth
+      tabWidth = currentConfig.tabSize
 
       getComponent(EditorAutoCompletion::class.java)?.isEnabled = currentConfig.autoComplete
       getComponent(Magnifier::class.java)?.isEnabled = true
@@ -86,21 +89,147 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
   }
 
   fun applyConfig(config: EditorConfig) {
+    val previousMode = currentConfig.highlightingMode
     currentConfig = config
 
     codeEditor.apply {
       setTextSize(config.textSize)
-      isLineNumberEnabled = config.showLineNumbers
+      isLineNumberEnabled = config.showLineNumber
       isWordwrap = config.wordWrap
-      tabWidth = config.tabWidth
+      tabWidth = config.tabSize
       isHighlightCurrentLine = config.highlightCurrentLine
       isHighlightBracketPair = config.highlightBrackets
+
+      setPinLineNumber(config.pinLineNumber)
+      setStickyScroll(config.stickyScroll)
+      setFastDelete(config.fastDelete)
+      setCursorAnimation(config.cursorAnimation)
+      setKeyboardSuggestion(config.keyboardSuggestion)
+      setLineSpacing(config.lineSpacing)
+      setRenderWhitespace(config.renderWhitespace)
+      setHideSoftKeyboard(config.hideSoftKbd)
 
       getComponent(EditorAutoCompletion::class.java)?.isEnabled = config.autoComplete
     }
 
-    if (currentConfig.highlightingMode != config.highlightingMode) {
+    if (previousMode != config.highlightingMode) {
       setLanguage(currentLanguageType)
+    }
+  }
+
+  private fun CodeEditor.setPinLineNumber(pin: Boolean) {
+    isLineNumberPinned = pin
+  }
+
+  private fun CodeEditor.setStickyScroll(enabled: Boolean) {
+    isStickyScrollEnabled = enabled
+  }
+
+  private fun CodeEditor.setFastDelete(enabled: Boolean) {
+    props.deleteEmptyLineFast = enabled
+    props.deleteMultiSpaces = if (enabled) -1 else 1
+  }
+
+  private fun CodeEditor.setCursorAnimation(animationType: CursorAnimationType) {
+    cursorAnimator.apply {
+      when (animationType) {
+        CursorAnimationType.NONE -> {
+          isEnabled = false
+        }
+        CursorAnimationType.FADE -> {
+          isEnabled = true
+          duration = 200
+        }
+        CursorAnimationType.BLINK -> {
+          isEnabled = true
+          duration = 500
+        }
+        CursorAnimationType.SCALE -> {
+          isEnabled = true
+          duration = 150
+        }
+      }
+    }
+  }
+
+  private fun CodeEditor.setKeyboardSuggestion(enabled: Boolean) {
+    inputType = if (enabled) {
+      android.text.InputType.TYPE_CLASS_TEXT or
+        android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
+    } else {
+      android.text.InputType.TYPE_CLASS_TEXT or
+        android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE or
+        android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+    }
+  }
+
+  private fun CodeEditor.setLineSpacing(multiplier: Float) {
+    lineSpacingMultiplier = multiplier
+  }
+
+  private fun CodeEditor.setRenderWhitespace(mode: RenderWhitespaceMode) {
+    isNonPrintablePaintingEnabled = mode != RenderWhitespaceMode.NONE
+    when (mode) {
+      RenderWhitespaceMode.NONE -> {
+        nonPrintablePaintingFlags = 0
+      }
+      RenderWhitespaceMode.SELECTION -> {
+        nonPrintablePaintingFlags = CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
+      }
+      RenderWhitespaceMode.BOUNDARY -> {
+        nonPrintablePaintingFlags = CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or
+          CodeEditor.FLAG_DRAW_WHITESPACE_TRAILING
+      }
+      RenderWhitespaceMode.TRAILING -> {
+        nonPrintablePaintingFlags = CodeEditor.FLAG_DRAW_WHITESPACE_TRAILING
+      }
+      RenderWhitespaceMode.ALL -> {
+        nonPrintablePaintingFlags = CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or
+          CodeEditor.FLAG_DRAW_WHITESPACE_TRAILING or
+          CodeEditor.FLAG_DRAW_WHITESPACE_INNER or
+          CodeEditor.FLAG_DRAW_LINE_SEPARATOR
+      }
+    }
+  }
+
+  private fun CodeEditor.setHideSoftKeyboard(hide: Boolean) {
+    isEditable = !hide
+    if (hide) {
+      hideEditorWindows()
+    }
+  }
+
+  fun getLineEnding(): LineEndingType {
+    return currentConfig.lineEndingSetting
+  }
+
+  fun setLineEnding(type: LineEndingType) {
+    currentConfig = currentConfig.copy(lineEndingSetting = type)
+  }
+
+  fun ensureFinalNewline(): String {
+    val text = getText()
+    return if (currentConfig.finalNewline && text.isNotEmpty() && !text.endsWith("\n")) {
+      text + getLineEndingString()
+    } else {
+      text
+    }
+  }
+
+  fun getLineEndingString(): String {
+    return when (currentConfig.lineEndingSetting) {
+      LineEndingType.LF -> "\n"
+      LineEndingType.CRLF -> "\r\n"
+      LineEndingType.CR -> "\r"
+    }
+  }
+
+  fun normalizeLineEndings(text: String): String {
+    val normalized = text.replace("\r\n", "\n").replace("\r", "\n")
+    return when (currentConfig.lineEndingSetting) {
+      LineEndingType.LF -> normalized
+      LineEndingType.CRLF -> normalized.replace("\n", "\r\n")
+      LineEndingType.CR -> normalized.replace("\n", "\r")
     }
   }
 

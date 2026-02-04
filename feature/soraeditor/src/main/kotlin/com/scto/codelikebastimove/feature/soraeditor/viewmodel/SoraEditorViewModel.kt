@@ -2,6 +2,7 @@ package com.scto.codelikebastimove.feature.soraeditor.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.scto.codelikebastimove.feature.soraeditor.model.CursorAnimationType
 import com.scto.codelikebastimove.feature.soraeditor.model.EditorConfig
 import com.scto.codelikebastimove.feature.soraeditor.model.EditorFile
 import com.scto.codelikebastimove.feature.soraeditor.model.EditorLanguageType
@@ -9,6 +10,8 @@ import com.scto.codelikebastimove.feature.soraeditor.model.EditorTab
 import com.scto.codelikebastimove.feature.soraeditor.model.EditorTheme
 import com.scto.codelikebastimove.feature.soraeditor.model.EditorThemes
 import com.scto.codelikebastimove.feature.soraeditor.model.HighlightingMode
+import com.scto.codelikebastimove.feature.soraeditor.model.LineEndingType
+import com.scto.codelikebastimove.feature.soraeditor.model.RenderWhitespaceMode
 import java.io.File
 import java.util.UUID
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -131,7 +134,15 @@ class SoraEditorViewModel : ViewModel() {
       try {
         if (tab.file.path.isNotEmpty()) {
           val file = File(tab.file.path)
-          file.writeText(tab.file.content)
+          var content = tab.file.content
+
+          if (_uiState.value.config.finalNewline && content.isNotEmpty() && !content.endsWith("\n")) {
+            content += getLineEndingString()
+          }
+
+          content = normalizeLineEndings(content)
+
+          file.writeText(content)
 
           fileContents[tabId] = tab.file.content
 
@@ -151,6 +162,23 @@ class SoraEditorViewModel : ViewModel() {
       } catch (e: Exception) {
         e.printStackTrace()
       }
+    }
+  }
+
+  private fun getLineEndingString(): String {
+    return when (_uiState.value.config.lineEndingSetting) {
+      LineEndingType.LF -> "\n"
+      LineEndingType.CRLF -> "\r\n"
+      LineEndingType.CR -> "\r"
+    }
+  }
+
+  private fun normalizeLineEndings(text: String): String {
+    val normalized = text.replace("\r\n", "\n").replace("\r", "\n")
+    return when (_uiState.value.config.lineEndingSetting) {
+      LineEndingType.LF -> normalized
+      LineEndingType.CRLF -> normalized.replace("\n", "\r\n")
+      LineEndingType.CR -> normalized.replace("\n", "\r")
     }
   }
 
@@ -174,15 +202,79 @@ class SoraEditorViewModel : ViewModel() {
     _uiState.update { state -> state.copy(config = state.config.copy(textSize = size)) }
   }
 
-  fun toggleLineNumbers() {
+  fun updateTabSize(size: Int) {
+    _uiState.update { state -> state.copy(config = state.config.copy(tabSize = size)) }
+  }
+
+  fun togglePinLineNumber() {
     _uiState.update { state ->
-      state.copy(config = state.config.copy(showLineNumbers = !state.config.showLineNumbers))
+      state.copy(config = state.config.copy(pinLineNumber = !state.config.pinLineNumber))
+    }
+  }
+
+  fun toggleStickyScroll() {
+    _uiState.update { state ->
+      state.copy(config = state.config.copy(stickyScroll = !state.config.stickyScroll))
+    }
+  }
+
+  fun toggleFastDelete() {
+    _uiState.update { state ->
+      state.copy(config = state.config.copy(fastDelete = !state.config.fastDelete))
+    }
+  }
+
+  fun toggleShowLineNumber() {
+    _uiState.update { state ->
+      state.copy(config = state.config.copy(showLineNumber = !state.config.showLineNumber))
+    }
+  }
+
+  fun setCursorAnimation(animationType: CursorAnimationType) {
+    _uiState.update { state ->
+      state.copy(config = state.config.copy(cursorAnimation = animationType))
     }
   }
 
   fun toggleWordWrap() {
     _uiState.update { state ->
       state.copy(config = state.config.copy(wordWrap = !state.config.wordWrap))
+    }
+  }
+
+  fun toggleKeyboardSuggestion() {
+    _uiState.update { state ->
+      state.copy(config = state.config.copy(keyboardSuggestion = !state.config.keyboardSuggestion))
+    }
+  }
+
+  fun updateLineSpacing(spacing: Float) {
+    _uiState.update { state ->
+      state.copy(config = state.config.copy(lineSpacing = spacing))
+    }
+  }
+
+  fun setRenderWhitespace(mode: RenderWhitespaceMode) {
+    _uiState.update { state ->
+      state.copy(config = state.config.copy(renderWhitespace = mode))
+    }
+  }
+
+  fun toggleHideSoftKbd() {
+    _uiState.update { state ->
+      state.copy(config = state.config.copy(hideSoftKbd = !state.config.hideSoftKbd))
+    }
+  }
+
+  fun setLineEndingSetting(type: LineEndingType) {
+    _uiState.update { state ->
+      state.copy(config = state.config.copy(lineEndingSetting = type))
+    }
+  }
+
+  fun toggleFinalNewline() {
+    _uiState.update { state ->
+      state.copy(config = state.config.copy(finalNewline = !state.config.finalNewline))
     }
   }
 

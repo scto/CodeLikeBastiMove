@@ -2,16 +2,24 @@ package com.scto.codelikebastimove.feature.soraeditor.model
 
 data class EditorConfig(
   val textSize: Float = 14f,
-  val tabWidth: Int = 4,
-  val showLineNumbers: Boolean = true,
-  val showNonPrintableChars: Boolean = false,
+  val tabSize: Int = 4,
+  val pinLineNumber: Boolean = false,
+  val stickyScroll: Boolean = false,
+  val fastDelete: Boolean = false,
+  val showLineNumber: Boolean = true,
+  val cursorAnimation: CursorAnimationType = CursorAnimationType.FADE,
   val wordWrap: Boolean = false,
+  val keyboardSuggestion: Boolean = true,
+  val lineSpacing: Float = 1.2f,
+  val renderWhitespace: RenderWhitespaceMode = RenderWhitespaceMode.NONE,
+  val hideSoftKbd: Boolean = false,
+  val lineEndingSetting: LineEndingType = LineEndingType.LF,
+  val finalNewline: Boolean = true,
   val autoIndent: Boolean = true,
   val autoComplete: Boolean = true,
   val highlightCurrentLine: Boolean = true,
   val highlightBrackets: Boolean = true,
   val useTabCharacter: Boolean = false,
-  val stickyScroll: Boolean = false,
   val fontFamily: String = "JetBrains Mono",
   val highlightingMode: HighlightingMode = HighlightingMode.TEXTMATE,
 )
@@ -20,6 +28,27 @@ enum class HighlightingMode {
   TEXTMATE,
   TREESITTER,
   SIMPLE,
+}
+
+enum class CursorAnimationType {
+  NONE,
+  FADE,
+  BLINK,
+  SCALE,
+}
+
+enum class RenderWhitespaceMode {
+  NONE,
+  SELECTION,
+  BOUNDARY,
+  TRAILING,
+  ALL,
+}
+
+enum class LineEndingType {
+  LF,
+  CRLF,
+  CR,
 }
 
 data class EditorFile(
