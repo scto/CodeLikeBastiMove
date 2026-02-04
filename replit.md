@@ -82,7 +82,14 @@ To use Firebase Authentication, you need to:
 3. Download `google-services.json` and place it in the `app/` directory
 4. For Google Sign-In, configure OAuth consent screen and add Web Client ID to `GoogleSignInHelper`
 
-## Recent Changes (January 2026)
+## Recent Changes (February 2026)
+- **SoraEditor TreeSitter Implementation:** TreeSitterLanguageProvider now properly implements LanguageProvider interface with full support for Kotlin, Java, XML, JSON, C/C++, and Log languages via AndroidIDE tree-sitter grammars
+- **TextMate YAML/TOML Support:** Added complete TextMate grammar configurations for YAML and TOML file types (note: tree-sitter grammars not available for these in AndroidIDE library)
+- **EditorThemeProvider Enhancement:** Comprehensive color scheme mappings for text visibility including TEXT_NORMAL, LINE_NUMBER, COMPLETION_WND colors, and all syntax highlighting tokens
+- **Version Catalog Fixes:** Sora Editor libraries properly referenced with version.ref = "editor" (0.23.5)
+- **Dependency Reference Fix:** Fixed libs.androidide.ts to libs.androidide.ts.core in soraeditor build.gradle.kts
+
+## Previous Changes (January 2026)
 - **Build Fixes Completed:** Successfully resolved all compilation errors to achieve BUILD SUCCESSFUL
 - **Material3 Theme Fix:** Added Google Material library (`com.google.android.material:material:1.12.0`) to `core:resources` module to resolve Theme.Material3.Light.NoActionBar and Material3 color attribute errors
 - **MVVMCleanArchitectureTemplate Fix:** Renamed conflicting methods `generateRootBuildGradleKts` and `generateRootBuildGradleGroovy` to `generateMvvmRootBuildGradleKts` and `generateMvvmRootBuildGradleGroovy` to avoid hiding supertype members
