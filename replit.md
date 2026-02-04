@@ -23,7 +23,7 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 - **Architecture:** MVVM with ViewModel and StateFlow, emphasizing a multi-module design.
 - **State Management:** MainViewModel manages core application state.
 - **Data Persistence:** Proto DataStore for user preferences and EncryptedSharedPreferences for secure data.
-- **Project Management:** Provides 5 distinct project templates, a creation wizard, project list management, and Git repository cloning.
+- **Project Management:** Provides 5 distinct project templates, a creation wizard, project list management, Git repository cloning, and import existing Android projects (with copy-to-workspace or link-in-place options).
 - **Code Editor:** Advanced Sora Editor integration with TextMate and TreeSitter syntax highlighting, supporting various languages. Features tabbed editing, undo/redo, find/replace, and multiple color themes. Configurable editor settings for font, tabs, line numbers, word wrap, etc.
 - **File System Interaction:** Hierarchical file structure display (Android, Project, Packages views) with file operations (create, rename, delete, copy, move), comprehensive browsing, and project selection.
 - **Asset Studio:** Comprehensive Vector Asset Studio with icon repository system, SVG to AVD conversion, AVD editor, and export options.
@@ -33,7 +33,7 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 
 **System Design Choices:**
 - **Modular Architecture:** Organized into `core/` and `feature/` directories with grouped submodules for actions, plugins, templates, tooling, terminal, datastore, UI, resources, and logging.
-- **Home Module (`feature/home`):** Dedicated module for home screen, project creation wizard, and project list management. Contains HomeViewModel for project-related operations (create, delete, open, clone) and HomeScreen, CreateProjectScreen, OpenProjectScreen UI components.
+- **Home Module (`feature/home`):** Dedicated module for home screen, project creation wizard, import projects, and project list management. Contains HomeViewModel for project-related operations (create, delete, open, clone, import) and HomeScreen, CreateProjectScreen, ImportProjectScreen, OpenProjectScreen UI components.
 - **Git Module (`feature/git`):** Comprehensive Git version control integration with AndroidIDE-inspired UI, including GitOperations interface, data models, repository for binary interaction, ViewModel, and dedicated UI screens for changes, history, branches, remotes, and settings. Supports repository cloning with recursive submodules, stashing, and tagging.
 - **Theme Builder Module (`feature/themebuilder`):** Full Material Theme Builder with MaterialKolor-style UI, seed color-based theme generation, HCT color space, 7 scheme styles (Tonal Spot, Vibrant, Expressive, Fidelity, Monochrome, Neutral, Content), tonal palette visualization (13 tones), light/dark scheme generation, and export to Android project folders (colors.xml, themes.xml, Color.kt, Theme.kt).
 - **Sub-Module Maker (`feature/submodulemaker`):** Dedicated module for creating new Gradle sub-modules (Kotlin/Java) with automatic settings.gradle.kts updates. Features Gradle notation input (e.g., `:core:common`, `:feature:auth`), real-time validation, auto-suggestions, package name generation, Compose support toggle, and preview of generated structure.
