@@ -83,6 +83,12 @@ To use Firebase Authentication, you need to:
 4. For Google Sign-In, configure OAuth consent screen and add Web Client ID to `GoogleSignInHelper`
 
 ## Recent Changes (February 2026)
+- **Complete Resource Centralization:** All UI strings in 9 feature modules now use stringResource(R.string.xxx) pattern instead of hardcoded text
+- **Extended String Resources:** Added 50+ new string resources to core/resources/src/main/res/values/strings.xml covering German and English text for project management, editor actions, designer, settings, theme builder, asset studio, and sub-module maker
+- **Modules Updated:** HomeScreen, CreateProjectScreen, OpenProjectScreen, CloneRepositoryScreen, SoraEditorScreen, IDESettingsScreen, ThemeBuilderScreen, VectorAssetStudioScreen, SubModuleMakerScreen all use centralized string resources
+- **Resource Access Pattern:** All feature modules access core:resources via FeatureConventionPlugin's api dependency
+
+## Previous Changes (February 2026)
 - **Editor Settings Architecture:** Comprehensive EditorSettings system with 17 configurable options (font size, font family, tab size, soft tabs, line numbers, word wrap, highlight current line, auto-indent, whitespace display, bracket matching, auto-close brackets/quotes, editor theme, minimap, sticky scroll, cursor blink rate, smooth scrolling)
 - **Settings Module Refactoring:** Moved IDESettingsScreen from feature/main to dedicated feature/settings module with proper ViewModel integration
 - **EditorSettingsScreen:** New comprehensive UI for editor preferences with sliders, toggles, and selection dialogs
