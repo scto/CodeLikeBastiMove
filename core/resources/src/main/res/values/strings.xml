@@ -1680,9 +1680,8 @@ Aktiviert detailliertes Logging für Debugging-Zwecke</string>
     <string name="tag_name">Tag Name</string>
     <string name="annotated_tag">Annotated Tag</string>
     <string name="tag_message">Tag Message</string>
-    <string name="create">Create</string>
     <string name="delete">Delete</string>
-    <string name="refresh">Refresh</string>
+    <string name="refresh_action">Refresh</string>
     <string name="create_new_project">Neues Projekt erstellen</string>
 
     <!-- File Tree View Strings -->
