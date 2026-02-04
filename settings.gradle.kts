@@ -42,9 +42,8 @@ include(":core:termux:termux-shared")
 include(":core:termux:termux-emulator")
 include(":core:termux:termux-view")
 include(":core:termux:termux-app")
-include(":core:auth")
+// Auth modules removed
 include(":core:firebase:analytics")
-include(":core:firebase:auth")
 include(":core:firebase:firestore")
 include(":core:project-manager")
 
@@ -61,4 +60,4 @@ include(":feature:submodulemaker")
 include(":feature:themebuilder")
 include(":feature:treeview")
 include(":feature:git")
-include(":feature:auth")
+// feature:auth removed

@@ -5,7 +5,6 @@ import java.io.FileInputStream
 plugins {
     id("clbm.android.application")
     id("clbm.android.compose")
-    id("com.google.gms.google-services") // <--- Das hier fehlt oft!
 }
 
 val keystorePropsFile = rootProject.file("release.properties")
@@ -114,8 +113,6 @@ dependencies {
     api(project(":core:logger"))
     implementation(project(":core:datastore:datastore"))
     implementation(project(":core:templates:templates-api"))
-    implementation(project(":core:auth"))
-    implementation(project(":feature:auth"))
     
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)

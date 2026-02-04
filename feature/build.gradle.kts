@@ -13,7 +13,7 @@ dependencies {
 
     /* Feature Modules */
     api(project(":feature:assetstudio"))
-    api(project(":feature:auth"))
+    // feature:auth removed
     api(project(":feature:designer"))
     api(project(":feature:explorer"))
     api(project(":feature:git"))
