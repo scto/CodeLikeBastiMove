@@ -27,6 +27,10 @@ Close drawer</string>
 Close</string>
 
     <string
+        name="back">
+Back</string>
+
+    <string
         name="close_all">
 Close all</string>
 
