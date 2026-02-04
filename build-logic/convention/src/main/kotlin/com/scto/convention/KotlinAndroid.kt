@@ -37,8 +37,6 @@ private fun Project.configureKotlin(javaVersion: org.gradle.api.JavaVersion) {
       freeCompilerArgs.addAll(
         "-opt-in=kotlin.RequiresOptIn",
         "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-        "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
-        "-opt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi",
       )
     }
   }

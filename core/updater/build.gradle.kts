@@ -9,6 +9,7 @@ android {
 dependencies {
     implementation(project(":core:datastore:datastore"))
     
+    implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)

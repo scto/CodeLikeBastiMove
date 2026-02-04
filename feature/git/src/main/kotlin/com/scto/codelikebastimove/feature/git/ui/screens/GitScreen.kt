@@ -194,7 +194,7 @@ private fun GitNavigationRail(
     )
 
     GitNavItem(
-      icon = Icons.Outlined.CallSplit,
+      icon = Icons.AutoMirrored.Outlined.CallSplit,
       label = "Branches",
       selected = selectedSection == GitSection.BRANCHES,
       onClick = { onSectionSelected(GitSection.BRANCHES) },

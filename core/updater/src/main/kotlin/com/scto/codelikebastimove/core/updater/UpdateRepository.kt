@@ -1,6 +1,7 @@
 package com.scto.codelikebastimove.core.updater
 
 import android.content.Context
+import androidx.core.content.pm.PackageInfoCompat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -9,9 +10,10 @@ class UpdateRepository(
     private val context: Context
 ) {
     private val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+    private val versionCodeLong = PackageInfoCompat.getLongVersionCode(packageInfo)
     
     private val updateChecker = UpdateChecker(
-        currentVersionCode = packageInfo.versionCode,
+        currentVersionCode = versionCodeLong.toInt(),
         currentVersionName = packageInfo.versionName ?: "0.0.1"
     )
 
@@ -46,7 +48,7 @@ class UpdateRepository(
     }
 
     fun getVersionName(): String = packageInfo.versionName ?: "0.0.1"
-    fun getVersionCode(): Int = packageInfo.versionCode
+    fun getVersionCode(): Int = versionCodeLong.toInt()
 
     fun getGitHubProjectUrl(): String = UpdateChecker.GITHUB_PROJECT_URL
     fun getGitHubReleasesUrl(): String = UpdateChecker.GITHUB_RELEASES_URL
