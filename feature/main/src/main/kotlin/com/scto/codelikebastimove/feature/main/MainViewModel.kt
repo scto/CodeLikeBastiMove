@@ -402,7 +402,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         return@launch
       }
 
-      ModuleGenerator.generateModule(projectDir, config)
+      ModuleGenerator().generateModule(projectDir, config)
         .onSuccess {
           _uiState.update { it.copy(isLoading = false, errorMessage = null) }
           notifyFileSystemChanged()

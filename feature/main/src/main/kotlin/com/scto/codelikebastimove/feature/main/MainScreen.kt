@@ -200,10 +200,6 @@ fun MainScreen(
       MainDestination.SubModuleMaker -> {
         SubModuleMakerScreen(
           onBackClick = { viewModel.onBackPressed() },
-          onCreateModule = { config ->
-            viewModel.createSubModule(config)
-            viewModel.onNavigate(MainDestination.IDE)
-          },
         )
       }
 
