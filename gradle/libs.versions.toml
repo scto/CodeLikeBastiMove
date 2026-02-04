@@ -135,7 +135,7 @@ appVersionCode = "1"
 appVersionName = "0.0.1"
 compileSdk = "36"
 targetSdk = "35"
-minSdk = "26"
+minSdk = "28"
 
 [libraries]
 # ... CORE:ANDROID ...

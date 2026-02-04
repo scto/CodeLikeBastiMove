@@ -3,12 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <background
-        android:drawable="@drawable/ic_launcher_background" />
+        android:drawable="@mipmap/ic_launcher_background" />
 
     <foreground
-        android:drawable="@drawable/ic_launcher_foreground" />
+        android:drawable="@mipmap/ic_launcher_foreground" />
 
     <monochrome
-        android:drawable="@drawable/ic_launcher_monochrome" />
+        android:drawable="@mipmap/ic_launcher_monochrome" />
 
 </adaptive-icon>
