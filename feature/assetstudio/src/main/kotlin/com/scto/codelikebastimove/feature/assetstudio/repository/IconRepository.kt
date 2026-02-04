@@ -159,7 +159,7 @@ class MaterialIconsRepository : IconRepositoryProvider {
       createIcon("download", "Download", Icons.Filled.Download, "File", listOf("save")),
       createIcon("upload", "Upload", Icons.Filled.Upload, "File", listOf("send")),
       createIcon("folder", "Folder", Icons.Filled.Folder, "File", listOf("directory")),
-      createIcon("file", "File", Icons.Filled.InsertDriveFile, "File", listOf("document")),
+      createIcon("file", "File", Icons.AutoMirrored.Filled.InsertDriveFile, "File", listOf("document")),
       createIcon("code", "Code", Icons.Filled.Code, "Action", listOf("programming", "developer")),
       createIcon("android", "Android", Icons.Filled.Android, "Device", listOf("robot", "mobile")),
       createIcon("star", "Star", Icons.Filled.Star, "Toggle", listOf("favorite", "rate")),

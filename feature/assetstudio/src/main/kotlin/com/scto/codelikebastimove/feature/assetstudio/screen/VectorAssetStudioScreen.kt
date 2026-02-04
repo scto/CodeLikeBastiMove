@@ -47,7 +47,7 @@ import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SelectAll
-import androidx.compose.material.icons.filled.ViewList
+import androidx.compose.material.icons.automirrored.filled.ViewList
 import androidx.compose.material.icons.filled.ZoomIn
 import androidx.compose.material.icons.filled.ZoomOut
 import androidx.compose.material3.AlertDialog
@@ -266,7 +266,7 @@ private fun BrowseTab(viewModel: VectorAssetStudioViewModel, state: VectorAssetS
               }
             ) {
               Icon(
-                if (state.viewMode == ViewMode.GRID) Icons.Default.ViewList
+                if (state.viewMode == ViewMode.GRID) Icons.AutoMirrored.Filled.ViewList
                 else Icons.Default.GridView,
                 "Toggle View",
               )

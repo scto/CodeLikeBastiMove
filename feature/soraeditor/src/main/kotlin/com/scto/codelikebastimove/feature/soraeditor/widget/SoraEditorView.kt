@@ -191,8 +191,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
   }
 
   private fun CodeEditor.setPinLineNumber(pin: Boolean) {
-    // Line number pinning is controlled via props if available
-    props.pinLineNumber = pin
+    // Line number pinning - use isLineNumberPinned property
+    isLineNumberPinned = pin
   }
 
   private fun CodeEditor.setFastDelete(enabled: Boolean) {
@@ -201,12 +201,14 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
   }
 
   private fun CodeEditor.setCursorAnimation(animationType: CursorAnimationType) {
+    // Cursor animation is handled by the cursor animator
+    val animator = cursorAnimator
     when (animationType) {
       CursorAnimationType.NONE -> {
-        cursorBlink = false
+        animator?.isEnabled = false
       }
       CursorAnimationType.FADE, CursorAnimationType.BLINK, CursorAnimationType.SCALE -> {
-        cursorBlink = true
+        animator?.isEnabled = true
       }
     }
   }
