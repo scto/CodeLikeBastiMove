@@ -60,6 +60,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 }
                 _uiState.update { it.copy(rootDirectory = existingRootDir) }
                 refreshDirectoryContents()
+                scanAndSyncProjects(existingRootDir)
             }
 
             launch {
@@ -91,6 +92,41 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 }
             } catch (e: Exception) {
                 CLBMLogger.e(TAG, "Failed to restore last opened project", e)
+            }
+        }
+    }
+
+    private suspend fun scanAndSyncProjects(rootDir: String) {
+        val dir = File(rootDir)
+        if (!dir.exists() || !dir.isDirectory) return
+
+        val existingProjects = repository.getProjectsOnce()
+        val existingPaths = existingProjects.map { it.path }.toSet()
+
+        val projectsOnDisk = dir.listFiles()
+            ?.filter { it.isDirectory && isProjectDirectory(it) }
+            ?: emptyList()
+
+        for (projectDir in projectsOnDisk) {
+            if (projectDir.absolutePath !in existingPaths) {
+                CLBMLogger.d(TAG, "Found new project on disk: ${projectDir.absolutePath}")
+                val storedProject = StoredProject(
+                    name = projectDir.name,
+                    path = projectDir.absolutePath,
+                    packageName = detectPackageName(projectDir),
+                    templateType = ProjectTemplateType.EMPTY_COMPOSE,
+                    createdAt = projectDir.lastModified(),
+                    lastOpenedAt = projectDir.lastModified(),
+                )
+                repository.addProject(storedProject)
+            }
+        }
+
+        val diskPaths = projectsOnDisk.map { it.absolutePath }.toSet()
+        for (project in existingProjects) {
+            if (project.path.startsWith(rootDir) && project.path !in diskPaths) {
+                CLBMLogger.d(TAG, "Removing missing project from datastore: ${project.path}")
+                repository.removeProject(project.path)
             }
         }
     }
@@ -334,12 +370,61 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun cloneRepository(url: String, branch: String, shallowClone: Boolean, singleBranch: Boolean) {
-        viewModelScope.launch {
+    fun cloneRepository(
+        url: String,
+        branch: String,
+        shallowClone: Boolean,
+        singleBranch: Boolean,
+        recursive: Boolean = true,
+        depth: Int? = null,
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
             _uiState.update { it.copy(isLoading = true, cloneProgress = "Cloning repository...") }
+
+            val rootDir = _uiState.value.rootDirectory
+            if (rootDir.isBlank()) {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        cloneProgress = "",
+                        errorMessage = "Root directory not set. Please complete onboarding first."
+                    )
+                }
+                return@launch
+            }
+
+            val repoName = extractRepoName(url)
+            val targetDir = File(rootDir, repoName)
+
+            if (targetDir.exists()) {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        cloneProgress = "",
+                        errorMessage = "A project with name '$repoName' already exists"
+                    )
+                }
+                return@launch
+            }
+
             _uiState.update { it.copy(isLoading = false, cloneProgress = "") }
             notifyFileSystemChanged()
         }
+    }
+
+    fun getCloneTargetDirectory(url: String): String {
+        val rootDir = _uiState.value.rootDirectory
+        if (rootDir.isBlank()) return ""
+        val repoName = extractRepoName(url)
+        return File(rootDir, repoName).absolutePath
+    }
+
+    private fun extractRepoName(url: String): String {
+        return url
+            .removeSuffix(".git")
+            .removeSuffix("/")
+            .substringAfterLast("/")
+            .ifBlank { "cloned_repo" }
     }
 
     fun importProject(sourcePath: String, copyToWorkspace: Boolean) {
