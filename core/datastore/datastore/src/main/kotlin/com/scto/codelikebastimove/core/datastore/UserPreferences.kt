@@ -147,12 +147,34 @@ data class OnboardingConfig(
   val installationCompleted: Boolean = false,
 )
 
+enum class CursorAnimationType {
+  NONE,
+  FADE,
+  BLINK,
+  SCALE,
+}
+
+enum class RenderWhitespaceMode {
+  NONE,
+  SELECTION,
+  BOUNDARY,
+  TRAILING,
+  ALL,
+}
+
+enum class LineEndingType {
+  LF,
+  CRLF,
+  CR,
+}
+
 data class EditorSettings(
   val fontSize: Float = 14f,
   val fontFamily: String = "JetBrains Mono",
   val tabSize: Int = 4,
   val useSoftTabs: Boolean = true,
   val showLineNumbers: Boolean = true,
+  val pinLineNumber: Boolean = false,
   val wordWrap: Boolean = false,
   val highlightCurrentLine: Boolean = true,
   val autoIndent: Boolean = true,
@@ -163,6 +185,14 @@ data class EditorSettings(
   val editorTheme: String = "Darcula",
   val minimapEnabled: Boolean = true,
   val stickyScroll: Boolean = false,
+  val fastDelete: Boolean = false,
+  val cursorAnimation: CursorAnimationType = CursorAnimationType.FADE,
+  val keyboardSuggestion: Boolean = true,
+  val lineSpacing: Float = 1.2f,
+  val renderWhitespace: RenderWhitespaceMode = RenderWhitespaceMode.NONE,
+  val hideSoftKbd: Boolean = false,
+  val lineEndingSetting: LineEndingType = LineEndingType.LF,
+  val finalNewline: Boolean = true,
   val cursorBlinkRate: Int = 530,
   val smoothScrolling: Boolean = true,
 )

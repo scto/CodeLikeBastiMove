@@ -757,6 +757,7 @@ class UserPreferencesRepository(private val context: Context) {
         tabSize = if (tabSize > 0) tabSize else 4,
         useSoftTabs = useSoftTabs,
         showLineNumbers = showLineNumbers,
+        pinLineNumber = pinLineNumber,
         wordWrap = wordWrap,
         highlightCurrentLine = highlightCurrentLine,
         autoIndent = autoIndent,
@@ -767,6 +768,14 @@ class UserPreferencesRepository(private val context: Context) {
         editorTheme = editorTheme.ifEmpty { "Darcula" },
         minimapEnabled = minimapEnabled,
         stickyScroll = stickyScroll,
+        fastDelete = fastDelete,
+        cursorAnimation = CursorAnimationType.entries.getOrElse(cursorAnimation) { CursorAnimationType.FADE },
+        keyboardSuggestion = keyboardSuggestion,
+        lineSpacing = if (lineSpacing > 0) lineSpacing else 1.2f,
+        renderWhitespace = RenderWhitespaceMode.entries.getOrElse(renderWhitespace) { RenderWhitespaceMode.NONE },
+        hideSoftKbd = hideSoftKbd,
+        lineEndingSetting = LineEndingType.entries.getOrElse(lineEndingSetting) { LineEndingType.LF },
+        finalNewline = finalNewline,
         cursorBlinkRate = if (cursorBlinkRate > 0) cursorBlinkRate else 530,
         smoothScrolling = smoothScrolling,
       )
@@ -780,6 +789,7 @@ class UserPreferencesRepository(private val context: Context) {
       .setTabSize(tabSize)
       .setUseSoftTabs(useSoftTabs)
       .setShowLineNumbers(showLineNumbers)
+      .setPinLineNumber(pinLineNumber)
       .setWordWrap(wordWrap)
       .setHighlightCurrentLine(highlightCurrentLine)
       .setAutoIndent(autoIndent)
@@ -790,6 +800,14 @@ class UserPreferencesRepository(private val context: Context) {
       .setEditorTheme(editorTheme)
       .setMinimapEnabled(minimapEnabled)
       .setStickyScroll(stickyScroll)
+      .setFastDelete(fastDelete)
+      .setCursorAnimation(cursorAnimation.ordinal)
+      .setKeyboardSuggestion(keyboardSuggestion)
+      .setLineSpacing(lineSpacing)
+      .setRenderWhitespace(renderWhitespace.ordinal)
+      .setHideSoftKbd(hideSoftKbd)
+      .setLineEndingSetting(lineEndingSetting.ordinal)
+      .setFinalNewline(finalNewline)
       .setCursorBlinkRate(cursorBlinkRate)
       .setSmoothScrolling(smoothScrolling)
       .build()

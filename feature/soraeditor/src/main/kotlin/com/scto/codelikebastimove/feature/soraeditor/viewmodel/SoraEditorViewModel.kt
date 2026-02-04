@@ -2,6 +2,7 @@ package com.scto.codelikebastimove.feature.soraeditor.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.scto.codelikebastimove.core.datastore.EditorSettings as DatastoreEditorSettings
 import com.scto.codelikebastimove.feature.soraeditor.model.CursorAnimationType
 import com.scto.codelikebastimove.feature.soraeditor.model.EditorConfig
 import com.scto.codelikebastimove.feature.soraeditor.model.EditorFile
@@ -12,6 +13,7 @@ import com.scto.codelikebastimove.feature.soraeditor.model.EditorThemes
 import com.scto.codelikebastimove.feature.soraeditor.model.HighlightingMode
 import com.scto.codelikebastimove.feature.soraeditor.model.LineEndingType
 import com.scto.codelikebastimove.feature.soraeditor.model.RenderWhitespaceMode
+import com.scto.codelikebastimove.feature.soraeditor.util.EditorSettingsMapper.toEditorConfig
 import java.io.File
 import java.util.UUID
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +28,11 @@ class SoraEditorViewModel : ViewModel() {
   val uiState: StateFlow<SoraEditorUiState> = _uiState.asStateFlow()
 
   private val fileContents = mutableMapOf<String, String>()
+
+  fun applyDatastoreSettings(datastoreSettings: DatastoreEditorSettings) {
+    val config = datastoreSettings.toEditorConfig()
+    updateConfig(config)
+  }
 
   fun openFile(filePath: String) {
     viewModelScope.launch {

@@ -151,6 +151,15 @@ message EditorSettingsProto {
     bool sticky_scroll = 15;
     int32 cursor_blink_rate = 16;
     bool smooth_scrolling = 17;
+    bool pin_line_number = 18;
+    bool fast_delete = 19;
+    int32 cursor_animation = 20;
+    bool keyboard_suggestion = 21;
+    float line_spacing = 22;
+    int32 render_whitespace = 23;
+    bool hide_soft_kbd = 24;
+    int32 line_ending_setting = 25;
+    bool final_newline = 26;
 }
 
 message UserPreferencesProto {

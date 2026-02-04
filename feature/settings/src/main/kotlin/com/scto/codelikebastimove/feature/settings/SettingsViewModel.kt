@@ -4,7 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.scto.codelikebastimove.core.datastore.BuildSettings
+import com.scto.codelikebastimove.core.datastore.CursorAnimationType
 import com.scto.codelikebastimove.core.datastore.EditorSettings
+import com.scto.codelikebastimove.core.datastore.LineEndingType
+import com.scto.codelikebastimove.core.datastore.RenderWhitespaceMode
 import com.scto.codelikebastimove.core.datastore.ThemeMode
 import com.scto.codelikebastimove.core.datastore.UserPreferences
 import com.scto.codelikebastimove.core.datastore.UserPreferencesRepository
@@ -135,6 +138,69 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
   fun setEditorSmoothScrolling(smoothScrolling: Boolean) {
     viewModelScope.launch { userPreferencesRepository.setEditorSmoothScrolling(smoothScrolling) }
+  }
+
+  fun setEditorPinLineNumber(pinLineNumber: Boolean) {
+    viewModelScope.launch {
+      val current = userPreferences.value.editorSettings
+      userPreferencesRepository.updateEditorSettings(current.copy(pinLineNumber = pinLineNumber))
+    }
+  }
+
+  fun setEditorFastDelete(fastDelete: Boolean) {
+    viewModelScope.launch {
+      val current = userPreferences.value.editorSettings
+      userPreferencesRepository.updateEditorSettings(current.copy(fastDelete = fastDelete))
+    }
+  }
+
+  fun setEditorCursorAnimation(cursorAnimation: CursorAnimationType) {
+    viewModelScope.launch {
+      val current = userPreferences.value.editorSettings
+      userPreferencesRepository.updateEditorSettings(current.copy(cursorAnimation = cursorAnimation))
+    }
+  }
+
+  fun setEditorKeyboardSuggestion(keyboardSuggestion: Boolean) {
+    viewModelScope.launch {
+      val current = userPreferences.value.editorSettings
+      userPreferencesRepository.updateEditorSettings(current.copy(keyboardSuggestion = keyboardSuggestion))
+    }
+  }
+
+  fun setEditorLineSpacing(lineSpacing: Float) {
+    viewModelScope.launch {
+      val current = userPreferences.value.editorSettings
+      userPreferencesRepository.updateEditorSettings(current.copy(lineSpacing = lineSpacing))
+    }
+  }
+
+  fun setEditorRenderWhitespace(renderWhitespace: RenderWhitespaceMode) {
+    viewModelScope.launch {
+      val current = userPreferences.value.editorSettings
+      userPreferencesRepository.updateEditorSettings(current.copy(renderWhitespace = renderWhitespace))
+    }
+  }
+
+  fun setEditorHideSoftKbd(hideSoftKbd: Boolean) {
+    viewModelScope.launch {
+      val current = userPreferences.value.editorSettings
+      userPreferencesRepository.updateEditorSettings(current.copy(hideSoftKbd = hideSoftKbd))
+    }
+  }
+
+  fun setEditorLineEnding(lineEnding: LineEndingType) {
+    viewModelScope.launch {
+      val current = userPreferences.value.editorSettings
+      userPreferencesRepository.updateEditorSettings(current.copy(lineEndingSetting = lineEnding))
+    }
+  }
+
+  fun setEditorFinalNewline(finalNewline: Boolean) {
+    viewModelScope.launch {
+      val current = userPreferences.value.editorSettings
+      userPreferencesRepository.updateEditorSettings(current.copy(finalNewline = finalNewline))
+    }
   }
 
   fun updateEditorSettings(settings: EditorSettings) {

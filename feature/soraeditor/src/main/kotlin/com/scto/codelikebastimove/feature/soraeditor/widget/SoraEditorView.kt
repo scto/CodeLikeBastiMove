@@ -3,6 +3,9 @@ package com.scto.codelikebastimove.feature.soraeditor.widget
 import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.view.ActionMode
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.FrameLayout
 import com.scto.codelikebastimove.feature.soraeditor.language.LanguageRegistry
 import com.scto.codelikebastimove.feature.soraeditor.model.CursorAnimationType
@@ -15,6 +18,7 @@ import com.scto.codelikebastimove.feature.soraeditor.model.LineEndingType
 import com.scto.codelikebastimove.feature.soraeditor.model.RenderWhitespaceMode
 import com.scto.codelikebastimove.feature.soraeditor.theme.EditorThemeProvider
 import io.github.rosemoe.sora.event.ContentChangeEvent
+import io.github.rosemoe.sora.event.LongPressEvent
 import io.github.rosemoe.sora.event.SelectionChangeEvent
 import io.github.rosemoe.sora.widget.CodeEditor
 import io.github.rosemoe.sora.widget.component.EditorAutoCompletion
@@ -35,11 +39,23 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
   private var onTextChangeListener: ((String) -> Unit)? = null
   private var onCursorChangeListener: ((Int, Int) -> Unit)? = null
+  private var actionModeCallback: EditorActionModeCallback? = null
+
+  companion object {
+    private const val MENU_ITEM_SELECT_ALL = 1
+    private const val MENU_ITEM_CUT = 2
+    private const val MENU_ITEM_COPY = 3
+    private const val MENU_ITEM_PASTE = 4
+    private const val MENU_ITEM_UNDO = 5
+    private const val MENU_ITEM_REDO = 6
+    private const val MENU_ITEM_FORMAT = 7
+  }
 
   init {
     addView(codeEditor, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
     setupEditor()
     setupEventListeners()
+    setupActionMode()
   }
 
   private fun setupEditor() {
@@ -47,9 +63,14 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
       typefaceText = Typeface.MONOSPACE
       typefaceLineNumber = Typeface.MONOSPACE
 
-      isLineNumberEnabled = currentConfig.showLineNumber
+      isLineNumberEnabled = true
       isWordwrap = currentConfig.wordWrap
       tabWidth = currentConfig.tabSize
+
+      isScrollable = true
+      isNestedScrollingEnabled = true
+      isVerticalScrollBarEnabled = true
+      isHorizontalScrollBarEnabled = true
 
       getComponent(EditorAutoCompletion::class.java)?.isEnabled = currentConfig.autoComplete
       getComponent(Magnifier::class.java)?.isEnabled = true
@@ -67,6 +88,56 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
       val cursor = codeEditor.cursor
       onCursorChangeListener?.invoke(cursor.leftLine, cursor.leftColumn)
     }
+
+    codeEditor.subscribeEvent(LongPressEvent::class.java) { event, _ ->
+      showContextMenu()
+    }
+  }
+
+  private fun setupActionMode() {
+    actionModeCallback = EditorActionModeCallback()
+  }
+
+  private fun showContextMenu() {
+    codeEditor.startActionMode(actionModeCallback, ActionMode.TYPE_FLOATING)
+  }
+
+  inner class EditorActionModeCallback : ActionMode.Callback {
+    override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+      menu?.apply {
+        add(Menu.NONE, MENU_ITEM_SELECT_ALL, 0, "Select All")
+        add(Menu.NONE, MENU_ITEM_CUT, 1, "Cut")
+        add(Menu.NONE, MENU_ITEM_COPY, 2, "Copy")
+        add(Menu.NONE, MENU_ITEM_PASTE, 3, "Paste")
+        add(Menu.NONE, MENU_ITEM_UNDO, 4, "Undo")
+        add(Menu.NONE, MENU_ITEM_REDO, 5, "Redo")
+        add(Menu.NONE, MENU_ITEM_FORMAT, 6, "Format")
+      }
+      return true
+    }
+
+    override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+      menu?.findItem(MENU_ITEM_UNDO)?.isEnabled = canUndo()
+      menu?.findItem(MENU_ITEM_REDO)?.isEnabled = canRedo()
+      return true
+    }
+
+    override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+      when (item?.itemId) {
+        MENU_ITEM_SELECT_ALL -> selectAll()
+        MENU_ITEM_CUT -> cut()
+        MENU_ITEM_COPY -> copy()
+        MENU_ITEM_PASTE -> paste()
+        MENU_ITEM_UNDO -> undo()
+        MENU_ITEM_REDO -> redo()
+        MENU_ITEM_FORMAT -> formatCode()
+        else -> return false
+      }
+      mode?.finish()
+      return true
+    }
+
+    override fun onDestroyActionMode(mode: ActionMode?) {}
   }
 
   fun setText(text: String) {
@@ -99,6 +170,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
       tabWidth = config.tabSize
       isHighlightCurrentLine = config.highlightCurrentLine
       isHighlightBracketPair = config.highlightBrackets
+
+      isScrollable = true
+      isNestedScrollingEnabled = true
+      isVerticalScrollBarEnabled = true
+      isHorizontalScrollBarEnabled = true
 
       setPinLineNumber(config.pinLineNumber)
       setStickyScroll(config.stickyScroll)
