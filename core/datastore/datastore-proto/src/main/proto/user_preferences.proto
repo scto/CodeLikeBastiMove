@@ -133,6 +133,26 @@ message OnboardingConfigProto {
     bool installation_completed = 11;
 }
 
+message EditorSettingsProto {
+    float font_size = 1;
+    string font_family = 2;
+    int32 tab_size = 3;
+    bool use_soft_tabs = 4;
+    bool show_line_numbers = 5;
+    bool word_wrap = 6;
+    bool highlight_current_line = 7;
+    bool auto_indent = 8;
+    bool show_whitespace = 9;
+    bool bracket_matching = 10;
+    bool auto_close_brackets = 11;
+    bool auto_close_quotes = 12;
+    string editor_theme = 13;
+    bool minimap_enabled = 14;
+    bool sticky_scroll = 15;
+    int32 cursor_blink_rate = 16;
+    bool smooth_scrolling = 17;
+}
+
 message UserPreferencesProto {
     ThemeMode theme_mode = 1;
     bool dynamic_colors_enabled = 2;
@@ -145,4 +165,5 @@ message UserPreferencesProto {
     bool logging_enabled = 9;
     bool logging_initialized = 10;
     TemplateRegistryProto template_registry = 11;
+    EditorSettingsProto editor_settings = 12;
 }

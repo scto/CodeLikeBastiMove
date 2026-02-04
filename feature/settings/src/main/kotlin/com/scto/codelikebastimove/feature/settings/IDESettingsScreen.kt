@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.feature.main.screens
+package com.scto.codelikebastimove.feature.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,41 +39,26 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.scto.codelikebastimove.core.datastore.ThemeMode
-import com.scto.codelikebastimove.core.datastore.UserPreferences
-import com.scto.codelikebastimove.core.datastore.UserPreferencesRepository
 import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
-import kotlinx.coroutines.launch
-
-data class SettingsCategory(val title: String, val items: List<SettingsItem>)
-
-data class SettingsItem(
-  val title: String,
-  val description: String,
-  val icon: ImageVector? = null,
-  val onClick: () -> Unit = {},
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IDESettingsScreen(
+  viewModel: SettingsViewModel = viewModel(),
   onBackClick: () -> Unit,
   onNavigateToAIAgent: () -> Unit,
+  onNavigateToEditorSettings: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  val context = LocalContext.current
-  val scope = rememberCoroutineScope()
-  val userPreferencesRepository = remember { UserPreferencesRepository(context) }
-  val userPreferences by
-    userPreferencesRepository.userPreferences.collectAsState(initial = UserPreferences())
+  val userPreferences by viewModel.userPreferences.collectAsState()
 
   var showThemeDialog by remember { mutableStateOf(false) }
   var showResetOnboardingDialog by remember { mutableStateOf(false) }
@@ -87,8 +72,7 @@ fun IDESettingsScreen(
             Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Zurück")
           }
         },
-        colors =
-          TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface),
         modifier = Modifier.statusBarsPadding(),
       )
     },
@@ -96,11 +80,11 @@ fun IDESettingsScreen(
     modifier = modifier,
   ) { paddingValues ->
     Column(
-      modifier =
-        Modifier.fillMaxSize()
-          .background(MaterialTheme.colorScheme.background)
-          .padding(paddingValues)
-          .verticalScroll(rememberScrollState())
+      modifier = Modifier
+        .fillMaxSize()
+        .background(MaterialTheme.colorScheme.background)
+        .padding(paddingValues)
+        .verticalScroll(rememberScrollState())
     ) {
       SettingsCategoryHeader(title = "Erscheinungsbild")
 
@@ -115,9 +99,7 @@ fun IDESettingsScreen(
         icon = Icons.Default.Palette,
         isEnabled = userPreferences.dynamicColorsEnabled,
         onToggle = {
-          scope.launch {
-            userPreferencesRepository.setDynamicColorsEnabled(!userPreferences.dynamicColorsEnabled)
-          }
+          viewModel.setDynamicColorsEnabled(!userPreferences.dynamicColorsEnabled)
         },
       )
 
@@ -132,7 +114,11 @@ fun IDESettingsScreen(
         onClick = {},
       )
 
-      SettingsItemRow(title = "Editor", description = "Konfiguriere den Editor.", onClick = {})
+      SettingsItemRow(
+        title = "Editor",
+        description = "Konfiguriere den Editor.",
+        onClick = onNavigateToEditorSettings,
+      )
 
       SettingsItemRow(
         title = "AI Agent",
@@ -174,9 +160,7 @@ fun IDESettingsScreen(
         icon = Icons.Default.BugReport,
         isEnabled = userPreferences.loggingEnabled,
         onToggle = {
-          scope.launch {
-            userPreferencesRepository.setLoggingEnabled(!userPreferences.loggingEnabled)
-          }
+          viewModel.setLoggingEnabled(!userPreferences.loggingEnabled)
         },
       )
 
@@ -197,7 +181,11 @@ fun IDESettingsScreen(
 
       SettingsCategoryHeader(title = "Über")
 
-      SettingsItemRow(title = "Über", description = "App-Version und Informationen", onClick = {})
+      SettingsItemRow(
+        title = "Über",
+        description = "App-Version und Informationen",
+        onClick = {},
+      )
     }
   }
 
@@ -205,7 +193,7 @@ fun IDESettingsScreen(
     ThemeSelectionDialog(
       currentTheme = userPreferences.themeMode,
       onThemeSelected = { theme ->
-        scope.launch { userPreferencesRepository.setThemeMode(theme) }
+        viewModel.setThemeMode(theme)
         showThemeDialog = false
       },
       onDismiss = { showThemeDialog = false },
@@ -224,12 +212,7 @@ fun IDESettingsScreen(
       confirmButton = {
         TextButton(
           onClick = {
-            scope.launch {
-              userPreferencesRepository.setOnboardingCompleted(false)
-              userPreferencesRepository.setFileAccessPermissionGranted(false)
-              userPreferencesRepository.setInstallationStarted(false)
-              userPreferencesRepository.setInstallationCompleted(false)
-            }
+            viewModel.resetOnboarding()
             showResetOnboardingDialog = false
           }
         ) {
@@ -262,11 +245,10 @@ private fun SettingsItemRow(
   modifier: Modifier = Modifier,
 ) {
   Column(
-    modifier =
-      modifier
-        .fillMaxWidth()
-        .clickable(onClick = onClick)
-        .padding(horizontal = 16.dp, vertical = 12.dp)
+    modifier = modifier
+      .fillMaxWidth()
+      .clickable(onClick = onClick)
+      .padding(horizontal = 16.dp, vertical = 12.dp)
   ) {
     Text(
       text = title,
@@ -291,26 +273,23 @@ private fun ThemeSettingRow(
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  val themeName =
-    when (currentTheme) {
-      ThemeMode.LIGHT -> "Hell"
-      ThemeMode.DARK -> "Dunkel"
-      ThemeMode.FOLLOW_SYSTEM -> "System"
-    }
+  val themeName = when (currentTheme) {
+    ThemeMode.LIGHT -> "Hell"
+    ThemeMode.DARK -> "Dunkel"
+    ThemeMode.FOLLOW_SYSTEM -> "System"
+  }
 
-  val themeIcon =
-    when (currentTheme) {
-      ThemeMode.LIGHT -> Icons.Default.LightMode
-      ThemeMode.DARK -> Icons.Default.DarkMode
-      ThemeMode.FOLLOW_SYSTEM -> Icons.Default.Settings
-    }
+  val themeIcon = when (currentTheme) {
+    ThemeMode.LIGHT -> Icons.Default.LightMode
+    ThemeMode.DARK -> Icons.Default.DarkMode
+    ThemeMode.FOLLOW_SYSTEM -> Icons.Default.Settings
+  }
 
   Row(
-    modifier =
-      modifier
-        .fillMaxWidth()
-        .clickable(onClick = onClick)
-        .padding(horizontal = 16.dp, vertical = 12.dp),
+    modifier = modifier
+      .fillMaxWidth()
+      .clickable(onClick = onClick)
+      .padding(horizontal = 16.dp, vertical = 12.dp),
     verticalAlignment = Alignment.CenterVertically,
   ) {
     Icon(
@@ -351,11 +330,10 @@ private fun ToggleSettingRow(
   modifier: Modifier = Modifier,
 ) {
   Row(
-    modifier =
-      modifier
-        .fillMaxWidth()
-        .clickable(onClick = onToggle)
-        .padding(horizontal = 16.dp, vertical = 12.dp),
+    modifier = modifier
+      .fillMaxWidth()
+      .clickable(onClick = onToggle)
+      .padding(horizontal = 16.dp, vertical = 12.dp),
     verticalAlignment = Alignment.CenterVertically,
   ) {
     Icon(
@@ -426,9 +404,17 @@ private fun ThemeSelectionDialog(
 }
 
 @Composable
-private fun ThemeOption(name: String, icon: ImageVector, isSelected: Boolean, onClick: () -> Unit) {
+private fun ThemeOption(
+  name: String,
+  icon: ImageVector,
+  isSelected: Boolean,
+  onClick: () -> Unit,
+) {
   Row(
-    modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).padding(vertical = 12.dp),
+    modifier = Modifier
+      .fillMaxWidth()
+      .clickable(onClick = onClick)
+      .padding(vertical = 12.dp),
     verticalAlignment = Alignment.CenterVertically,
   ) {
     RadioButton(selected = isSelected, onClick = onClick)
@@ -438,9 +424,8 @@ private fun ThemeOption(name: String, icon: ImageVector, isSelected: Boolean, on
     Icon(
       imageVector = icon,
       contentDescription = null,
-      tint =
-        if (isSelected) MaterialTheme.colorScheme.primary
-        else MaterialTheme.colorScheme.onSurfaceVariant,
+      tint = if (isSelected) MaterialTheme.colorScheme.primary
+      else MaterialTheme.colorScheme.onSurfaceVariant,
     )
 
     Spacer(modifier = Modifier.width(12.dp))
@@ -448,8 +433,8 @@ private fun ThemeOption(name: String, icon: ImageVector, isSelected: Boolean, on
     Text(
       text = name,
       style = MaterialTheme.typography.bodyLarge,
-      color =
-        if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+      color = if (isSelected) MaterialTheme.colorScheme.primary
+      else MaterialTheme.colorScheme.onSurface,
     )
   }
 }

@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
 import com.scto.codelikebastimove.core.datastore.proto.BuildToolsVersion as ProtoBuildToolsVersion
 import com.scto.codelikebastimove.core.datastore.proto.ClonedRepositoryProto
+import com.scto.codelikebastimove.core.datastore.proto.EditorSettingsProto
 import com.scto.codelikebastimove.core.datastore.proto.GitConfigProto
 import com.scto.codelikebastimove.core.datastore.proto.GradleInfoProto
 import com.scto.codelikebastimove.core.datastore.proto.OnboardingConfigProto
@@ -42,6 +43,7 @@ class UserPreferencesRepository(private val context: Context) {
         currentProjectPath = proto.currentProjectPath,
         loggingEnabled = proto.loggingEnabled,
         loggingInitialized = proto.loggingInitialized,
+        editorSettings = proto.editorSettings.toEditorSettings(),
       )
     }
 
@@ -611,5 +613,178 @@ class UserPreferencesRepository(private val context: Context) {
 
   suspend fun getTemplateInfo(templateId: String): TemplateInfo? {
     return getTemplateRegistryOnce().templates.find { it.id == templateId }
+  }
+
+  val editorSettings: Flow<EditorSettings> =
+    context.userPreferencesStore.data.map { proto -> proto.editorSettings.toEditorSettings() }
+
+  suspend fun getEditorSettingsOnce(): EditorSettings {
+    return editorSettings.first()
+  }
+
+  suspend fun updateEditorSettings(settings: EditorSettings) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      currentPrefs.toBuilder().setEditorSettings(settings.toProto()).build()
+    }
+  }
+
+  suspend fun setEditorFontSize(fontSize: Float) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      val editorProto = currentPrefs.editorSettings.toBuilder().setFontSize(fontSize).build()
+      currentPrefs.toBuilder().setEditorSettings(editorProto).build()
+    }
+  }
+
+  suspend fun setEditorFontFamily(fontFamily: String) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      val editorProto = currentPrefs.editorSettings.toBuilder().setFontFamily(fontFamily).build()
+      currentPrefs.toBuilder().setEditorSettings(editorProto).build()
+    }
+  }
+
+  suspend fun setEditorTabSize(tabSize: Int) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      val editorProto = currentPrefs.editorSettings.toBuilder().setTabSize(tabSize).build()
+      currentPrefs.toBuilder().setEditorSettings(editorProto).build()
+    }
+  }
+
+  suspend fun setEditorUseSoftTabs(useSoftTabs: Boolean) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      val editorProto = currentPrefs.editorSettings.toBuilder().setUseSoftTabs(useSoftTabs).build()
+      currentPrefs.toBuilder().setEditorSettings(editorProto).build()
+    }
+  }
+
+  suspend fun setEditorShowLineNumbers(showLineNumbers: Boolean) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      val editorProto = currentPrefs.editorSettings.toBuilder().setShowLineNumbers(showLineNumbers).build()
+      currentPrefs.toBuilder().setEditorSettings(editorProto).build()
+    }
+  }
+
+  suspend fun setEditorWordWrap(wordWrap: Boolean) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      val editorProto = currentPrefs.editorSettings.toBuilder().setWordWrap(wordWrap).build()
+      currentPrefs.toBuilder().setEditorSettings(editorProto).build()
+    }
+  }
+
+  suspend fun setEditorHighlightCurrentLine(highlightCurrentLine: Boolean) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      val editorProto = currentPrefs.editorSettings.toBuilder().setHighlightCurrentLine(highlightCurrentLine).build()
+      currentPrefs.toBuilder().setEditorSettings(editorProto).build()
+    }
+  }
+
+  suspend fun setEditorAutoIndent(autoIndent: Boolean) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      val editorProto = currentPrefs.editorSettings.toBuilder().setAutoIndent(autoIndent).build()
+      currentPrefs.toBuilder().setEditorSettings(editorProto).build()
+    }
+  }
+
+  suspend fun setEditorShowWhitespace(showWhitespace: Boolean) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      val editorProto = currentPrefs.editorSettings.toBuilder().setShowWhitespace(showWhitespace).build()
+      currentPrefs.toBuilder().setEditorSettings(editorProto).build()
+    }
+  }
+
+  suspend fun setEditorBracketMatching(bracketMatching: Boolean) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      val editorProto = currentPrefs.editorSettings.toBuilder().setBracketMatching(bracketMatching).build()
+      currentPrefs.toBuilder().setEditorSettings(editorProto).build()
+    }
+  }
+
+  suspend fun setEditorAutoCloseBrackets(autoCloseBrackets: Boolean) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      val editorProto = currentPrefs.editorSettings.toBuilder().setAutoCloseBrackets(autoCloseBrackets).build()
+      currentPrefs.toBuilder().setEditorSettings(editorProto).build()
+    }
+  }
+
+  suspend fun setEditorAutoCloseQuotes(autoCloseQuotes: Boolean) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      val editorProto = currentPrefs.editorSettings.toBuilder().setAutoCloseQuotes(autoCloseQuotes).build()
+      currentPrefs.toBuilder().setEditorSettings(editorProto).build()
+    }
+  }
+
+  suspend fun setEditorTheme(editorTheme: String) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      val editorProto = currentPrefs.editorSettings.toBuilder().setEditorTheme(editorTheme).build()
+      currentPrefs.toBuilder().setEditorSettings(editorProto).build()
+    }
+  }
+
+  suspend fun setEditorMinimapEnabled(minimapEnabled: Boolean) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      val editorProto = currentPrefs.editorSettings.toBuilder().setMinimapEnabled(minimapEnabled).build()
+      currentPrefs.toBuilder().setEditorSettings(editorProto).build()
+    }
+  }
+
+  suspend fun setEditorStickyScroll(stickyScroll: Boolean) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      val editorProto = currentPrefs.editorSettings.toBuilder().setStickyScroll(stickyScroll).build()
+      currentPrefs.toBuilder().setEditorSettings(editorProto).build()
+    }
+  }
+
+  suspend fun setEditorSmoothScrolling(smoothScrolling: Boolean) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      val editorProto = currentPrefs.editorSettings.toBuilder().setSmoothScrolling(smoothScrolling).build()
+      currentPrefs.toBuilder().setEditorSettings(editorProto).build()
+    }
+  }
+
+  private fun EditorSettingsProto?.toEditorSettings(): EditorSettings {
+    return if (this == null || this == EditorSettingsProto.getDefaultInstance()) {
+      EditorSettings()
+    } else {
+      EditorSettings(
+        fontSize = if (fontSize > 0) fontSize else 14f,
+        fontFamily = fontFamily.ifEmpty { "JetBrains Mono" },
+        tabSize = if (tabSize > 0) tabSize else 4,
+        useSoftTabs = useSoftTabs,
+        showLineNumbers = showLineNumbers,
+        wordWrap = wordWrap,
+        highlightCurrentLine = highlightCurrentLine,
+        autoIndent = autoIndent,
+        showWhitespace = showWhitespace,
+        bracketMatching = bracketMatching,
+        autoCloseBrackets = autoCloseBrackets,
+        autoCloseQuotes = autoCloseQuotes,
+        editorTheme = editorTheme.ifEmpty { "Darcula" },
+        minimapEnabled = minimapEnabled,
+        stickyScroll = stickyScroll,
+        cursorBlinkRate = if (cursorBlinkRate > 0) cursorBlinkRate else 530,
+        smoothScrolling = smoothScrolling,
+      )
+    }
+  }
+
+  private fun EditorSettings.toProto(): EditorSettingsProto {
+    return EditorSettingsProto.newBuilder()
+      .setFontSize(fontSize)
+      .setFontFamily(fontFamily)
+      .setTabSize(tabSize)
+      .setUseSoftTabs(useSoftTabs)
+      .setShowLineNumbers(showLineNumbers)
+      .setWordWrap(wordWrap)
+      .setHighlightCurrentLine(highlightCurrentLine)
+      .setAutoIndent(autoIndent)
+      .setShowWhitespace(showWhitespace)
+      .setBracketMatching(bracketMatching)
+      .setAutoCloseBrackets(autoCloseBrackets)
+      .setAutoCloseQuotes(autoCloseQuotes)
+      .setEditorTheme(editorTheme)
+      .setMinimapEnabled(minimapEnabled)
+      .setStickyScroll(stickyScroll)
+      .setCursorBlinkRate(cursorBlinkRate)
+      .setSmoothScrolling(smoothScrolling)
+      .build()
   }
 }

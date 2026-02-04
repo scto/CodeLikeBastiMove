@@ -22,7 +22,8 @@ import com.scto.codelikebastimove.feature.main.screens.CloneRepositoryScreen
 import com.scto.codelikebastimove.feature.main.screens.ConsoleScreen
 import com.scto.codelikebastimove.feature.main.screens.CreateProjectScreen
 import com.scto.codelikebastimove.feature.main.screens.HomeScreen
-import com.scto.codelikebastimove.feature.main.screens.IDESettingsScreen
+import com.scto.codelikebastimove.feature.settings.EditorSettingsScreen
+import com.scto.codelikebastimove.feature.settings.IDESettingsScreen
 import com.scto.codelikebastimove.feature.main.screens.IDEWorkspaceScreen
 import com.scto.codelikebastimove.feature.main.screens.OpenProjectScreen
 import com.scto.codelikebastimove.feature.submodulemaker.SubModuleMakerScreen
@@ -126,6 +127,13 @@ fun MainScreen(
         IDESettingsScreen(
           onBackClick = { viewModel.onBackPressed() },
           onNavigateToAIAgent = { viewModel.onNavigate(MainDestination.AIAgent) },
+          onNavigateToEditorSettings = { viewModel.onNavigate(MainDestination.EditorSettings) },
+        )
+      }
+
+      MainDestination.EditorSettings -> {
+        EditorSettingsScreen(
+          onBackClick = { viewModel.onBackPressed() },
         )
       }
 

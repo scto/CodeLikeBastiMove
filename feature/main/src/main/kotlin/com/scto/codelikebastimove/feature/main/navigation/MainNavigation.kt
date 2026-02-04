@@ -26,6 +26,8 @@ sealed class MainDestination(val route: String, val title: String) {
 
   data object Settings : MainDestination("settings", "IDE-Einstellungen")
 
+  data object EditorSettings : MainDestination("editor_settings", "Editor-Einstellungen")
+
   data object AssetStudio : MainDestination("asset_studio", "Asset Studio")
 
   data object AIAgent : MainDestination("ai_agent", "AI Agent")

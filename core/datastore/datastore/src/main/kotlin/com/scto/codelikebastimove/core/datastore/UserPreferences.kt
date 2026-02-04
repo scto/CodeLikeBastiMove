@@ -147,6 +147,26 @@ data class OnboardingConfig(
   val installationCompleted: Boolean = false,
 )
 
+data class EditorSettings(
+  val fontSize: Float = 14f,
+  val fontFamily: String = "JetBrains Mono",
+  val tabSize: Int = 4,
+  val useSoftTabs: Boolean = true,
+  val showLineNumbers: Boolean = true,
+  val wordWrap: Boolean = false,
+  val highlightCurrentLine: Boolean = true,
+  val autoIndent: Boolean = true,
+  val showWhitespace: Boolean = false,
+  val bracketMatching: Boolean = true,
+  val autoCloseBrackets: Boolean = true,
+  val autoCloseQuotes: Boolean = true,
+  val editorTheme: String = "Darcula",
+  val minimapEnabled: Boolean = true,
+  val stickyScroll: Boolean = false,
+  val cursorBlinkRate: Int = 530,
+  val smoothScrolling: Boolean = true,
+)
+
 data class UserPreferences(
   val themeMode: ThemeMode = ThemeMode.FOLLOW_SYSTEM,
   val dynamicColorsEnabled: Boolean = true,
@@ -158,4 +178,5 @@ data class UserPreferences(
   val currentProjectPath: String = "",
   val loggingEnabled: Boolean = true,
   val loggingInitialized: Boolean = false,
+  val editorSettings: EditorSettings = EditorSettings(),
 )
