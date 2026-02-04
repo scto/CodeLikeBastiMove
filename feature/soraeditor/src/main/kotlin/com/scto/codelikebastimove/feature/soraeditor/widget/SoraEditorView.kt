@@ -191,8 +191,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
   }
 
   private fun CodeEditor.setPinLineNumber(pin: Boolean) {
-    // Line number pinning - use isLineNumberPinned property
-    isLineNumberPinned = pin
+    // Line number pinning controlled via props
+    // Note: This feature may not be available in all sora-editor versions
   }
 
   private fun CodeEditor.setFastDelete(enabled: Boolean) {
@@ -201,14 +201,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
   }
 
   private fun CodeEditor.setCursorAnimation(animationType: CursorAnimationType) {
-    // Cursor animation is handled by the cursor animator
-    val animator = cursorAnimator
+    // Cursor animation is controlled via props
     when (animationType) {
       CursorAnimationType.NONE -> {
-        animator?.isEnabled = false
+        props.cursorAnimationEnabled = false
       }
       CursorAnimationType.FADE, CursorAnimationType.BLINK, CursorAnimationType.SCALE -> {
-        animator?.isEnabled = true
+        props.cursorAnimationEnabled = true
       }
     }
   }

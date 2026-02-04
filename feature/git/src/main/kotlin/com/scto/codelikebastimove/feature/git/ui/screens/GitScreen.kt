@@ -193,8 +193,9 @@ private fun GitNavigationRail(
       onClick = { onSectionSelected(GitSection.HISTORY) },
     )
 
+    @Suppress("DEPRECATION")
     GitNavItem(
-      icon = Icons.AutoMirrored.Outlined.CallSplit,
+      icon = Icons.Outlined.CallSplit,
       label = "Branches",
       selected = selectedSection == GitSection.BRANCHES,
       onClick = { onSectionSelected(GitSection.BRANCHES) },
