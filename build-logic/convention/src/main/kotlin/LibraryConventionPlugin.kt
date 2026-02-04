@@ -32,23 +32,15 @@ class LibraryConventionPlugin : Plugin<Project> {
 
       extensions.configure<LibraryExtension> { 
         configureKotlinAndroid(this) 
-        
-        buildFeatures {
-          buildConfig = true
-        }
-        
-        defaultConfig {
-          buildConfigField("boolean", "DEBUG_LOGGING_ENABLED", "true")
-        }
-        
-        buildTypes {
-          getByName("release") {
-            buildConfigField("boolean", "DEBUG_LOGGING_ENABLED", "false")
-          }
-        }
       }
 
-      dependencies { add("testImplementation", kotlin("test")) }
+      dependencies { 
+        add("testImplementation", kotlin("test")) 
+        // Add logger dependency unless this is the logger module itself
+        if (path != ":core:logger") {
+          add("implementation", project(":core:logger"))
+        }
+      }
     }
   }
 }
