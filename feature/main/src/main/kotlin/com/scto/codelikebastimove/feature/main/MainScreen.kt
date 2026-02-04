@@ -21,12 +21,13 @@ import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 import com.scto.codelikebastimove.feature.main.screens.AIAgentScreen
 import com.scto.codelikebastimove.feature.main.screens.BuildVariantsScreen
 import com.scto.codelikebastimove.feature.main.screens.ConsoleScreen
-import com.scto.codelikebastimove.feature.main.screens.CreateProjectScreen
-import com.scto.codelikebastimove.feature.main.screens.HomeScreen
+import com.scto.codelikebastimove.feature.home.screens.CreateProjectScreen
+import com.scto.codelikebastimove.feature.home.screens.HomeScreen
+import com.scto.codelikebastimove.feature.home.screens.ImportProjectScreen
 import com.scto.codelikebastimove.feature.settings.EditorSettingsScreen
 import com.scto.codelikebastimove.feature.settings.IDESettingsScreen
 import com.scto.codelikebastimove.feature.main.screens.IDEWorkspaceScreen
-import com.scto.codelikebastimove.feature.main.screens.OpenProjectScreen
+import com.scto.codelikebastimove.feature.home.screens.OpenProjectScreen
 import com.scto.codelikebastimove.feature.submodulemaker.SubModuleMakerScreen
 
 @Composable
@@ -65,6 +66,7 @@ fun MainScreen(
         HomeScreen(
           onNavigate = { viewModel.onNavigate(it) },
           onCreateProject = { viewModel.onNavigate(MainDestination.CreateProject) },
+          onImportProject = { viewModel.onNavigate(MainDestination.ImportProject) },
           onOpenProject = { viewModel.onNavigate(MainDestination.OpenProject) },
           onCloneRepository = { viewModel.onNavigate(MainDestination.GitClone) },
         )
@@ -93,6 +95,19 @@ fun MainScreen(
           onProjectSelected = { project -> viewModel.onOpenProject(project.path, project.name) },
           onProjectDelete = { project -> viewModel.deleteProject(project.path) },
           onBrowseFolder = {},
+        )
+      }
+
+      MainDestination.ImportProject -> {
+        ImportProjectScreen(
+          onBackClick = { viewModel.onBackPressed() },
+          onBrowseClick = {},
+          onImportProject = { path, copyToWorkspace ->
+            viewModel.importProject(path, copyToWorkspace)
+          },
+          selectedPath = "",
+          isLoading = uiState.isLoading,
+          importProgress = uiState.importProgress,
         )
       }
 
@@ -182,6 +197,7 @@ fun MainScreen(
         HomeScreen(
           onNavigate = { viewModel.onNavigate(it) },
           onCreateProject = { viewModel.onNavigate(MainDestination.CreateProject) },
+          onImportProject = { viewModel.onNavigate(MainDestination.ImportProject) },
           onOpenProject = { viewModel.onNavigate(MainDestination.OpenProject) },
           onCloneRepository = { viewModel.onNavigate(MainDestination.GitClone) },
         )

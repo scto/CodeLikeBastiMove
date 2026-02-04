@@ -1731,4 +1731,24 @@ Aktiviert detailliertes Logging für Debugging-Zwecke</string>
     <string name="failed_copy">Failed to copy</string>
     <string name="failed_move">Failed to move</string>
 
+    <string name="import_project">Import Project</string>
+    <string name="import_project_title">Import Existing Project</string>
+    <string name="import_project_description">Import an Android project from your device storage</string>
+    <string name="select_project_folder">Select Project Folder</string>
+    <string name="selected_path">Selected Path</string>
+    <string name="no_path_selected">No path selected</string>
+    <string name="browse">Browse</string>
+    <string name="import_button">Import</string>
+    <string name="importing_project">Importing project...</string>
+    <string name="import_success">Project imported successfully</string>
+    <string name="import_failed">Failed to import project</string>
+    <string name="invalid_project_path">Invalid project path</string>
+    <string name="not_valid_android_project">The selected folder is not a valid Android project</string>
+    <string name="project_already_exists">A project with this name already exists</string>
+    <string name="import_options">Import Options</string>
+    <string name="copy_to_workspace">Copy to workspace</string>
+    <string name="copy_to_workspace_description">Copy the project files to your workspace directory</string>
+    <string name="link_in_place">Link in place</string>
+    <string name="link_in_place_description">Open the project from its current location</string>
+
 </resources>

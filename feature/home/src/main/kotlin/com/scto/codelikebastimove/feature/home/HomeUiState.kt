@@ -14,6 +14,7 @@ data class HomeUiState(
     val directoryContents: List<DirectoryItem> = emptyList(),
     val errorMessage: String? = null,
     val cloneProgress: String = "",
+    val importProgress: String = "",
     val isLoading: Boolean = false,
     val lastFileSystemUpdate: Long = 0L,
 )

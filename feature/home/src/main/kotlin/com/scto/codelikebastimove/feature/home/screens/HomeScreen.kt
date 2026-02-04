@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Terminal
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.outlined.CloudDownload
+import androidx.compose.material.icons.outlined.FileDownload
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -45,6 +46,7 @@ import com.scto.codelikebastimove.feature.home.navigation.HomeDestination
 fun HomeScreen(
     onNavigate: (HomeDestination) -> Unit,
     onCreateProject: () -> Unit,
+    onImportProject: () -> Unit,
     onOpenProject: () -> Unit,
     onCloneRepository: () -> Unit,
     modifier: Modifier = Modifier,
@@ -97,6 +99,14 @@ fun HomeScreen(
             icon = Icons.Default.Add,
             title = stringResource(R.string.create_project),
             onClick = onCreateProject,
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        HomeActionButton(
+            icon = Icons.Outlined.FileDownload,
+            title = stringResource(R.string.import_project),
+            onClick = onImportProject,
         )
 
         Spacer(modifier = Modifier.height(12.dp))

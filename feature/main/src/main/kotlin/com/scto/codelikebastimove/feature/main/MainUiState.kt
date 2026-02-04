@@ -18,6 +18,7 @@ data class MainUiState(
   val directoryContents: List<DirectoryItem> = emptyList(),
   val errorMessage: String? = null,
   val cloneProgress: String = "",
+  val importProgress: String = "",
   val bottomSheetContent: BottomSheetContentType = BottomSheetContentType.TERMINAL,
   // Speichert den Ansichtsmodus des Projekt-Explorers
   val projectViewType: ProjectViewMode = ProjectViewMode.ANDROID,

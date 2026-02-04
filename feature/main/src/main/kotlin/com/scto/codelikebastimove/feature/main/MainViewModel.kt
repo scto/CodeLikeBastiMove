@@ -445,6 +445,123 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
   }
 
+  fun importProject(sourcePath: String, copyToWorkspace: Boolean) {
+    viewModelScope.launch(Dispatchers.IO) {
+      _uiState.update { it.copy(isLoading = true, importProgress = "Importing project...") }
+      CLBMLogger.d(TAG, "Importing project from: $sourcePath, copyToWorkspace: $copyToWorkspace")
+
+      val sourceDir = File(sourcePath)
+      if (!sourceDir.exists() || !sourceDir.isDirectory) {
+        _uiState.update {
+          it.copy(
+            isLoading = false,
+            importProgress = "",
+            errorMessage = "Invalid project path"
+          )
+        }
+        return@launch
+      }
+
+      if (!isProjectDirectory(sourceDir)) {
+        _uiState.update {
+          it.copy(
+            isLoading = false,
+            importProgress = "",
+            errorMessage = "The selected folder is not a valid Android project"
+          )
+        }
+        return@launch
+      }
+
+      val projectName = sourceDir.name
+      val rootDir = _uiState.value.rootDirectory
+
+      if (rootDir.isBlank()) {
+        _uiState.update {
+          it.copy(
+            isLoading = false,
+            importProgress = "",
+            errorMessage = "Root directory not set. Please complete onboarding first."
+          )
+        }
+        return@launch
+      }
+
+      try {
+        val targetPath = if (copyToWorkspace) {
+          val targetDir = File(rootDir, projectName)
+          if (targetDir.exists()) {
+            _uiState.update {
+              it.copy(
+                isLoading = false,
+                importProgress = "",
+                errorMessage = "A project with this name already exists"
+              )
+            }
+            return@launch
+          }
+
+          _uiState.update { it.copy(importProgress = "Copying files...") }
+          sourceDir.copyRecursively(targetDir, overwrite = false)
+          targetDir.absolutePath
+        } else {
+          sourcePath
+        }
+
+        val storedProject = StoredProject(
+          name = projectName,
+          path = targetPath,
+          packageName = detectPackageName(File(targetPath)),
+          templateType = ProjectTemplateType.EMPTY_COMPOSE,
+          createdAt = System.currentTimeMillis(),
+          lastOpenedAt = System.currentTimeMillis(),
+        )
+        repository.addProject(storedProject)
+        refreshDirectoryContents()
+
+        repository.setCurrentProjectPath(targetPath)
+
+        _uiState.update {
+          it.copy(
+            isLoading = false,
+            importProgress = "",
+            projectName = projectName,
+            projectPath = targetPath,
+            isProjectOpen = true,
+            currentDestination = MainDestination.IDE,
+          )
+        }
+        CLBMLogger.d(TAG, "Project imported successfully: $targetPath")
+      } catch (e: Exception) {
+        CLBMLogger.e(TAG, "Failed to import project", e)
+        _uiState.update {
+          it.copy(
+            isLoading = false,
+            importProgress = "",
+            errorMessage = "Failed to import project: ${e.message}"
+          )
+        }
+      }
+    }
+  }
+
+  private fun detectPackageName(projectDir: File): String {
+    val manifestFile = File(projectDir, "app/src/main/AndroidManifest.xml")
+    if (manifestFile.exists()) {
+      try {
+        val content = manifestFile.readText()
+        val packageRegex = """package\s*=\s*["']([^"']+)["']""".toRegex()
+        val match = packageRegex.find(content)
+        if (match != null) {
+          return match.groupValues[1]
+        }
+      } catch (e: Exception) {
+        CLBMLogger.e(TAG, "Failed to detect package name", e)
+      }
+    }
+    return "com.example.${projectDir.name.lowercase().replace("-", "").replace(" ", "")}"
+  }
+
   fun onContentTypeChanged(contentType: MainContentType) {
     _uiState.update { it.copy(currentContent = contentType) }
   }

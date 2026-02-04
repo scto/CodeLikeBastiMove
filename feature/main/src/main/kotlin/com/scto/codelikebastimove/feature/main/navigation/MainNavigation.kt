@@ -21,6 +21,8 @@ sealed class MainDestination(val route: String, val title: String) {
 
   data object OpenProject : MainDestination("open_project", "Projekt öffnen")
 
+  data object ImportProject : MainDestination("import_project", "Projekt importieren")
+
   data object GitClone : MainDestination("git_clone", "Repository klonen")
 
   data object GitPanel : MainDestination("git_panel", "Git")
