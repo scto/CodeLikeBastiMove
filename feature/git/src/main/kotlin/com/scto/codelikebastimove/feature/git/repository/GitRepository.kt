@@ -1,12 +1,15 @@
 package com.scto.codelikebastimove.feature.git.repository
 
 import com.scto.codelikebastimove.feature.git.api.*
+import com.scto.codelikebastimove.feature.git.library.JGitLibrary
+import com.scto.codelikebastimove.feature.git.library.JGitResult
 import com.scto.codelikebastimove.feature.git.model.*
 import kotlinx.coroutines.flow.*
 
 class DefaultGitRepository : GitOperations {
 
   private val executor = GitCommandExecutor()
+  private val jgitLibrary = JGitLibrary()
 
   private val _currentRepository = MutableStateFlow<GitRepository?>(null)
   override val currentRepository: StateFlow<GitRepository?> = _currentRepository.asStateFlow()
@@ -66,17 +69,26 @@ class DefaultGitRepository : GitOperations {
     emitProgress("Clone", "Cloning repository...", 0f, true)
 
     try {
-      val args = mutableListOf("clone", options.url, options.directory)
-      options.branch?.let { args.addAll(listOf("-b", it)) }
-      options.depth?.let { args.addAll(listOf("--depth", it.toString())) }
-      if (options.recursive) args.add("--recursive")
+      val result = jgitLibrary.cloneRepository(
+        url = options.url,
+        directory = options.directory,
+        branch = options.branch,
+        depth = options.depth,
+        recursive = options.recursive,
+        progressCallback = { message, progress ->
+          kotlinx.coroutines.runBlocking {
+            emitProgress("Clone", message, progress.toFloat() / 100f, true)
+          }
+        }
+      )
 
-      val result = executor.execute(*args.toTypedArray())
-
-      return if (result.success) {
-        openRepository(options.directory)
-      } else {
-        GitOperationResult.Error(result.stderr)
+      return when (result) {
+        is JGitResult.Success -> {
+          openRepository(options.directory)
+        }
+        is JGitResult.Error -> {
+          GitOperationResult.Error(result.message)
+        }
       }
     } finally {
       _isOperationInProgress.value = false

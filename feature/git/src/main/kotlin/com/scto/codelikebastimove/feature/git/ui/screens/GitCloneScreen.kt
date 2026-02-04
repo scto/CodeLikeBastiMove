@@ -66,6 +66,7 @@ private val GitTextColor = Color(0xFFE0D4C8)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GitCloneScreen(
+    rootDirectory: String,
     onBackClick: () -> Unit,
     onCloneSuccess: (projectPath: String) -> Unit,
     modifier: Modifier = Modifier,
@@ -78,6 +79,17 @@ fun GitCloneScreen(
     var recursiveSubmodules by remember { mutableStateOf(true) }
     var singleBranch by remember { mutableStateOf(false) }
     var cloneDepth by remember { mutableStateOf("") }
+
+    LaunchedEffect(repositoryUrl, rootDirectory) {
+        if (repositoryUrl.isNotBlank() && rootDirectory.isNotBlank()) {
+            val repoName = repositoryUrl
+                .removeSuffix(".git")
+                .removeSuffix("/")
+                .substringAfterLast("/")
+                .ifBlank { "cloned_repo" }
+            targetDirectory = "$rootDirectory/$repoName"
+        }
+    }
 
     val isOperationInProgress by viewModel.isOperationInProgress.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
