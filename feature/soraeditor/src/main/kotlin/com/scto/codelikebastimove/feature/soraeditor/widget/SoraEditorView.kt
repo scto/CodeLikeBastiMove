@@ -7,6 +7,9 @@ import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.FrameLayout
+import com.scto.codelikebastimove.feature.soraeditor.intelligent.AutoCloseTag
+import com.scto.codelikebastimove.feature.soraeditor.intelligent.BulletContinuation
+import com.scto.codelikebastimove.feature.soraeditor.intelligent.IntelligentFeatureRegistry
 import com.scto.codelikebastimove.feature.soraeditor.language.LanguageRegistry
 import com.scto.codelikebastimove.feature.soraeditor.model.CursorAnimationType
 import com.scto.codelikebastimove.feature.soraeditor.model.EditorConfig
@@ -17,7 +20,10 @@ import com.scto.codelikebastimove.feature.soraeditor.model.HighlightingMode
 import com.scto.codelikebastimove.feature.soraeditor.model.LineEndingType
 import com.scto.codelikebastimove.feature.soraeditor.model.RenderWhitespaceMode
 import com.scto.codelikebastimove.feature.soraeditor.theme.EditorThemeProvider
+import com.scto.codelikebastimove.feature.soraeditor.util.FontCache
 import io.github.rosemoe.sora.event.ContentChangeEvent
+import io.github.rosemoe.sora.event.EditorKeyEvent
+import io.github.rosemoe.sora.event.InterceptTarget
 import io.github.rosemoe.sora.event.LongPressEvent
 import io.github.rosemoe.sora.event.SelectionChangeEvent
 import io.github.rosemoe.sora.widget.CodeEditor
@@ -56,6 +62,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     setupEditor()
     setupEventListeners()
     setupActionMode()
+    setupIntelligentFeatures()
   }
 
   private fun setupEditor() {
@@ -94,13 +101,57 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
       onCursorChangeListener?.invoke(cursor.leftLine, cursor.leftColumn)
     }
 
-    codeEditor.subscribeEvent(LongPressEvent::class.java) { event, _ ->
+    codeEditor.subscribeEvent(LongPressEvent::class.java) { _, _ ->
       showEditorContextMenu()
     }
   }
 
   private fun setupActionMode() {
     actionModeCallback = EditorActionModeCallback()
+  }
+
+  private fun setupIntelligentFeatures() {
+    AutoCloseTag.setEnabled(currentConfig.autoCloseTag)
+    BulletContinuation.setEnabled(currentConfig.bulletContinuation)
+
+    codeEditor.subscribeEvent(EditorKeyEvent::class.java) { event, _ ->
+      val features = IntelligentFeatureRegistry.getFeaturesForExtensions(currentLanguageType.fileExtensions)
+      features.forEach { feature ->
+        feature.handleKeyEvent(event, codeEditor)
+      }
+    }
+
+    codeEditor.subscribeEvent(ContentChangeEvent::class.java) { event, _ ->
+      if (event.action == ContentChangeEvent.ACTION_INSERT && event.changedText.length == 1) {
+        val insertedChar = event.changedText[0]
+        val features = IntelligentFeatureRegistry.getFeaturesForExtensions(currentLanguageType.fileExtensions)
+        features.filter { insertedChar in it.triggerCharacters }.forEach { feature ->
+          feature.handleInsertChar(insertedChar, codeEditor)
+        }
+      } else if (event.action == ContentChangeEvent.ACTION_DELETE && event.changedText.length == 1) {
+        val deletedChar = event.changedText[0]
+        val features = IntelligentFeatureRegistry.getFeaturesForExtensions(currentLanguageType.fileExtensions)
+        features.filter { deletedChar in it.triggerCharacters }.forEach { feature ->
+          feature.handleDeleteChar(deletedChar, codeEditor)
+        }
+      }
+    }
+  }
+
+  fun getCurrentFileExtensions(): List<String> {
+    return currentLanguageType.fileExtensions
+  }
+
+  fun applyCustomFont(fontPath: String, isAsset: Boolean = false) {
+    val typeface = FontCache.getFont(context, fontPath, isAsset)
+    if (typeface != null) {
+      codeEditor.typefaceText = typeface
+    }
+  }
+
+  fun resetToDefaultFont() {
+    codeEditor.typefaceText = Typeface.MONOSPACE
+    codeEditor.typefaceLineNumber = Typeface.MONOSPACE
   }
 
   private fun showEditorContextMenu() {
@@ -194,6 +245,15 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         isEnabled = config.autoComplete
         runCatching { setEnabledAnimation(config.autoCompletionAnimation) }
       }
+    }
+
+    AutoCloseTag.setEnabled(config.autoCloseTag)
+    BulletContinuation.setEnabled(config.bulletContinuation)
+
+    if (config.useCustomFont && config.customFontPath != null) {
+      applyCustomFont(config.customFontPath)
+    } else {
+      resetToDefaultFont()
     }
 
     if (previousMode != config.highlightingMode) {

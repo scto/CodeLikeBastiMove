@@ -26,6 +26,10 @@ data class EditorConfig(
   val autoCompletionAnimation: Boolean = true,
   val trimTrailingWhitespace: Boolean = false,
   val insertFinalNewline: Boolean = false,
+  val autoCloseTag: Boolean = true,
+  val bulletContinuation: Boolean = true,
+  val customFontPath: String? = null,
+  val useCustomFont: Boolean = false,
 )
 
 enum class HighlightingMode {
