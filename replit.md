@@ -45,7 +45,7 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 - **Theme Builder Module (`feature/themebuilder`):** Dedicated module for Material Theme Builder functionality with data models, color utilities, UI components, and theme export generators.
 - **Sub-Module Maker (`feature/submodulemaker`):** Dedicated module for creating new Gradle sub-modules with AndroidIDE-inspired dark UI, supporting Kotlin Gradle notation `:folderName:moduleName`. Features include programming language selector (Kotlin/Java), folder path input, module name input, and automatic settings.gradle.kts updates.
 - **Asset Studio (`feature/assetstudio`):** Dedicated module for Vector Asset Studio functionality with data models, SVG to AVD converter, icon repository system, and editor screens.
-- **Tree View (`feature/treeview`):** File tree view component with AndroidIDE-inspired dark design, featuring brownish folder icons, animated chevron expand/collapse indicators, project header with settings and new folder buttons, and support for hidden files display.
+- **Tree View (`feature/treeview`):** Enhanced file tree view with AndroidIDE-inspired dark design, featuring: 4 view modes (File, Package, Module, Project), file operations (create/rename/delete/copy/move), context menus, search functionality, hidden file toggle, brownish folder icons, and animated chevron expand/collapse indicators. Includes FileTreeDrawer for drawer integration.
 - **Sora Editor (`feature/soraeditor`):** Advanced code editor module using Rosemoe's sora-editor library, featuring language support, theming, UI widgets, Jetpack Compose integration, and a plugin system for extensions.
 - **Main (`feature/main`):** Main IDE workspace module with NavigationRail, drawer navigation, and BottomSheetBar panels.
 - **Settings (`feature/settings`):** Application settings and preferences UI.
@@ -71,6 +71,14 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 - **Android Tree-Sitter:** Java bindings for Tree-sitter parsing library.
 
 ## Recent Changes (February 2026)
+- **Enhanced File Tree View Module:** Comprehensive file operations and view modes in feature/treeview:
+  - FileOperations.kt with create/rename/delete/copy/move operations and error handling
+  - EnhancedTreeView.kt with context menus, search, and hidden file toggle
+  - FileTreeDrawer.kt migrated from feature/main with view mode switcher UI
+  - Four view modes: File View, Package View, Module View, Project View
+  - 45+ new string resources for file operations UI
+- **MainViewModel Enhancement:** Added refreshFileSystem() method for tree view updates
+- **Module Cleanup:** Removed deprecated FileTreeDrawerContent.kt from feature/main
 - **Authentication Removed:** Removed all authentication modules (core/auth, core/firebase/auth, feature/auth) and related UI (login, sign-out, account section in settings)
 - **App Flow Simplified:** MainActivity now navigates directly to MainScreen after onboarding (no auth check)
 - **Settings Screen Updated:** Removed account section and sign-out functionality
