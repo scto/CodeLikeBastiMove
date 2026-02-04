@@ -128,12 +128,12 @@ class JGitLibrary {
             val unstagedChanges = mutableListOf<GitFileChange>()
             val untrackedFiles = mutableListOf<String>()
 
-            status.added.forEach { stagedChanges.add(GitFileChange(it, FileChangeType.ADDED, true)) }
-            status.changed.forEach { stagedChanges.add(GitFileChange(it, FileChangeType.MODIFIED, true)) }
-            status.removed.forEach { stagedChanges.add(GitFileChange(it, FileChangeType.DELETED, true)) }
+            status.added.forEach { stagedChanges.add(GitFileChange(path = it, status = GitFileStatus.ADDED, staged = true)) }
+            status.changed.forEach { stagedChanges.add(GitFileChange(path = it, status = GitFileStatus.MODIFIED, staged = true)) }
+            status.removed.forEach { stagedChanges.add(GitFileChange(path = it, status = GitFileStatus.DELETED, staged = true)) }
 
-            status.modified.forEach { unstagedChanges.add(GitFileChange(it, FileChangeType.MODIFIED, false)) }
-            status.missing.forEach { unstagedChanges.add(GitFileChange(it, FileChangeType.DELETED, false)) }
+            status.modified.forEach { unstagedChanges.add(GitFileChange(path = it, status = GitFileStatus.MODIFIED, staged = false)) }
+            status.missing.forEach { unstagedChanges.add(GitFileChange(path = it, status = GitFileStatus.DELETED, staged = false)) }
 
             untrackedFiles.addAll(status.untracked)
 
@@ -142,14 +142,14 @@ class JGitLibrary {
             JGitResult.Success(
                 GitStatus(
                     branch = currentBranch,
+                    trackingBranch = null,
+                    ahead = 0,
+                    behind = 0,
                     stagedChanges = stagedChanges,
                     unstagedChanges = unstagedChanges,
                     untrackedFiles = untrackedFiles,
                     hasConflicts = status.conflicting.isNotEmpty(),
-                    conflictingFiles = status.conflicting.toList(),
-                    isDetachedHead = ObjectId.isId(currentBranch),
-                    ahead = 0,
-                    behind = 0,
+                    conflictedFiles = status.conflicting.toList(),
                 )
             )
         } catch (e: Exception) {
@@ -682,7 +682,7 @@ class JGitLibrary {
                     index = index,
                     message = revCommit.shortMessage,
                     branch = "",
-                    hash = revCommit.name,
+                    commitHash = revCommit.name,
                 )
             }
             JGitResult.Success(stashes)

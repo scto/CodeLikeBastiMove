@@ -142,7 +142,7 @@ class DefaultGitRepository : GitOperations {
   }
 
   override suspend fun unstageAll(): GitOperationResult<Unit> {
-    return when (val result = jgitLibrary.reset(ResetMode.MIXED, "HEAD")) {
+    return when (val result = jgitLibrary.reset(JGitResetMode.MIXED, "HEAD")) {
       is JGitResult.Success -> {
         refresh()
         GitOperationResult.Success(Unit)
@@ -192,7 +192,7 @@ class DefaultGitRepository : GitOperations {
     return when (val result = jgitLibrary.getLog(maxCount)) {
       is JGitResult.Success -> {
         val commits = if (skip > 0) result.data.drop(skip) else result.data
-        GitOperationResult.Success(GitLog(commits = commits, hasMore = false))
+        GitOperationResult.Success(GitLog(commits = commits, totalCount = result.data.size, hasMore = false))
       }
       is JGitResult.Error -> GitOperationResult.Error(result.message)
     }
@@ -285,7 +285,7 @@ class DefaultGitRepository : GitOperations {
   }
 
   override suspend fun abortMerge(): GitOperationResult<Unit> {
-    return when (val result = jgitLibrary.reset(ResetMode.HARD, "HEAD")) {
+    return when (val result = jgitLibrary.reset(JGitResetMode.HARD, "HEAD")) {
       is JGitResult.Success -> {
         refresh()
         GitOperationResult.Success(Unit)
