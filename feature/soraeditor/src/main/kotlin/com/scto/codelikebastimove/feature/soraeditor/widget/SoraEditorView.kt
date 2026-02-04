@@ -415,6 +415,78 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     codeEditor.selectAll()
   }
 
+  fun selectCurrentWord() {
+    val cursor = codeEditor.cursor
+    val text = codeEditor.text
+    val line = cursor.leftLine
+    val column = cursor.leftColumn
+
+    if (line >= text.lineCount) return
+    val lineContent = text.getLine(line).toString()
+    if (column > lineContent.length) return
+
+    var start = column
+    var end = column
+
+    while (start > 0 && isWordChar(lineContent[start - 1])) {
+      start--
+    }
+    while (end < lineContent.length && isWordChar(lineContent[end])) {
+      end++
+    }
+
+    if (start < end) {
+      codeEditor.setSelectionRegion(line, start, line, end)
+    }
+  }
+
+  private fun isWordChar(c: Char): Boolean {
+    return c.isLetterOrDigit() || c == '_'
+  }
+
+  fun getSelectedText(): String {
+    val cursor = codeEditor.cursor
+    return if (cursor.isSelected) {
+      val start = cursor.left()
+      val end = cursor.right()
+      codeEditor.text.substring(start, end)
+    } else {
+      ""
+    }
+  }
+
+  fun hasSelection(): Boolean {
+    return codeEditor.cursor.isSelected
+  }
+
+  fun replaceSelection(replacement: String) {
+    if (hasSelection()) {
+      val cursor = codeEditor.cursor
+      val startLine = cursor.leftLine
+      val startColumn = cursor.leftColumn
+      val endLine = cursor.rightLine
+      val endColumn = cursor.rightColumn
+      codeEditor.text.replace(startLine, startColumn, endLine, endColumn, replacement)
+    }
+  }
+
+  fun isWordWrapEnabled(): Boolean {
+    return codeEditor.isWordwrap
+  }
+
+  fun setWordWrap(enabled: Boolean) {
+    codeEditor.isWordwrap = enabled
+    currentConfig = currentConfig.copy(wordWrap = enabled)
+  }
+
+  fun isEditable(): Boolean {
+    return codeEditor.isEditable
+  }
+
+  fun setEditable(editable: Boolean) {
+    codeEditor.isEditable = editable
+  }
+
   fun copy() {
     codeEditor.copyText()
   }
