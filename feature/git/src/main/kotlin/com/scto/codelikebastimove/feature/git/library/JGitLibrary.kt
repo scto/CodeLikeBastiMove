@@ -80,7 +80,6 @@ class JGitLibrary {
         branch: String? = null,
         depth: Int? = null,
         recursive: Boolean = true,
-        progressCallback: ((String, Int) -> Unit)? = null,
     ): JGitResult<Repository> = withContext(Dispatchers.IO) {
         try {
             val targetDir = File(directory)
@@ -100,25 +99,6 @@ class JGitLibrary {
             }
 
             credentialsProvider?.let { cloneCommand.setCredentialsProvider(it) }
-
-            cloneCommand.setProgressMonitor(object : ProgressMonitor {
-                override fun start(totalTasks: Int) {
-                    progressCallback?.invoke("Starting clone...", 0)
-                }
-
-                override fun beginTask(title: String?, totalWork: Int) {
-                    progressCallback?.invoke(title ?: "Working...", 0)
-                }
-
-                override fun update(completed: Int) {
-                    progressCallback?.invoke("Cloning...", completed)
-                }
-
-                override fun endTask() {}
-
-                override fun isCancelled(): Boolean = false
-                override fun showDuration(enabled: Boolean) {}
-            })
 
             val git = cloneCommand.call()
             currentGit = git

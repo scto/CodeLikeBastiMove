@@ -75,11 +75,6 @@ class DefaultGitRepository : GitOperations {
         branch = options.branch,
         depth = options.depth,
         recursive = options.recursive,
-        progressCallback = { message, progress ->
-          kotlinx.coroutines.runBlocking {
-            emitProgress("Clone", message, progress.toFloat() / 100f, true)
-          }
-        }
       )
 
       return when (result) {
