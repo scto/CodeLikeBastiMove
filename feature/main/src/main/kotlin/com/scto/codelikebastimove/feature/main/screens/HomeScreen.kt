@@ -35,8 +35,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.scto.codelikebastimove.core.resources.R
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 
 @Composable
@@ -59,14 +61,14 @@ fun HomeScreen(
     Spacer(modifier = Modifier.height(32.dp))
 
     Text(
-      text = "Code Like Basti Move",
+      text = stringResource(R.string.app_name),
       style = MaterialTheme.typography.headlineMedium,
       fontWeight = FontWeight.Bold,
       color = MaterialTheme.colorScheme.onBackground,
     )
 
     Text(
-      text = "Your Ideas, Anywhere",
+      text = stringResource(R.string.your_ideas_anywhere),
       style = MaterialTheme.typography.bodyMedium,
       color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
     )
@@ -78,14 +80,14 @@ fun HomeScreen(
     Spacer(modifier = Modifier.height(16.dp))
 
     Text(
-      text = "Loslegen",
+      text = stringResource(R.string.get_started),
       style = MaterialTheme.typography.titleMedium,
       fontWeight = FontWeight.SemiBold,
       color = MaterialTheme.colorScheme.onBackground,
     )
 
     Text(
-      text = "Starten Sie Ihr neues großartiges Projekt!",
+      text = stringResource(R.string.start_your_project),
       style = MaterialTheme.typography.bodyMedium,
       color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
     )
@@ -94,7 +96,7 @@ fun HomeScreen(
 
     HomeActionButton(
       icon = Icons.Default.Add,
-      title = "Projekt erstellen",
+      title = stringResource(R.string.create_project),
       onClick = onCreateProject,
     )
 
@@ -102,7 +104,7 @@ fun HomeScreen(
 
     HomeActionButton(
       icon = Icons.Default.Folder,
-      title = "Vorhandenes Projekt öffnen",
+      title = stringResource(R.string.open_existing_project),
       onClick = onOpenProject,
     )
 
@@ -110,7 +112,7 @@ fun HomeScreen(
 
     HomeActionButton(
       icon = Icons.Outlined.CloudDownload,
-      title = "Repository klonen",
+      title = stringResource(R.string.clone_repository),
       onClick = onCloneRepository,
     )
 
@@ -118,7 +120,7 @@ fun HomeScreen(
 
     HomeActionButton(
       icon = Icons.Default.Terminal,
-      title = "Konsole",
+      title = stringResource(R.string.console),
       onClick = { onNavigate(MainDestination.Console) },
     )
 
@@ -126,7 +128,7 @@ fun HomeScreen(
 
     HomeActionButton(
       icon = Icons.Default.Settings,
-      title = "Einstellungen",
+      title = stringResource(R.string.settings),
       onClick = { onNavigate(MainDestination.Settings) },
     )
 
@@ -134,7 +136,7 @@ fun HomeScreen(
 
     HomeActionButton(
       icon = Icons.Default.Tune,
-      title = "IDE Configurations",
+      title = stringResource(R.string.ide_configurations),
       onClick = { onNavigate(MainDestination.Settings) },
     )
 
@@ -142,7 +144,7 @@ fun HomeScreen(
 
     HomeActionButton(
       icon = Icons.Default.Book,
-      title = "Dokumentation",
+      title = stringResource(R.string.documentation),
       onClick = { onNavigate(MainDestination.Documentation) },
     )
 

@@ -43,10 +43,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.scto.codelikebastimove.core.datastore.ThemeMode
+import com.scto.codelikebastimove.core.resources.R
 import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,10 +68,10 @@ fun IDESettingsScreen(
   Scaffold(
     topBar = {
       AdaptiveTopAppBar(
-        title = "IDE-Einstellungen",
+        title = stringResource(R.string.ide_settings),
         navigationIcon = {
           IconButton(onClick = onBackClick) {
-            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Zurück")
+            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.close))
           }
         },
         colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -86,7 +88,7 @@ fun IDESettingsScreen(
         .padding(paddingValues)
         .verticalScroll(rememberScrollState())
     ) {
-      SettingsCategoryHeader(title = "Erscheinungsbild")
+      SettingsCategoryHeader(title = stringResource(R.string.appearance))
 
       ThemeSettingRow(
         currentTheme = userPreferences.themeMode,
@@ -94,8 +96,8 @@ fun IDESettingsScreen(
       )
 
       ToggleSettingRow(
-        title = "Dynamische Farben",
-        description = "Material You Farben basierend auf Hintergrundbild (Android 12+)",
+        title = stringResource(R.string.dynamic_colors),
+        description = stringResource(R.string.dynamic_colors_summary_enabled),
         icon = Icons.Default.Palette,
         isEnabled = userPreferences.dynamicColorsEnabled,
         onToggle = {
@@ -106,57 +108,57 @@ fun IDESettingsScreen(
       Spacer(modifier = Modifier.height(8.dp))
       HorizontalDivider()
 
-      SettingsCategoryHeader(title = "Konfigurieren")
+      SettingsCategoryHeader(title = stringResource(R.string.configure))
 
       SettingsItemRow(
-        title = "Allgemein",
-        description = "Allgemeine IDE-Konfiguration.",
+        title = stringResource(R.string.general_settings),
+        description = stringResource(R.string.pref_configure_general_summary),
         onClick = {},
       )
 
       SettingsItemRow(
-        title = "Editor",
-        description = "Konfiguriere den Editor.",
+        title = stringResource(R.string.editor),
+        description = stringResource(R.string.pref_configure_editor_summary),
         onClick = onNavigateToEditorSettings,
       )
 
       SettingsItemRow(
-        title = "AI Agent",
-        description = "KI-gestützte Codegenerierung mit AI Agent",
+        title = stringResource(R.string.ai_agent),
+        description = stringResource(R.string.pref_configure_editor_summary),
         onClick = onNavigateToAIAgent,
       )
 
       SettingsItemRow(
-        title = "Build & Run",
-        description = "Gradle-Build konfigurieren.",
+        title = stringResource(R.string.build_and_run),
+        description = stringResource(R.string.pref_configure_general_summary),
         onClick = {},
       )
 
       SettingsItemRow(
-        title = "Termux",
-        description = "Einstellungen für das Termux-Terminal.",
+        title = stringResource(R.string.termux),
+        description = stringResource(R.string.pref_configure_general_summary),
         onClick = {},
       )
 
       Spacer(modifier = Modifier.height(8.dp))
       HorizontalDivider()
 
-      SettingsCategoryHeader(title = "Datenschutz")
+      SettingsCategoryHeader(title = stringResource(R.string.privacy))
 
       SettingsItemRow(
-        title = "CLBM Statistiken",
-        description = "Anonyme Nutzungsdaten",
+        title = stringResource(R.string.clbm_statistics),
+        description = stringResource(R.string.pref_configure_general_summary),
         onClick = {},
       )
 
       Spacer(modifier = Modifier.height(8.dp))
       HorizontalDivider()
 
-      SettingsCategoryHeader(title = "Entwickleroptionen")
+      SettingsCategoryHeader(title = stringResource(R.string.developer_options))
 
       ToggleSettingRow(
-        title = "Debug-Logging",
-        description = "Aktiviert detailliertes Logging für Debugging-Zwecke",
+        title = stringResource(R.string.debug_logging),
+        description = stringResource(R.string.debug_logging_description),
         icon = Icons.Default.BugReport,
         isEnabled = userPreferences.loggingEnabled,
         onToggle = {

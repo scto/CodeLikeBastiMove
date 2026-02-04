@@ -19,7 +19,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.scto.codelikebastimove.core.resources.R
 import com.scto.codelikebastimove.feature.themebuilder.components.BottomActionBar
 import com.scto.codelikebastimove.feature.themebuilder.components.ColorPickerDialog
 import com.scto.codelikebastimove.feature.themebuilder.components.ColorSchemePreviewSection
@@ -111,7 +113,7 @@ fun ThemeBuilderContent(modifier: Modifier = Modifier) {
 
           item {
             ColorSchemePreviewSection(
-              title = "Light Scheme",
+              title = stringResource(R.string.light_scheme),
               isDark = false,
               themeColors = themeColors,
               onColorClick = { name, color ->
@@ -124,7 +126,7 @@ fun ThemeBuilderContent(modifier: Modifier = Modifier) {
 
           item {
             ColorSchemePreviewSection(
-              title = "Dark Scheme",
+              title = stringResource(R.string.dark_scheme),
               isDark = true,
               themeColors = themeColors,
               onColorClick = { name, color ->

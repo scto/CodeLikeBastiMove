@@ -45,9 +45,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.scto.codelikebastimove.core.datastore.StoredProject
+import com.scto.codelikebastimove.core.resources.R
 import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -148,7 +150,7 @@ fun OpenProjectScreen(
       verticalAlignment = Alignment.CenterVertically,
     ) {
       Text(
-        text = "Projekt öffnen",
+        text = stringResource(R.string.open_project),
         style = MaterialTheme.typography.titleLarge,
         fontWeight = FontWeight.SemiBold,
       )
@@ -159,8 +161,8 @@ fun OpenProjectScreen(
     OutlinedTextField(
       value = searchQuery,
       onValueChange = { searchQuery = it },
-      placeholder = { Text("Projekte suchen...") },
-      leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = "Suchen") },
+      placeholder = { Text(stringResource(R.string.search_projects)) },
+      leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = stringResource(R.string.editor_search)) },
       singleLine = true,
       shape = RoundedCornerShape(12.dp),
       colors =

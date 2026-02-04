@@ -42,8 +42,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.scto.codelikebastimove.core.resources.R
 import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
 import com.scto.codelikebastimove.feature.submodulemaker.model.ModuleConfig
 import com.scto.codelikebastimove.feature.submodulemaker.model.ProgrammingLanguage
@@ -68,12 +70,12 @@ fun SubModuleMakerScreen(
   Scaffold(
     topBar = {
       AdaptiveTopAppBar(
-        title = "Sub-Module Maker",
+        title = stringResource(R.string.sub_module_maker),
         navigationIcon = {
           IconButton(onClick = onBackClick) {
             Icon(
               imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-              contentDescription = "Back",
+              contentDescription = stringResource(R.string.close),
               tint = SubModuleTextColor,
             )
           }

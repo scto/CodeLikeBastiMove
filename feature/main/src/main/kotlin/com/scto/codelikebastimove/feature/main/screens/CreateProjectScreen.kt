@@ -46,10 +46,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.scto.codelikebastimove.core.datastore.ProjectTemplateType
+import com.scto.codelikebastimove.core.resources.R
 import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -123,7 +125,7 @@ fun CreateProjectScreen(
       }
 
       Text(
-        text = "Projektdetails",
+        text = stringResource(R.string.project_details),
         style = MaterialTheme.typography.titleMedium,
         fontWeight = FontWeight.SemiBold,
       )
@@ -137,8 +139,8 @@ fun CreateProjectScreen(
             packageName = "com.example.$safeName"
           }
         },
-        label = { Text("Projektname") },
-        placeholder = { Text("MyApplication") },
+        label = { Text(stringResource(R.string.project_name)) },
+        placeholder = { Text(stringResource(R.string.my_application_placeholder)) },
         singleLine = true,
         shape = RoundedCornerShape(12.dp),
         colors =
@@ -152,7 +154,7 @@ fun CreateProjectScreen(
       OutlinedTextField(
         value = packageName,
         onValueChange = { packageName = it },
-        label = { Text("Package Name") },
+        label = { Text(stringResource(R.string.package_name)) },
         placeholder = { Text("com.example.myapp") },
         singleLine = true,
         shape = RoundedCornerShape(12.dp),
@@ -168,7 +170,7 @@ fun CreateProjectScreen(
         OutlinedTextField(
           value = "API $minSdk",
           onValueChange = {},
-          label = { Text("Minimum SDK") },
+          label = { Text(stringResource(R.string.minimum_sdk)) },
           readOnly = true,
           trailingIcon = {
             IconButton(onClick = { showMinSdkDropdown = true }) {
@@ -201,7 +203,7 @@ fun CreateProjectScreen(
       }
 
       Text(
-        text = "Vorlage auswählen",
+        text = stringResource(R.string.select_template),
         style = MaterialTheme.typography.titleMedium,
         fontWeight = FontWeight.SemiBold,
       )
@@ -215,7 +217,7 @@ fun CreateProjectScreen(
       }
 
       Text(
-        text = "Sprache & Build",
+        text = stringResource(R.string.language_and_build),
         style = MaterialTheme.typography.titleMedium,
         fontWeight = FontWeight.SemiBold,
       )
@@ -225,7 +227,7 @@ fun CreateProjectScreen(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
       ) {
-        Text("Kotlin verwenden")
+        Text(stringResource(R.string.use_kotlin))
         Switch(checked = useKotlin, onCheckedChange = { useKotlin = it })
       }
 
@@ -234,7 +236,7 @@ fun CreateProjectScreen(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
       ) {
-        Text("Kotlin DSL (build.gradle.kts)")
+        Text(stringResource(R.string.kotlin_dsl))
         Switch(checked = useKotlinDsl, onCheckedChange = { useKotlinDsl = it })
       }
 
@@ -259,7 +261,7 @@ fun CreateProjectScreen(
       ) {
         Icon(Icons.Default.Check, contentDescription = null)
         Spacer(modifier = Modifier.width(8.dp))
-        Text("Projekt erstellen", fontWeight = FontWeight.SemiBold)
+        Text(stringResource(R.string.create_project), fontWeight = FontWeight.SemiBold)
       }
 
       Spacer(modifier = Modifier.height(32.dp))

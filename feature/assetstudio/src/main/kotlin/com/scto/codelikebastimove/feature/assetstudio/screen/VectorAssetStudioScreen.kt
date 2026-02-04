@@ -95,11 +95,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.scto.codelikebastimove.core.resources.R
 import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
 import com.scto.codelikebastimove.feature.assetstudio.AssetStudioTab
 import com.scto.codelikebastimove.feature.assetstudio.VectorAssetStudioState
@@ -135,9 +137,9 @@ fun VectorAssetStudioScreen(
   Scaffold(
     topBar = {
       AdaptiveTopAppBar(
-        title = "Vector Asset Studio",
+        title = stringResource(R.string.vector_asset_studio),
         navigationIcon = {
-          IconButton(onClick = onBackClick) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back") }
+          IconButton(onClick = onBackClick) { Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.close)) }
         },
         actions = {
           if (uiState.selectedIcons.isNotEmpty()) {

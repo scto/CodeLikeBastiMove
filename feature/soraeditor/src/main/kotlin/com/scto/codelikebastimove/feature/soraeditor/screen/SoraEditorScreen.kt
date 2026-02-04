@@ -43,6 +43,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.res.stringResource
+import com.scto.codelikebastimove.core.resources.R
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -306,7 +308,7 @@ private fun EditorMenu(
 ) {
   DropdownMenu(expanded = expanded, onDismissRequest = onDismiss) {
     DropdownMenuItem(
-      text = { Text("Copy") },
+      text = { Text(stringResource(R.string.copy)) },
       leadingIcon = { Icon(Icons.Default.ContentCopy, null) },
       onClick = {
         onCopy()
@@ -314,7 +316,7 @@ private fun EditorMenu(
       },
     )
     DropdownMenuItem(
-      text = { Text("Cut") },
+      text = { Text(stringResource(R.string.editor_action_cut)) },
       leadingIcon = { Icon(Icons.Default.ContentCut, null) },
       onClick = {
         onCut()
@@ -322,7 +324,7 @@ private fun EditorMenu(
       },
     )
     DropdownMenuItem(
-      text = { Text("Paste") },
+      text = { Text(stringResource(R.string.editor_action_paste)) },
       leadingIcon = { Icon(Icons.Default.ContentPaste, null) },
       onClick = {
         onPaste()
@@ -330,14 +332,14 @@ private fun EditorMenu(
       },
     )
     DropdownMenuItem(
-      text = { Text("Select All") },
+      text = { Text(stringResource(R.string.select_all)) },
       onClick = {
         onSelectAll()
         onDismiss()
       },
     )
     DropdownMenuItem(
-      text = { Text("Format Code") },
+      text = { Text(stringResource(R.string.format_code)) },
       leadingIcon = { Icon(Icons.Default.FormatAlignLeft, null) },
       onClick = {
         onFormat()
@@ -345,7 +347,7 @@ private fun EditorMenu(
       },
     )
     DropdownMenuItem(
-      text = { Text("Find") },
+      text = { Text(stringResource(R.string.find)) },
       leadingIcon = { Icon(Icons.Default.Search, null) },
       onClick = {
         onFind()
@@ -353,7 +355,7 @@ private fun EditorMenu(
       },
     )
     DropdownMenuItem(
-      text = { Text("Settings") },
+      text = { Text(stringResource(R.string.settings)) },
       leadingIcon = { Icon(Icons.Default.Settings, null) },
       onClick = {
         onSettings()

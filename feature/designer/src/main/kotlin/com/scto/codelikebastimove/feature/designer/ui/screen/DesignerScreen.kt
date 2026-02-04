@@ -59,10 +59,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.scto.codelikebastimove.core.resources.R
 import com.scto.codelikebastimove.feature.designer.data.model.ExportConfig
 import com.scto.codelikebastimove.feature.designer.data.model.ThemeDescriptor
 import com.scto.codelikebastimove.feature.designer.data.model.ValidationResult

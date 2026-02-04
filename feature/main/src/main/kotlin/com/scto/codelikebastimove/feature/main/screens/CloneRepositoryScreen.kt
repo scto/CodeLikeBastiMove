@@ -40,8 +40,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.scto.codelikebastimove.core.resources.R
 import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,10 +62,10 @@ fun CloneRepositoryScreen(
 
   Column(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
     AdaptiveTopAppBar(
-      title = "Repository klonen",
+      title = stringResource(R.string.clone_repository),
       navigationIcon = {
         IconButton(onClick = onBackClick) {
-          Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Zurück")
+          Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.close))
         }
       },
       colors =
@@ -103,7 +105,7 @@ fun CloneRepositoryScreen(
       }
 
       Text(
-        text = "Repository klonen",
+        text = stringResource(R.string.clone_repository),
         style = MaterialTheme.typography.headlineSmall,
         fontWeight = FontWeight.SemiBold,
         modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -114,7 +116,7 @@ fun CloneRepositoryScreen(
       OutlinedTextField(
         value = repositoryUrl,
         onValueChange = { repositoryUrl = it },
-        label = { Text("Repository URL") },
+        label = { Text(stringResource(R.string.repository_url)) },
         placeholder = { Text("https://github.com/user/repo.git") },
         singleLine = true,
         shape = RoundedCornerShape(12.dp),
@@ -129,7 +131,7 @@ fun CloneRepositoryScreen(
       OutlinedTextField(
         value = branch,
         onValueChange = { branch = it },
-        label = { Text("Branch (optional)") },
+        label = { Text(stringResource(R.string.branch_optional)) },
         placeholder = { Text("main") },
         singleLine = true,
         shape = RoundedCornerShape(12.dp),
@@ -142,7 +144,7 @@ fun CloneRepositoryScreen(
       )
 
       Text(
-        text = "Clone Options",
+        text = stringResource(R.string.clone_options),
         style = MaterialTheme.typography.titleMedium,
         fontWeight = FontWeight.SemiBold,
       )
@@ -151,13 +153,13 @@ fun CloneRepositoryScreen(
         FilterChip(
           selected = shallowClone,
           onClick = { shallowClone = !shallowClone },
-          label = { Text("Shallow clone (faster)") },
+          label = { Text(stringResource(R.string.shallow_clone)) },
         )
 
         FilterChip(
           selected = singleBranch,
           onClick = { singleBranch = !singleBranch },
-          label = { Text("Clone single branch") },
+          label = { Text(stringResource(R.string.clone_single_branch)) },
         )
       }
 
@@ -184,7 +186,7 @@ fun CloneRepositoryScreen(
           shape = RoundedCornerShape(12.dp),
           modifier = Modifier.weight(1f).height(56.dp),
         ) {
-          Text("Abbrechen")
+          Text(stringResource(R.string.cancel))
         }
 
         Button(
@@ -197,7 +199,7 @@ fun CloneRepositoryScreen(
           shape = RoundedCornerShape(12.dp),
           modifier = Modifier.weight(1f).height(56.dp),
         ) {
-          Text("Klonen", fontWeight = FontWeight.SemiBold)
+          Text(stringResource(R.string.clone), fontWeight = FontWeight.SemiBold)
         }
       }
     }
