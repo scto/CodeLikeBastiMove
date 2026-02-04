@@ -31,6 +31,8 @@ data class SyntaxColors(
   val tag: Color,
   val property: Color,
   val error: Color,
+  val parameter: Color,
+  val punctuation: Color,
 )
 
 object EditorThemes {
@@ -63,6 +65,8 @@ object EditorThemes {
           tag = Color(0xFF569CD6),
           property = Color(0xFF9CDCFE),
           error = Color(0xFFF44747),
+          parameter = Color(0xFF9CDCFE),
+          punctuation = Color(0xFFD4D4D4),
         ),
     )
 
@@ -94,6 +98,8 @@ object EditorThemes {
           tag = Color(0xFF800000),
           property = Color(0xFF001080),
           error = Color(0xFFE51400),
+          parameter = Color(0xFF001080),
+          punctuation = Color(0xFF000000),
         ),
     )
 
@@ -125,6 +131,8 @@ object EditorThemes {
           tag = Color(0xFFFF79C6),
           property = Color(0xFF8BE9FD),
           error = Color(0xFFFF5555),
+          parameter = Color(0xFFFFB86C),
+          punctuation = Color(0xFFF8F8F2),
         ),
     )
 
@@ -156,6 +164,8 @@ object EditorThemes {
           tag = Color(0xFFFF6188),
           property = Color(0xFF78DCE8),
           error = Color(0xFFFF6188),
+          parameter = Color(0xFFFC9867),
+          punctuation = Color(0xFFFCFCFA),
         ),
     )
 
@@ -187,6 +197,8 @@ object EditorThemes {
           tag = Color(0xFFE06C75),
           property = Color(0xFFE06C75),
           error = Color(0xFFE06C75),
+          parameter = Color(0xFFE06C75),
+          punctuation = Color(0xFFABB2BF),
         ),
     )
 

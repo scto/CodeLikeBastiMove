@@ -40,7 +40,7 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 - **Asset Studio (`feature/assetstudio`):** Comprehensive Vector Asset Studio with icon repository system, SVG to AVD conversion, AVD editor, and export options. Includes AssetExporter for real Android project export with vector drawables, launcher icons (all mipmap densities), adaptive icons (foreground/background layers), notification icons, and action bar icons.
 - **Designer Module (`feature/designer`):** Dedicated module for Jetpack Compose live preview with ComposeParser for extracting @Composable functions, LivePreviewRenderer for visual rendering, CodeSynchronizer for bidirectional code updates, and ComposePreviewScreen with split view (code/preview/properties). Supports 40+ Material3 components including Column, Row, Box, Card, Text, Button, TextField, NavigationBar, etc.
 - **Tree View (`feature/treeview`):** Enhanced file tree view with 4 view modes (File, Package, Module, Project), file operations, context menus, search, hidden file toggle, and animated expand/collapse indicators.
-- **Sora Editor (`feature/soraeditor`):** Advanced code editor module using Rosemoe's sora-editor library, with language support, theming, UI widgets, Jetpack Compose integration, plugin system, and EditorContent UI component for tabbed file editing.
+- **Sora Editor (`feature/soraeditor`):** Advanced code editor module using Rosemoe's sora-editor library with full TreeSitter integration for syntax highlighting. Supports Java, Kotlin, XML, JSON, C++, and Log languages via android-tree-sitter bindings. Features TsLanguageSpec with custom .scm query files (highlights, blocks, brackets, locals), TsTheme with comprehensive token styling, EditorContent UI component for tabbed file editing, and 5 built-in color themes (Dark Modern, Light Modern, Dracula, Monokai Pro, One Dark Pro). Query files located in `feature/soraeditor/src/main/assets/tree-sitter-queries/`.
 - **Action System (`core/actions/`):** VS Code-style command/action system for event-driven architecture.
 - **Plugin System (`core/plugin/`):** Core modules for Android Studio/VS Code style extensibility with plugin manager, dynamic loader, and security manager.
 - **Termux Terminal System (`core/termux/`)::** Termux-inspired terminal emulator modules providing core utilities, emulation engine, and UI components.
@@ -57,5 +57,5 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 - **Material Design 3 libraries:** UI components and styling.
 - **Accompanist Permissions:** Runtime permission handling.
 - **Sora Editor (io.github.Rosemoe.sora-editor):** Advanced Android code editor library.
-- **Android Tree-Sitter:** Java bindings for Tree-sitter parsing library.
+- **Android Tree-Sitter (io.github.mohammed-baqer-null):** Java bindings for Tree-sitter parsing library, providing TSLanguageJava, TSLanguageKotlin, TSLanguageXml, TSLanguageJson, TSLanguageCpp, and TSLanguageLog for syntax parsing.
 - **Google Material library (`com.google.android.material:material`):** Material3 theme support.
