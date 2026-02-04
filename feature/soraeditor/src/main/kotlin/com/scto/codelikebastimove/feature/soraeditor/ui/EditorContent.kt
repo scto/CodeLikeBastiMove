@@ -148,12 +148,11 @@ private fun SoraCodeEditorArea(
             onTextChange = onContentChange,
             languageType = languageType,
             config = EditorConfig(
-                showLineNumbers = true,
+                showLineNumber = true,
                 wordWrap = false,
-                tabWidth = 4,
+                tabSize = 4,
                 autoIndent = true,
                 highlightCurrentLine = true,
-                showNonPrintableChars = false,
             ),
             modifier = Modifier.fillMaxSize(),
         )

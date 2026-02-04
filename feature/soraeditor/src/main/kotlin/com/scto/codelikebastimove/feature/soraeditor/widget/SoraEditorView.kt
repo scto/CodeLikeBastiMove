@@ -67,7 +67,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
       isWordwrap = currentConfig.wordWrap
       tabWidth = currentConfig.tabSize
 
-      isScrollable = true
       isNestedScrollingEnabled = true
       isVerticalScrollBarEnabled = true
       isHorizontalScrollBarEnabled = true
@@ -90,7 +89,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     codeEditor.subscribeEvent(LongPressEvent::class.java) { event, _ ->
-      showContextMenu()
+      showEditorContextMenu()
     }
   }
 
@@ -98,7 +97,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     actionModeCallback = EditorActionModeCallback()
   }
 
-  private fun showContextMenu() {
+  private fun showEditorContextMenu() {
     codeEditor.startActionMode(actionModeCallback, ActionMode.TYPE_FLOATING)
   }
 
@@ -171,13 +170,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
       isHighlightCurrentLine = config.highlightCurrentLine
       isHighlightBracketPair = config.highlightBrackets
 
-      isScrollable = true
       isNestedScrollingEnabled = true
       isVerticalScrollBarEnabled = true
       isHorizontalScrollBarEnabled = true
 
       setPinLineNumber(config.pinLineNumber)
-      setStickyScroll(config.stickyScroll)
       setFastDelete(config.fastDelete)
       setCursorAnimation(config.cursorAnimation)
       setKeyboardSuggestion(config.keyboardSuggestion)
@@ -194,11 +191,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
   }
 
   private fun CodeEditor.setPinLineNumber(pin: Boolean) {
-    isLineNumberPinned = pin
-  }
-
-  private fun CodeEditor.setStickyScroll(enabled: Boolean) {
-    isStickyScrollEnabled = enabled
+    // Line number pinning is controlled via props if available
+    props.pinLineNumber = pin
   }
 
   private fun CodeEditor.setFastDelete(enabled: Boolean) {
@@ -207,23 +201,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
   }
 
   private fun CodeEditor.setCursorAnimation(animationType: CursorAnimationType) {
-    cursorAnimator.apply {
-      when (animationType) {
-        CursorAnimationType.NONE -> {
-          isEnabled = false
-        }
-        CursorAnimationType.FADE -> {
-          isEnabled = true
-          duration = 200
-        }
-        CursorAnimationType.BLINK -> {
-          isEnabled = true
-          duration = 500
-        }
-        CursorAnimationType.SCALE -> {
-          isEnabled = true
-          duration = 150
-        }
+    when (animationType) {
+      CursorAnimationType.NONE -> {
+        cursorBlink = false
+      }
+      CursorAnimationType.FADE, CursorAnimationType.BLINK, CursorAnimationType.SCALE -> {
+        cursorBlink = true
       }
     }
   }
@@ -244,23 +227,15 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
   }
 
   private fun CodeEditor.setRenderWhitespace(mode: RenderWhitespaceMode) {
-    isNonPrintablePaintingEnabled = mode != RenderWhitespaceMode.NONE
-    when (mode) {
-      RenderWhitespaceMode.NONE -> {
-        nonPrintablePaintingFlags = 0
-      }
-      RenderWhitespaceMode.SELECTION -> {
-        nonPrintablePaintingFlags = CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
-      }
+    nonPrintablePaintingFlags = when (mode) {
+      RenderWhitespaceMode.NONE -> 0
+      RenderWhitespaceMode.SELECTION -> CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
       RenderWhitespaceMode.BOUNDARY -> {
-        nonPrintablePaintingFlags = CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or
-          CodeEditor.FLAG_DRAW_WHITESPACE_TRAILING
+        CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or CodeEditor.FLAG_DRAW_WHITESPACE_TRAILING
       }
-      RenderWhitespaceMode.TRAILING -> {
-        nonPrintablePaintingFlags = CodeEditor.FLAG_DRAW_WHITESPACE_TRAILING
-      }
+      RenderWhitespaceMode.TRAILING -> CodeEditor.FLAG_DRAW_WHITESPACE_TRAILING
       RenderWhitespaceMode.ALL -> {
-        nonPrintablePaintingFlags = CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or
+        CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or
           CodeEditor.FLAG_DRAW_WHITESPACE_TRAILING or
           CodeEditor.FLAG_DRAW_WHITESPACE_INNER or
           CodeEditor.FLAG_DRAW_LINE_SEPARATOR
