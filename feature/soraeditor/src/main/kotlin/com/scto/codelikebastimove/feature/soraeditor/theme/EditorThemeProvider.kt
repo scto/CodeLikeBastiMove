@@ -59,10 +59,6 @@ class EditorThemeProvider {
                 setColor(COMPLETION_WND_TEXT_SECONDARY, lineNumber)
                 setColor(COMPLETION_WND_ITEM_CURRENT, selection)
                 setColor(COMPLETION_WND_CORNER, divider)
-                setColor(COMPLETION_WND_TEXT_MATCHED, cursor)
-
-                setColor(TEXT_ACTION_WINDOW_BACKGROUND, background)
-                setColor(TEXT_ACTION_WINDOW_ICON_COLOR, foreground)
 
                 setColor(DIAGNOSTIC_TOOLTIP_BACKGROUND, background)
                 setColor(DIAGNOSTIC_TOOLTIP_BRIEF_MSG, foreground)
@@ -72,12 +68,6 @@ class EditorThemeProvider {
                 setColor(SIGNATURE_BACKGROUND, background)
                 setColor(SIGNATURE_TEXT_NORMAL, foreground)
                 setColor(SIGNATURE_TEXT_HIGHLIGHTED_PARAMETER, cursor)
-                setColor(SIGNATURE_BORDER, divider)
-
-                setColor(HOVER_BACKGROUND, background)
-                setColor(HOVER_TEXT_NORMAL, foreground)
-                setColor(HOVER_TEXT_HIGHLIGHTED, cursor)
-                setColor(HOVER_BORDER, divider)
 
                 setColor(STICKY_SCROLL_DIVIDER, divider)
 
@@ -96,7 +86,6 @@ class EditorThemeProvider {
                 setColor(HIGHLIGHTED_DELIMITERS_FOREGROUND, cursor)
                 setColor(HIGHLIGHTED_DELIMITERS_BACKGROUND, theme.currentLineColor.toArgb())
                 setColor(HIGHLIGHTED_DELIMITERS_UNDERLINE, android.graphics.Color.TRANSPARENT)
-                setColor(HIGHLIGHTED_DELIMITERS_BORDER, cursor)
             }
 
             private fun setAlpha(color: Int, factor: Float): Int {

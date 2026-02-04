@@ -447,9 +447,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
   fun getSelectedText(): String {
     val cursor = codeEditor.cursor
     return if (cursor.isSelected) {
-      val start = cursor.left()
-      val end = cursor.right()
-      codeEditor.text.substring(start, end)
+      val startLine = cursor.leftLine
+      val startColumn = cursor.leftColumn
+      val endLine = cursor.rightLine
+      val endColumn = cursor.rightColumn
+      codeEditor.text.subSequence(startLine, startColumn, endLine, endColumn).toString()
     } else {
       ""
     }

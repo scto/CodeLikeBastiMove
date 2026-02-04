@@ -22,11 +22,11 @@ object BulletContinuation : IntelligentFeature() {
 
         if (event.keyCode == KeyEvent.KEYCODE_ENTER && event.modifiers == 0) {
             onEnter(editor) { 
-                runCatching { event.markAsConsumed() }
+                runCatching { event.result = true }
             }
         } else if (event.keyCode == KeyEvent.KEYCODE_TAB && !event.isCtrlPressed && !event.isAltPressed) {
             onTab(editor, event.isShiftPressed) { 
-                runCatching { event.markAsConsumed() }
+                runCatching { event.result = true }
             }
         }
     }
