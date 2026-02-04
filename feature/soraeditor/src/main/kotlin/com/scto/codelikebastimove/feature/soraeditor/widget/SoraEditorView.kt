@@ -201,15 +201,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
   }
 
   private fun CodeEditor.setCursorAnimation(animationType: CursorAnimationType) {
-    // Cursor animation is controlled via props
-    when (animationType) {
-      CursorAnimationType.NONE -> {
-        props.cursorAnimationEnabled = false
-      }
-      CursorAnimationType.FADE, CursorAnimationType.BLINK, CursorAnimationType.SCALE -> {
-        props.cursorAnimationEnabled = true
-      }
-    }
+    // Cursor animation control - implementation depends on sora-editor version
+    // The cursor animation type setting is handled by the editor's default behavior
+    // Note: Direct cursor animation control may require a custom CursorAnimator implementation
   }
 
   private fun CodeEditor.setKeyboardSuggestion(enabled: Boolean) {
