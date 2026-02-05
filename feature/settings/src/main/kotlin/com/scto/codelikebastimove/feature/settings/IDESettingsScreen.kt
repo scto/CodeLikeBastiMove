@@ -56,8 +56,14 @@ import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
 fun IDESettingsScreen(
   viewModel: SettingsViewModel = viewModel(),
   onBackClick: () -> Unit,
-  onNavigateToAIAgent: () -> Unit,
+  onNavigateToGeneral: () -> Unit,
   onNavigateToEditorSettings: () -> Unit,
+  onNavigateToAIAgent: () -> Unit,
+  onNavigateToBuildAndRun: () -> Unit,
+  onNavigateToTermux: () -> Unit,
+  onNavigateToStatistics: () -> Unit,
+  onNavigateToDeveloperOptions: () -> Unit,
+  onNavigateToAbout: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val userPreferences by viewModel.userPreferences.collectAsState()
@@ -113,7 +119,7 @@ fun IDESettingsScreen(
       SettingsItemRow(
         title = stringResource(R.string.general_settings),
         description = stringResource(R.string.pref_configure_general_summary),
-        onClick = {},
+        onClick = onNavigateToGeneral,
       )
 
       SettingsItemRow(
@@ -131,13 +137,13 @@ fun IDESettingsScreen(
       SettingsItemRow(
         title = stringResource(R.string.build_and_run),
         description = stringResource(R.string.pref_configure_general_summary),
-        onClick = {},
+        onClick = onNavigateToBuildAndRun,
       )
 
       SettingsItemRow(
         title = stringResource(R.string.termux),
         description = stringResource(R.string.pref_configure_general_summary),
-        onClick = {},
+        onClick = onNavigateToTermux,
       )
 
       Spacer(modifier = Modifier.height(8.dp))
@@ -148,7 +154,7 @@ fun IDESettingsScreen(
       SettingsItemRow(
         title = stringResource(R.string.clbm_statistics),
         description = stringResource(R.string.pref_configure_general_summary),
-        onClick = {},
+        onClick = onNavigateToStatistics,
       )
 
       Spacer(modifier = Modifier.height(8.dp))
@@ -169,7 +175,7 @@ fun IDESettingsScreen(
       SettingsItemRow(
         title = "Entwickleroptionen",
         description = "Experimentelle/Debugging Optionen für CLBM",
-        onClick = {},
+        onClick = onNavigateToDeveloperOptions,
       )
 
       SettingsItemRow(
@@ -186,7 +192,7 @@ fun IDESettingsScreen(
       SettingsItemRow(
         title = "Über",
         description = "App-Version und Informationen",
-        onClick = {},
+        onClick = onNavigateToAbout,
       )
     }
   }

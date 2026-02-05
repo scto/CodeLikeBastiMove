@@ -52,15 +52,36 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun initializeApp() {
         viewModelScope.launch {
-            val existingRootDir = repository.getRootDirectoryOnce()
-            if (existingRootDir.isNotBlank()) {
-                val dir = File(existingRootDir)
-                if (!dir.exists()) {
-                    dir.mkdirs()
+            var rootDir = repository.getRootDirectoryOnce()
+            
+            if (rootDir.isBlank()) {
+                @Suppress("DEPRECATION")
+                val externalDir = android.os.Environment.getExternalStorageDirectory()
+                val defaultDir = File(externalDir, "CLBMProjects")
+                try {
+                    if (!defaultDir.exists()) {
+                        defaultDir.mkdirs()
+                    }
+                    rootDir = defaultDir.absolutePath
+                    repository.setRootDirectory(rootDir)
+                    CLBMLogger.d(TAG, "Initialized default CLBMProjects directory: $rootDir")
+                } catch (e: Exception) {
+                    CLBMLogger.e(TAG, "Failed to create CLBMProjects directory", e)
                 }
-                _uiState.update { it.copy(rootDirectory = existingRootDir) }
+            }
+            
+            if (rootDir.isNotBlank()) {
+                val dir = File(rootDir)
+                if (!dir.exists()) {
+                    try {
+                        dir.mkdirs()
+                    } catch (e: Exception) {
+                        CLBMLogger.e(TAG, "Failed to create root directory", e)
+                    }
+                }
+                _uiState.update { it.copy(rootDirectory = rootDir) }
                 refreshDirectoryContents()
-                scanAndSyncProjects(existingRootDir)
+                scanAndSyncProjects(rootDir)
             }
 
             launch {

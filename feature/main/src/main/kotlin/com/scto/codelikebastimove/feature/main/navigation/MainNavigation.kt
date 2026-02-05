@@ -33,6 +33,18 @@ sealed class MainDestination(val route: String, val title: String) {
 
   data object EditorSettings : MainDestination("editor_settings", "Editor-Einstellungen")
 
+  data object GeneralSettings : MainDestination("general_settings", "Allgemeine Einstellungen")
+
+  data object BuildAndRunSettings : MainDestination("build_run_settings", "Build & Run")
+
+  data object TermuxSettings : MainDestination("termux_settings", "Termux")
+
+  data object StatisticsSettings : MainDestination("statistics_settings", "Statistiken")
+
+  data object DeveloperOptions : MainDestination("developer_options", "Entwickleroptionen")
+
+  data object About : MainDestination("about", "Über")
+
   data object AssetStudio : MainDestination("asset_studio", "Asset Studio")
 
   data object AIAgent : MainDestination("ai_agent", "AI Agent")

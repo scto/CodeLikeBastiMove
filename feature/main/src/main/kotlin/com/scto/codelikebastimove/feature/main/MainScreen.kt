@@ -165,8 +165,48 @@ fun MainScreen(
       MainDestination.Settings -> {
         IDESettingsScreen(
           onBackClick = { viewModel.onBackPressed() },
-          onNavigateToAIAgent = { viewModel.onNavigate(MainDestination.AIAgent) },
+          onNavigateToGeneral = { viewModel.onNavigate(MainDestination.GeneralSettings) },
           onNavigateToEditorSettings = { viewModel.onNavigate(MainDestination.EditorSettings) },
+          onNavigateToAIAgent = { viewModel.onNavigate(MainDestination.AIAgent) },
+          onNavigateToBuildAndRun = { viewModel.onNavigate(MainDestination.BuildAndRunSettings) },
+          onNavigateToTermux = { viewModel.onNavigate(MainDestination.TermuxSettings) },
+          onNavigateToStatistics = { viewModel.onNavigate(MainDestination.StatisticsSettings) },
+          onNavigateToDeveloperOptions = { viewModel.onNavigate(MainDestination.DeveloperOptions) },
+          onNavigateToAbout = { viewModel.onNavigate(MainDestination.About) },
+        )
+      }
+
+      MainDestination.GeneralSettings -> {
+        com.scto.codelikebastimove.feature.settings.SettingsScreen()
+      }
+
+      MainDestination.BuildAndRunSettings -> {
+        com.scto.codelikebastimove.feature.settings.screens.DocumentationSettingsScreen(
+          onBack = { viewModel.onBackPressed() },
+        )
+      }
+
+      MainDestination.TermuxSettings -> {
+        com.scto.codelikebastimove.feature.settings.screens.DocumentationSettingsScreen(
+          onBack = { viewModel.onBackPressed() },
+        )
+      }
+
+      MainDestination.StatisticsSettings -> {
+        com.scto.codelikebastimove.feature.settings.screens.DocumentationSettingsScreen(
+          onBack = { viewModel.onBackPressed() },
+        )
+      }
+
+      MainDestination.DeveloperOptions -> {
+        com.scto.codelikebastimove.feature.settings.screens.HelpSettingsScreen(
+          onBack = { viewModel.onBackPressed() },
+        )
+      }
+
+      MainDestination.About -> {
+        com.scto.codelikebastimove.feature.settings.screens.HelpSettingsScreen(
+          onBack = { viewModel.onBackPressed() },
         )
       }
 

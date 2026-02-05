@@ -24,11 +24,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.scto.codelikebastimove.feature.main.MainViewModel
+import com.scto.codelikebastimove.feature.soraeditor.compose.SoraEditor
+import com.scto.codelikebastimove.feature.soraeditor.model.EditorLanguageType
 
 @Composable
 fun EditorContent(
@@ -77,6 +77,7 @@ fun EditorContent(
                     content = activeFile.content,
                     onContentChange = { viewModel.updateFileContent(it) },
                     modifier = Modifier.weight(1f),
+                    fileName = activeFile.name,
                 )
             }
         }
@@ -129,19 +130,27 @@ private fun EditorPane(
     content: String,
     onContentChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    fileName: String = "",
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color(0xFF1E1E1E))
-            .padding(8.dp),
-    ) {
-        Text(
-            text = content,
-            fontFamily = FontFamily.Monospace,
-            fontSize = 14.sp,
-            color = Color(0xFFD4D4D4),
-            modifier = Modifier.fillMaxSize(),
-        )
+    val languageType = when {
+        fileName.endsWith(".kt") || fileName.endsWith(".kts") -> EditorLanguageType.KOTLIN
+        fileName.endsWith(".java") -> EditorLanguageType.JAVA
+        fileName.endsWith(".xml") -> EditorLanguageType.XML
+        fileName.endsWith(".json") -> EditorLanguageType.JSON
+        fileName.endsWith(".gradle") -> EditorLanguageType.KOTLIN
+        fileName.endsWith(".md") -> EditorLanguageType.MARKDOWN
+        fileName.endsWith(".py") -> EditorLanguageType.PYTHON
+        fileName.endsWith(".js") || fileName.endsWith(".ts") -> EditorLanguageType.JAVASCRIPT
+        fileName.endsWith(".html") || fileName.endsWith(".htm") -> EditorLanguageType.HTML
+        fileName.endsWith(".css") -> EditorLanguageType.CSS
+        fileName.endsWith(".c") || fileName.endsWith(".cpp") || fileName.endsWith(".h") -> EditorLanguageType.CPP
+        else -> EditorLanguageType.PLAIN_TEXT
     }
+
+    SoraEditor(
+        text = content,
+        onTextChange = onContentChange,
+        languageType = languageType,
+        modifier = modifier.fillMaxSize(),
+    )
 }
