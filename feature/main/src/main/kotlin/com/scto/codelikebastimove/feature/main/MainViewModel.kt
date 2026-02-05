@@ -15,8 +15,6 @@ import com.scto.codelikebastimove.core.templates.api.ProjectManager
 import com.scto.codelikebastimove.core.templates.impl.ProjectManagerImpl
 import com.scto.codelikebastimove.core.utils.ProjectUtils
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
-import com.scto.codelikebastimove.feature.submodulemaker.generator.ModuleGenerator
-import com.scto.codelikebastimove.feature.submodulemaker.model.ModuleConfig
 import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -107,88 +105,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
   }
 
-  // --- Editor File Management ---
-
-  fun openFile(path: String) {
-    val file = File(path)
-    if (!file.exists() || !file.isFile) {
-      CLBMLogger.e(TAG, "File not found or is directory: $path")
-      return
-    }
-
-    // Prüfen, ob Datei bereits geöffnet ist
-    val existingIndex = _uiState.value.openFiles.indexOfFirst { it.path == path }
-    if (existingIndex != -1) {
-      _uiState.update {
-        it.copy(activeFileIndex = existingIndex, currentContent = MainContentType.EDITOR)
-      }
-      return
-    }
-
-    viewModelScope.launch {
-      try {
-        _uiState.update { it.copy(isLoading = true) }
-        val content = withContext(Dispatchers.IO) { file.readText() }
-
-        val newFile = EditorFile(name = file.name, path = file.path, content = content)
-
-        _uiState.update { state ->
-          val newOpenFiles = state.openFiles + newFile
-          state.copy(
-            openFiles = newOpenFiles,
-            activeFileIndex = newOpenFiles.lastIndex,
-            currentContent = MainContentType.EDITOR,
-            isLoading = false,
-          )
-        }
-      } catch (e: Exception) {
-        CLBMLogger.e(TAG, "Error reading file: $path", e)
-        _uiState.update {
-          it.copy(isLoading = false, errorMessage = "Fehler beim Öffnen der Datei: ${e.message}")
-        }
-      }
-    }
-  }
-
-  fun closeFile(index: Int) {
-    _uiState.update { state ->
-      val newOpenFiles = state.openFiles.toMutableList()
-      newOpenFiles.removeAt(index)
-
-      var newActiveIndex = state.activeFileIndex
-      if (index <= state.activeFileIndex) {
-        newActiveIndex = (state.activeFileIndex - 1).coerceAtLeast(0)
-      }
-      if (newOpenFiles.isEmpty()) {
-        newActiveIndex = -1
-      } else if (newActiveIndex >= newOpenFiles.size) {
-        newActiveIndex = newOpenFiles.size - 1
-      }
-
-      state.copy(openFiles = newOpenFiles, activeFileIndex = newActiveIndex)
-    }
-  }
-
-  fun selectFile(index: Int) {
-    if (index in _uiState.value.openFiles.indices) {
-      _uiState.update { it.copy(activeFileIndex = index) }
-    }
-  }
-
-  fun updateFileContent(content: String) {
-    val activeIndex = _uiState.value.activeFileIndex
-    if (activeIndex != -1) {
-      _uiState.update { state ->
-        val files = state.openFiles.toMutableList()
-        val currentFile = files[activeIndex]
-        files[activeIndex] = currentFile.copy(content = content, isModified = true)
-        state.copy(openFiles = files, hasUnsavedChanges = true)
-      }
-    }
-  }
-
-  // --- End Editor File Management ---
-
   fun refreshDirectoryContents() {
     val rootDir = _uiState.value.rootDirectory
     if (rootDir.isBlank()) return
@@ -268,8 +184,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         isProjectOpen = false,
         projectPath = "",
         currentDestination = MainDestination.Home,
-        openFiles = emptyList(),
-        activeFileIndex = -1,
       )
     }
   }
@@ -374,48 +288,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         .onFailure { error ->
           CLBMLogger.e(TAG, "Failed to create project: ${error.message}", error)
           _uiState.update { it.copy(isLoading = false, errorMessage = error.message) }
-        }
-    }
-  }
-
-  /**
-   * Erstellt ein Sub-Modul basierend auf der Gradle-Notation (z.B. :core:ui).
-   *
-   * @param config Die Konfiguration für das neue Modul
-   */
-  fun createSubModule(config: ModuleConfig) {
-    val currentProjectPath = _uiState.value.projectPath
-    if (currentProjectPath.isBlank()) {
-      _uiState.update { it.copy(errorMessage = "Kein Projekt geöffnet") }
-      return
-    }
-
-    viewModelScope.launch(Dispatchers.IO) {
-      _uiState.update { it.copy(isLoading = true) }
-
-      val projectDir = File(currentProjectPath)
-      val moduleDir = File(projectDir, config.directoryPath)
-
-      if (moduleDir.exists()) {
-        _uiState.update {
-          it.copy(isLoading = false, errorMessage = "Modul existiert bereits: ${config.gradlePath}")
-        }
-        return@launch
-      }
-
-      ModuleGenerator().generateModule(projectDir, config)
-        .onSuccess {
-          _uiState.update { it.copy(isLoading = false, errorMessage = null) }
-          notifyFileSystemChanged()
-        }
-        .onFailure { error ->
-          CLBMLogger.e(TAG, "Error creating submodule", error)
-          _uiState.update {
-            it.copy(
-              isLoading = false,
-              errorMessage = "Fehler beim Erstellen des Moduls: ${error.message}",
-            )
-          }
         }
     }
   }

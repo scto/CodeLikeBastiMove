@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.scto.codelikebastimove.feature.main.MainViewModel
+import com.scto.codelikebastimove.feature.soraeditor.viewmodel.SoraEditorViewModel
 import java.io.File
 
 data class ProjectFileItem(
@@ -38,7 +39,11 @@ data class ProjectFileItem(
 )
 
 @Composable
-fun ProjectContent(viewModel: MainViewModel, modifier: Modifier = Modifier) {
+fun ProjectContent(
+  viewModel: MainViewModel,
+  editorViewModel: SoraEditorViewModel,
+  modifier: Modifier = Modifier,
+) {
   val projectRootPath by viewModel.currentProjectPath.collectAsState()
   val projectRoot =
     remember(projectRootPath) { if (projectRootPath != null) File(projectRootPath!!) else null }
@@ -104,7 +109,7 @@ fun ProjectContent(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             item = item,
             onItemClick = { clickedItem ->
               if (!clickedItem.isDirectory) {
-                viewModel.openFile(clickedItem.path)
+                editorViewModel.openFile(clickedItem.path)
               }
             },
           )

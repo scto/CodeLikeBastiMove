@@ -26,19 +26,8 @@ data class MainUiState(
   val isLoading: Boolean = false,
   val hasUnsavedChanges: Boolean = false,
 
-  // Editor State
-  val openFiles: List<EditorFile> = emptyList(),
-  val activeFileIndex: Int = -1,
-
   // Trigger für Dateisystem-Aktualisierungen (Timestamp)
   val lastFileSystemUpdate: Long = 0L,
-)
-
-data class EditorFile(
-  val name: String,
-  val path: String,
-  val content: String,
-  val isModified: Boolean = false,
 )
 
 enum class BottomSheetContentType(val title: String) {

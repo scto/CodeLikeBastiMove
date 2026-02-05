@@ -47,6 +47,7 @@ import com.scto.codelikebastimove.feature.main.content.EditorContent
 import com.scto.codelikebastimove.feature.main.content.ProjectContent
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 import com.scto.codelikebastimove.feature.themebuilder.ThemeBuilderContent
+import com.scto.codelikebastimove.feature.soraeditor.viewmodel.SoraEditorViewModel
 import com.scto.codelikebastimove.feature.treeview.FileTreeDrawer
 import kotlinx.coroutines.launch
 
@@ -65,8 +66,8 @@ fun IDEWorkspaceScreen(
   onBottomSheetToggle: () -> Unit,
   onBottomSheetContentChanged: (BottomSheetContentType) -> Unit,
   modifier: Modifier = Modifier,
-  // ViewModel injecten oder übergeben, um es an EditorContent weiterzugeben
   viewModel: MainViewModel = viewModel(),
+  editorViewModel: SoraEditorViewModel = viewModel(),
 ) {
   val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
   val scope = rememberCoroutineScope()
@@ -81,7 +82,7 @@ fun IDEWorkspaceScreen(
           fileSystemVersion = fileSystemVersion,
           onFileClick = { fileNode ->
             if (!fileNode.isDirectory) {
-              viewModel.openFile(fileNode.path)
+              editorViewModel.openFile(fileNode.path)
               scope.launch { drawerState.close() }
             }
           },
@@ -129,8 +130,11 @@ fun IDEWorkspaceScreen(
             label = "content_transition",
           ) { contentType ->
             when (contentType) {
-              MainContentType.EDITOR -> EditorContent(viewModel = viewModel)
-              MainContentType.PROJECT -> ProjectContent(viewModel = viewModel)
+              MainContentType.EDITOR -> EditorContent(editorViewModel = editorViewModel)
+              MainContentType.PROJECT -> ProjectContent(
+                viewModel = viewModel,
+                editorViewModel = editorViewModel,
+              )
               MainContentType.GIT -> GitScreen(projectPath = projectPath)
               MainContentType.ASSETS_STUDIO -> AssetsStudioContent()
               MainContentType.THEME_BUILDER -> ThemeBuilderContent()

@@ -26,21 +26,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.scto.codelikebastimove.feature.main.MainViewModel
 import com.scto.codelikebastimove.feature.soraeditor.compose.SoraEditor
 import com.scto.codelikebastimove.feature.soraeditor.model.EditorLanguageType
+import com.scto.codelikebastimove.feature.soraeditor.viewmodel.SoraEditorViewModel
 
 @Composable
 fun EditorContent(
-    viewModel: MainViewModel,
+    editorViewModel: SoraEditorViewModel,
     modifier: Modifier = Modifier,
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    val openFiles = uiState.openFiles
-    val activeFileIndex = uiState.activeFileIndex
+    val uiState by editorViewModel.uiState.collectAsState()
+    val tabs = uiState.tabs
+    val activeTabId = uiState.activeTabId
 
     Column(modifier = modifier.fillMaxSize()) {
-        if (openFiles.isEmpty()) {
+        if (tabs.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center,
@@ -58,26 +58,26 @@ fun EditorContent(
                     .horizontalScroll(rememberScrollState())
                     .background(MaterialTheme.colorScheme.surfaceVariant),
             ) {
-                openFiles.forEachIndexed { index, file ->
+                tabs.forEach { tab ->
                     FileTab(
-                        fileName = file.name,
-                        isSelected = index == activeFileIndex,
-                        isModified = file.isModified,
-                        onClick = { viewModel.selectFile(index) },
-                        onClose = { viewModel.closeFile(index) },
+                        fileName = tab.file.name,
+                        isSelected = tab.id == activeTabId,
+                        isModified = tab.file.isModified,
+                        onClick = { editorViewModel.selectTab(tab.id) },
+                        onClose = { editorViewModel.closeTab(tab.id) },
                     )
                 }
             }
 
             HorizontalDivider()
 
-            if (activeFileIndex in openFiles.indices) {
-                val activeFile = openFiles[activeFileIndex]
+            val activeTab = tabs.find { it.id == activeTabId }
+            if (activeTab != null) {
                 EditorPane(
-                    content = activeFile.content,
-                    onContentChange = { viewModel.updateFileContent(it) },
+                    content = activeTab.file.content,
+                    onContentChange = { editorViewModel.updateContent(activeTab.id, it) },
                     modifier = Modifier.weight(1f),
-                    fileName = activeFile.name,
+                    fileName = activeTab.file.name,
                 )
             }
         }
