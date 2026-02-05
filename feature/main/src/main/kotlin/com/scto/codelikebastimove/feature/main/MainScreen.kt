@@ -274,7 +274,7 @@ fun MainScreen(
       }
 
       MainDestination.VectorAssetStudio -> {
-        VectorAssetStudioScreen(onBackClick = { viewModel.onBackPressed() })
+        VectorAssetStudioScreen(onBack = { viewModel.onBackPressed() })
       }
     }
   }
