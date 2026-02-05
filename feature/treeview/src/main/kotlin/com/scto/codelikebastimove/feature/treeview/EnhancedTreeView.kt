@@ -557,6 +557,7 @@ private fun buildFileTree(
 
   return when (viewMode) {
     TreeViewMode.FILE_VIEW -> buildFileViewTree(root, includeHidden, 0)
+    TreeViewMode.ANDROID_VIEW -> buildAndroidViewTree(root, includeHidden)
     TreeViewMode.PACKAGE_VIEW -> buildPackageViewTree(root, includeHidden)
     TreeViewMode.MODULE_VIEW -> buildModuleViewTree(root, includeHidden)
     TreeViewMode.PROJECT_VIEW -> buildProjectViewTree(root, includeHidden)
@@ -579,6 +580,370 @@ private fun buildFileViewTree(dir: File, includeHidden: Boolean, level: Int): Li
         children = if (file.isDirectory) buildFileViewTree(file, includeHidden, level + 1) else emptyList(),
       )
     }
+}
+
+private fun buildAndroidViewTree(root: File, includeHidden: Boolean): List<FileTreeNode> {
+  val androidStructure = mutableListOf<FileTreeNode>()
+  val discoveredModules = mutableListOf<Pair<String, File>>()
+  
+  val settingsKts = File(root, "settings.gradle.kts")
+  val settingsGroovy = File(root, "settings.gradle")
+  val settingsFile = when {
+    settingsKts.exists() -> settingsKts
+    settingsGroovy.exists() -> settingsGroovy
+    else -> null
+  }
+  
+  if (settingsFile != null) {
+    val content = settingsFile.readText()
+    val modulePaths = parseIncludeStatements(content)
+    
+    modulePaths.forEach { gradlePath ->
+      val relativePath = gradlePath.trimStart(':').replace(':', File.separatorChar)
+      val moduleDir = File(root, relativePath)
+      if (moduleDir.exists() && hasGradleBuildFile(moduleDir)) {
+        discoveredModules.add(gradlePath to moduleDir)
+      }
+    }
+  }
+  
+  if (discoveredModules.isEmpty()) {
+    val appDir = File(root, "app")
+    if (appDir.exists() && hasGradleBuildFile(appDir)) {
+      discoveredModules.add(":app" to appDir)
+    }
+  }
+  
+  discoveredModules
+    .sortedWith(compareBy({ !it.first.equals(":app", ignoreCase = true) }, { it.first }))
+    .forEach { (gradlePath, moduleDir) ->
+      val displayName = gradlePath.trimStart(':')
+      androidStructure.add(buildAndroidModuleNode(moduleDir, displayName, includeHidden))
+    }
+  
+  val gradleScriptsNode = buildGradleScriptsNode(root, discoveredModules)
+  if (gradleScriptsNode.children.isNotEmpty()) {
+    androidStructure.add(gradleScriptsNode)
+  }
+  
+  if (androidStructure.isEmpty()) {
+    return buildFileViewTree(root, includeHidden, 0)
+  }
+  
+  return androidStructure
+}
+
+private fun parseIncludeStatements(content: String): List<String> {
+  val modules = mutableListOf<String>()
+  val lines = content.lines()
+  var i = 0
+  
+  while (i < lines.size) {
+    var line = lines[i].trim()
+    
+    if (line.startsWith("//") || line.startsWith("/*")) {
+      i++
+      continue
+    }
+    
+    if (line.contains("includeBuild")) {
+      i++
+      continue
+    }
+    
+    if (line.contains("include")) {
+      val fullStatement = StringBuilder(line)
+      while (!fullStatement.contains(")") && !fullStatement.endsWith("\"") && 
+             !fullStatement.endsWith("'") && i + 1 < lines.size) {
+        i++
+        fullStatement.append(" ").append(lines[i].trim())
+      }
+      
+      val statement = fullStatement.toString()
+      val stringPattern = Regex("""["']([^"']+)["']""")
+      stringPattern.findAll(statement).forEach { match ->
+        val value = match.groupValues[1]
+        if (value.startsWith(":") || value.contains(":")) {
+          val modulePath = if (value.startsWith(":")) value else ":$value"
+          if (!modules.contains(modulePath)) {
+            modules.add(modulePath)
+          }
+        }
+      }
+    }
+    i++
+  }
+  
+  return modules.distinct()
+}
+
+private fun hasGradleBuildFile(dir: File): Boolean {
+  return File(dir, "build.gradle.kts").exists() || File(dir, "build.gradle").exists()
+}
+
+private fun buildAndroidModuleNode(moduleDir: File, moduleName: String, includeHidden: Boolean): FileTreeNode {
+  val children = mutableListOf<FileTreeNode>()
+  
+  val manifestNodes = mutableListOf<FileTreeNode>()
+  val mainManifest = File(moduleDir, "src/main/AndroidManifest.xml")
+  val debugManifest = File(moduleDir, "src/debug/AndroidManifest.xml")
+  val releaseManifest = File(moduleDir, "src/release/AndroidManifest.xml")
+  
+  listOf(mainManifest to "AndroidManifest.xml", debugManifest to "AndroidManifest.xml (debug)", 
+         releaseManifest to "AndroidManifest.xml (release)").forEach { (file, name) ->
+    if (file.exists()) {
+      manifestNodes.add(FileTreeNode(file = file, name = name, path = file.absolutePath, isDirectory = false))
+    }
+  }
+  
+  if (manifestNodes.isNotEmpty()) {
+    children.add(FileTreeNode(
+      file = null,
+      name = "manifests",
+      path = "${moduleDir.absolutePath}/__manifests__",
+      isDirectory = true,
+      children = manifestNodes,
+    ))
+  }
+  
+  val sourceNodes = mutableListOf<FileTreeNode>()
+  
+  val mainKotlin = File(moduleDir, "src/main/kotlin")
+  val mainJava = File(moduleDir, "src/main/java")
+  val mainSrc = when {
+    mainKotlin.exists() -> mainKotlin
+    mainJava.exists() -> mainJava
+    else -> null
+  }
+  if (mainSrc != null) {
+    sourceNodes.addAll(buildPackageNodes(mainSrc, includeHidden))
+  }
+  
+  if (sourceNodes.isNotEmpty()) {
+    children.add(FileTreeNode(
+      file = null,
+      name = if (mainKotlin.exists()) "kotlin" else "java",
+      path = "${moduleDir.absolutePath}/__source__",
+      isDirectory = true,
+      children = sourceNodes,
+    ))
+  }
+  
+  val testNodes = mutableListOf<FileTreeNode>()
+  val testKotlin = File(moduleDir, "src/test/kotlin")
+  val testJava = File(moduleDir, "src/test/java")
+  val testSrc = when {
+    testKotlin.exists() -> testKotlin
+    testJava.exists() -> testJava
+    else -> null
+  }
+  if (testSrc != null) {
+    testNodes.addAll(buildPackageNodes(testSrc, includeHidden))
+  }
+  if (testNodes.isNotEmpty()) {
+    children.add(FileTreeNode(
+      file = null,
+      name = if (testKotlin.exists()) "kotlin (test)" else "java (test)",
+      path = "${moduleDir.absolutePath}/__test_source__",
+      isDirectory = true,
+      children = testNodes,
+    ))
+  }
+  
+  val androidTestNodes = mutableListOf<FileTreeNode>()
+  val androidTestKotlin = File(moduleDir, "src/androidTest/kotlin")
+  val androidTestJava = File(moduleDir, "src/androidTest/java")
+  val androidTestSrc = when {
+    androidTestKotlin.exists() -> androidTestKotlin
+    androidTestJava.exists() -> androidTestJava
+    else -> null
+  }
+  if (androidTestSrc != null) {
+    androidTestNodes.addAll(buildPackageNodes(androidTestSrc, includeHidden))
+  }
+  if (androidTestNodes.isNotEmpty()) {
+    children.add(FileTreeNode(
+      file = null,
+      name = if (androidTestKotlin.exists()) "kotlin (androidTest)" else "java (androidTest)",
+      path = "${moduleDir.absolutePath}/__androidtest_source__",
+      isDirectory = true,
+      children = androidTestNodes,
+    ))
+  }
+  
+  val resDir = File(moduleDir, "src/main/res")
+  if (resDir.exists()) {
+    children.add(FileTreeNode(
+      file = resDir,
+      name = "res",
+      path = resDir.absolutePath,
+      isDirectory = true,
+      children = buildResViewTree(resDir, includeHidden),
+    ))
+  }
+  
+  val assetsDir = File(moduleDir, "src/main/assets")
+  if (assetsDir.exists()) {
+    children.add(FileTreeNode(
+      file = assetsDir,
+      name = "assets",
+      path = assetsDir.absolutePath,
+      isDirectory = true,
+      children = buildFileViewTree(assetsDir, includeHidden, 0),
+    ))
+  }
+  
+  return FileTreeNode(
+    file = moduleDir,
+    name = moduleName,
+    path = moduleDir.absolutePath,
+    isDirectory = true,
+    children = children,
+  )
+}
+
+private fun buildPackageNodes(srcDir: File, includeHidden: Boolean): List<FileTreeNode> {
+  val packages = mutableListOf<FileTreeNode>()
+  
+  fun collectPackageFiles(dir: File, packagePath: String) {
+    val files = dir.listFiles() ?: return
+    val sourceFiles = files.filter { !it.isDirectory && (includeHidden || !it.name.startsWith(".")) }
+    val subdirs = files.filter { it.isDirectory && (includeHidden || !it.name.startsWith(".")) }
+    
+    if (sourceFiles.isNotEmpty()) {
+      val displayName = if (packagePath.isBlank()) "(default package)" else packagePath
+      val fileNodes = sourceFiles.sortedBy { it.name.lowercase() }.map { file ->
+        FileTreeNode(
+          file = file,
+          name = file.name,
+          path = file.absolutePath,
+          isDirectory = false,
+        )
+      }
+      packages.add(
+        FileTreeNode(
+          file = dir,
+          name = displayName,
+          path = dir.absolutePath,
+          isDirectory = true,
+          children = fileNodes,
+        )
+      )
+    }
+    
+    subdirs.sortedBy { it.name.lowercase() }.forEach { subdir ->
+      val newPackagePath = if (packagePath.isBlank()) subdir.name else "$packagePath.${subdir.name}"
+      collectPackageFiles(subdir, newPackagePath)
+    }
+  }
+  
+  collectPackageFiles(srcDir, "")
+  return packages
+}
+
+private fun buildResViewTree(resDir: File, includeHidden: Boolean): List<FileTreeNode> {
+  val files = resDir.listFiles() ?: return emptyList()
+  
+  return files
+    .filter { (includeHidden || !it.name.startsWith(".")) }
+    .sortedWith(compareBy({ !it.isDirectory }, { it.name.lowercase() }))
+    .map { file ->
+      FileTreeNode(
+        file = file,
+        name = file.name,
+        path = file.absolutePath,
+        isDirectory = file.isDirectory,
+        children = if (file.isDirectory) {
+          file.listFiles()
+            ?.filter { includeHidden || !it.name.startsWith(".") }
+            ?.sortedBy { it.name.lowercase() }
+            ?.map { child ->
+              FileTreeNode(
+                file = child,
+                name = child.name,
+                path = child.absolutePath,
+                isDirectory = child.isDirectory,
+              )
+            } ?: emptyList()
+        } else emptyList(),
+      )
+    }
+}
+
+private fun buildGradleScriptsNode(root: File, discoveredModules: List<Pair<String, File>>): FileTreeNode {
+  val gradleFiles = mutableListOf<FileTreeNode>()
+  
+  val buildGradle = File(root, "build.gradle.kts")
+  val buildGradleGroovy = File(root, "build.gradle")
+  val settingsGradle = File(root, "settings.gradle.kts")
+  val settingsGradleGroovy = File(root, "settings.gradle")
+  val gradleProperties = File(root, "gradle.properties")
+  val localProperties = File(root, "local.properties")
+  val gradleWrapper = File(root, "gradle/wrapper/gradle-wrapper.properties")
+  val versionsCatalog = File(root, "gradle/libs.versions.toml")
+  
+  listOf(
+    buildGradle to "build.gradle.kts (Project)",
+    buildGradleGroovy to "build.gradle (Project)",
+    settingsGradle to "settings.gradle.kts",
+    settingsGradleGroovy to "settings.gradle",
+    gradleProperties to "gradle.properties (Project)",
+    localProperties to "local.properties",
+    gradleWrapper to "gradle-wrapper.properties",
+    versionsCatalog to "libs.versions.toml",
+  ).forEach { (file, displayName) ->
+    if (file.exists()) {
+      gradleFiles.add(
+        FileTreeNode(
+          file = file,
+          name = displayName,
+          path = file.absolutePath,
+          isDirectory = false,
+        )
+      )
+    }
+  }
+  
+  discoveredModules
+    .sortedBy { it.first }
+    .forEach { (gradlePath, moduleDir) ->
+      val moduleBuildGradleKts = File(moduleDir, "build.gradle.kts")
+      val moduleBuildGradle = File(moduleDir, "build.gradle")
+      val moduleProguard = File(moduleDir, "proguard-rules.pro")
+      
+      if (moduleBuildGradleKts.exists()) {
+        gradleFiles.add(FileTreeNode(
+          file = moduleBuildGradleKts,
+          name = "build.gradle.kts ($gradlePath)",
+          path = moduleBuildGradleKts.absolutePath,
+          isDirectory = false,
+        ))
+      } else if (moduleBuildGradle.exists()) {
+        gradleFiles.add(FileTreeNode(
+          file = moduleBuildGradle,
+          name = "build.gradle ($gradlePath)",
+          path = moduleBuildGradle.absolutePath,
+          isDirectory = false,
+        ))
+      }
+      
+      if (moduleProguard.exists()) {
+        gradleFiles.add(FileTreeNode(
+          file = moduleProguard,
+          name = "proguard-rules.pro ($gradlePath)",
+          path = moduleProguard.absolutePath,
+          isDirectory = false,
+        ))
+      }
+    }
+  
+  return FileTreeNode(
+    file = null,
+    name = "Gradle Scripts",
+    path = "${root.absolutePath}/__gradle_scripts__",
+    isDirectory = true,
+    children = gradleFiles,
+  )
 }
 
 private fun buildPackageViewTree(root: File, includeHidden: Boolean): List<FileTreeNode> {

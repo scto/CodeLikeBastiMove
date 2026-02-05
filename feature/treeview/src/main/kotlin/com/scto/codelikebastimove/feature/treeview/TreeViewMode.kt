@@ -2,6 +2,7 @@ package com.scto.codelikebastimove.feature.treeview
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountTree
+import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.Extension
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Inventory2
@@ -17,6 +18,11 @@ enum class TreeViewMode(
     icon = Icons.Default.Folder,
     description = "Standard file system view",
   ),
+  ANDROID_VIEW(
+    displayName = "Android",
+    icon = Icons.Default.Android,
+    description = "Android Studio-style project view",
+  ),
   PACKAGE_VIEW(
     displayName = "Packages",
     icon = Icons.Default.Inventory2,
@@ -30,7 +36,7 @@ enum class TreeViewMode(
   PROJECT_VIEW(
     displayName = "Project",
     icon = Icons.Default.AccountTree,
-    description = "Android Studio-style project view",
+    description = "Full project structure view",
   ),
 }
 
