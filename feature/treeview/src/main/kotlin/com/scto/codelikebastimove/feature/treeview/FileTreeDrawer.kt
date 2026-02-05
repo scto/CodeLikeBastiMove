@@ -26,8 +26,12 @@ import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.Brush
 import androidx.compose.material.icons.filled.Extension
 import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.MergeType
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Terminal
+import androidx.compose.material.icons.filled.ViewQuilt
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -65,6 +69,10 @@ enum class DrawerTab(val title: String, val icon: ImageVector) {
   BUILD("Build", Icons.Default.Android),
   MODULE("Module", Icons.Default.Extension),
   ASSETS("Assets", Icons.Default.Brush),
+  GIT("Git", Icons.Default.MergeType),
+  THEME("Theme", Icons.Default.Palette),
+  LAYOUT("Layout", Icons.Default.ViewQuilt),
+  SETTINGS("Settings", Icons.Default.Settings),
   TERMINAL("Terminal", Icons.Default.Terminal),
 }
 
@@ -138,6 +146,18 @@ fun FileTreeDrawer(
         }
         DrawerTab.ASSETS -> {
           AssetStudioTabContent()
+        }
+        DrawerTab.GIT -> {
+          GitTabContent()
+        }
+        DrawerTab.THEME -> {
+          ThemeTabContent()
+        }
+        DrawerTab.LAYOUT -> {
+          LayoutTabContent()
+        }
+        DrawerTab.SETTINGS -> {
+          SettingsTabContent()
         }
         DrawerTab.TERMINAL -> {
           TerminalTabContent(onOpenTerminalSheet = onOpenTerminalSheet)
@@ -468,5 +488,195 @@ private fun TerminalTabContent(onOpenTerminalSheet: () -> Unit, modifier: Modifi
         )
       }
     }
+  }
+}
+
+@Composable
+private fun GitTabContent(modifier: Modifier = Modifier) {
+  Column(
+    modifier = modifier.fillMaxSize().padding(16.dp),
+    verticalArrangement = Arrangement.spacedBy(16.dp),
+  ) {
+    Text(
+      text = "Git Version Control",
+      style = MaterialTheme.typography.titleMedium,
+      fontWeight = FontWeight.SemiBold,
+    )
+
+    Card(
+      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+      modifier = Modifier.fillMaxWidth(),
+    ) {
+      Column(
+        modifier = Modifier.padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+      ) {
+        Icon(
+          imageVector = Icons.Default.MergeType,
+          contentDescription = null,
+          modifier = Modifier.size(48.dp),
+          tint = MaterialTheme.colorScheme.onPrimaryContainer,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+          text = "Open Git Panel",
+          style = MaterialTheme.typography.titleSmall,
+          fontWeight = FontWeight.Medium,
+          color = MaterialTheme.colorScheme.onPrimaryContainer,
+        )
+      }
+    }
+
+    Text(
+      text = "Quick Actions",
+      style = MaterialTheme.typography.labelMedium,
+      color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+
+    AssetQuickAction(title = "Commit Changes", description = "Stage and commit files", onClick = {})
+    AssetQuickAction(title = "Push", description = "Push commits to remote", onClick = {})
+    AssetQuickAction(title = "Pull", description = "Pull changes from remote", onClick = {})
+  }
+}
+
+@Composable
+private fun ThemeTabContent(modifier: Modifier = Modifier) {
+  Column(
+    modifier = modifier.fillMaxSize().padding(16.dp),
+    verticalArrangement = Arrangement.spacedBy(16.dp),
+  ) {
+    Text(
+      text = "Theme Builder",
+      style = MaterialTheme.typography.titleMedium,
+      fontWeight = FontWeight.SemiBold,
+    )
+
+    Card(
+      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+      modifier = Modifier.fillMaxWidth(),
+    ) {
+      Column(
+        modifier = Modifier.padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+      ) {
+        Icon(
+          imageVector = Icons.Default.Palette,
+          contentDescription = null,
+          modifier = Modifier.size(48.dp),
+          tint = MaterialTheme.colorScheme.onPrimaryContainer,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+          text = "Open Theme Builder",
+          style = MaterialTheme.typography.titleSmall,
+          fontWeight = FontWeight.Medium,
+          color = MaterialTheme.colorScheme.onPrimaryContainer,
+        )
+      }
+    }
+
+    Text(
+      text = "Quick Themes",
+      style = MaterialTheme.typography.labelMedium,
+      color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+
+    AssetQuickAction(title = "Material Default", description = "Standard Material 3 colors", onClick = {})
+    AssetQuickAction(title = "Dynamic Colors", description = "System wallpaper-based theme", onClick = {})
+  }
+}
+
+@Composable
+private fun LayoutTabContent(modifier: Modifier = Modifier) {
+  Column(
+    modifier = modifier.fillMaxSize().padding(16.dp),
+    verticalArrangement = Arrangement.spacedBy(16.dp),
+  ) {
+    Text(
+      text = "Layout Designer",
+      style = MaterialTheme.typography.titleMedium,
+      fontWeight = FontWeight.SemiBold,
+    )
+
+    Card(
+      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+      modifier = Modifier.fillMaxWidth(),
+    ) {
+      Column(
+        modifier = Modifier.padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+      ) {
+        Icon(
+          imageVector = Icons.Default.ViewQuilt,
+          contentDescription = null,
+          modifier = Modifier.size(48.dp),
+          tint = MaterialTheme.colorScheme.onPrimaryContainer,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+          text = "Open Layout Designer",
+          style = MaterialTheme.typography.titleSmall,
+          fontWeight = FontWeight.Medium,
+          color = MaterialTheme.colorScheme.onPrimaryContainer,
+        )
+      }
+    }
+
+    Text(
+      text = "Templates",
+      style = MaterialTheme.typography.labelMedium,
+      color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+
+    AssetQuickAction(title = "Empty Activity", description = "Blank Compose layout", onClick = {})
+    AssetQuickAction(title = "List Layout", description = "LazyColumn with items", onClick = {})
+  }
+}
+
+@Composable
+private fun SettingsTabContent(modifier: Modifier = Modifier) {
+  Column(
+    modifier = modifier.fillMaxSize().padding(16.dp),
+    verticalArrangement = Arrangement.spacedBy(16.dp),
+  ) {
+    Text(
+      text = "Settings",
+      style = MaterialTheme.typography.titleMedium,
+      fontWeight = FontWeight.SemiBold,
+    )
+
+    Card(
+      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+      modifier = Modifier.fillMaxWidth(),
+    ) {
+      Column(
+        modifier = Modifier.padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+      ) {
+        Icon(
+          imageVector = Icons.Default.Settings,
+          contentDescription = null,
+          modifier = Modifier.size(48.dp),
+          tint = MaterialTheme.colorScheme.onPrimaryContainer,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+          text = "Open Settings",
+          style = MaterialTheme.typography.titleSmall,
+          fontWeight = FontWeight.Medium,
+          color = MaterialTheme.colorScheme.onPrimaryContainer,
+        )
+      }
+    }
+
+    Text(
+      text = "Quick Settings",
+      style = MaterialTheme.typography.labelMedium,
+      color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+
+    AssetQuickAction(title = "General", description = "Theme and appearance", onClick = {})
+    AssetQuickAction(title = "Editor", description = "Font, tabs, and formatting", onClick = {})
+    AssetQuickAction(title = "Build & Run", description = "Build configuration", onClick = {})
   }
 }

@@ -5,12 +5,14 @@ import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.FolderOpen
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ViewQuilt
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.FolderOpen
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.MergeType
 import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ViewQuilt
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -55,5 +57,11 @@ enum class MainContentType(
     icon = Icons.Outlined.ViewQuilt,
     selectedIcon = Icons.Filled.ViewQuilt,
     description = "Layout Designer for XML",
+  ),
+  SETTINGS(
+    title = "Settings",
+    icon = Icons.Outlined.Settings,
+    selectedIcon = Icons.Filled.Settings,
+    description = "Application settings",
   ),
 }

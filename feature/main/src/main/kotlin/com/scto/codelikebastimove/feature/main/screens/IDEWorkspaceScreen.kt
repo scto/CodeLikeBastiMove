@@ -18,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Undo
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -49,6 +48,7 @@ import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 import com.scto.codelikebastimove.feature.themebuilder.ThemeBuilderContent
 import com.scto.codelikebastimove.feature.soraeditor.viewmodel.SoraEditorViewModel
 import com.scto.codelikebastimove.feature.treeview.FileTreeDrawer
+import com.scto.codelikebastimove.feature.settings.SettingsScreen
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import kotlinx.coroutines.launch
@@ -106,7 +106,6 @@ fun IDEWorkspaceScreen(
         IDETopAppBar(
           projectName = projectName,
           onMenuClick = { scope.launch { drawerState.open() } },
-          onStopClick = {},
           onUndoClick = {},
           onMoreClick = {},
         )
@@ -149,6 +148,7 @@ fun IDEWorkspaceScreen(
               MainContentType.ASSETS_STUDIO -> AssetsStudioContent()
               MainContentType.THEME_BUILDER -> ThemeBuilderContent()
               MainContentType.LAYOUT_DESIGNER -> LayoutDesignerContent()
+              MainContentType.SETTINGS -> SettingsScreen()
             }
           }
         }
@@ -169,7 +169,6 @@ fun IDEWorkspaceScreen(
 private fun IDETopAppBar(
   projectName: String,
   onMenuClick: () -> Unit,
-  onStopClick: () -> Unit,
   onUndoClick: () -> Unit,
   onMoreClick: () -> Unit,
   modifier: Modifier = Modifier,
@@ -182,9 +181,6 @@ private fun IDETopAppBar(
       }
     },
     actions = {
-      IconButton(onClick = onStopClick) {
-        Icon(imageVector = Icons.Default.Stop, contentDescription = "Stop")
-      }
       IconButton(onClick = onUndoClick) {
         Icon(imageVector = Icons.AutoMirrored.Filled.Undo, contentDescription = "Undo")
       }

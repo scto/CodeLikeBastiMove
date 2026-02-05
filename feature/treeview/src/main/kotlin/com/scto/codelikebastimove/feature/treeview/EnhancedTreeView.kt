@@ -271,9 +271,11 @@ private fun EnhancedTreeViewHeader(
   onToggleSearch: () -> Unit,
   onNewFile: () -> Unit,
   onNewFolder: () -> Unit,
+  onEditorSettings: () -> Unit = {},
   modifier: Modifier = Modifier,
 ) {
   var showViewModeMenu by remember { mutableStateOf(false) }
+  var showOptionsMenu by remember { mutableStateOf(false) }
 
   Column(modifier = modifier.fillMaxWidth().background(TreeViewHeaderBackground)) {
     Row(
@@ -283,9 +285,9 @@ private fun EnhancedTreeViewHeader(
     ) {
       Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
-          imageVector = viewState.currentMode.icon,
+          imageVector = Icons.Default.Folder,
           contentDescription = null,
-          tint = AccentColor,
+          tint = TreeViewFolderColor,
           modifier = Modifier.size(18.dp),
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -335,43 +337,100 @@ private fun EnhancedTreeViewHeader(
         }
 
         Box {
-          IconButton(onClick = { showViewModeMenu = true }, modifier = Modifier.size(28.dp)) {
+          IconButton(onClick = { showOptionsMenu = true }, modifier = Modifier.size(28.dp)) {
             Icon(
               imageVector = Icons.Default.MoreVert,
-              contentDescription = "View Mode",
+              contentDescription = "Options",
               tint = TreeViewFileColor,
               modifier = Modifier.size(18.dp),
             )
           }
 
           DropdownMenu(
-            expanded = showViewModeMenu,
-            onDismissRequest = { showViewModeMenu = false },
+            expanded = showOptionsMenu,
+            onDismissRequest = { showOptionsMenu = false },
           ) {
-            TreeViewMode.entries.forEach { mode ->
-              DropdownMenuItem(
-                text = {
-                  Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                      imageVector = mode.icon,
-                      contentDescription = null,
-                      modifier = Modifier.size(18.dp),
-                      tint = if (viewState.currentMode == mode) AccentColor else TreeViewTextColor,
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                      text = mode.displayName,
-                      color = if (viewState.currentMode == mode) AccentColor else TreeViewTextColor,
-                    )
-                  }
-                },
-                onClick = {
-                  onViewModeChange(mode)
-                  showViewModeMenu = false
-                },
-              )
-            }
+            DropdownMenuItem(
+              text = { Text("Editor Settings", color = TreeViewTextColor) },
+              leadingIcon = {
+                Icon(
+                  imageVector = Icons.Default.Settings,
+                  contentDescription = null,
+                  tint = TreeViewTextColor,
+                  modifier = Modifier.size(18.dp),
+                )
+              },
+              onClick = {
+                onEditorSettings()
+                showOptionsMenu = false
+              },
+            )
           }
+        }
+      }
+    }
+
+    Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp)) {
+      Surface(
+        onClick = { showViewModeMenu = true },
+        color = Color(0xFF333333),
+        shape = MaterialTheme.shapes.small,
+        modifier = Modifier.fillMaxWidth(),
+      ) {
+        Row(
+          modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
+          horizontalArrangement = Arrangement.SpaceBetween,
+          verticalAlignment = Alignment.CenterVertically,
+        ) {
+          Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+              imageVector = viewState.currentMode.icon,
+              contentDescription = null,
+              tint = AccentColor,
+              modifier = Modifier.size(16.dp),
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+              text = viewState.currentMode.displayName,
+              style = MaterialTheme.typography.bodyMedium,
+              color = TreeViewTextColor,
+            )
+          }
+          Icon(
+            imageVector = Icons.Default.ChevronRight,
+            contentDescription = null,
+            tint = TreeViewChevronColor,
+            modifier = Modifier.size(16.dp).rotate(90f),
+          )
+        }
+      }
+
+      DropdownMenu(
+        expanded = showViewModeMenu,
+        onDismissRequest = { showViewModeMenu = false },
+      ) {
+        TreeViewMode.entries.forEach { mode ->
+          DropdownMenuItem(
+            text = {
+              Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                  imageVector = mode.icon,
+                  contentDescription = null,
+                  modifier = Modifier.size(18.dp),
+                  tint = if (viewState.currentMode == mode) AccentColor else TreeViewTextColor,
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                  text = mode.displayName,
+                  color = if (viewState.currentMode == mode) AccentColor else TreeViewTextColor,
+                )
+              }
+            },
+            onClick = {
+              onViewModeChange(mode)
+              showViewModeMenu = false
+            },
+          )
         }
       }
     }

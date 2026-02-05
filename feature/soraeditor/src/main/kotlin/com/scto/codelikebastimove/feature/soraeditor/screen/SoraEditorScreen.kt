@@ -178,22 +178,26 @@ private fun EditorTabBar(
   onTabClose: (String) -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  Row(
-    modifier =
-      modifier
-        .fillMaxWidth()
-        .background(MaterialTheme.colorScheme.surfaceContainerLow)
-        .horizontalScroll(rememberScrollState())
-        .padding(horizontal = 4.dp, vertical = 2.dp),
-    horizontalArrangement = Arrangement.Start,
+  Surface(
+    color = MaterialTheme.colorScheme.surfaceContainerLow,
+    modifier = modifier.fillMaxWidth(),
   ) {
-    tabs.forEach { tab ->
-      EditorTabItem(
-        tab = tab,
-        isActive = tab.id == activeTabId,
-        onSelect = { onTabSelect(tab.id) },
-        onClose = { onTabClose(tab.id) },
-      )
+    Row(
+      modifier = Modifier
+        .fillMaxWidth()
+        .horizontalScroll(rememberScrollState())
+        .padding(horizontal = 4.dp, vertical = 4.dp),
+      horizontalArrangement = Arrangement.Start,
+    ) {
+      tabs.forEach { tab ->
+        EditorTabItem(
+          tab = tab,
+          isActive = tab.id == activeTabId,
+          onSelect = { onTabSelect(tab.id) },
+          onClose = { onTabClose(tab.id) },
+        )
+        Spacer(modifier = Modifier.width(2.dp))
+      }
     }
   }
 }
@@ -207,38 +211,40 @@ private fun EditorTabItem(
   modifier: Modifier = Modifier,
 ) {
   Surface(
-    modifier =
-      modifier.clip(RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp)).clickable { onSelect() },
-    color =
-      if (isActive) {
-        MaterialTheme.colorScheme.surface
-      } else {
-        MaterialTheme.colorScheme.surfaceContainerLow
-      },
+    onClick = onSelect,
+    color = if (isActive) {
+      MaterialTheme.colorScheme.primaryContainer
+    } else {
+      MaterialTheme.colorScheme.surfaceContainer
+    },
+    shape = RoundedCornerShape(6.dp),
+    modifier = modifier,
   ) {
     Row(
-      modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+      modifier = Modifier.padding(start = 10.dp, end = 6.dp, top = 6.dp, bottom = 6.dp),
       verticalAlignment = Alignment.CenterVertically,
     ) {
       Icon(
         imageVector = Icons.Default.Code,
         contentDescription = null,
-        modifier = Modifier.size(16.dp),
-        tint = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.size(14.dp),
+        tint = if (isActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
       )
-      Spacer(modifier = Modifier.width(4.dp))
+      Spacer(modifier = Modifier.width(6.dp))
       Text(
         text = if (tab.file.isModified) "${tab.file.name}*" else tab.file.name,
         style = MaterialTheme.typography.bodySmall,
+        color = if (isActive) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
       )
-      Spacer(modifier = Modifier.width(4.dp))
-      IconButton(onClick = onClose, modifier = Modifier.size(16.dp)) {
+      Spacer(modifier = Modifier.width(6.dp))
+      IconButton(onClick = onClose, modifier = Modifier.size(18.dp)) {
         Icon(
           imageVector = Icons.Default.Close,
           contentDescription = "Close tab",
           modifier = Modifier.size(12.dp),
+          tint = if (isActive) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
         )
       }
     }
