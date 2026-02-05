@@ -2,6 +2,7 @@ package com.scto.codelikebastimove.feature.soraeditor.language
 
 import android.content.Context
 import com.scto.codelikebastimove.feature.soraeditor.model.EditorLanguageType
+import com.scto.codelikebastimove.feature.soraeditor.model.EditorTheme
 import com.scto.codelikebastimove.feature.soraeditor.model.HighlightingMode
 import io.github.rosemoe.sora.lang.EmptyLanguage
 import io.github.rosemoe.sora.lang.Language
@@ -16,6 +17,10 @@ class LanguageRegistry(private val context: Context) {
 
   private val textMateProvider = TextMateLanguageProvider()
   private val treeSitterProvider = TreeSitterLanguageProvider()
+
+  fun setTheme(theme: EditorTheme) {
+    treeSitterProvider.setTheme(theme)
+  }
 
   fun getLanguage(languageType: EditorLanguageType, mode: HighlightingMode): Language {
     return when (mode) {

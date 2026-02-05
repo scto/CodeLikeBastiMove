@@ -218,6 +218,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
   fun setLanguage(languageType: EditorLanguageType) {
     currentLanguageType = languageType
+    languageRegistry.setTheme(currentTheme)
     val language = languageRegistry.getLanguage(languageType, currentConfig.highlightingMode)
     codeEditor.setEditorLanguage(language)
   }
