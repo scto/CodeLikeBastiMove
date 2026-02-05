@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.feature.main.screens
+package com.scto.codelikebastimove.feature.submodulemaker
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -87,7 +87,6 @@ class BuildVariantsViewModel : ViewModel() {
         val json = JSONObject()
         variants.forEach { variant -> json.put(variant.moduleName, variant.activeVariant) }
 
-        // Pretty print mit Indentierung 2
         prefsFile.writeText(json.toString(2))
       } catch (e: Exception) {
         e.printStackTrace()
@@ -109,7 +108,6 @@ class BuildVariantsViewModel : ViewModel() {
       val json = JSONObject(content)
       modules.map { variant ->
         val savedVariant = json.optString(variant.moduleName)
-        // Prüfen ob die gespeicherte Variante noch gültig ist (in availableVariants existiert)
         if (savedVariant.isNotEmpty() && variant.availableVariants.contains(savedVariant)) {
           variant.copy(activeVariant = savedVariant)
         } else {

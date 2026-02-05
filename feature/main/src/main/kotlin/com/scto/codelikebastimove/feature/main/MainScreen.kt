@@ -18,17 +18,14 @@ import com.scto.codelikebastimove.feature.designer.ui.screen.DesignerScreen
 import com.scto.codelikebastimove.feature.git.ui.screens.GitCloneScreen
 import com.scto.codelikebastimove.feature.git.ui.screens.GitScreen
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
-import com.scto.codelikebastimove.feature.main.screens.AIAgentScreen
-import com.scto.codelikebastimove.feature.main.screens.BuildVariantsScreen
-import com.scto.codelikebastimove.feature.main.screens.ConsoleScreen
-import com.scto.codelikebastimove.feature.home.navigation.HomeDestination
-import com.scto.codelikebastimove.feature.home.screens.CreateProjectScreen
-import com.scto.codelikebastimove.feature.home.screens.HomeScreen
-import com.scto.codelikebastimove.feature.home.screens.ImportProjectScreen
+import com.scto.codelikebastimove.feature.main.screens.CreateProjectScreen
+import com.scto.codelikebastimove.feature.main.screens.HomeScreen
+import com.scto.codelikebastimove.feature.main.screens.ImportProjectScreen
+import com.scto.codelikebastimove.feature.main.screens.OpenProjectScreen
+import com.scto.codelikebastimove.feature.submodulemaker.BuildVariantsScreen
+import com.scto.codelikebastimove.feature.main.screens.IDEWorkspaceScreen
 import com.scto.codelikebastimove.feature.settings.EditorSettingsScreen
 import com.scto.codelikebastimove.feature.settings.IDESettingsScreen
-import com.scto.codelikebastimove.feature.main.screens.IDEWorkspaceScreen
-import com.scto.codelikebastimove.feature.home.screens.OpenProjectScreen
 import com.scto.codelikebastimove.feature.submodulemaker.SubModuleMakerScreen
 
 @Composable
@@ -65,15 +62,7 @@ fun MainScreen(
     when (destination) {
       MainDestination.Home -> {
         HomeScreen(
-          onNavigate = { homeDestination ->
-            val mainDestination = when (homeDestination) {
-              HomeDestination.Console -> MainDestination.Console
-              HomeDestination.Settings -> MainDestination.Settings
-              HomeDestination.Documentation -> MainDestination.Documentation
-              else -> MainDestination.Home
-            }
-            viewModel.onNavigate(mainDestination)
-          },
+          onNavigate = { viewModel.onNavigate(it) },
           onCreateProject = { viewModel.onNavigate(MainDestination.CreateProject) },
           onImportProject = { viewModel.onNavigate(MainDestination.ImportProject) },
           onOpenProject = { viewModel.onNavigate(MainDestination.OpenProject) },
@@ -114,8 +103,6 @@ fun MainScreen(
             viewModel.onBackPressed()
           },
           onBrowseClick = {
-            // Note: File picker integration requires Activity result handling
-            // Users can manually enter/paste the project path in the text field
           },
           onImportProject = { path, copyToWorkspace ->
             viewModel.importProject(path, copyToWorkspace)
@@ -227,11 +214,16 @@ fun MainScreen(
       }
 
       MainDestination.AIAgent -> {
-        AIAgentScreen(onBackClick = { viewModel.onBackPressed() })
+        HomeScreen(
+          onNavigate = { viewModel.onNavigate(it) },
+          onCreateProject = { viewModel.onNavigate(MainDestination.CreateProject) },
+          onImportProject = { viewModel.onNavigate(MainDestination.ImportProject) },
+          onOpenProject = { viewModel.onNavigate(MainDestination.OpenProject) },
+          onCloneRepository = { viewModel.onNavigate(MainDestination.GitClone) },
+        )
       }
 
       MainDestination.BuildVariants -> {
-        // Hier wurde der projectPath hinzugefügt
         BuildVariantsScreen(
           projectPath = uiState.projectPath,
           onBackClick = { viewModel.onBackPressed() },
@@ -245,20 +237,18 @@ fun MainScreen(
       }
 
       MainDestination.Console -> {
-        ConsoleScreen(onBackClick = { viewModel.onBackPressed() })
+        HomeScreen(
+          onNavigate = { viewModel.onNavigate(it) },
+          onCreateProject = { viewModel.onNavigate(MainDestination.CreateProject) },
+          onImportProject = { viewModel.onNavigate(MainDestination.ImportProject) },
+          onOpenProject = { viewModel.onNavigate(MainDestination.OpenProject) },
+          onCloneRepository = { viewModel.onNavigate(MainDestination.GitClone) },
+        )
       }
 
       MainDestination.Documentation -> {
         HomeScreen(
-          onNavigate = { homeDestination ->
-            val mainDestination = when (homeDestination) {
-              HomeDestination.Console -> MainDestination.Console
-              HomeDestination.Settings -> MainDestination.Settings
-              HomeDestination.Documentation -> MainDestination.Documentation
-              else -> MainDestination.Home
-            }
-            viewModel.onNavigate(mainDestination)
-          },
+          onNavigate = { viewModel.onNavigate(it) },
           onCreateProject = { viewModel.onNavigate(MainDestination.CreateProject) },
           onImportProject = { viewModel.onNavigate(MainDestination.ImportProject) },
           onOpenProject = { viewModel.onNavigate(MainDestination.OpenProject) },

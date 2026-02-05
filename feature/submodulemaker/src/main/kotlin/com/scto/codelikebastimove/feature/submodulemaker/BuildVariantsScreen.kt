@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.feature.main.screens
+package com.scto.codelikebastimove.feature.submodulemaker
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -28,7 +28,6 @@ fun BuildVariantsScreen(
 ) {
   val uiState by viewModel.uiState.collectAsState()
 
-  // Lade Varianten beim Start oder wenn sich der Pfad ändert
   LaunchedEffect(projectPath) { viewModel.loadBuildVariants(projectPath) }
 
   Scaffold(

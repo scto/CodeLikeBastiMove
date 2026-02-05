@@ -43,12 +43,14 @@ import com.scto.codelikebastimove.feature.assetstudio.ui.AssetsStudioContent
 import com.scto.codelikebastimove.feature.designer.ui.LayoutDesignerContent
 import com.scto.codelikebastimove.feature.main.components.BottomSheetBar
 import com.scto.codelikebastimove.feature.main.components.ContentNavigationRail
-import com.scto.codelikebastimove.feature.main.content.EditorContent
 import com.scto.codelikebastimove.feature.main.content.ProjectContent
+import com.scto.codelikebastimove.feature.soraeditor.screen.SoraEditorScreen
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 import com.scto.codelikebastimove.feature.themebuilder.ThemeBuilderContent
 import com.scto.codelikebastimove.feature.soraeditor.viewmodel.SoraEditorViewModel
 import com.scto.codelikebastimove.feature.treeview.FileTreeDrawer
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,6 +73,7 @@ fun IDEWorkspaceScreen(
 ) {
   val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
   val scope = rememberCoroutineScope()
+  val editorUiState by editorViewModel.uiState.collectAsState()
 
   ModalNavigationDrawer(
     drawerState = drawerState,
@@ -130,7 +133,14 @@ fun IDEWorkspaceScreen(
             label = "content_transition",
           ) { contentType ->
             when (contentType) {
-              MainContentType.EDITOR -> EditorContent(editorViewModel = editorViewModel)
+              MainContentType.EDITOR -> SoraEditorScreen(
+                tabs = editorUiState.tabs,
+                activeTabId = editorUiState.activeTabId,
+                onTabSelect = { tabId -> editorViewModel.selectTab(tabId) },
+                onTabClose = { tabId -> editorViewModel.closeTab(tabId) },
+                onTextChange = { tabId, text -> editorViewModel.updateContent(tabId, text) },
+                onSave = { tabId -> editorViewModel.saveFile(tabId) },
+              )
               MainContentType.PROJECT -> ProjectContent(
                 viewModel = viewModel,
                 editorViewModel = editorViewModel,

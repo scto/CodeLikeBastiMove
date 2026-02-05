@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.feature.home.screens
+package com.scto.codelikebastimove.feature.main.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -50,7 +50,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.scto.codelikebastimove.core.resources.R
 import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
 

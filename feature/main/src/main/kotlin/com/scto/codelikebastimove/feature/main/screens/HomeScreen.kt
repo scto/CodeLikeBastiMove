@@ -1,4 +1,4 @@
-package com.scto.codelikebastimove.feature.home.screens
+package com.scto.codelikebastimove.feature.main.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -40,11 +40,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.scto.codelikebastimove.core.resources.R
-import com.scto.codelikebastimove.feature.home.navigation.HomeDestination
+import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 
 @Composable
 fun HomeScreen(
-    onNavigate: (HomeDestination) -> Unit,
+    onNavigate: (MainDestination) -> Unit,
     onCreateProject: () -> Unit,
     onImportProject: () -> Unit,
     onOpenProject: () -> Unit,
@@ -130,7 +130,7 @@ fun HomeScreen(
         HomeActionButton(
             icon = Icons.Default.Terminal,
             title = stringResource(R.string.console),
-            onClick = { onNavigate(HomeDestination.Console) },
+            onClick = { onNavigate(MainDestination.Console) },
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -138,7 +138,7 @@ fun HomeScreen(
         HomeActionButton(
             icon = Icons.Default.Settings,
             title = stringResource(R.string.settings),
-            onClick = { onNavigate(HomeDestination.Settings) },
+            onClick = { onNavigate(MainDestination.Settings) },
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -146,7 +146,7 @@ fun HomeScreen(
         HomeActionButton(
             icon = Icons.Default.Tune,
             title = stringResource(R.string.ide_configurations),
-            onClick = { onNavigate(HomeDestination.Settings) },
+            onClick = { onNavigate(MainDestination.Settings) },
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -154,7 +154,7 @@ fun HomeScreen(
         HomeActionButton(
             icon = Icons.Default.Book,
             title = stringResource(R.string.documentation),
-            onClick = { onNavigate(HomeDestination.Documentation) },
+            onClick = { onNavigate(MainDestination.Documentation) },
         )
 
         Spacer(modifier = Modifier.height(32.dp))
