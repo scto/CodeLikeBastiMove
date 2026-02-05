@@ -122,7 +122,7 @@ data class GradleNotation(
                 ":data:remote",
                 ":domain:model",
                 ":domain:usecase",
-                ":feature:home",
+                ":feature:main",
                 ":feature:auth",
                 ":feature:settings",
                 ":feature:profile",

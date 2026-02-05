@@ -207,7 +207,7 @@ class SubModuleMakerViewModel : ViewModel() {
             ).filter { it.startsWith(current) && it != current })
         } else if (current.startsWith(":feature:") && !current.substringAfter(":feature:").contains(":")) {
             suggestions.addAll(listOf(
-                ":feature:home",
+                ":feature:main",
                 ":feature:auth",
                 ":feature:settings",
                 ":feature:profile",

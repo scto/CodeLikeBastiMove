@@ -119,7 +119,7 @@ graph LR
   :core:navigation --> :core:ui
   :core:navigation --> :core:di
   :core:navigation --> :core:domain
-  :core:navigation --> :feature:home
+  :core:navigation --> :feature:main
   :core:navigation --> :feature:onboarding
   :core:navigation --> :feature:subscription
   :core:navigation --> :feature:chat_list
