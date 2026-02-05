@@ -132,20 +132,7 @@ private fun EditorPane(
     modifier: Modifier = Modifier,
     fileName: String = "",
 ) {
-    val languageType = when {
-        fileName.endsWith(".kt") || fileName.endsWith(".kts") -> EditorLanguageType.KOTLIN
-        fileName.endsWith(".java") -> EditorLanguageType.JAVA
-        fileName.endsWith(".xml") -> EditorLanguageType.XML
-        fileName.endsWith(".json") -> EditorLanguageType.JSON
-        fileName.endsWith(".gradle") -> EditorLanguageType.KOTLIN
-        fileName.endsWith(".md") -> EditorLanguageType.MARKDOWN
-        fileName.endsWith(".py") -> EditorLanguageType.PYTHON
-        fileName.endsWith(".js") || fileName.endsWith(".ts") -> EditorLanguageType.JAVASCRIPT
-        fileName.endsWith(".html") || fileName.endsWith(".htm") -> EditorLanguageType.HTML
-        fileName.endsWith(".css") -> EditorLanguageType.CSS
-        fileName.endsWith(".c") || fileName.endsWith(".cpp") || fileName.endsWith(".h") -> EditorLanguageType.CPP
-        else -> EditorLanguageType.PLAIN_TEXT
-    }
+    val languageType = EditorLanguageType.fromFileName(fileName)
 
     SoraEditor(
         text = content,
