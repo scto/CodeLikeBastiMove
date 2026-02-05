@@ -50,6 +50,7 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 - **Convention Plugins:** Custom Gradle plugins centralize build logic and dependencies.
 - **Centralized Resources:** `core/resources` module for shared resources, including all UI strings.
 - **Centralized Logging:** `core/logger` module with a facade wrapping `android.util.Log` and runtime-toggleable logging.
+- **Shared Utilities (`core/utils`):** Common utility module containing FileUtils (file operations: create, delete, rename, copy, move with Result-based error handling) and ProjectUtils (project detection, package name detection, repo name extraction, validation utilities). Used by HomeViewModel and MainViewModel to eliminate code duplication.
 
 ## External Dependencies
 - **Proto DataStore:** User preferences and settings.
