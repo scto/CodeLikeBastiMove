@@ -37,20 +37,31 @@ fun SoraEditor(
       isFocusable = true
       isFocusableInTouchMode = true
       isClickable = true
+      applyTheme(theme)
+      applyConfig(config)
+      setLanguage(languageType)
+      setText(text)
     }
   }
 
   LaunchedEffect(text) {
     if (editorView.getText() != text) {
       editorView.setText(text)
+      editorView.applyTheme(theme)
     }
   }
 
-  LaunchedEffect(languageType) { editorView.setLanguage(languageType) }
+  LaunchedEffect(languageType) { 
+    editorView.setLanguage(languageType) 
+  }
 
-  LaunchedEffect(config) { editorView.applyConfig(config) }
+  LaunchedEffect(config) { 
+    editorView.applyConfig(config) 
+  }
 
-  LaunchedEffect(theme) { editorView.applyTheme(theme) }
+  LaunchedEffect(theme) { 
+    editorView.applyTheme(theme) 
+  }
 
   LaunchedEffect(Unit) {
     editorView.setOnTextChangeListener { newText -> onTextChange(newText) }

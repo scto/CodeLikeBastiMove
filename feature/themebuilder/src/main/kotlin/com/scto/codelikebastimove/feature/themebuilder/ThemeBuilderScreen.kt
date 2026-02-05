@@ -11,6 +11,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -35,6 +36,8 @@ import com.scto.codelikebastimove.feature.themebuilder.components.ThemeHeader
 import com.scto.codelikebastimove.feature.themebuilder.components.ThemeNameCard
 import com.scto.codelikebastimove.feature.themebuilder.components.TonalPaletteSection
 import com.scto.codelikebastimove.feature.themebuilder.export.exportTheme
+import com.scto.codelikebastimove.feature.themebuilder.generator.MaterialColorGenerator
+import com.scto.codelikebastimove.feature.themebuilder.generator.SchemeStyle
 import com.scto.codelikebastimove.feature.themebuilder.model.ThemeColors
 import com.scto.codelikebastimove.feature.themebuilder.util.schemeOptions
 
@@ -57,8 +60,53 @@ fun ThemeBuilderContent(modifier: Modifier = Modifier) {
 
   var dynamicColorEnabled by remember { mutableStateOf(false) }
   var selectedScheme by remember { mutableStateOf("Tonal Spot") }
+  val colorGenerator = remember { MaterialColorGenerator() }
+  var seedColor by remember { mutableStateOf(themeColors.primary) }
 
   var showExportMenu by remember { mutableStateOf(false) }
+
+  fun regenerateColors(seed: Color, scheme: String) {
+    val schemeStyle = when (scheme) {
+      "Tonal Spot" -> SchemeStyle.TONAL_SPOT
+      "Vibrant" -> SchemeStyle.VIBRANT
+      "Expressive" -> SchemeStyle.EXPRESSIVE
+      "Fidelity" -> SchemeStyle.FIDELITY
+      "Monochromatic", "Monochrome" -> SchemeStyle.MONOCHROME
+      "Neutral" -> SchemeStyle.NEUTRAL
+      "Content" -> SchemeStyle.CONTENT
+      "Rainbow" -> SchemeStyle.EXPRESSIVE
+      "Fruit Salad" -> SchemeStyle.VIBRANT
+      else -> SchemeStyle.TONAL_SPOT
+    }
+    val generated = colorGenerator.generateTheme(seed, schemeStyle)
+    val lightScheme = generated.lightScheme
+    themeColors = ThemeColors(
+      primary = lightScheme.primary,
+      secondary = lightScheme.secondary,
+      tertiary = lightScheme.tertiary,
+      error = lightScheme.error,
+      primaryContainer = lightScheme.primaryContainer,
+      secondaryContainer = lightScheme.secondaryContainer,
+      tertiaryContainer = lightScheme.tertiaryContainer,
+      errorContainer = lightScheme.errorContainer,
+      surface = lightScheme.surface,
+      surfaceVariant = lightScheme.surfaceVariant,
+      background = lightScheme.background,
+      outline = lightScheme.outline,
+    )
+  }
+
+  LaunchedEffect(selectedScheme) {
+    if (!dynamicColorEnabled) {
+      regenerateColors(seedColor, selectedScheme)
+    }
+  }
+
+  LaunchedEffect(dynamicColorEnabled) {
+    if (!dynamicColorEnabled) {
+      regenerateColors(seedColor, selectedScheme)
+    }
+  }
 
   Column(modifier = modifier.fillMaxSize()) {
     ThemeHeader(themeName = themeName, onThemeNameChange = { themeName = it })
@@ -146,10 +194,13 @@ fun ThemeBuilderContent(modifier: Modifier = Modifier) {
           item {
             SeedColorRow(
               themeColors = themeColors,
-              onColorSelected = { color -> themeColors = themeColors.copy(primary = color) },
+              onColorSelected = { color -> 
+                seedColor = color
+                regenerateColors(color, selectedScheme)
+              },
               onPickColor = {
                 editingColorName = "Primary"
-                editingColor = themeColors.primary
+                editingColor = seedColor
                 showColorPicker = true
               },
             )
@@ -187,18 +238,23 @@ fun ThemeBuilderContent(modifier: Modifier = Modifier) {
       initialColor = editingColor,
       onDismiss = { showColorPicker = false },
       onColorSelected = { newColor ->
-        themeColors =
-          when (editingColorName) {
-            "Primary" -> themeColors.copy(primary = newColor)
-            "Secondary" -> themeColors.copy(secondary = newColor)
-            "Tertiary" -> themeColors.copy(tertiary = newColor)
-            "Error" -> themeColors.copy(error = newColor)
-            "Primary Container" -> themeColors.copy(primaryContainer = newColor)
-            "Secondary Container" -> themeColors.copy(secondaryContainer = newColor)
-            "Tertiary Container" -> themeColors.copy(tertiaryContainer = newColor)
-            "Surface" -> themeColors.copy(surface = newColor)
-            else -> themeColors
-          }
+        if (editingColorName == "Primary" && !dynamicColorEnabled) {
+          seedColor = newColor
+          regenerateColors(newColor, selectedScheme)
+        } else {
+          themeColors =
+            when (editingColorName) {
+              "Primary" -> themeColors.copy(primary = newColor)
+              "Secondary" -> themeColors.copy(secondary = newColor)
+              "Tertiary" -> themeColors.copy(tertiary = newColor)
+              "Error" -> themeColors.copy(error = newColor)
+              "Primary Container" -> themeColors.copy(primaryContainer = newColor)
+              "Secondary Container" -> themeColors.copy(secondaryContainer = newColor)
+              "Tertiary Container" -> themeColors.copy(tertiaryContainer = newColor)
+              "Surface" -> themeColors.copy(surface = newColor)
+              else -> themeColors
+            }
+        }
         showColorPicker = false
       },
     )

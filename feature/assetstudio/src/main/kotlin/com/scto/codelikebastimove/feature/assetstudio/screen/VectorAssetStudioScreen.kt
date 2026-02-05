@@ -111,10 +111,18 @@ import com.scto.codelikebastimove.feature.assetstudio.model.ExportConfig
 import com.scto.codelikebastimove.feature.assetstudio.model.ExportFormat
 import com.scto.codelikebastimove.feature.assetstudio.model.VectorAsset
 
+enum class AssetType(val title: String, val description: String) {
+  VECTOR("Vector Asset", "Create vector drawable from SVG or icon"),
+  LAUNCHER("Launcher Icon", "App icon for all densities"),
+  NOTIFICATION("Notification Icon", "Notification icons for status bar"),
+  ACTION_BAR("Action Bar Icon", "Action bar and toolbar icons")
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VectorAssetStudioScreen(
-  onBackClick: () -> Unit,
+  onBack: () -> Unit = {},
+  assetType: AssetType = AssetType.VECTOR,
   modifier: Modifier = Modifier,
   viewModel: VectorAssetStudioViewModel = viewModel(),
 ) {
@@ -137,9 +145,9 @@ fun VectorAssetStudioScreen(
   Scaffold(
     topBar = {
       AdaptiveTopAppBar(
-        title = stringResource(R.string.vector_asset_studio),
+        title = assetType.title,
         navigationIcon = {
-          IconButton(onClick = onBackClick) { Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.close)) }
+          IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.close)) }
         },
         actions = {
           if (uiState.selectedIcons.isNotEmpty()) {

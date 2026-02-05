@@ -40,6 +40,10 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,9 +53,60 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.scto.codelikebastimove.feature.assetstudio.screen.AssetType
+import com.scto.codelikebastimove.feature.assetstudio.screen.VectorAssetStudioScreen
+
+enum class AssetStudioView {
+    HOME,
+    VECTOR_ASSET,
+    LAUNCHER_ICON,
+    NOTIFICATION_ICON,
+    ACTION_BAR_ICON
+}
 
 @Composable
 fun AssetsStudioContent(modifier: Modifier = Modifier) {
+    var currentView by remember { mutableStateOf(AssetStudioView.HOME) }
+    var currentAssetType by remember { mutableStateOf(AssetType.VECTOR) }
+
+    when (currentView) {
+        AssetStudioView.HOME -> AssetsStudioHomeContent(
+            modifier = modifier,
+            onNavigateToVectorAsset = { 
+                currentAssetType = AssetType.VECTOR
+                currentView = AssetStudioView.VECTOR_ASSET 
+            },
+            onNavigateToLauncherIcon = { 
+                currentAssetType = AssetType.LAUNCHER
+                currentView = AssetStudioView.LAUNCHER_ICON 
+            },
+            onNavigateToNotificationIcon = { 
+                currentAssetType = AssetType.NOTIFICATION
+                currentView = AssetStudioView.NOTIFICATION_ICON 
+            },
+            onNavigateToActionBarIcon = { 
+                currentAssetType = AssetType.ACTION_BAR
+                currentView = AssetStudioView.ACTION_BAR_ICON 
+            },
+        )
+        AssetStudioView.VECTOR_ASSET,
+        AssetStudioView.LAUNCHER_ICON,
+        AssetStudioView.NOTIFICATION_ICON,
+        AssetStudioView.ACTION_BAR_ICON -> VectorAssetStudioScreen(
+            assetType = currentAssetType,
+            onBack = { currentView = AssetStudioView.HOME },
+        )
+    }
+}
+
+@Composable
+private fun AssetsStudioHomeContent(
+    modifier: Modifier = Modifier,
+    onNavigateToVectorAsset: () -> Unit = {},
+    onNavigateToLauncherIcon: () -> Unit = {},
+    onNavigateToNotificationIcon: () -> Unit = {},
+    onNavigateToActionBarIcon: () -> Unit = {},
+) {
     Column(modifier = modifier.fillMaxSize()) {
         AssetsHeader()
 
@@ -63,9 +118,13 @@ fun AssetsStudioContent(modifier: Modifier = Modifier) {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            AssetTypesSection()
+            AssetTypesSection(
+                onNavigateToLauncherIcon = onNavigateToLauncherIcon,
+                onNavigateToNotificationIcon = onNavigateToNotificationIcon,
+                onNavigateToActionBarIcon = onNavigateToActionBarIcon,
+            )
 
-            AIGeneratorSection()
+            AIGeneratorSection(onNavigateToVectorAsset = onNavigateToVectorAsset)
 
             RecentAssetsSection()
         }
@@ -101,7 +160,12 @@ private fun AssetsHeader(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun AssetTypesSection(modifier: Modifier = Modifier) {
+private fun AssetTypesSection(
+    modifier: Modifier = Modifier,
+    onNavigateToLauncherIcon: () -> Unit = {},
+    onNavigateToNotificationIcon: () -> Unit = {},
+    onNavigateToActionBarIcon: () -> Unit = {},
+) {
     Column(modifier = modifier) {
         Text(
             text = "Create New Asset",
@@ -119,7 +183,7 @@ private fun AssetTypesSection(modifier: Modifier = Modifier) {
                 icon = Icons.Default.Apps,
                 title = "Launcher Icon",
                 description = "App icon for all densities",
-                onClick = {},
+                onClick = onNavigateToLauncherIcon,
                 modifier = Modifier.weight(1f),
             )
 
@@ -127,7 +191,7 @@ private fun AssetTypesSection(modifier: Modifier = Modifier) {
                 icon = Icons.Default.Notifications,
                 title = "Notification",
                 description = "Notification icons",
-                onClick = {},
+                onClick = onNavigateToNotificationIcon,
                 modifier = Modifier.weight(1f),
             )
 
@@ -135,7 +199,7 @@ private fun AssetTypesSection(modifier: Modifier = Modifier) {
                 icon = Icons.Default.Settings,
                 title = "Action Bar",
                 description = "Action bar icons",
-                onClick = {},
+                onClick = onNavigateToActionBarIcon,
                 modifier = Modifier.weight(1f),
             )
         }
@@ -180,7 +244,10 @@ private fun AssetTypeCard(
 }
 
 @Composable
-private fun AIGeneratorSection(modifier: Modifier = Modifier) {
+private fun AIGeneratorSection(
+    modifier: Modifier = Modifier,
+    onNavigateToVectorAsset: () -> Unit = {},
+) {
     ElevatedCard(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.elevatedCardColors(
@@ -214,7 +281,7 @@ private fun AIGeneratorSection(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(12.dp))
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = {}) {
+                Button(onClick = onNavigateToVectorAsset) {
                     Icon(
                         imageVector = Icons.Outlined.SmartToy,
                         contentDescription = null,
@@ -224,7 +291,7 @@ private fun AIGeneratorSection(modifier: Modifier = Modifier) {
                     Text("Generate with AI")
                 }
 
-                FilledTonalButton(onClick = {}) {
+                FilledTonalButton(onClick = onNavigateToVectorAsset) {
                     Icon(
                         imageVector = Icons.Outlined.Palette,
                         contentDescription = null,
