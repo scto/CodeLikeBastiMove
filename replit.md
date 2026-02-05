@@ -21,7 +21,7 @@ The application is an Android mobile application leveraging Jetpack Compose for 
 - **Build System:** Gradle with Kotlin DSL and custom Convention Plugins, using Koin DI.
 - **SDKs:** Compile SDK 36, Target SDK 35, Minimum SDK 24.
 - **Architecture:** MVVM with ViewModel and StateFlow, emphasizing a multi-module design.
-- **State Management:** MainViewModel manages core application state.
+- **State Management:** MainViewModel manages core application state (navigation, project management). SoraEditorViewModel manages editor state (open files, tabs, content editing).
 - **Data Persistence:** Proto DataStore for user preferences and EncryptedSharedPreferences for secure data.
 - **Project Management:** Provides 5 distinct project templates, a creation wizard, project list management, Git repository cloning, and import existing Android projects (with copy-to-workspace or link-in-place options).
 - **Code Editor:** Advanced Sora Editor integration with TextMate and TreeSitter syntax highlighting, supporting various languages. Features tabbed editing, undo/redo, find/replace, and multiple color themes. Configurable editor settings for font, tabs, line numbers, word wrap, etc.
