@@ -83,6 +83,7 @@ fun FileTreeDrawer(
   onFileClick: (FileTreeNode) -> Unit,
   onFileOperationComplete: () -> Unit,
   onOpenTerminalSheet: () -> Unit = {},
+  onNavigateToSettings: () -> Unit = {},
   fileSystemVersion: Long = 0L,
   modifier: Modifier = Modifier,
 ) {
@@ -157,7 +158,7 @@ fun FileTreeDrawer(
           LayoutTabContent()
         }
         DrawerTab.SETTINGS -> {
-          SettingsTabContent()
+          SettingsTabContent(onNavigateToSettings = onNavigateToSettings)
         }
         DrawerTab.TERMINAL -> {
           TerminalTabContent(onOpenTerminalSheet = onOpenTerminalSheet)
@@ -634,7 +635,10 @@ private fun LayoutTabContent(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun SettingsTabContent(modifier: Modifier = Modifier) {
+private fun SettingsTabContent(
+  onNavigateToSettings: () -> Unit,
+  modifier: Modifier = Modifier,
+) {
   Column(
     modifier = modifier.fillMaxSize().padding(16.dp),
     verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -646,6 +650,7 @@ private fun SettingsTabContent(modifier: Modifier = Modifier) {
     )
 
     Card(
+      onClick = onNavigateToSettings,
       colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
       modifier = Modifier.fillMaxWidth(),
     ) {

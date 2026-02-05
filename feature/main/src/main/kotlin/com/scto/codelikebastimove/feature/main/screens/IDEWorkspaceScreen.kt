@@ -77,6 +77,10 @@ fun IDEWorkspaceScreen(
             onBottomSheetContentChanged(BottomSheetContentType.TERMINAL)
             scope.launch { drawerState.close() }
           },
+          onNavigateToSettings = {
+            onNavigate(MainDestination.Settings)
+            scope.launch { drawerState.close() }
+          },
         )
       }
     },
