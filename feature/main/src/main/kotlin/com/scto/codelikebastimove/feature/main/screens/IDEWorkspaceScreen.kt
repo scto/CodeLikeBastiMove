@@ -106,6 +106,9 @@ fun IDEWorkspaceScreen(
           onTabClose = { tabId -> editorViewModel.closeTab(tabId) },
           onTextChange = { tabId, text -> editorViewModel.updateContent(tabId, text) },
           onSave = { tabId -> editorViewModel.saveFile(tabId) },
+          onEditorReady = { onUndo, onRedo ->
+            editorViewModel.setUndoRedoCallbacks(onUndo, onRedo)
+          },
           modifier = Modifier.weight(1f),
         )
 

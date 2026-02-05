@@ -75,6 +75,7 @@ fun SoraEditorScreen(
   theme: EditorTheme = EditorThemes.Dracula,
   onConfigChange: (EditorConfig) -> Unit = {},
   onThemeChange: (EditorTheme) -> Unit = {},
+  onEditorReady: (onUndo: () -> Unit, onRedo: () -> Unit) -> Unit = { _, _ -> },
 ) {
   var showMenu by remember { mutableStateOf(false) }
   var cursorLine by remember { mutableIntStateOf(0) }
@@ -105,7 +106,12 @@ fun SoraEditorScreen(
             cursorLine = line
             cursorColumn = column
           },
-          editorViewRef = { view -> editorViewRef = view },
+          editorViewRef = { view ->
+            editorViewRef = view
+            if (view != null) {
+              onEditorReady({ view.undo() }, { view.redo() })
+            }
+          },
           modifier = Modifier.fillMaxSize(),
         )
       } else {
