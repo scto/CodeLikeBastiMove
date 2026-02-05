@@ -47,6 +47,7 @@ include(":core:firebase:analytics")
 include(":core:firebase:firestore")
 include(":core:project-manager")
 include(":core:updater")
+include(":core:utils")
 
 //include(":feature")
 include(":feature:assetstudio")

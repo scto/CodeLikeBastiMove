@@ -13,6 +13,7 @@ import com.scto.codelikebastimove.core.templates.api.ProjectConfig
 import com.scto.codelikebastimove.core.templates.api.ProjectLanguage
 import com.scto.codelikebastimove.core.templates.api.ProjectManager
 import com.scto.codelikebastimove.core.templates.impl.ProjectManagerImpl
+import com.scto.codelikebastimove.core.utils.ProjectUtils
 import com.scto.codelikebastimove.feature.home.navigation.HomeDestination
 import com.scto.codelikebastimove.feature.submodulemaker.generator.ModuleGenerator
 import com.scto.codelikebastimove.feature.submodulemaker.model.ModuleConfig
@@ -125,7 +126,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         val existingPaths = existingProjects.map { it.path }.toSet()
 
         val projectsOnDisk = dir.listFiles()
-            ?.filter { it.isDirectory && isProjectDirectory(it) }
+            ?.filter { it.isDirectory && ProjectUtils.isProjectDirectory(it) }
             ?: emptyList()
 
         for (projectDir in projectsOnDisk) {
@@ -134,7 +135,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 val storedProject = StoredProject(
                     name = projectDir.name,
                     path = projectDir.absolutePath,
-                    packageName = detectPackageName(projectDir),
+                    packageName = ProjectUtils.detectPackageName(projectDir),
                     templateType = ProjectTemplateType.EMPTY_COMPOSE,
                     createdAt = projectDir.lastModified(),
                     lastOpenedAt = projectDir.lastModified(),
@@ -168,7 +169,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     name = file.name,
                     path = file.absolutePath,
                     isDirectory = file.isDirectory,
-                    isProject = isProjectDirectory(file),
+                    isProject = ProjectUtils.isProjectDirectory(file),
                     lastModified = file.lastModified(),
                     size = if (file.isFile) file.length() else 0,
                 )
@@ -414,7 +415,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 return@launch
             }
 
-            val repoName = extractRepoName(url)
+            val repoName = ProjectUtils.extractRepoName(url)
             val targetDir = File(rootDir, repoName)
 
             if (targetDir.exists()) {
@@ -436,16 +437,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun getCloneTargetDirectory(url: String): String {
         val rootDir = _uiState.value.rootDirectory
         if (rootDir.isBlank()) return ""
-        val repoName = extractRepoName(url)
+        val repoName = ProjectUtils.extractRepoName(url)
         return File(rootDir, repoName).absolutePath
-    }
-
-    private fun extractRepoName(url: String): String {
-        return url
-            .removeSuffix(".git")
-            .removeSuffix("/")
-            .substringAfterLast("/")
-            .ifBlank { "cloned_repo" }
     }
 
     fun importProject(sourcePath: String, copyToWorkspace: Boolean) {
@@ -465,7 +458,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 return@launch
             }
 
-            if (!isProjectDirectory(sourceDir)) {
+            if (!ProjectUtils.isProjectDirectory(sourceDir)) {
                 _uiState.update {
                     it.copy(
                         isLoading = false,
@@ -514,7 +507,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 val storedProject = StoredProject(
                     name = projectName,
                     path = targetPath,
-                    packageName = detectPackageName(File(targetPath)),
+                    packageName = ProjectUtils.detectPackageName(File(targetPath)),
                     templateType = ProjectTemplateType.EMPTY_COMPOSE,
                     createdAt = System.currentTimeMillis(),
                     lastOpenedAt = System.currentTimeMillis(),
@@ -548,26 +541,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private fun detectPackageName(projectDir: File): String {
-        val manifestFile = File(projectDir, "app/src/main/AndroidManifest.xml")
-        if (manifestFile.exists()) {
-            try {
-                val content = manifestFile.readText()
-                val packageRegex = """package\s*=\s*["']([^"']+)["']""".toRegex()
-                val match = packageRegex.find(content)
-                if (match != null) {
-                    return match.groupValues[1]
-                }
-            } catch (e: Exception) {
-                CLBMLogger.e(TAG, "Failed to detect package name", e)
-            }
-        }
-        return "com.example.${projectDir.name.lowercase().replace("-", "").replace(" ", "")}"
-    }
-
     fun validateProjectPath(path: String): Boolean {
         val dir = File(path)
-        return dir.exists() && dir.isDirectory && isProjectDirectory(dir)
+        return dir.exists() && dir.isDirectory && ProjectUtils.isProjectDirectory(dir)
     }
 
     fun createFolder(folderName: String) {
@@ -591,13 +567,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun isProjectDirectory(file: File): Boolean {
-        if (!file.isDirectory) return false
-        return File(file, "build.gradle.kts").exists() ||
-            File(file, "build.gradle").exists() ||
-            File(file, "settings.gradle.kts").exists() ||
-            File(file, "settings.gradle").exists()
-    }
+    fun isProjectDirectory(file: File): Boolean = ProjectUtils.isProjectDirectory(file)
 
     fun clearError() {
         _uiState.update { it.copy(errorMessage = null) }
