@@ -83,72 +83,17 @@ fun SoraEditorScreen(
 
   val activeTab = tabs.find { it.id == activeTabId }
 
-  Scaffold(
-    modifier = modifier,
-    topBar = {
-      Column {
-        TopAppBar(
-          title = {
-            Text(
-              text = activeTab?.file?.name ?: "Editor",
-              maxLines = 1,
-              overflow = TextOverflow.Ellipsis,
-            )
-          },
-          actions = {
-            IconButton(onClick = { editorViewRef?.undo() }) {
-              Icon(Icons.AutoMirrored.Filled.Undo, contentDescription = "Undo")
-            }
-            IconButton(onClick = { editorViewRef?.redo() }) {
-              Icon(Icons.AutoMirrored.Filled.Redo, contentDescription = "Redo")
-            }
-            IconButton(onClick = { activeTabId?.let { onSave(it) } }) {
-              Icon(Icons.Default.Save, contentDescription = "Save")
-            }
-            Box {
-              IconButton(onClick = { showMenu = true }) {
-                Icon(Icons.Default.MoreVert, contentDescription = "More")
-              }
-              EditorMenu(
-                expanded = showMenu,
-                onDismiss = { showMenu = false },
-                onCopy = { editorViewRef?.copy() },
-                onCut = { editorViewRef?.cut() },
-                onPaste = { editorViewRef?.paste() },
-                onSelectAll = { editorViewRef?.selectAll() },
-                onFormat = { editorViewRef?.formatCode() },
-                onFind = {},
-                onSettings = {},
-              )
-            }
-          },
-          colors =
-            TopAppBarDefaults.topAppBarColors(
-              containerColor = MaterialTheme.colorScheme.surfaceContainer
-            ),
-        )
-
-        if (tabs.isNotEmpty()) {
-          EditorTabBar(
-            tabs = tabs,
-            activeTabId = activeTabId,
-            onTabSelect = onTabSelect,
-            onTabClose = onTabClose,
-          )
-        }
-      }
-    },
-    bottomBar = {
-      EditorStatusBar(
-        languageType = activeTab?.file?.languageType ?: EditorLanguageType.PLAIN_TEXT,
-        cursorLine = cursorLine,
-        cursorColumn = cursorColumn,
-        isModified = activeTab?.file?.isModified ?: false,
-        encoding = "UTF-8",
+  Column(modifier = modifier.fillMaxSize()) {
+    if (tabs.isNotEmpty()) {
+      EditorTabBar(
+        tabs = tabs,
+        activeTabId = activeTabId,
+        onTabSelect = onTabSelect,
+        onTabClose = onTabClose,
       )
-    },
-  ) { paddingValues ->
-    Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
+    }
+
+    Box(modifier = Modifier.weight(1f)) {
       if (activeTab != null) {
         SoraEditor(
           text = activeTab.file.content,
@@ -186,7 +131,7 @@ private fun EditorTabBar(
       modifier = Modifier
         .fillMaxWidth()
         .horizontalScroll(rememberScrollState())
-        .padding(horizontal = 4.dp, vertical = 4.dp),
+        .padding(horizontal = 2.dp, vertical = 2.dp),
       horizontalArrangement = Arrangement.Start,
     ) {
       tabs.forEach { tab ->
@@ -196,7 +141,7 @@ private fun EditorTabBar(
           onSelect = { onTabSelect(tab.id) },
           onClose = { onTabClose(tab.id) },
         )
-        Spacer(modifier = Modifier.width(2.dp))
+        Spacer(modifier = Modifier.width(1.dp))
       }
     }
   }
@@ -217,33 +162,33 @@ private fun EditorTabItem(
     } else {
       MaterialTheme.colorScheme.surfaceContainer
     },
-    shape = RoundedCornerShape(6.dp),
+    shape = RoundedCornerShape(4.dp),
     modifier = modifier,
   ) {
     Row(
-      modifier = Modifier.padding(start = 10.dp, end = 6.dp, top = 6.dp, bottom = 6.dp),
+      modifier = Modifier.padding(start = 6.dp, end = 4.dp, top = 4.dp, bottom = 4.dp),
       verticalAlignment = Alignment.CenterVertically,
     ) {
       Icon(
         imageVector = Icons.Default.Code,
         contentDescription = null,
-        modifier = Modifier.size(14.dp),
+        modifier = Modifier.size(10.dp),
         tint = if (isActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
       )
-      Spacer(modifier = Modifier.width(6.dp))
+      Spacer(modifier = Modifier.width(4.dp))
       Text(
         text = if (tab.file.isModified) "${tab.file.name}*" else tab.file.name,
-        style = MaterialTheme.typography.bodySmall,
+        style = MaterialTheme.typography.labelSmall,
         color = if (isActive) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
       )
-      Spacer(modifier = Modifier.width(6.dp))
-      IconButton(onClick = onClose, modifier = Modifier.size(18.dp)) {
+      Spacer(modifier = Modifier.width(4.dp))
+      IconButton(onClick = onClose, modifier = Modifier.size(14.dp)) {
         Icon(
           imageVector = Icons.Default.Close,
           contentDescription = "Close tab",
-          modifier = Modifier.size(12.dp),
+          modifier = Modifier.size(10.dp),
           tint = if (isActive) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
         )
       }

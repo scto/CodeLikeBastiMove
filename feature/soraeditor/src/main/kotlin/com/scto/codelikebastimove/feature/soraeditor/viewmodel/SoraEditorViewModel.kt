@@ -292,6 +292,22 @@ class SoraEditorViewModel : ViewModel() {
   fun getUnsavedTabs(): List<EditorTab> {
     return _uiState.value.tabs.filter { it.file.isModified }
   }
+
+  private var undoCallback: (() -> Unit)? = null
+  private var redoCallback: (() -> Unit)? = null
+
+  fun setUndoRedoCallbacks(onUndo: () -> Unit, onRedo: () -> Unit) {
+    undoCallback = onUndo
+    redoCallback = onRedo
+  }
+
+  fun undo() {
+    undoCallback?.invoke()
+  }
+
+  fun redo() {
+    redoCallback?.invoke()
+  }
 }
 
 data class SoraEditorUiState(
