@@ -61,8 +61,8 @@ import com.scto.codelikebastimove.feature.main.screens.ImportProjectScreen
 import com.scto.codelikebastimove.feature.main.screens.OpenProjectScreen
 import com.scto.codelikebastimove.feature.submodulemaker.BuildVariantsScreen
 import com.scto.codelikebastimove.feature.main.screens.IDEWorkspaceScreen
-import com.scto.codelikebastimove.feature.settings.EditorSettingsScreen
-import com.scto.codelikebastimove.feature.settings.IDESettingsScreen
+import com.scto.codelikebastimove.feature.settings.app.SettingsAppScreen
+import com.scto.codelikebastimove.feature.settings.editor.EditorSettingsScreen
 import com.scto.codelikebastimove.feature.submodulemaker.SubModuleMakerScreen
 
 @Composable
@@ -186,7 +186,7 @@ fun MainScreen(
       }
 
       MainDestination.Settings -> {
-        IDESettingsScreen(
+        SettingsAppScreen(
           onBackClick = { viewModel.onBackPressed() },
           onNavigateToGeneral = { viewModel.onNavigate(MainDestination.GeneralSettings) },
           onNavigateToEditorSettings = { viewModel.onNavigate(MainDestination.EditorSettings) },
@@ -200,35 +200,37 @@ fun MainScreen(
       }
 
       MainDestination.GeneralSettings -> {
-        com.scto.codelikebastimove.feature.settings.SettingsScreen()
+        com.scto.codelikebastimove.feature.settings.general.GeneralSettingsScreen(
+          onBack = { viewModel.onBackPressed() },
+        )
       }
 
       MainDestination.BuildAndRunSettings -> {
-        com.scto.codelikebastimove.feature.settings.screens.DocumentationSettingsScreen(
+        com.scto.codelikebastimove.feature.settings.general.GeneralSettingsScreen(
           onBack = { viewModel.onBackPressed() },
         )
       }
 
       MainDestination.TermuxSettings -> {
-        com.scto.codelikebastimove.feature.settings.screens.DocumentationSettingsScreen(
+        com.scto.codelikebastimove.feature.settings.general.GeneralSettingsScreen(
           onBack = { viewModel.onBackPressed() },
         )
       }
 
       MainDestination.StatisticsSettings -> {
-        com.scto.codelikebastimove.feature.settings.screens.DocumentationSettingsScreen(
+        com.scto.codelikebastimove.feature.settings.general.GeneralSettingsScreen(
           onBack = { viewModel.onBackPressed() },
         )
       }
 
       MainDestination.DeveloperOptions -> {
-        com.scto.codelikebastimove.feature.settings.screens.HelpSettingsScreen(
+        com.scto.codelikebastimove.feature.settings.debug.DebugSettingsScreen(
           onBack = { viewModel.onBackPressed() },
         )
       }
 
       MainDestination.About -> {
-        com.scto.codelikebastimove.feature.settings.screens.HelpSettingsScreen(
+        com.scto.codelikebastimove.feature.settings.about.AboutScreen(
           onBack = { viewModel.onBackPressed() },
         )
       }
