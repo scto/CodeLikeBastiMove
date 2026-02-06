@@ -143,6 +143,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
       navigationStack.add(currentDestination)
     }
     _uiState.update { it.copy(currentDestination = destination) }
+
+    if (destination == MainDestination.OpenProject) {
+      refreshDirectoryContents()
+    }
   }
 
   fun onBackPressed(): Boolean {

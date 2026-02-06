@@ -22,6 +22,7 @@ import com.scto.codelikebastimove.feature.soraeditor.model.RenderWhitespaceMode
 import com.scto.codelikebastimove.feature.soraeditor.theme.EditorThemeProvider
 import com.scto.codelikebastimove.feature.soraeditor.util.FontCache
 import io.github.rosemoe.sora.event.ContentChangeEvent
+import io.github.rosemoe.sora.langs.textmate.TextMateColorScheme
 import io.github.rosemoe.sora.event.EditorKeyEvent
 import io.github.rosemoe.sora.event.InterceptTarget
 import io.github.rosemoe.sora.event.LongPressEvent
@@ -219,6 +220,23 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
   fun setLanguage(languageType: EditorLanguageType) {
     currentLanguageType = languageType
     languageRegistry.setTheme(currentTheme)
+
+    val mode = currentConfig.highlightingMode
+    val isTextMateMode = mode == HighlightingMode.TEXTMATE ||
+      (mode == HighlightingMode.TREESITTER &&
+        !languageRegistry.getSupportedLanguages(HighlightingMode.TREESITTER).contains(languageType) &&
+        languageRegistry.getTextMateProvider().supportsLanguage(languageType))
+
+    if (isTextMateMode && codeEditor.colorScheme !is TextMateColorScheme) {
+      val textMateScheme = languageRegistry.getTextMateProvider().getColorScheme()
+      if (textMateScheme != null) {
+        themeProvider.applyColorsToScheme(textMateScheme, currentTheme)
+        codeEditor.colorScheme = textMateScheme
+      }
+    } else if (!isTextMateMode && codeEditor.colorScheme is TextMateColorScheme) {
+      themeProvider.applyTheme(codeEditor, currentTheme)
+    }
+
     val language = languageRegistry.getLanguage(languageType, currentConfig.highlightingMode)
     codeEditor.setEditorLanguage(language)
   }
@@ -390,8 +408,28 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
   fun applyTheme(theme: EditorTheme) {
     currentTheme = theme
-    themeProvider.applyTheme(codeEditor, theme)
-    setLanguage(currentLanguageType)
+    languageRegistry.setTheme(theme)
+
+    val isTextMateMode = (currentConfig.highlightingMode == HighlightingMode.TEXTMATE &&
+      languageRegistry.getTextMateProvider().supportsLanguage(currentLanguageType)) ||
+      (currentConfig.highlightingMode == HighlightingMode.TREESITTER &&
+        !languageRegistry.getSupportedLanguages(HighlightingMode.TREESITTER).contains(currentLanguageType) &&
+        languageRegistry.getTextMateProvider().supportsLanguage(currentLanguageType))
+
+    if (isTextMateMode) {
+      val textMateScheme = languageRegistry.getTextMateProvider().getColorScheme()
+      if (textMateScheme != null) {
+        themeProvider.applyColorsToScheme(textMateScheme, theme)
+        codeEditor.colorScheme = textMateScheme
+      } else {
+        themeProvider.applyTheme(codeEditor, theme)
+      }
+    } else {
+      themeProvider.applyTheme(codeEditor, theme)
+    }
+
+    val language = languageRegistry.getLanguage(currentLanguageType, currentConfig.highlightingMode)
+    codeEditor.setEditorLanguage(language)
   }
 
   fun setHighlightingMode(mode: HighlightingMode) {

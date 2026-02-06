@@ -126,9 +126,17 @@ class TextMateLanguageProvider : LanguageProvider {
     }
   }
 
+  fun ensureInitialized(context: Context) {
+    initializeIfNeeded(context)
+  }
+
   fun setTheme(isDark: Boolean) {
-    val themeRegistry = ThemeRegistry.getInstance()
-    themeRegistry.setTheme(if (isDark) "dark_modern" else "light_modern")
+    try {
+      val themeRegistry = ThemeRegistry.getInstance()
+      themeRegistry.setTheme(if (isDark) "dark_modern" else "light_modern")
+    } catch (e: Exception) {
+      e.printStackTrace()
+    }
   }
 
   fun getColorScheme(): TextMateColorScheme? {

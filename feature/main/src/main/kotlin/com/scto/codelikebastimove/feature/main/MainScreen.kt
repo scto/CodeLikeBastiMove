@@ -126,8 +126,10 @@ fun MainScreen(
       MainDestination.OpenProject -> {
         OpenProjectScreen(
           projects = uiState.projects,
+          directoryContents = uiState.directoryContents,
           onBackClick = { viewModel.onBackPressed() },
           onProjectSelected = { project -> viewModel.onOpenProject(project.path, project.name) },
+          onDirectorySelected = { dirItem -> viewModel.onOpenProject(dirItem.path, dirItem.name) },
           onProjectDelete = { project -> viewModel.deleteProject(project.path) },
           onBrowseFolder = { viewModel.onNavigate(MainDestination.ImportProject) },
         )

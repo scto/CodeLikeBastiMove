@@ -20,7 +20,11 @@ class LanguageRegistry(private val context: Context) {
 
   fun setTheme(theme: EditorTheme) {
     treeSitterProvider.setTheme(theme)
+    textMateProvider.ensureInitialized(context)
+    textMateProvider.setTheme(theme.isDark)
   }
+
+  fun getTextMateProvider(): TextMateLanguageProvider = textMateProvider
 
   fun getLanguage(languageType: EditorLanguageType, mode: HighlightingMode): Language {
     return when (mode) {

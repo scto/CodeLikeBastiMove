@@ -48,6 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.scto.codelikebastimove.core.datastore.DirectoryItem
 import com.scto.codelikebastimove.core.datastore.StoredProject
 import com.scto.codelikebastimove.core.resources.R
 import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
@@ -59,8 +60,10 @@ import java.util.Locale
 @Composable
 fun OpenProjectScreen(
     projects: List<StoredProject>,
+    directoryContents: List<DirectoryItem>,
     onBackClick: () -> Unit,
     onProjectSelected: (StoredProject) -> Unit,
+    onDirectorySelected: (DirectoryItem) -> Unit,
     onProjectDelete: (StoredProject) -> Unit,
     onBrowseFolder: () -> Unit,
     modifier: Modifier = Modifier,
@@ -69,13 +72,29 @@ fun OpenProjectScreen(
 
     val sortedProjects = remember(projects) { projects.sortedByDescending { it.lastOpenedAt } }
 
+    val storedPaths = remember(projects) { projects.map { it.path }.toSet() }
+
+    val discoveredDirectories = remember(directoryContents, storedPaths) {
+        directoryContents
+            .filter { it.isDirectory && !storedPaths.contains(it.path) }
+            .sortedByDescending { it.lastModified }
+    }
+
     val filteredProjects = if (searchQuery.isBlank()) {
         sortedProjects
     } else {
         sortedProjects.filter { it.name.contains(searchQuery, ignoreCase = true) }
     }
 
+    val filteredDirectories = if (searchQuery.isBlank()) {
+        discoveredDirectories
+    } else {
+        discoveredDirectories.filter { it.name.contains(searchQuery, ignoreCase = true) }
+    }
+
     val recentThreshold = System.currentTimeMillis() - (7 * 24 * 60 * 60 * 1000L)
+
+    val hasContent = filteredProjects.isNotEmpty() || filteredDirectories.isNotEmpty()
 
     Column(
         modifier = modifier
@@ -198,7 +217,7 @@ fun OpenProjectScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (filteredProjects.isEmpty()) {
+        if (!hasContent) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -234,13 +253,34 @@ fun OpenProjectScreen(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                items(filteredProjects) { project ->
-                    ProjectCard(
-                        project = project,
-                        isRecent = project.lastOpenedAt > recentThreshold,
-                        onClick = { onProjectSelected(project) },
-                        onDelete = { onProjectDelete(project) },
-                    )
+                if (filteredProjects.isNotEmpty()) {
+                    items(filteredProjects) { project ->
+                        ProjectCard(
+                            project = project,
+                            isRecent = project.lastOpenedAt > recentThreshold,
+                            onClick = { onProjectSelected(project) },
+                            onDelete = { onProjectDelete(project) },
+                        )
+                    }
+                }
+
+                if (filteredDirectories.isNotEmpty()) {
+                    item {
+                        Text(
+                            text = "Verzeichnisse",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                        )
+                    }
+
+                    items(filteredDirectories) { dirItem ->
+                        DirectoryCard(
+                            directoryItem = dirItem,
+                            onClick = { onDirectorySelected(dirItem) },
+                        )
+                    }
                 }
             }
         }
@@ -326,6 +366,82 @@ private fun ProjectCard(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Projekt löschen",
                     tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun DirectoryCard(
+    directoryItem: DirectoryItem,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val dateFormat = remember { SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault()) }
+
+    Card(
+        onClick = onClick,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+        ),
+        shape = RoundedCornerShape(12.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = Icons.Default.Folder,
+                contentDescription = null,
+                tint = if (directoryItem.isProject) MaterialTheme.colorScheme.tertiary
+                       else MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(40.dp),
+            )
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = directoryItem.name,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Medium,
+                    )
+
+                    if (directoryItem.isProject) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Surface(
+                            color = MaterialTheme.colorScheme.tertiary,
+                            shape = RoundedCornerShape(4.dp)
+                        ) {
+                            Text(
+                                text = "Projekt",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onTertiary,
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                            )
+                        }
+                    }
+                }
+
+                Text(
+                    text = directoryItem.path,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+
+                Text(
+                    text = "Geändert: ${dateFormat.format(Date(directoryItem.lastModified))}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
                 )
             }
         }
