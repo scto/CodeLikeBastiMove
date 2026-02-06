@@ -57,6 +57,10 @@ class UserPreferencesRepository(private val context: Context) {
   val loggingEnabled: Flow<Boolean> =
     context.userPreferencesStore.data.map { proto -> proto.loggingEnabled }
 
+  suspend fun getUserPreferencesOnce(): UserPreferences {
+    return userPreferences.first()
+  }
+
   suspend fun getLoggingEnabledOnce(): Boolean {
     return loggingEnabled.first()
   }

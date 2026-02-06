@@ -501,6 +501,7 @@ private fun EditorThemeSelectionDialog(
     "QuietLight",
     "Monokai",
     "GitHub",
+    "GitHub Dark",
     "Solarized Dark",
     "Solarized Light",
     "One Dark",

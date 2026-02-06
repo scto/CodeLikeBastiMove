@@ -433,10 +433,67 @@ object EditorThemes {
         ),
     )
 
+  val GitHubDark =
+    EditorTheme(
+      name = "GitHub Dark",
+      isDark = true,
+      backgroundColor = Color(0xFF0D1117),
+      foregroundColor = Color(0xFFC9D1D9),
+      lineNumberColor = Color(0xFF484F58),
+      lineNumberBackgroundColor = Color(0xFF0D1117),
+      currentLineColor = Color(0xFF161B22),
+      selectionColor = Color(0xFF1F6FEB),
+      cursorColor = Color(0xFFC9D1D9),
+      gutterDividerColor = Color(0xFF21262D),
+      syntaxColors =
+        SyntaxColors(
+          keyword = Color(0xFFFF7B72),
+          type = Color(0xFFFFA657),
+          string = Color(0xFFA5D6FF),
+          number = Color(0xFF79C0FF),
+          comment = Color(0xFF8B949E),
+          function = Color(0xFFD2A8FF),
+          variable = Color(0xFFFFA657),
+          operator = Color(0xFFFF7B72),
+          annotation = Color(0xFFFFA657),
+          constant = Color(0xFF79C0FF),
+          attribute = Color(0xFF79C0FF),
+          tag = Color(0xFF7EE787),
+          property = Color(0xFF79C0FF),
+          error = Color(0xFFF85149),
+          parameter = Color(0xFFC9D1D9),
+          punctuation = Color(0xFFC9D1D9),
+        ),
+    )
+
   val allThemes = listOf(
-    Darcula, QuietLight, Monokai, GitHub, SolarizedDark, SolarizedLight,
+    Darcula, QuietLight, Monokai, GitHub, GitHubDark, SolarizedDark, SolarizedLight,
     OneDarkPro, Dracula, Nord, DarkModern, LightModern, MonokaiPro,
   )
 
   fun getTheme(name: String): EditorTheme = allThemes.find { it.name == name } ?: DarkModern
+
+  private val themeCounterparts = mapOf(
+    "Darcula" to "QuietLight",
+    "QuietLight" to "Darcula",
+    "Solarized Dark" to "Solarized Light",
+    "Solarized Light" to "Solarized Dark",
+    "Dark Modern" to "Light Modern",
+    "Light Modern" to "Dark Modern",
+    "GitHub" to "GitHub Dark",
+    "GitHub Dark" to "GitHub",
+  )
+
+  private const val DEFAULT_DARK_THEME = "Darcula"
+  private const val DEFAULT_LIGHT_THEME = "QuietLight"
+
+  fun getThemeForMode(currentThemeName: String, isDark: Boolean): EditorTheme {
+    val currentTheme = getTheme(currentThemeName)
+    if (currentTheme.isDark == isDark) return currentTheme
+
+    val counterpartName = themeCounterparts[currentThemeName]
+    if (counterpartName != null) return getTheme(counterpartName)
+
+    return getTheme(if (isDark) DEFAULT_DARK_THEME else DEFAULT_LIGHT_THEME)
+  }
 }

@@ -28,6 +28,8 @@ import com.scto.codelikebastimove.core.ui.theme.AppTheme
 import com.scto.codelikebastimove.core.ui.theme.ThemeMode
 import com.scto.codelikebastimove.feature.main.MainScreen
 import com.scto.codelikebastimove.feature.onboarding.OnboardingScreen
+import com.scto.codelikebastimove.feature.soraeditor.model.EditorThemes
+import androidx.compose.foundation.isSystemInDarkTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -68,6 +70,20 @@ class MainActivity : ComponentActivity() {
           DataStoreThemeMode.DARK -> ThemeMode.DARK
           DataStoreThemeMode.FOLLOW_SYSTEM -> ThemeMode.FOLLOW_SYSTEM
         }
+
+      val isSystemDark = isSystemInDarkTheme()
+      LaunchedEffect(isSystemDark, userPreferences.themeMode) {
+        if (userPreferences.themeMode == DataStoreThemeMode.FOLLOW_SYSTEM) {
+          val editorSettings = userPreferencesRepository.getEditorSettingsOnce()
+          val currentTheme = EditorThemes.getTheme(editorSettings.editorTheme)
+          if (currentTheme.isDark != isSystemDark) {
+            val newTheme = EditorThemes.getThemeForMode(editorSettings.editorTheme, isSystemDark)
+            if (newTheme.name != editorSettings.editorTheme) {
+              userPreferencesRepository.setEditorTheme(newTheme.name)
+            }
+          }
+        }
+      }
 
       AppTheme(themeMode = themeMode, dynamicColor = userPreferences.dynamicColorsEnabled) {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
