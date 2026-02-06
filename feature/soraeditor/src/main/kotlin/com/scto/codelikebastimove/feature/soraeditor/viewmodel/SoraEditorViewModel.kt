@@ -32,6 +32,9 @@ class SoraEditorViewModel : ViewModel() {
   fun applyDatastoreSettings(datastoreSettings: DatastoreEditorSettings) {
     val config = datastoreSettings.toEditorConfig()
     updateConfig(config)
+
+    val theme = EditorThemes.getTheme(datastoreSettings.editorTheme)
+    updateTheme(theme)
   }
 
   fun openFile(filePath: String) {

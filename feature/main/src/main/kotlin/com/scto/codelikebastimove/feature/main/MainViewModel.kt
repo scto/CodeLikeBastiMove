@@ -45,6 +45,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         initialValue = null,
       )
 
+  val editorSettings = repository.userPreferences
+    .map { it.editorSettings }
+    .stateIn(
+      scope = viewModelScope,
+      started = SharingStarted.WhileSubscribed(5_000),
+      initialValue = com.scto.codelikebastimove.core.datastore.EditorSettings(),
+    )
+
   fun updateContentType(contentType: MainContentType) {
     _uiState.update { it.copy(currentContent = contentType) }
   }

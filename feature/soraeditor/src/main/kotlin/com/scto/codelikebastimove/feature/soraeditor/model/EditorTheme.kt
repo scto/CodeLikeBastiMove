@@ -171,7 +171,7 @@ object EditorThemes {
 
   val OneDarkPro =
     EditorTheme(
-      name = "One Dark Pro",
+      name = "One Dark",
       isDark = true,
       backgroundColor = Color(0xFF282C34),
       foregroundColor = Color(0xFFABB2BF),
@@ -202,7 +202,241 @@ object EditorThemes {
         ),
     )
 
-  val allThemes = listOf(DarkModern, LightModern, Dracula, MonokaiPro, OneDarkPro)
+  val Darcula =
+    EditorTheme(
+      name = "Darcula",
+      isDark = true,
+      backgroundColor = Color(0xFF2B2B2B),
+      foregroundColor = Color(0xFFA9B7C6),
+      lineNumberColor = Color(0xFF606366),
+      lineNumberBackgroundColor = Color(0xFF313335),
+      currentLineColor = Color(0xFF323232),
+      selectionColor = Color(0xFF214283),
+      cursorColor = Color(0xFFBBBBBB),
+      gutterDividerColor = Color(0xFF555758),
+      syntaxColors =
+        SyntaxColors(
+          keyword = Color(0xFFCC7832),
+          type = Color(0xFFA9B7C6),
+          string = Color(0xFF6A8759),
+          number = Color(0xFF6897BB),
+          comment = Color(0xFF808080),
+          function = Color(0xFFFFC66D),
+          variable = Color(0xFFA9B7C6),
+          operator = Color(0xFFA9B7C6),
+          annotation = Color(0xFFBBB529),
+          constant = Color(0xFF9876AA),
+          attribute = Color(0xFFBABABA),
+          tag = Color(0xFFE8BF6A),
+          property = Color(0xFF9876AA),
+          error = Color(0xFFBC3F3C),
+          parameter = Color(0xFFA9B7C6),
+          punctuation = Color(0xFFA9B7C6),
+        ),
+    )
+
+  val QuietLight =
+    EditorTheme(
+      name = "QuietLight",
+      isDark = false,
+      backgroundColor = Color(0xFFF5F5F5),
+      foregroundColor = Color(0xFF333333),
+      lineNumberColor = Color(0xFF9B9B9B),
+      lineNumberBackgroundColor = Color(0xFFEDEDED),
+      currentLineColor = Color(0xFFE4F6D4),
+      selectionColor = Color(0xFFC9D0D9),
+      cursorColor = Color(0xFF54494B),
+      gutterDividerColor = Color(0xFFD9D9D9),
+      syntaxColors =
+        SyntaxColors(
+          keyword = Color(0xFF4B83CD),
+          type = Color(0xFF7A3E9D),
+          string = Color(0xFF448C27),
+          number = Color(0xFFAB6526),
+          comment = Color(0xFFAAA9A9),
+          function = Color(0xFFAA3731),
+          variable = Color(0xFF7A3E9D),
+          operator = Color(0xFF777777),
+          annotation = Color(0xFF8190A0),
+          constant = Color(0xFFAB6526),
+          attribute = Color(0xFFAB6526),
+          tag = Color(0xFF4B83CD),
+          property = Color(0xFF7A3E9D),
+          error = Color(0xFFE05252),
+          parameter = Color(0xFF7A3E9D),
+          punctuation = Color(0xFF777777),
+        ),
+    )
+
+  val GitHub =
+    EditorTheme(
+      name = "GitHub",
+      isDark = false,
+      backgroundColor = Color(0xFFFFFFFF),
+      foregroundColor = Color(0xFF24292E),
+      lineNumberColor = Color(0xFF959DA5),
+      lineNumberBackgroundColor = Color(0xFFFAFBFC),
+      currentLineColor = Color(0xFFFFFBDD),
+      selectionColor = Color(0xFFC8E1FF),
+      cursorColor = Color(0xFF24292E),
+      gutterDividerColor = Color(0xFFE1E4E8),
+      syntaxColors =
+        SyntaxColors(
+          keyword = Color(0xFFD73A49),
+          type = Color(0xFF6F42C1),
+          string = Color(0xFF032F62),
+          number = Color(0xFF005CC5),
+          comment = Color(0xFF6A737D),
+          function = Color(0xFF6F42C1),
+          variable = Color(0xFFE36209),
+          operator = Color(0xFFD73A49),
+          annotation = Color(0xFFE36209),
+          constant = Color(0xFF005CC5),
+          attribute = Color(0xFF005CC5),
+          tag = Color(0xFF22863A),
+          property = Color(0xFF005CC5),
+          error = Color(0xFFCB2431),
+          parameter = Color(0xFF24292E),
+          punctuation = Color(0xFF24292E),
+        ),
+    )
+
+  val SolarizedDark =
+    EditorTheme(
+      name = "Solarized Dark",
+      isDark = true,
+      backgroundColor = Color(0xFF002B36),
+      foregroundColor = Color(0xFF839496),
+      lineNumberColor = Color(0xFF586E75),
+      lineNumberBackgroundColor = Color(0xFF002B36),
+      currentLineColor = Color(0xFF073642),
+      selectionColor = Color(0xFF073642),
+      cursorColor = Color(0xFFD30102),
+      gutterDividerColor = Color(0xFF073642),
+      syntaxColors =
+        SyntaxColors(
+          keyword = Color(0xFF859900),
+          type = Color(0xFFB58900),
+          string = Color(0xFF2AA198),
+          number = Color(0xFFD33682),
+          comment = Color(0xFF586E75),
+          function = Color(0xFF268BD2),
+          variable = Color(0xFF268BD2),
+          operator = Color(0xFF859900),
+          annotation = Color(0xFF93A1A1),
+          constant = Color(0xFFCB4B16),
+          attribute = Color(0xFFB58900),
+          tag = Color(0xFF268BD2),
+          property = Color(0xFF268BD2),
+          error = Color(0xFFDC322F),
+          parameter = Color(0xFF839496),
+          punctuation = Color(0xFF839496),
+        ),
+    )
+
+  val SolarizedLight =
+    EditorTheme(
+      name = "Solarized Light",
+      isDark = false,
+      backgroundColor = Color(0xFFFDF6E3),
+      foregroundColor = Color(0xFF657B83),
+      lineNumberColor = Color(0xFF93A1A1),
+      lineNumberBackgroundColor = Color(0xFFEEE8D5),
+      currentLineColor = Color(0xFFEEE8D5),
+      selectionColor = Color(0xFFEEE8D5),
+      cursorColor = Color(0xFFD30102),
+      gutterDividerColor = Color(0xFFEEE8D5),
+      syntaxColors =
+        SyntaxColors(
+          keyword = Color(0xFF859900),
+          type = Color(0xFFB58900),
+          string = Color(0xFF2AA198),
+          number = Color(0xFFD33682),
+          comment = Color(0xFF93A1A1),
+          function = Color(0xFF268BD2),
+          variable = Color(0xFF268BD2),
+          operator = Color(0xFF859900),
+          annotation = Color(0xFF657B83),
+          constant = Color(0xFFCB4B16),
+          attribute = Color(0xFFB58900),
+          tag = Color(0xFF268BD2),
+          property = Color(0xFF268BD2),
+          error = Color(0xFFDC322F),
+          parameter = Color(0xFF657B83),
+          punctuation = Color(0xFF657B83),
+        ),
+    )
+
+  val Nord =
+    EditorTheme(
+      name = "Nord",
+      isDark = true,
+      backgroundColor = Color(0xFF2E3440),
+      foregroundColor = Color(0xFFD8DEE9),
+      lineNumberColor = Color(0xFF4C566A),
+      lineNumberBackgroundColor = Color(0xFF2E3440),
+      currentLineColor = Color(0xFF3B4252),
+      selectionColor = Color(0xFF434C5E),
+      cursorColor = Color(0xFFD8DEE9),
+      gutterDividerColor = Color(0xFF434C5E),
+      syntaxColors =
+        SyntaxColors(
+          keyword = Color(0xFF81A1C1),
+          type = Color(0xFF8FBCBB),
+          string = Color(0xFFA3BE8C),
+          number = Color(0xFFB48EAD),
+          comment = Color(0xFF616E88),
+          function = Color(0xFF88C0D0),
+          variable = Color(0xFFD8DEE9),
+          operator = Color(0xFF81A1C1),
+          annotation = Color(0xFFD08770),
+          constant = Color(0xFFB48EAD),
+          attribute = Color(0xFF8FBCBB),
+          tag = Color(0xFF81A1C1),
+          property = Color(0xFF88C0D0),
+          error = Color(0xFFBF616A),
+          parameter = Color(0xFFD8DEE9),
+          punctuation = Color(0xFFECEFF4),
+        ),
+    )
+
+  val Monokai =
+    EditorTheme(
+      name = "Monokai",
+      isDark = true,
+      backgroundColor = Color(0xFF272822),
+      foregroundColor = Color(0xFFF8F8F2),
+      lineNumberColor = Color(0xFF90908A),
+      lineNumberBackgroundColor = Color(0xFF272822),
+      currentLineColor = Color(0xFF3E3D32),
+      selectionColor = Color(0xFF49483E),
+      cursorColor = Color(0xFFF8F8F0),
+      gutterDividerColor = Color(0xFF49483E),
+      syntaxColors =
+        SyntaxColors(
+          keyword = Color(0xFFF92672),
+          type = Color(0xFF66D9EF),
+          string = Color(0xFFE6DB74),
+          number = Color(0xFFAE81FF),
+          comment = Color(0xFF75715E),
+          function = Color(0xFFA6E22E),
+          variable = Color(0xFFF8F8F2),
+          operator = Color(0xFFF92672),
+          annotation = Color(0xFFA6E22E),
+          constant = Color(0xFFAE81FF),
+          attribute = Color(0xFF66D9EF),
+          tag = Color(0xFFF92672),
+          property = Color(0xFF66D9EF),
+          error = Color(0xFFF92672),
+          parameter = Color(0xFFFD971F),
+          punctuation = Color(0xFFF8F8F2),
+        ),
+    )
+
+  val allThemes = listOf(
+    Darcula, QuietLight, Monokai, GitHub, SolarizedDark, SolarizedLight,
+    OneDarkPro, Dracula, Nord, DarkModern, LightModern, MonokaiPro,
+  )
 
   fun getTheme(name: String): EditorTheme = allThemes.find { it.name == name } ?: DarkModern
 }

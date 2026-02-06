@@ -22,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -55,6 +56,11 @@ fun IDEWorkspaceScreen(
   val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
   val scope = rememberCoroutineScope()
   val editorUiState by editorViewModel.uiState.collectAsState()
+  val editorSettings by viewModel.editorSettings.collectAsState()
+
+  LaunchedEffect(editorSettings) {
+    editorViewModel.applyDatastoreSettings(editorSettings)
+  }
 
   val activeTab = editorUiState.tabs.find { it.id == editorUiState.activeTabId }
 
@@ -110,6 +116,8 @@ fun IDEWorkspaceScreen(
           onTabClose = { tabId -> editorViewModel.closeTab(tabId) },
           onTextChange = { tabId, text -> editorViewModel.updateContent(tabId, text) },
           onSave = { tabId -> editorViewModel.saveFile(tabId) },
+          config = editorUiState.config,
+          theme = editorUiState.theme,
           onEditorReady = { onUndo, onRedo ->
             editorViewModel.setUndoRedoCallbacks(onUndo, onRedo)
           },
