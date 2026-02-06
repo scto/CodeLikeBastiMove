@@ -22,17 +22,26 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountTree
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.Brush
+import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Extension
 import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Label
 import androidx.compose.material.icons.filled.MergeType
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.SaveAlt
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Terminal
 import androidx.compose.material.icons.filled.ViewQuilt
+import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
@@ -48,6 +57,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -61,6 +71,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -84,6 +95,8 @@ fun FileTreeDrawer(
   onFileOperationComplete: () -> Unit,
   onOpenTerminalSheet: () -> Unit = {},
   onNavigateToSettings: () -> Unit = {},
+  activeFileName: String? = null,
+  activeFileContent: String? = null,
   fileSystemVersion: Long = 0L,
   modifier: Modifier = Modifier,
 ) {
@@ -149,13 +162,16 @@ fun FileTreeDrawer(
           AssetStudioTabContent()
         }
         DrawerTab.GIT -> {
-          GitTabContent()
+          GitTabContent(projectPath = projectPath)
         }
         DrawerTab.THEME -> {
           ThemeTabContent()
         }
         DrawerTab.LAYOUT -> {
-          LayoutTabContent()
+          LayoutTabContent(
+            activeFileName = activeFileName,
+            activeFileContent = activeFileContent,
+          )
         }
         DrawerTab.SETTINGS -> {
           SettingsTabContent(onNavigateToSettings = onNavigateToSettings)
@@ -493,50 +509,85 @@ private fun TerminalTabContent(onOpenTerminalSheet: () -> Unit, modifier: Modifi
 }
 
 @Composable
-private fun GitTabContent(modifier: Modifier = Modifier) {
+private fun GitTabContent(
+  projectPath: String,
+  onNavigateToGitSettings: () -> Unit = {},
+  modifier: Modifier = Modifier,
+) {
   Column(
     modifier = modifier.fillMaxSize().padding(16.dp),
-    verticalArrangement = Arrangement.spacedBy(16.dp),
+    verticalArrangement = Arrangement.spacedBy(12.dp),
   ) {
     Text(
-      text = "Git Version Control",
+      text = "Git client",
       style = MaterialTheme.typography.titleMedium,
       fontWeight = FontWeight.SemiBold,
     )
 
     Card(
-      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
       modifier = Modifier.fillMaxWidth(),
     ) {
-      Column(
-        modifier = Modifier.padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+      Row(
+        modifier = Modifier.padding(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
       ) {
-        Icon(
-          imageVector = Icons.Default.MergeType,
-          contentDescription = null,
-          modifier = Modifier.size(48.dp),
-          tint = MaterialTheme.colorScheme.onPrimaryContainer,
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-          text = "Open Git Panel",
-          style = MaterialTheme.typography.titleSmall,
-          fontWeight = FontWeight.Medium,
-          color = MaterialTheme.colorScheme.onPrimaryContainer,
-        )
+        Button(
+          onClick = {},
+          colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+          ),
+        ) {
+          Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(16.dp))
+          Spacer(modifier = Modifier.width(4.dp))
+          Text("Stage All")
+        }
+        OutlinedButton(onClick = {}) {
+          Icon(Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(16.dp))
+          Spacer(modifier = Modifier.width(4.dp))
+          Text("Refresh")
+        }
       }
     }
 
-    Text(
-      text = "Quick Actions",
-      style = MaterialTheme.typography.labelMedium,
-      color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
+    GitSectionItem(icon = Icons.Default.History, label = "History", onClick = {})
+    GitSectionItem(icon = Icons.Default.AccountTree, label = "Branches", onClick = {})
+    GitSectionItem(icon = Icons.Default.Wifi, label = "Remotes", onClick = {})
+    GitSectionItem(icon = Icons.Default.SaveAlt, label = "Stash", onClick = {})
+    GitSectionItem(icon = Icons.Default.Label, label = "Tags", onClick = {})
+    GitSectionItem(icon = Icons.Default.Settings, label = "Settings", onClick = onNavigateToGitSettings)
+  }
+}
 
-    AssetQuickAction(title = "Commit Changes", description = "Stage and commit files", onClick = {})
-    AssetQuickAction(title = "Push", description = "Push commits to remote", onClick = {})
-    AssetQuickAction(title = "Pull", description = "Pull changes from remote", onClick = {})
+@Composable
+private fun GitSectionItem(
+  icon: ImageVector,
+  label: String,
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier,
+) {
+  Card(
+    onClick = onClick,
+    colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+    modifier = modifier.fillMaxWidth(),
+  ) {
+    Row(
+      modifier = Modifier.padding(horizontal = 8.dp, vertical = 12.dp),
+      verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+      Icon(
+        imageVector = icon,
+        contentDescription = null,
+        modifier = Modifier.size(24.dp),
+        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+      )
+      Text(
+        text = label,
+        style = MaterialTheme.typography.bodyMedium,
+      )
+    }
   }
 }
 
@@ -588,50 +639,148 @@ private fun ThemeTabContent(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun LayoutTabContent(modifier: Modifier = Modifier) {
+private fun LayoutTabContent(
+  activeFileName: String?,
+  activeFileContent: String?,
+  modifier: Modifier = Modifier,
+) {
+  var composableFunctions by remember { mutableStateOf<List<String>>(emptyList()) }
+  var lastScanned by remember { mutableStateOf("") }
+
+  LaunchedEffect(activeFileContent) {
+    if (activeFileContent != null && activeFileContent != lastScanned) {
+      composableFunctions = extractComposableFunctions(activeFileContent)
+      lastScanned = activeFileContent
+    }
+  }
+
   Column(
     modifier = modifier.fillMaxSize().padding(16.dp),
-    verticalArrangement = Arrangement.spacedBy(16.dp),
+    verticalArrangement = Arrangement.spacedBy(12.dp),
   ) {
-    Text(
-      text = "Layout Designer",
-      style = MaterialTheme.typography.titleMedium,
-      fontWeight = FontWeight.SemiBold,
-    )
-
-    Card(
-      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+    Row(
       modifier = Modifier.fillMaxWidth(),
+      horizontalArrangement = Arrangement.SpaceBetween,
+      verticalAlignment = Alignment.CenterVertically,
     ) {
-      Column(
-        modifier = Modifier.padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-      ) {
-        Icon(
-          imageVector = Icons.Default.ViewQuilt,
-          contentDescription = null,
-          modifier = Modifier.size(48.dp),
-          tint = MaterialTheme.colorScheme.onPrimaryContainer,
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-          text = "Open Layout Designer",
-          style = MaterialTheme.typography.titleSmall,
-          fontWeight = FontWeight.Medium,
-          color = MaterialTheme.colorScheme.onPrimaryContainer,
-        )
+      Text(
+        text = "Compose Preview",
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.SemiBold,
+      )
+      IconButton(onClick = {
+        if (activeFileContent != null) {
+          composableFunctions = extractComposableFunctions(activeFileContent)
+        }
+      }) {
+        Icon(Icons.Default.Refresh, contentDescription = "Refresh")
       }
     }
 
-    Text(
-      text = "Templates",
-      style = MaterialTheme.typography.labelMedium,
-      color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
+    if (activeFileName != null) {
+      Text(
+        text = activeFileName,
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+      )
+    }
 
-    AssetQuickAction(title = "Empty Activity", description = "Blank Compose layout", onClick = {})
-    AssetQuickAction(title = "List Layout", description = "LazyColumn with items", onClick = {})
+    if (composableFunctions.isNotEmpty()) {
+      Text(
+        text = "Detected @Composable functions:",
+        style = MaterialTheme.typography.labelMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+      )
+
+      composableFunctions.forEach { funcName ->
+        Card(
+          colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
+          modifier = Modifier.fillMaxWidth(),
+        ) {
+          Row(
+            modifier = Modifier.padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+          ) {
+            Icon(
+              imageVector = Icons.Default.ViewQuilt,
+              contentDescription = null,
+              modifier = Modifier.size(20.dp),
+              tint = MaterialTheme.colorScheme.primary,
+            )
+            Text(
+              text = funcName,
+              style = MaterialTheme.typography.bodyMedium,
+              fontFamily = FontFamily.Monospace,
+            )
+          }
+        }
+      }
+    } else {
+      Column(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+      ) {
+        Icon(
+          imageVector = Icons.Default.Code,
+          contentDescription = null,
+          modifier = Modifier.size(48.dp),
+          tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+        )
+        Text(
+          text = "No Compose UI Detected",
+          style = MaterialTheme.typography.titleSmall,
+          fontWeight = FontWeight.Medium,
+        )
+        Text(
+          text = "Open a Kotlin file containing\n@Composable functions to see a\nlive preview of the UI components.",
+          style = MaterialTheme.typography.bodySmall,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          textAlign = TextAlign.Center,
+        )
+        Card(
+          colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+          modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+        ) {
+          Column(modifier = Modifier.padding(12.dp)) {
+            Text(
+              text = "Supported Components",
+              style = MaterialTheme.typography.labelMedium,
+              fontWeight = FontWeight.SemiBold,
+              color = MaterialTheme.colorScheme.onPrimaryContainer,
+            )
+            Text(
+              text = "Column, Row, Box, Card, Text, Button, TextField, Icon, Image, TopAppBar, NavigationBar, Switch, Checkbox, and more...",
+              style = MaterialTheme.typography.bodySmall,
+              color = MaterialTheme.colorScheme.onPrimaryContainer,
+            )
+          }
+        }
+      }
+    }
   }
+}
+
+private fun extractComposableFunctions(content: String): List<String> {
+  val functions = mutableListOf<String>()
+  val lines = content.lines()
+
+  for (i in lines.indices) {
+    val line = lines[i].trim()
+    if (line.startsWith("@Composable")) {
+      for (j in i + 1 until minOf(i + 5, lines.size)) {
+        val nextLine = lines[j].trim()
+        val funcMatch = Regex("""(?:fun\s+)(\w+)\s*\(""").find(nextLine)
+        if (funcMatch != null) {
+          functions.add(funcMatch.groupValues[1])
+          break
+        }
+      }
+    }
+  }
+
+  return functions.distinct()
 }
 
 @Composable

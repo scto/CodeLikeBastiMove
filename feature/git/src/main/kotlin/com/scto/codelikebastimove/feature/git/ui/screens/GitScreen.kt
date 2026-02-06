@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -767,7 +769,12 @@ private fun RemoteCard(remote: GitRemote, onRemove: () -> Unit) {
 
 @Composable
 private fun SettingsContent(repository: GitRepository?) {
+  var userName by remember { mutableStateOf("") }
+  var userEmail by remember { mutableStateOf("") }
+  var accessToken by remember { mutableStateOf("") }
+  var tokenVisible by remember { mutableStateOf(false) }
   var rememberCredentials by remember { mutableStateOf(true) }
+  var configSaved by remember { mutableStateOf(false) }
 
   LazyColumn(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
     item {
@@ -783,33 +790,50 @@ private fun SettingsContent(repository: GitRepository?) {
             fontWeight = FontWeight.SemiBold,
           )
 
-          Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Text(
-              text = "Name:",
-              style = MaterialTheme.typography.bodyMedium,
-              color = Color(0xFF888888),
-            )
-            Text(
-              text = "User",
-              style = MaterialTheme.typography.bodyMedium,
-              color = Color(0xFFE0D4C8),
-            )
-          }
+          OutlinedTextField(
+            value = userName,
+            onValueChange = { userName = it; configSaved = false },
+            label = { Text("Name") },
+            placeholder = { Text("Your Name") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+              focusedBorderColor = GitAccentColor,
+              unfocusedBorderColor = Color(0xFF555555),
+              focusedLabelColor = GitAccentColor,
+              unfocusedLabelColor = Color(0xFF888888),
+              cursorColor = GitAccentColor,
+              focusedTextColor = Color(0xFFE0D4C8),
+              unfocusedTextColor = Color(0xFFE0D4C8),
+              focusedPlaceholderColor = Color(0xFF666666),
+              unfocusedPlaceholderColor = Color(0xFF666666),
+            ),
+          )
 
-          Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Text(
-              text = "Email:",
-              style = MaterialTheme.typography.bodyMedium,
-              color = Color(0xFF888888),
-            )
-            Text(
-              text = "user@example.com",
-              style = MaterialTheme.typography.bodyMedium,
-              color = Color(0xFFE0D4C8),
-            )
-          }
+          OutlinedTextField(
+            value = userEmail,
+            onValueChange = { userEmail = it; configSaved = false },
+            label = { Text("Email") },
+            placeholder = { Text("you@example.com") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+              focusedBorderColor = GitAccentColor,
+              unfocusedBorderColor = Color(0xFF555555),
+              focusedLabelColor = GitAccentColor,
+              unfocusedLabelColor = Color(0xFF888888),
+              cursorColor = GitAccentColor,
+              focusedTextColor = Color(0xFFE0D4C8),
+              unfocusedTextColor = Color(0xFFE0D4C8),
+              focusedPlaceholderColor = Color(0xFF666666),
+              unfocusedPlaceholderColor = Color(0xFF666666),
+            ),
+          )
 
-          GitFilledButton(text = "Edit User Config", onClick = {})
+          GitFilledButton(
+            text = if (configSaved) "Saved ✓" else "Save User Config",
+            onClick = { configSaved = true },
+          )
         }
       }
     }
@@ -827,6 +851,36 @@ private fun SettingsContent(repository: GitRepository?) {
             fontWeight = FontWeight.SemiBold,
           )
 
+          OutlinedTextField(
+            value = accessToken,
+            onValueChange = { accessToken = it },
+            label = { Text("Access Token") },
+            placeholder = { Text("ghp_xxxxxxxxxxxx") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+            visualTransformation = if (tokenVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+              IconButton(onClick = { tokenVisible = !tokenVisible }) {
+                Icon(
+                  imageVector = if (tokenVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                  contentDescription = if (tokenVisible) "Hide token" else "Show token",
+                  tint = Color(0xFF888888),
+                )
+              }
+            },
+            colors = OutlinedTextFieldDefaults.colors(
+              focusedBorderColor = GitAccentColor,
+              unfocusedBorderColor = Color(0xFF555555),
+              focusedLabelColor = GitAccentColor,
+              unfocusedLabelColor = Color(0xFF888888),
+              cursorColor = GitAccentColor,
+              focusedTextColor = Color(0xFFE0D4C8),
+              unfocusedTextColor = Color(0xFFE0D4C8),
+              focusedPlaceholderColor = Color(0xFF666666),
+              unfocusedPlaceholderColor = Color(0xFF666666),
+            ),
+          )
+
           Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -839,7 +893,7 @@ private fun SettingsContent(repository: GitRepository?) {
                 color = Color(0xFFE0D4C8),
               )
               Text(
-                text = "Save username and password for push/pull",
+                text = "Save token for push/pull operations",
                 style = MaterialTheme.typography.bodySmall,
                 color = Color(0xFF888888),
               )
@@ -856,20 +910,10 @@ private fun SettingsContent(repository: GitRepository?) {
             )
           }
 
-          Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Text(
-              text = "Status:",
-              style = MaterialTheme.typography.bodyMedium,
-              color = Color(0xFF888888),
-            )
-            Text(
-              text = if (rememberCredentials) "Saved" else "Not saved",
-              style = MaterialTheme.typography.bodyMedium,
-              color = Color(0xFFE0D4C8),
-            )
+          Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            GitFilledButton(text = "Save Token", onClick = {})
+            GitOutlinedButton(text = "Clear", onClick = { accessToken = "" })
           }
-
-          GitOutlinedButton(text = "Clear Saved Credentials", onClick = {})
         }
       }
     }

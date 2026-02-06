@@ -4,12 +4,19 @@ import com.scto.codelikebastimove.feature.git.model.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
+data class CloneProgressInfo(
+  val taskName: String = "",
+  val percentDone: Int = 0,
+  val isIndeterminate: Boolean = false,
+)
+
 interface GitOperations {
 
   val currentRepository: StateFlow<GitRepository?>
   val status: StateFlow<GitStatus?>
   val isOperationInProgress: StateFlow<Boolean>
   val operationProgress: Flow<GitOperationProgress>
+  val cloneProgress: StateFlow<CloneProgressInfo>
 
   suspend fun openRepository(path: String): GitOperationResult<GitRepository>
 

@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.scto.codelikebastimove.core.resources.R
 import com.scto.codelikebastimove.feature.git.viewmodel.GitViewModel
+import androidx.compose.ui.text.style.TextOverflow
 import kotlinx.coroutines.flow.collectLatest
 
 private val GitSurfaceBackground = Color(0xFF1A1A1A)
@@ -92,6 +93,7 @@ fun GitCloneScreen(
     }
 
     val isOperationInProgress by viewModel.isOperationInProgress.collectAsState()
+    val cloneProgress by viewModel.cloneProgress.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
@@ -308,14 +310,44 @@ fun GitCloneScreen(
                         .fillMaxWidth()
                         .padding(vertical = 16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    CircularProgressIndicator(color = GitAccentColor)
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Box(contentAlignment = Alignment.Center) {
+                        if (cloneProgress.isIndeterminate) {
+                            CircularProgressIndicator(
+                                color = GitAccentColor,
+                                trackColor = Color(0xFF444444),
+                                modifier = Modifier.size(64.dp),
+                            )
+                        } else {
+                            CircularProgressIndicator(
+                                progress = { cloneProgress.percentDone / 100f },
+                                color = GitAccentColor,
+                                trackColor = Color(0xFF444444),
+                                modifier = Modifier.size(64.dp),
+                            )
+                            Text(
+                                text = "${cloneProgress.percentDone}%",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = GitTextColor,
+                                fontWeight = FontWeight.Bold,
+                            )
+                        }
+                    }
                     Text(
                         text = stringResource(R.string.cloning),
                         style = MaterialTheme.typography.bodyMedium,
                         color = GitTextColor.copy(alpha = 0.7f),
                     )
+                    if (cloneProgress.taskName.isNotBlank()) {
+                        Text(
+                            text = cloneProgress.taskName,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = GitTextColor.copy(alpha = 0.5f),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
                 }
             }
 

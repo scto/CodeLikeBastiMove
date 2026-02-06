@@ -23,6 +23,9 @@ class DefaultGitRepository : GitOperations {
   private val _operationProgress = MutableSharedFlow<GitOperationProgress>()
   override val operationProgress: Flow<GitOperationProgress> = _operationProgress.asSharedFlow()
 
+  private val _cloneProgress = MutableStateFlow(CloneProgressInfo())
+  override val cloneProgress: StateFlow<CloneProgressInfo> = _cloneProgress.asStateFlow()
+
   override suspend fun openRepository(path: String): GitOperationResult<GitRepository> {
     val result = jgitLibrary.openRepository(path)
 
@@ -75,6 +78,9 @@ class DefaultGitRepository : GitOperations {
         branch = options.branch,
         depth = options.depth,
         recursive = options.recursive,
+        progressCallback = { taskName, percent, indeterminate ->
+            _cloneProgress.value = CloneProgressInfo(taskName, percent, indeterminate)
+        }
       )
 
       return when (result) {
@@ -86,6 +92,7 @@ class DefaultGitRepository : GitOperations {
         }
       }
     } finally {
+      _cloneProgress.value = CloneProgressInfo()
       _isOperationInProgress.value = false
     }
   }
@@ -673,3 +680,4 @@ class DefaultGitRepository : GitOperations {
     _operationProgress.emit(GitOperationProgress(operation, message, progress, indeterminate))
   }
 }
+

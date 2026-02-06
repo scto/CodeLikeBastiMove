@@ -2,6 +2,7 @@ package com.scto.codelikebastimove.feature.git.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.scto.codelikebastimove.feature.git.api.CloneProgressInfo
 import com.scto.codelikebastimove.feature.git.api.GitOperations
 import com.scto.codelikebastimove.feature.git.model.*
 import com.scto.codelikebastimove.feature.git.repository.DefaultGitRepository
@@ -15,6 +16,7 @@ class GitViewModel : ViewModel() {
   val currentRepository = repository.currentRepository
   val status = repository.status
   val isOperationInProgress = repository.isOperationInProgress
+  val cloneProgress: StateFlow<CloneProgressInfo> = repository.cloneProgress
 
   private val _uiState = MutableStateFlow(GitUiState())
   val uiState: StateFlow<GitUiState> = _uiState.asStateFlow()

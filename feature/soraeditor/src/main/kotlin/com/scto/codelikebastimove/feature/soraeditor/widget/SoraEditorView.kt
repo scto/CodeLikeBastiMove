@@ -391,6 +391,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
   fun applyTheme(theme: EditorTheme) {
     currentTheme = theme
     themeProvider.applyTheme(codeEditor, theme)
+    setLanguage(currentLanguageType)
   }
 
   fun setHighlightingMode(mode: HighlightingMode) {

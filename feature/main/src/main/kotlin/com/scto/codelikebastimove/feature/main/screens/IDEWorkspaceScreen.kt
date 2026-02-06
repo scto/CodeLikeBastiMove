@@ -56,6 +56,8 @@ fun IDEWorkspaceScreen(
   val scope = rememberCoroutineScope()
   val editorUiState by editorViewModel.uiState.collectAsState()
 
+  val activeTab = editorUiState.tabs.find { it.id == editorUiState.activeTabId }
+
   ModalNavigationDrawer(
     drawerState = drawerState,
     drawerContent = {
@@ -64,6 +66,8 @@ fun IDEWorkspaceScreen(
           projectName = projectName,
           projectPath = projectPath,
           fileSystemVersion = fileSystemVersion,
+          activeFileName = activeTab?.file?.name,
+          activeFileContent = activeTab?.file?.content,
           onFileClick = { fileNode ->
             if (!fileNode.isDirectory) {
               editorViewModel.openFile(fileNode.path)
