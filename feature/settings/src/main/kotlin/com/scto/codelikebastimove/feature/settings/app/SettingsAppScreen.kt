@@ -120,7 +120,7 @@ fun SettingsAppScreen(
             NavigationItem(
                 label = stringResource(R.string.general_settings),
                 description = stringResource(R.string.pref_configure_general_summary),
-                onClick = onNavigateToGeneral,
+                onClick = onNavigateToGeneralSetting,
             )
 
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -136,7 +136,7 @@ fun SettingsAppScreen(
             NavigationItem(
                 label = stringResource(R.string.ai_agent),
                 description = stringResource(R.string.pref_configure_editor_summary),
-                onClick = onNavigateToAIAgent,
+                onClick = onNavigateToAIAgentSettings,
             )
 
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -144,7 +144,7 @@ fun SettingsAppScreen(
             NavigationItem(
                 label = stringResource(R.string.build_and_run),
                 description = stringResource(R.string.pref_configure_general_summary),
-                onClick = onNavigateToBuildAndRun,
+                onClick = onNavigateToBuildAndRunSettings,
             )
 
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -204,7 +204,7 @@ fun SettingsAppScreen(
             NavigationItem(
                 label = "Über",
                 description = "App-Version und Informationen",
-                onClick = onNavigateToAbout,
+                onClick = onNavigateToAboutSettings,
             )
         }
     }
@@ -346,3 +346,4 @@ private fun ThemeOption(
     }
 }
 */
+}
