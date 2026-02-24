@@ -149,5 +149,3 @@ private fun getIntervalLabel(interval: UpdateCheckInterval): String {
         UpdateCheckInterval.WEEKLY -> stringResource(R.string.settings_interval_weekly)
     }
 }
-
-}
