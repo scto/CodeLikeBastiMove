@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+
 import com.scto.codelikebastimove.core.resources.R
 import com.scto.codelikebastimove.core.updater.UpdateCheckInterval
 import com.scto.codelikebastimove.feature.settings.SettingsViewModel
@@ -37,6 +38,7 @@ fun DebugSettingsScreen(
     modifier: Modifier = Modifier,
 ) {
     val userPreferences by viewModel.userPreferences.collectAsState()
+    val resetOnboarding = userPreferences.resetOnboarding
     val loggingEnabled = userPreferences.loggingEnabled
     val updateCheckInterval = UpdateCheckInterval.fromHours(userPreferences.updateCheckIntervalHours)
 
@@ -62,19 +64,6 @@ fun DebugSettingsScreen(
             )
         }
 
-        PreferenceGroup(heading = stringResource(R.string.settings_update_check_interval)) {
-            UpdateCheckInterval.entries.forEachIndexed { index, interval ->
-                UpdateIntervalOption(
-                    title = getIntervalLabel(interval),
-                    isSelected = updateCheckInterval == interval,
-                    onClick = { viewModel.setUpdateCheckInterval(interval) },
-                )
-                if (index < UpdateCheckInterval.entries.size - 1) {
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
-                }
-            }
-        }
-
         PreferenceGroup(heading = stringResource(R.string.settings_debug_actions)) {
             SettingsToggle(
                 label = stringResource(R.string.settings_reset_onboarding),
@@ -90,6 +79,19 @@ fun DebugSettingsScreen(
                     )
                 },
             )
+        }
+        
+        PreferenceGroup(heading = stringResource(R.string.settings_update_check_interval)) {
+            UpdateCheckInterval.entries.forEachIndexed { index, interval ->
+                UpdateIntervalOption(
+                    title = getIntervalLabel(interval),
+                    isSelected = updateCheckInterval == interval,
+                    onClick = { viewModel.setUpdateCheckInterval(interval) },
+                )
+                if (index < UpdateCheckInterval.entries.size - 1) {
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                }
+            }
         }
     }
 }

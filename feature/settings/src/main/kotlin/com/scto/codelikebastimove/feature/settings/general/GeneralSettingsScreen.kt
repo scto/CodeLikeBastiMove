@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+
 import com.scto.codelikebastimove.core.datastore.ThemeMode
 import com.scto.codelikebastimove.core.resources.R
 import com.scto.codelikebastimove.feature.settings.SettingsViewModel
@@ -39,6 +40,7 @@ fun GeneralSettingsScreen(
     modifier: Modifier = Modifier,
 ) {
     val userPreferences by viewModel.userPreferences.collectAsState()
+    
     val selectedThemeMode = userPreferences.themeMode
     val dynamicColorsEnabled = userPreferences.dynamicColorsEnabled
 
