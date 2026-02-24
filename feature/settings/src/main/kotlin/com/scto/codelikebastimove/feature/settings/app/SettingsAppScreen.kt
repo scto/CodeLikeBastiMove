@@ -191,13 +191,12 @@ fun SettingsAppScreen(
             )
 
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
-            /*
+            
             NavigationItem(
                 label = "Onboarding zurücksetzen",
                 description = "Zeigt den Einrichtungsassistenten beim nächsten Start",
-                onClick = { showResetOnboardingDialog = true },
+                                onClick = onNavigateToDeveloperOptions,
             )
-            */
         }
 
         PreferenceGroup(heading = "Über") {
