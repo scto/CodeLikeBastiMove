@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Terminal
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -38,7 +39,8 @@ fun DebugSettingsScreen(
     modifier: Modifier = Modifier,
 ) {
     val userPreferences by viewModel.userPreferences.collectAsState()
-    val resetOnboarding = userPreferences.resetOnboarding
+    //val resetOnboarding = userPreferences.resetOnboarding
+    var showResetOnboardingDialog by remember { mutableStateOf(false) }
     val loggingEnabled = userPreferences.loggingEnabled
     val updateCheckInterval = UpdateCheckInterval.fromHours(userPreferences.updateCheckIntervalHours)
 
@@ -64,6 +66,15 @@ fun DebugSettingsScreen(
             )
         }
 
+        NavigationItem(
+                label = "Onboarding zurücksetzen",
+                description = "Zeigt den Einrichtungsassistenten beim nächsten Start",
+                onClick = { showResetOnboardingDialog = true },
+        )
+        
+        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+
+        /*
         PreferenceGroup(heading = stringResource(R.string.settings_debug_actions)) {
             SettingsToggle(
                 label = stringResource(R.string.settings_reset_onboarding),
@@ -80,7 +91,10 @@ fun DebugSettingsScreen(
                 },
             )
         }
+        */
         
+        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+
         PreferenceGroup(heading = stringResource(R.string.settings_update_check_interval)) {
             UpdateCheckInterval.entries.forEachIndexed { index, interval ->
                 UpdateIntervalOption(
@@ -92,6 +106,32 @@ fun DebugSettingsScreen(
                     HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                 }
             }
+        }
+        
+        if (showResetOnboardingDialog) {
+            AlertDialog(
+                onDismissRequest = { showResetOnboardingDialog = false },
+                title = { Text("Onboarding zurücksetzen?") },
+                text = {
+                    Text(
+                        "Der Einrichtungsassistent wird beim nächsten Start der App angezeigt. Berechtigungen werden erneut geprüft."
+                    )
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            viewModel
+                            .resetOnboarding()
+                            showResetOnboardingDialog = false
+                        }
+                    ) {
+                        Text("Zurücksetzen")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showResetOnboardingDialog = false }) { Text("Abbrechen") }
+                },
+            )
         }
     }
 }
@@ -148,4 +188,28 @@ private fun getIntervalLabel(interval: UpdateCheckInterval): String {
         UpdateCheckInterval.DAILY -> stringResource(R.string.settings_interval_daily)
         UpdateCheckInterval.WEEKLY -> stringResource(R.string.settings_interval_weekly)
     }
+}
+
+@Composable
+private fun NavigationItem(
+    label: String,
+    description: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    SettingsToggle(
+        label = label,
+        description = description,
+        showSwitch = false,
+        onClick = onClick,
+        modifier = modifier,
+        endWidget = {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(24.dp),
+            )
+        },
+    )
 }

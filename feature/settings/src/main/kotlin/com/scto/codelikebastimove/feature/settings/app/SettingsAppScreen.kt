@@ -195,7 +195,7 @@ fun SettingsAppScreen(
             NavigationItem(
                 label = "Onboarding zurücksetzen",
                 description = "Zeigt den Einrichtungsassistenten beim nächsten Start",
-                                onClick = onNavigateToDeveloperOptions,
+                onClick = onNavigateToDeveloperOptions,
             )
         }
 
