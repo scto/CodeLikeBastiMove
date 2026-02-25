@@ -46,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+
 import com.scto.codelikebastimove.core.datastore.CursorAnimationType
 import com.scto.codelikebastimove.core.datastore.LineEndingType
 import com.scto.codelikebastimove.core.datastore.RenderWhitespaceMode
@@ -55,6 +56,8 @@ import com.scto.codelikebastimove.feature.settings.components.PreferenceLayout
 import com.scto.codelikebastimove.feature.settings.components.PreferenceTemplate
 import com.scto.codelikebastimove.feature.settings.components.SettingsSlider
 import com.scto.codelikebastimove.feature.settings.components.SettingsToggle
+
+import io.github.rosemoe.sora.langs.textmate.TextMateLanguage
 
 @Composable
 fun EditorSettingsScreen(
