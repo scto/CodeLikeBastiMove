@@ -1118,72 +1118,39 @@ Tell me what you want to generate…</string>
 Open Source Licences</string>
 
     <!-- German UI Strings -->
-    <string
-        name="search_projects">
+    <string name="search_projects">
 Projekte suchen...</string>
-
-    <string
-        name="project_name">
+    <string name="project_name">
 Projektname</string>
-
-    <string
-        name="my_application_placeholder">
+    <string name="my_application_placeholder">
 MyApplication</string>
-
-    <string
-        name="minimum_sdk">
+    <string name="minimum_sdk">
 Minimum SDK</string>
-
-    <string
-        name="api_level">
+    <string name="api_level">
 API %1$d</string>
-
-    <string
-        name="use_kotlin">
+    <string name="use_kotlin">
 Kotlin verwenden</string>
-
-    <string
-        name="kotlin_dsl">
+    <string name="kotlin_dsl">
 Kotlin DSL (build.gradle.kts)</string>
-
-    <string
-        name="create_project">
+    <string name="create_project">
 Projekt erstellen</string>
-
-    <string
-        name="new_project">
+    <string name="new_project">
 Neues Projekt erstellen</string>
-
-    <string
-        name="open_existing_project">
+    <string name="open_existing_project">
 Vorhandenes Projekt öffnen</string>
-
-    <string
-        name="clone_repository">
+    <string name="clone_repository">
 Repository klonen</string>
-
-    <string
-        name="console">
+    <string name="console">
 Konsole</string>
-
-    <string
-        name="ide_configurations">
+    <string name="ide_configurations">
 IDE Configurations</string>
-
-    <string
-        name="documentation">
+    <string name="documentation">
 Dokumentation</string>
-
-    <string
-        name="repository_url">
+    <string name="repository_url">
 Repository URL</string>
-
-    <string
-        name="branch_optional">
+    <string name="branch_optional">
 Branch (optional)</string>
-
-    <string
-        name="shallow_clone">
+    <string name="shallow_clone">
 Shallow clone (faster)</string>
 
     <string
@@ -1206,306 +1173,174 @@ Erneut versuchen</string>
         name="ask_ai">
 Ask AI anything...</string>
 
-    <string
-        name="start_build">
+    <string name="start_build">
 Build starten</string>
-
-    <string
-        name="build_variants">
+    <string name="build_variants">
 Build Varianten</string>
 
     <!-- English UI Strings - Editor Actions -->
-    <string
-        name="select_all">
+    <string name="select_all">
 Select All</string>
-
-    <string
-        name="format_code">
+    <string name="format_code">
 Format Code</string>
-
-    <string
-        name="find">
+    <string name="find">
 Find</string>
 
     <!-- Designer Strings -->
-    <string
-        name="generated_code">
+    <string name="generated_code">
 Generated Code</string>
-
-    <string
-        name="export">
+    <string name="export">
 Export</string>
-
-    <string
-        name="change">
+    <string name="change">
 Change</string>
-
-    <string
-        name="select_export_directory">
+    <string name="select_export_directory">
 Select Export Directory</string>
-
-    <string
-        name="include_imports">
+    <string name="include_imports">
 Include imports</string>
-
-    <string
-        name="validate_syntax">
+    <string name="validate_syntax">
 Validate syntax before export</string>
-
-    <string
-        name="theme_name">
+    <string name="theme_name">
 Theme Name</string>
-
-    <string
-        name="export_to_repository">
+    <string name="export_to_repository">
 Export to extension repository</string>
-
-    <string
-        name="repository_name">
+    <string name="repository_name">
 Repository Name</string>
-
-    <string
-        name="prefix">
+    <string name="prefix">
 Prefix</string>
-
-    <string
-        name="prefix_hint">
+    <string name="prefix_hint">
 Custom components will be prefixed (e.g., MyAppButton)</string>
-
-    <string
-        name="select_theme">
+    <string name="select_theme">
 Select Theme</string>
-
-    <string
-        name="done">
+    <string name="done">
 Done</string>
 
     <!-- Sub-Module Maker -->
-    <string
-        name="sub_module_maker">
+    <string name="sub_module_maker">
 Sub-Module Maker</string>
 
     <!-- Main Content Types -->
-    <string
-        name="content_editor">
+    <string name="content_editor">
 Editor</string>
-
-    <string
-        name="content_project">
+    <string name="content_project">
 Project</string>
-
-    <string
-        name="content_assets">
+    <string name="content_assets">
 Assets</string>
-
-    <string
-        name="content_theme">
+    <string name="content_theme">
 Theme</string>
-
-    <string
-        name="content_layout">
+    <string name="content_layout">
 Layout</string>
 
     <!-- Theme Builder -->
-    <string
-        name="light_scheme">
+    <string name="light_scheme">
 Light Scheme</string>
-
-    <string
-        name="dark_scheme">
+    <string name="dark_scheme">
 Dark Scheme</string>
 
     <!-- Asset Studio -->
-    <string
-        name="launcher_icon">
+    <string name="launcher_icon">
 Launcher Icon</string>
-
-    <string
-        name="notification_icon">
+    <string name="notification_icon">
 Notification</string>
-
-    <string
-        name="action_bar_icon">
+    <string name="action_bar_icon">
 Action Bar</string>
-
-    <string
-        name="create_drawable">
+    <string name="create_drawable">
 Create Drawable</string>
-
-    <string
-        name="create_icon">
+    <string name="create_icon">
 Create Icon</string>
-
-    <string
-        name="launcher_or_action_icon">
+    <string name="launcher_or_action_icon">
 Launcher or action icon</string>
-
-    <string
-        name="import_image">
+    <string name="import_image">
 Import Image</string>
-
-    <string
-        name="from_gallery_or_file">
+    <string name="from_gallery_or_file">
 From gallery or file</string>
-
-    <string
-        name="vector_asset_studio">
+    <string name="vector_asset_studio">
 Vector Asset Studio</string>
 
     <!-- IDE Settings -->
-    <string
-        name="ide_settings">
+    <string name="ide_settings">
 IDE-Einstellungen</string>
-
-    <string
-        name="appearance">
+    <string name="appearance">
 Erscheinungsbild</string>
-
-    <string
-        name="dynamic_colors">
+    <string name="dynamic_colors">
 Dynamische Farben</string>
-
-    <string
-        name="configure">
+    <string name="configure">
 Konfigurieren</string>
-
-    <string
-        name="general_settings">
+    <string name="general_settings">
 Allgemein</string>
-
-    <string
-        name="ai_agent">
+    <string name="ai_agent">
 AI Agent</string>
-
-    <string
-        name="build_and_run">
+    <string name="build_and_run">
 Build &amp; Run</string>
-
-    <string
-        name="termux">
+    <string name="termux">
 Termux</string>
-
-    <string
-        name="privacy">
+    <string name="privacy">
 Datenschutz</string>
-
-    <string
-        name="clbm_statistics">
+    <string name="clbm_statistics">
 CLBM Statistiken</string>
-
-    <string
-        name="developer_options">
+    <string name="developer_options">
 Entwickleroptionen</string>
 
     <!-- Editor Settings -->
-    <string
-        name="tab_size">
+    <string name="tab_size">
 Tab Size</string>
-
-    <string
-        name="soft_tabs">
+    <string name="soft_tabs">
 Soft Tabs</string>
-
-    <string
-        name="highlight_current_line">
+    <string name="highlight_current_line">
 Highlight Current Line</string>
-
-    <string
-        name="auto_indent">
+    <string name="auto_indent">
 Auto Indent</string>
-
-    <string
-        name="show_whitespace">
+    <string name="show_whitespace">
 Show Whitespace</string>
-
-    <string
-        name="bracket_matching">
+    <string name="bracket_matching">
 Bracket Matching</string>
-
-    <string
-        name="auto_close_brackets">
+    <string name="auto_close_brackets">
 Auto Close Brackets</string>
-
-    <string
-        name="auto_close_quotes">
+    <string name="auto_close_quotes">
 Auto Close Quotes</string>
-
-    <string
-        name="editor_theme">
+    <string name="editor_theme">
 Editor Theme</string>
-
-    <string
-        name="minimap">
+    <string name="minimap">
 Minimap</string>
-
-    <string
-        name="cursor_blink_rate">
+    <string name="cursor_blink_rate">
 Cursor Blink Rate</string>
-
-    <string
-        name="smooth_scrolling">
+    <string name="smooth_scrolling">
 Smooth Scrolling</string>
-
-    <string
-        name="layout_designer">
+    <string name="layout_designer">
 Layout Designer</string>
-
-    <string
-        name="asset_studio">
+    <string name="asset_studio">
 Asset Studio</string>
 
     <!-- Home Screen -->
-    <string
-        name="your_ideas_anywhere">
+    <string name="your_ideas_anywhere">
 Your Ideas, Anywhere</string>
-
-    <string
-        name="get_started">
+    <string name="get_started">
 Loslegen</string>
-
-    <string
-        name="start_your_project">
+    <string name="start_your_project">
 Starten Sie Ihr neues großartiges Projekt!</string>
 
     <!-- CreateProject Screen -->
-    <string
-        name="project_details">
+    <string name="project_details">
 Projektdetails</string>
-
-    <string
-        name="select_template">
+    <string name="select_template">
 Vorlage auswählen</string>
-
-    <string
-        name="language_and_build">
+    <string name="language_and_build">
 Sprache &amp; Build</string>
 
     <!-- OpenProject Screen -->
-    <string
-        name="open_project">
+    <string name="open_project">
 Projekt öffnen</string>
 
-    <string
-        name="search_hint">
+    <string name="search_hint">
 Suchen</string>
 
     <!-- CloneRepository Screen -->
-    <string
-        name="clone_options">
-Clone Options</string>
-
-    <string
-        name="cloning">
+    <string name="clone_options">Clone Options</string>
+    <string name="cloning">
 Cloning...</string>
 
     <!-- Debug Logging -->
-    <string
-        name="debug_logging">
-Debug-Logging</string>
-
-    <string
-        name="debug_logging_description">
-Aktiviert detailliertes Logging für Debugging-Zwecke</string>
+    <string name="debug_logging">Debug-Logging</string>
+    <string name="debug_logging_description">Aktiviert detailliertes Logging für Debugging-Zwecke</string>
 
     <!-- Git UI Strings -->
     <string name="target_directory">Target Directory</string>
@@ -1714,4 +1549,3 @@ Aktiviert detailliertes Logging für Debugging-Zwecke</string>
     <string name="settings_reset_onboarding_subtitle">Show the welcome screens again</string>
 
 </resources>
--->
