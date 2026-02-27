@@ -1,0 +1,14 @@
+Hinweis zu Git im Datastore:
+
+Ich habe die Git-Variablen im GitSettingsScreen
+und im ViewModel anhand typischer Namen eingebunden
+(wie gitAuthorName oder setGitAuthorEmail).
+
+Da mir der exakte Inhalt deiner Protobuf-Dateien
+für den Datastore fehlt, habe ich die Aufrufe im
+ViewModel vorerst auskommentiert 
+(// userPreferencesRepository.setGit...).
+
+Du musst diese ggf. in deiner .proto-Datei und im 
+UserPreferencesRepository ergänzen, bevor du die 
+Kommentare im ViewModel entfernst!

@@ -4,71 +4,228 @@
     tools:ignore="MissingTranslation">
 
     <!-- English Language -->
-    <string name="app_name" translatable="false">Code Like Basti Move</string>
+    <string
+        name="app_name"
+        translatable="false">
+Code Like Basti Move</string>
 
-    <string name="not_implemented">This feature is not implemented</string>
-    <string name="unsupported_content">Unsupported content</string>
-    <string name="null_content">Error: content is null</string>
-    
     <!-- Actions -->
-    <string name="open_drawer">Open drawer</string>
-    <string name="close_drawer">Close drawer</string>
-    <string name="open">Open</string>
-    <string name="close">Close</string>
-    <string name="back">Back</string>
-    <string name="close_all">Close all</string>
-    <string name="close_others">Close others</string>
-    <string name="restart_required">Restart required</string>
-    <string name="close_app">Close app</string>
-    <string name="copy">Copy</string>
-    <string name="copy_and_report">Copy and Report</string>
-    <string name="refresh">Refresh</string>
-    <string name="cancel">Cancel</string>
-    <string name="save">Save</string>
-    <string name="create">Create</string>
-    <string name="execute">Execute</string>
-    <string name="reset">Reset</string>
-    <string name="no">No</string>
-    <string name="yes">Yes</string>
-    <string name="ok">OK</string>
-    <string name="exit">Exit</string>
-    <string name="add">Add</string>
+    <string
+        name="open">
+Open</string>
 
-    <string name="settings">Settings</string>
-    <string name="general">General</string>
+    <string
+        name="open_drawer">
+Open drawer</string>
+
+    <string
+        name="close_drawer">
+Close drawer</string>
+
+    <string
+        name="close">
+Close</string>
+
+    <string
+        name="back">
+Back</string>
+
+    <string
+        name="close_all">
+Close all</string>
+
+    <string
+        name="close_others">
+Close others</string>
+
+    <string
+        name="close_app">
+Close app</string>
+
+    <string
+        name="copy">
+Copy</string>
+
+    <string
+        name="copy_and_report">
+Copy and Report</string>
+
+    <string
+        name="refresh">
+Refresh</string>
+
+    <string
+        name="cancel">
+Cancel</string>
+
+    <string
+        name="save">
+Save</string>
+
+    <string
+        name="create">
+Create</string>
+
+    <string
+        name="execute">
+Execute</string>
+
+    <string
+        name="settings">
+Settings</string>
+
+    <string
+        name="general">
+General</string>
+
+    <string
+        name="reset">
+Reset</string>
+
+    <string
+        name="no">
+No</string>
+
+    <string
+        name="yes">
+Yes</string>
+
+    <string
+        name="ok">
+OK</string>
+
+    <string
+        name="exit">
+Exit</string>
+
+    <string
+        name="add">
+Add</string>
 
     <!-- Editor -->
-    <string name="editor">Editor</string>
-    <string name="editor_close">Close this</string>
-    <string name="editor_close_others">Close others</string>
-    <string name="editor_close_all">Close all</string>
-    <string name="editor_save_and_close">Save &amp; Close</string>
-    <string name="editor_no_files_open">No files open</string>
-    <string name="editor_unsaved_files">Unsaved files</string>
-    <string name="editor_unsaved_files_message">Some open files have not been saved yet!\nUnsaved files: %s</string>
-    <string name="editor_action_comment_line">Comment line</string>
-    <string name="editor_action_uncomment_line">Uncomment line</string>
-    <string name="editor_action_long_select">Long select</string>
-    <string name="editor_action_select_all">Select all</string>
-    <string name="editor_action_copy">Copy</string>
-    <string name="editor_action_cut">Cut</string>
-    <string name="editor_action_paste">Paste</string>
-    <string name="editor_action_format">Format</string>
-    <string name="editor_action_explain_code">Explain Code</string>
-    <string name="editor_action_import_components">Import Compose Components</string>
-    <string name="editor_action_redo">Redo</string>
-    <string name="editor_action_undo">Undo</string>
-    <string name="editor_reload">Reload editor</string>
-    <string name="editor_search">Search</string>
-    <string name="editor_search_text">Search text</string>
-    <string name="editor_search_replace_text">Replace text</string>
-    <string name="editor_search_previous">Previous</string>
-    <string name="editor_search_next">Next</string>
-    <string name="editor_search_replace">Replace</string>
-    <string name="editor_search_replaceall">Replace all</string>
-    <string name="editor_search_close">Close</string>
-    <string name="editor_search_option_ignore_case">Ignore case</string>
-    <string name="editor_search_option_use_regex">Use regex</string>
+    <string
+        name="editor">
+Editor</string>
+
+    <string
+        name="editor_close">
+Close this</string>
+
+    <string
+        name="editor_close_others">
+Close others</string>
+
+    <string
+        name="editor_close_all">
+Close all</string>
+
+    <string
+        name="editor_save_and_close">
+Save &amp; Close</string>
+
+    <string
+        name="editor_no_files_open">
+No files open</string>
+
+    <string
+        name="editor_unsaved_files">
+Unsaved files</string>
+
+    <string
+        name="editor_unsaved_files_message">
+Some open files have not been saved yet!\nUnsaved files: %s</string>
+
+    <string
+        name="editor_action_comment_line">
+Comment line</string>
+
+    <string
+        name="editor_action_uncomment_line">
+Uncomment line</string>
+
+    <string
+        name="editor_action_long_select">
+Long select</string>
+
+    <string
+        name="editor_action_select_all">
+Select all</string>
+
+    <string
+        name="editor_action_copy">
+Copy</string>
+
+    <string
+        name="editor_action_cut">
+Cut</string>
+
+    <string
+        name="editor_action_paste">
+Paste</string>
+
+    <string
+        name="editor_action_format">
+Format</string>
+
+    <string
+        name="editor_action_explain_code">
+Explain Code</string>
+
+    <string
+        name="editor_action_import_components">
+Import Compose Components</string>
+
+    <string
+        name="editor_redo">
+Redo</string>
+
+    <string
+        name="editor_undo">
+Undo</string>
+
+    <string
+        name="editor_reload">
+Reload editor</string>
+
+    <string
+        name="editor_search">
+Search</string>
+
+    <string
+        name="editor_search_text">
+Search text</string>
+
+    <string
+        name="editor_search_replace_text">
+Replace text</string>
+
+    <string
+        name="editor_search_previous">
+Previous</string>
+
+    <string
+        name="editor_search_next">
+Next</string>
+
+    <string
+        name="editor_search_replace">
+Replace</string>
+
+    <string
+        name="editor_search_replaceall">
+Replace all</string>
+
+    <string
+        name="editor_search_close">
+Close</string>
+
+    <string
+        name="editor_search_option_ignore_case">
+Ignore case</string>
+
+    <string
+        name="editor_search_option_use_regex">
+Use regex</string>
 
     <!-- Python Compiler -->
     <string
@@ -1118,39 +1275,72 @@ Tell me what you want to generate…</string>
 Open Source Licences</string>
 
     <!-- German UI Strings -->
-    <string name="search_projects">
+    <string
+        name="search_projects">
 Projekte suchen...</string>
-    <string name="project_name">
+
+    <string
+        name="project_name">
 Projektname</string>
-    <string name="my_application_placeholder">
+
+    <string
+        name="my_application_placeholder">
 MyApplication</string>
-    <string name="minimum_sdk">
+
+    <string
+        name="minimum_sdk">
 Minimum SDK</string>
-    <string name="api_level">
+
+    <string
+        name="api_level">
 API %1$d</string>
-    <string name="use_kotlin">
+
+    <string
+        name="use_kotlin">
 Kotlin verwenden</string>
-    <string name="kotlin_dsl">
+
+    <string
+        name="kotlin_dsl">
 Kotlin DSL (build.gradle.kts)</string>
-    <string name="create_project">
+
+    <string
+        name="create_project">
 Projekt erstellen</string>
-    <string name="new_project">
+
+    <string
+        name="new_project">
 Neues Projekt erstellen</string>
-    <string name="open_existing_project">
+
+    <string
+        name="open_existing_project">
 Vorhandenes Projekt öffnen</string>
-    <string name="clone_repository">
+
+    <string
+        name="clone_repository">
 Repository klonen</string>
-    <string name="console">
+
+    <string
+        name="console">
 Konsole</string>
-    <string name="ide_configurations">
+
+    <string
+        name="ide_configurations">
 IDE Configurations</string>
-    <string name="documentation">
+
+    <string
+        name="documentation">
 Dokumentation</string>
-    <string name="repository_url">
+
+    <string
+        name="repository_url">
 Repository URL</string>
-    <string name="branch_optional">
+
+    <string
+        name="branch_optional">
 Branch (optional)</string>
-    <string name="shallow_clone">
+
+    <string
+        name="shallow_clone">
 Shallow clone (faster)</string>
 
     <string
@@ -1173,174 +1363,306 @@ Erneut versuchen</string>
         name="ask_ai">
 Ask AI anything...</string>
 
-    <string name="start_build">
+    <string
+        name="start_build">
 Build starten</string>
-    <string name="build_variants">
+
+    <string
+        name="build_variants">
 Build Varianten</string>
 
     <!-- English UI Strings - Editor Actions -->
-    <string name="select_all">
+    <string
+        name="select_all">
 Select All</string>
-    <string name="format_code">
+
+    <string
+        name="format_code">
 Format Code</string>
-    <string name="find">
+
+    <string
+        name="find">
 Find</string>
 
     <!-- Designer Strings -->
-    <string name="generated_code">
+    <string
+        name="generated_code">
 Generated Code</string>
-    <string name="export">
+
+    <string
+        name="export">
 Export</string>
-    <string name="change">
+
+    <string
+        name="change">
 Change</string>
-    <string name="select_export_directory">
+
+    <string
+        name="select_export_directory">
 Select Export Directory</string>
-    <string name="include_imports">
+
+    <string
+        name="include_imports">
 Include imports</string>
-    <string name="validate_syntax">
+
+    <string
+        name="validate_syntax">
 Validate syntax before export</string>
-    <string name="theme_name">
+
+    <string
+        name="theme_name">
 Theme Name</string>
-    <string name="export_to_repository">
+
+    <string
+        name="export_to_repository">
 Export to extension repository</string>
-    <string name="repository_name">
+
+    <string
+        name="repository_name">
 Repository Name</string>
-    <string name="prefix">
+
+    <string
+        name="prefix">
 Prefix</string>
-    <string name="prefix_hint">
+
+    <string
+        name="prefix_hint">
 Custom components will be prefixed (e.g., MyAppButton)</string>
-    <string name="select_theme">
+
+    <string
+        name="select_theme">
 Select Theme</string>
-    <string name="done">
+
+    <string
+        name="done">
 Done</string>
 
     <!-- Sub-Module Maker -->
-    <string name="sub_module_maker">
+    <string
+        name="sub_module_maker">
 Sub-Module Maker</string>
 
     <!-- Main Content Types -->
-    <string name="content_editor">
+    <string
+        name="content_editor">
 Editor</string>
-    <string name="content_project">
+
+    <string
+        name="content_project">
 Project</string>
-    <string name="content_assets">
+
+    <string
+        name="content_assets">
 Assets</string>
-    <string name="content_theme">
+
+    <string
+        name="content_theme">
 Theme</string>
-    <string name="content_layout">
+
+    <string
+        name="content_layout">
 Layout</string>
 
     <!-- Theme Builder -->
-    <string name="light_scheme">
+    <string
+        name="light_scheme">
 Light Scheme</string>
-    <string name="dark_scheme">
+
+    <string
+        name="dark_scheme">
 Dark Scheme</string>
 
     <!-- Asset Studio -->
-    <string name="launcher_icon">
+    <string
+        name="launcher_icon">
 Launcher Icon</string>
-    <string name="notification_icon">
+
+    <string
+        name="notification_icon">
 Notification</string>
-    <string name="action_bar_icon">
+
+    <string
+        name="action_bar_icon">
 Action Bar</string>
-    <string name="create_drawable">
+
+    <string
+        name="create_drawable">
 Create Drawable</string>
-    <string name="create_icon">
+
+    <string
+        name="create_icon">
 Create Icon</string>
-    <string name="launcher_or_action_icon">
+
+    <string
+        name="launcher_or_action_icon">
 Launcher or action icon</string>
-    <string name="import_image">
+
+    <string
+        name="import_image">
 Import Image</string>
-    <string name="from_gallery_or_file">
+
+    <string
+        name="from_gallery_or_file">
 From gallery or file</string>
-    <string name="vector_asset_studio">
+
+    <string
+        name="vector_asset_studio">
 Vector Asset Studio</string>
 
     <!-- IDE Settings -->
-    <string name="ide_settings">
+    <string
+        name="ide_settings">
 IDE-Einstellungen</string>
-    <string name="appearance">
+
+    <string
+        name="appearance">
 Erscheinungsbild</string>
-    <string name="dynamic_colors">
+
+    <string
+        name="dynamic_colors">
 Dynamische Farben</string>
-    <string name="configure">
+
+    <string
+        name="configure">
 Konfigurieren</string>
-    <string name="general_settings">
+
+    <string
+        name="general_settings">
 Allgemein</string>
-    <string name="ai_agent">
+
+    <string
+        name="ai_agent">
 AI Agent</string>
-    <string name="build_and_run">
+
+    <string
+        name="build_and_run">
 Build &amp; Run</string>
-    <string name="termux">
+
+    <string
+        name="termux">
 Termux</string>
-    <string name="privacy">
+
+    <string
+        name="privacy">
 Datenschutz</string>
-    <string name="clbm_statistics">
+
+    <string
+        name="clbm_statistics">
 CLBM Statistiken</string>
-    <string name="developer_options">
+
+    <string
+        name="developer_options">
 Entwickleroptionen</string>
 
     <!-- Editor Settings -->
-    <string name="tab_size">
+    <string
+        name="tab_size">
 Tab Size</string>
-    <string name="soft_tabs">
+
+    <string
+        name="soft_tabs">
 Soft Tabs</string>
-    <string name="highlight_current_line">
+
+    <string
+        name="highlight_current_line">
 Highlight Current Line</string>
-    <string name="auto_indent">
+
+    <string
+        name="auto_indent">
 Auto Indent</string>
-    <string name="show_whitespace">
+
+    <string
+        name="show_whitespace">
 Show Whitespace</string>
-    <string name="bracket_matching">
+
+    <string
+        name="bracket_matching">
 Bracket Matching</string>
-    <string name="auto_close_brackets">
+
+    <string
+        name="auto_close_brackets">
 Auto Close Brackets</string>
-    <string name="auto_close_quotes">
+
+    <string
+        name="auto_close_quotes">
 Auto Close Quotes</string>
-    <string name="editor_theme">
+
+    <string
+        name="editor_theme">
 Editor Theme</string>
-    <string name="minimap">
+
+    <string
+        name="minimap">
 Minimap</string>
-    <string name="cursor_blink_rate">
+
+    <string
+        name="cursor_blink_rate">
 Cursor Blink Rate</string>
-    <string name="smooth_scrolling">
+
+    <string
+        name="smooth_scrolling">
 Smooth Scrolling</string>
-    <string name="layout_designer">
+
+    <string
+        name="layout_designer">
 Layout Designer</string>
-    <string name="asset_studio">
+
+    <string
+        name="asset_studio">
 Asset Studio</string>
 
     <!-- Home Screen -->
-    <string name="your_ideas_anywhere">
+    <string
+        name="your_ideas_anywhere">
 Your Ideas, Anywhere</string>
-    <string name="get_started">
+
+    <string
+        name="get_started">
 Loslegen</string>
-    <string name="start_your_project">
+
+    <string
+        name="start_your_project">
 Starten Sie Ihr neues großartiges Projekt!</string>
 
     <!-- CreateProject Screen -->
-    <string name="project_details">
+    <string
+        name="project_details">
 Projektdetails</string>
-    <string name="select_template">
+
+    <string
+        name="select_template">
 Vorlage auswählen</string>
-    <string name="language_and_build">
+
+    <string
+        name="language_and_build">
 Sprache &amp; Build</string>
 
     <!-- OpenProject Screen -->
-    <string name="open_project">
+    <string
+        name="open_project">
 Projekt öffnen</string>
 
-    <string name="search_hint">
+    <string
+        name="search_hint">
 Suchen</string>
 
     <!-- CloneRepository Screen -->
-    <string name="clone_options">Clone Options</string>
-    <string name="cloning">
+    <string
+        name="clone_options">
+Clone Options</string>
+
+    <string
+        name="cloning">
 Cloning...</string>
 
     <!-- Debug Logging -->
-    <string name="debug_logging">Debug-Logging</string>
-    <string name="debug_logging_description">Aktiviert detailliertes Logging für Debugging-Zwecke</string>
+    <string
+        name="debug_logging">
+Debug-Logging</string>
+
+    <string
+        name="debug_logging_description">
+Aktiviert detailliertes Logging für Debugging-Zwecke</string>
 
     <!-- Git UI Strings -->
     <string name="target_directory">Target Directory</string>
@@ -1430,16 +1752,10 @@ Cloning...</string>
     <string name="link_in_place_description">Open the project from its current location</string>
 
     <!-- Settings Screens -->
-    <string name="settings_category_about">About</string>
-    <string name="settings_category_ai">AI</string>
-    <string name="settings_category_build_and_run">Build and Run</string>
-    <string name="settings_category_debug">Debug</string>
-    <string name="settings_category_editor">Editor</string>
-    <string name="settings_category_general">General</string>
-    <string name="settings_category_git">Git</string>
-    <string name="settings_category_lsp">LSP</string>
+    <string name="settings_category_app">Application</string>
     <string name="settings_category_support">Support</string>
-    <string name="settings_category_termux">Termux</string>
+    <string name="settings_category_about">About</string>
+    <string name="settings_category_developer">Developer</string>
 
     <string name="settings_general">General</string>
     <string name="settings_general_subtitle">Theme, appearance, and display settings</string>
@@ -1522,16 +1838,8 @@ Cloning...</string>
     <string name="settings_contact_subtitle">Send us an email</string>
 
     <!-- About Screen -->
-    <string name="settings_app_description">Code Like Basti Move is an Android IDE application that enables you to create, edit, and manage Android projects directly on your mobile device.</string>
     <string name="settings_version">Version %1$s</string>
     <string name="settings_updates">Updates</string>
-    <string name="settings_update_check_interval">Update Check Interval</string>
-    <string name="settings_interval_never">Never</string>
-    <string name="settings_interval_hourly">Every Hour</string>
-    <string name="settings_interval_6_hours">Every 6 Hours</string>
-    <string name="settings_interval_12_hours">Every 12 Hours</string>
-    <string name="settings_interval_daily">Daily</string>
-    <string name="settings_interval_weekly">Weekly</string>
     <string name="settings_check_for_updates">Tap to check for updates</string>
     <string name="settings_checking_updates">Checking for updates...</string>
     <string name="settings_up_to_date">You have the latest version</string>
@@ -1539,12 +1847,20 @@ Cloning...</string>
     <string name="settings_update_error">Failed to check for updates</string>
     <string name="settings_check">Check</string>
     <string name="settings_links">Links</string>
+    <string name="settings_app_description">Code Like Basti Move is an Android IDE application that enables you to create, edit, and manage Android projects directly on your mobile device.</string>
 
     <!-- Debug Settings -->
-    <string name="settings_debug_actions">Debug Actions</string>
     <string name="settings_debug_logging">Logging</string>
     <string name="settings_enable_logging">Enable Logging</string>
     <string name="settings_enable_logging_subtitle">Write debug logs to console</string>
+    <string name="settings_update_check_interval">Update Check Interval</string>
+    <string name="settings_interval_never">Never</string>
+    <string name="settings_interval_hourly">Every Hour</string>
+    <string name="settings_interval_6_hours">Every 6 Hours</string>
+    <string name="settings_interval_12_hours">Every 12 Hours</string>
+    <string name="settings_interval_daily">Daily</string>
+    <string name="settings_interval_weekly">Weekly</string>
+    <string name="settings_debug_actions">Debug Actions</string>
     <string name="settings_reset_onboarding">Reset Onboarding</string>
     <string name="settings_reset_onboarding_subtitle">Show the welcome screens again</string>
 

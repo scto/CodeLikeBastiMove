@@ -33,7 +33,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-
 import com.scto.codelikebastimove.core.datastore.ThemeMode
 import com.scto.codelikebastimove.core.resources.R
 import com.scto.codelikebastimove.feature.settings.SettingsViewModel
@@ -45,20 +44,18 @@ import com.scto.codelikebastimove.feature.settings.components.SettingsToggle
 fun SettingsAppScreen(
     viewModel: SettingsViewModel = viewModel(),
     onBackClick: () -> Unit,
-    onNavigateToAboutSettings: () -> Unit,
-    onNavigateToAIAgentSettings: () -> Unit,
-    onNavigateToBuildAndRunSettings: () -> Unit,
-    onNavigateToDeveloperOptions: () -> Unit,
+    onNavigateToGeneral: () -> Unit,
     onNavigateToEditorSettings: () -> Unit,
-    onNavigateToGeneralSetting: () -> Unit,
-    onNavigateToGitSettings: () -> Unit,
-    onNavigateToStatistics: () -> Unit,
+    onNavigateToAIAgent: () -> Unit,
+    onNavigateToBuildAndRun: () -> Unit,
     onNavigateToTermux: () -> Unit,
+    onNavigateToStatistics: () -> Unit,
+    onNavigateToDeveloperOptions: () -> Unit,
+    onNavigateToAbout: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val userPreferences by viewModel.userPreferences.collectAsState()
-    
-    /*
+
     var showThemeDialog by remember { mutableStateOf(false) }
     var showResetOnboardingDialog by remember { mutableStateOf(false) }
 
@@ -73,14 +70,12 @@ fun SettingsAppScreen(
         ThemeMode.DARK -> Icons.Default.DarkMode
         ThemeMode.FOLLOW_SYSTEM -> Icons.Default.Settings
     }
-    */
-    
+
     PreferenceLayout(
         label = stringResource(R.string.ide_settings),
         onBack = onBackClick,
         modifier = modifier,
     ) {
-        /*
         PreferenceGroup(heading = stringResource(R.string.appearance)) {
             SettingsToggle(
                 label = "Design",
@@ -114,13 +109,12 @@ fun SettingsAppScreen(
                 },
             )
         }
-        */
-        
+
         PreferenceGroup(heading = stringResource(R.string.configure)) {
             NavigationItem(
                 label = stringResource(R.string.general_settings),
                 description = stringResource(R.string.pref_configure_general_summary),
-                onClick = onNavigateToGeneralSetting,
+                onClick = onNavigateToGeneral,
             )
 
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -136,7 +130,7 @@ fun SettingsAppScreen(
             NavigationItem(
                 label = stringResource(R.string.ai_agent),
                 description = stringResource(R.string.pref_configure_editor_summary),
-                onClick = onNavigateToAIAgentSettings,
+                onClick = onNavigateToAIAgent,
             )
 
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -144,7 +138,7 @@ fun SettingsAppScreen(
             NavigationItem(
                 label = stringResource(R.string.build_and_run),
                 description = stringResource(R.string.pref_configure_general_summary),
-                onClick = onNavigateToBuildAndRunSettings,
+                onClick = onNavigateToBuildAndRun,
             )
 
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -165,7 +159,6 @@ fun SettingsAppScreen(
         }
 
         PreferenceGroup(heading = stringResource(R.string.developer_options)) {
-            /*
             SettingsToggle(
                 label = stringResource(R.string.debug_logging),
                 description = stringResource(R.string.debug_logging_description),
@@ -180,7 +173,6 @@ fun SettingsAppScreen(
                     )
                 },
             )
-            */
 
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
 
@@ -191,11 +183,11 @@ fun SettingsAppScreen(
             )
 
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
-            
+
             NavigationItem(
                 label = "Onboarding zurücksetzen",
                 description = "Zeigt den Einrichtungsassistenten beim nächsten Start",
-                onClick = onNavigateToDeveloperOptions,
+                onClick = { showResetOnboardingDialog = true },
             )
         }
 
@@ -203,12 +195,11 @@ fun SettingsAppScreen(
             NavigationItem(
                 label = "Über",
                 description = "App-Version und Informationen",
-                onClick = onNavigateToAboutSettings,
+                onClick = onNavigateToAbout,
             )
         }
     }
 
-    /*
     if (showThemeDialog) {
         ThemeSelectionDialog(
             currentTheme = userPreferences.themeMode,
@@ -219,7 +210,7 @@ fun SettingsAppScreen(
             onDismiss = { showThemeDialog = false },
         )
     }
-    
+
     if (showResetOnboardingDialog) {
         AlertDialog(
             onDismissRequest = { showResetOnboardingDialog = false },
@@ -244,7 +235,6 @@ fun SettingsAppScreen(
             },
         )
     }
-    */
 }
 
 @Composable
@@ -271,7 +261,6 @@ private fun NavigationItem(
     )
 }
 
-/*
 @Composable
 private fun ThemeSelectionDialog(
     currentTheme: ThemeMode,
@@ -344,5 +333,3 @@ private fun ThemeOption(
         )
     }
 }
-}
-*/

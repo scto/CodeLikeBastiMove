@@ -3,7 +3,6 @@ package com.scto.codelikebastimove.feature.settings
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-
 import com.scto.codelikebastimove.core.datastore.BuildSettings
 import com.scto.codelikebastimove.core.datastore.CursorAnimationType
 import com.scto.codelikebastimove.core.datastore.EditorSettings
@@ -16,7 +15,6 @@ import com.scto.codelikebastimove.core.updater.UpdateCheckInterval
 import com.scto.codelikebastimove.core.updater.UpdateRepository
 import com.scto.codelikebastimove.core.updater.UpdateState
 import com.scto.codelikebastimove.core.updater.UpdateWorker
-
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn

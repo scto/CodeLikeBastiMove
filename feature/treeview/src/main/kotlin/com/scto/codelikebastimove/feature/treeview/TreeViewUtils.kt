@@ -1,7 +1,6 @@
 package com.scto.codelikebastimove.feature.treeview
 
 import com.scto.codelikebastimove.core.templates.api.ProjectFile
-
 import java.io.File
 
 object TreeViewUtils {

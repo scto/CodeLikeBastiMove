@@ -21,6 +21,7 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
+
 import com.scto.codelikebastimove.core.datastore.ThemeMode as DataStoreThemeMode
 import com.scto.codelikebastimove.core.datastore.UserPreferences
 import com.scto.codelikebastimove.core.datastore.UserPreferencesRepository
@@ -29,6 +30,7 @@ import com.scto.codelikebastimove.core.ui.theme.ThemeMode
 import com.scto.codelikebastimove.feature.main.MainScreen
 import com.scto.codelikebastimove.feature.onboarding.OnboardingScreen
 import com.scto.codelikebastimove.feature.soraeditor.model.EditorThemes
+
 import androidx.compose.foundation.isSystemInDarkTheme
 
 class MainActivity : ComponentActivity() {

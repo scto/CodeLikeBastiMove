@@ -2,11 +2,13 @@ package com.scto.codelikebastimove
 
 import android.app.Application
 import android.content.res.Configuration
+
 import com.scto.codelikebastimove.core.datastore.ThemeMode
 import com.scto.codelikebastimove.core.datastore.UserPreferencesRepository
 import com.scto.codelikebastimove.core.logger.BuildConfig
 import com.scto.codelikebastimove.core.logger.CLBMLogger
 import com.scto.codelikebastimove.feature.soraeditor.model.EditorThemes
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

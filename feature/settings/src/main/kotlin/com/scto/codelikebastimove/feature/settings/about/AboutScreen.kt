@@ -36,7 +36,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-
 import com.scto.codelikebastimove.core.resources.R
 import com.scto.codelikebastimove.core.updater.UpdateState
 import com.scto.codelikebastimove.feature.settings.SettingsViewModel
