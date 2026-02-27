@@ -25,6 +25,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.scto.codelikebastimove.core.datastore.ThemeMode as DataStoreThemeMode
 import com.scto.codelikebastimove.core.datastore.UserPreferences
 import com.scto.codelikebastimove.core.datastore.UserPreferencesRepository
+import com.scto.codelikebastimove.core.resources
 import com.scto.codelikebastimove.core.ui.theme.AppTheme
 import com.scto.codelikebastimove.core.ui.theme.ThemeMode
 import com.scto.codelikebastimove.feature.main.MainScreen
