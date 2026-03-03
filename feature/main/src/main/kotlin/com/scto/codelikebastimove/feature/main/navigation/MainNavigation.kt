@@ -29,25 +29,20 @@ sealed class MainDestination(val route: String, val title: String) {
 
   data object IDE : MainDestination("ide", "IDE")
 
+  // Settings routes
   data object Settings : MainDestination("settings", "IDE-Einstellungen")
-
-  data object EditorSettings : MainDestination("editor_settings", "Editor-Einstellungen")
-
-  data object GeneralSettings : MainDestination("general_settings", "Allgemeine Einstellungen")
-
-  data object BuildAndRunSettings : MainDestination("build_run_settings", "Build & Run")
-
-  data object TermuxSettings : MainDestination("termux_settings", "Termux")
-
-  data object StatisticsSettings : MainDestination("statistics_settings", "Statistiken")
-
-  data object DeveloperOptions : MainDestination("developer_options", "Entwickleroptionen")
-
-  data object About : MainDestination("about", "Über")
+  data object AppearanceSettings : MainDestination("settings/appearance", "Erscheinungsbild")
+  data object GeneralSettings : MainDestination("settings/general", "Allgemeine Einstellungen")
+  data object EditorSettings : MainDestination("settings/editor", "Editor-Einstellungen")
+  data object AIAgentSettings : MainDestination("settings/ai_agent", "AI Agent Einstellungen")
+  data object BuildAndRunSettings : MainDestination("settings/build_run", "Build & Run")
+  data object TermuxSettings : MainDestination("settings/termux", "Termux")
+  data object StatisticsSettings : MainDestination("settings/statistics", "Statistiken")
+  data object DeveloperOptions : MainDestination("settings/developer_options", "Entwickleroptionen")
+  data object DebugSettings : MainDestination("settings/debug", "Debugging Einstellungen") // Nested under DeveloperOptions
+  data object About : MainDestination("settings/about", "Über")
 
   data object AssetStudio : MainDestination("asset_studio", "Asset Studio")
-
-  data object AIAgent : MainDestination("ai_agent", "AI Agent")
 
   data object BuildVariants : MainDestination("build_variants", "Build Varianten")
 

@@ -59,10 +59,20 @@ import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 import com.scto.codelikebastimove.feature.main.screens.CreateProjectScreen
 import com.scto.codelikebastimove.feature.main.screens.ImportProjectScreen
 import com.scto.codelikebastimove.feature.main.screens.OpenProjectScreen
-import com.scto.codelikebastimove.feature.submodulemaker.BuildVariantsScreen
 import com.scto.codelikebastimove.feature.main.screens.IDEWorkspaceScreen
+import com.scto.codelikebastimove.feature.settings.about.AboutScreen
+import com.scto.codelikebastimove.feature.settings.aiagent.AIAgentSettingsScreen
 import com.scto.codelikebastimove.feature.settings.app.SettingsAppScreen
+import com.scto.codelikebastimove.feature.settings.appearance.AppearanceSettingsScreen
+import com.scto.codelikebastimove.feature.settings.buildandrun.BuildAndRunSettingsScreen
+import com.scto.codelikebastimove.feature.settings.debug.DebugSettingsScreen
+import com.scto.codelikebastimove.feature.settings.developer.DeveloperOptionsScreen
 import com.scto.codelikebastimove.feature.settings.editor.EditorSettingsScreen
+import com.scto.codelikebastimove.feature.settings.general.GeneralSettingsScreen
+import com.scto.codelikebastimove.feature.settings.privacy.PrivacySettingsScreen
+import com.scto.codelikebastimove.feature.settings.statistics.StatisticsSettingsScreen
+import com.scto.codelikebastimove.feature.settings.termux.TermuxSettingsScreen
+import com.scto.codelikebastimove.feature.submodulemaker.BuildVariantsScreen
 import com.scto.codelikebastimove.feature.submodulemaker.SubModuleMakerScreen
 
 @Composable
