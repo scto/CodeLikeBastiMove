@@ -189,8 +189,10 @@ fun MainScreen(
         SettingsAppScreen(
           onBackClick = { viewModel.onBackPressed() },
           onNavigateToGeneral = { viewModel.onNavigate(MainDestination.GeneralSettings) },
+          onNavigateToAppearance = { viewModel.onNavigate(MainDestination.AppearanceSettings) },
+          onNavigateToGeneral = { viewModel.onNavigate(MainDestination.GeneralSettings) },
           onNavigateToEditorSettings = { viewModel.onNavigate(MainDestination.EditorSettings) },
-          onNavigateToAIAgent = { viewModel.onNavigate(MainDestination.AIAgent) },
+          onNavigateToAIAgent = { viewModel.onNavigate(MainDestination.AIAgentSettings) },
           onNavigateToBuildAndRun = { viewModel.onNavigate(MainDestination.BuildAndRunSettings) },
           onNavigateToTermux = { viewModel.onNavigate(MainDestination.TermuxSettings) },
           onNavigateToStatistics = { viewModel.onNavigate(MainDestination.StatisticsSettings) },
@@ -199,38 +201,14 @@ fun MainScreen(
         )
       }
 
+      MainDestination.AppearanceSettings -> {
+        AppearanceSettingsScreen(
+          onBackClick = { viewModel.onBackPressed() },
+        )
+      }
+
       MainDestination.GeneralSettings -> {
-        com.scto.codelikebastimove.feature.settings.general.GeneralSettingsScreen(
-          onBack = { viewModel.onBackPressed() },
-        )
-      }
-
-      MainDestination.BuildAndRunSettings -> {
-        com.scto.codelikebastimove.feature.settings.general.GeneralSettingsScreen(
-          onBack = { viewModel.onBackPressed() },
-        )
-      }
-
-      MainDestination.TermuxSettings -> {
-        com.scto.codelikebastimove.feature.settings.general.GeneralSettingsScreen(
-          onBack = { viewModel.onBackPressed() },
-        )
-      }
-
-      MainDestination.StatisticsSettings -> {
-        com.scto.codelikebastimove.feature.settings.general.GeneralSettingsScreen(
-          onBack = { viewModel.onBackPressed() },
-        )
-      }
-
-      MainDestination.DeveloperOptions -> {
-        com.scto.codelikebastimove.feature.settings.debug.DebugSettingsScreen(
-          onBack = { viewModel.onBackPressed() },
-        )
-      }
-
-      MainDestination.About -> {
-        com.scto.codelikebastimove.feature.settings.about.AboutScreen(
+        GeneralSettingsScreen(
           onBack = { viewModel.onBackPressed() },
         )
       }
@@ -241,6 +219,49 @@ fun MainScreen(
         )
       }
 
+      MainDestination.AIAgentSettings -> {
+        AIAgentSettingsScreen(
+          onBackClick = { viewModel.onBackPressed() },
+        )
+      }
+
+      MainDestination.BuildAndRunSettings -> {
+        BuildAndRunSettingsScreen(
+          onBackClick = { viewModel.onBackPressed() },
+        )
+      }
+
+      MainDestination.TermuxSettings -> {
+        TermuxSettingsScreen(
+          onBackClick = { viewModel.onBackPressed() },
+        )
+      }
+
+      MainDestination.StatisticsSettings -> {
+        StatisticsSettingsScreen(
+          onBackClick = { viewModel.onBackPressed() },
+        )
+      }
+
+      MainDestination.DeveloperOptions -> {
+        DeveloperOptionsScreen(
+          onBackClick = { viewModel.onBackPressed() },
+          onNavigateToDebugSettings = { viewModel.onNavigate(MainDestination.DebugSettings) },
+        )
+      }
+
+      MainDestination.DebugSettings -> {
+        DebugSettingsScreen(
+          onBack = { viewModel.onBackPressed() },
+        )
+      }
+
+      MainDestination.About -> {
+        AboutScreen(
+          onBack = { viewModel.onBackPressed() },
+        )
+      }
+
       MainDestination.AssetStudio -> {
         AssetStudioScreen(
           onBackClick = { viewModel.onBackPressed() },
@@ -248,16 +269,6 @@ fun MainScreen(
           onCreateDrawable = { viewModel.onNavigate(MainDestination.VectorAssetStudio) },
           onCreateIcon = { viewModel.onNavigate(MainDestination.VectorAssetStudio) },
           onImportImage = { viewModel.onNavigate(MainDestination.VectorAssetStudio) },
-        )
-      }
-
-      MainDestination.AIAgent -> {
-        HomeContent(
-          onNavigate = { viewModel.onNavigate(it) },
-          onCreateProject = { viewModel.onNavigate(MainDestination.CreateProject) },
-          onImportProject = { viewModel.onNavigate(MainDestination.ImportProject) },
-          onOpenProject = { viewModel.onNavigate(MainDestination.OpenProject) },
-          onCloneRepository = { viewModel.onNavigate(MainDestination.GitClone) },
         )
       }
 
@@ -275,6 +286,8 @@ fun MainScreen(
       }
 
       MainDestination.Console -> {
+        // You'll need to create a dedicated ConsoleScreen for MainDestination.Console
+        // For now, I'm providing a placeholder that navigates back to HomeContent
         HomeContent(
           onNavigate = { viewModel.onNavigate(it) },
           onCreateProject = { viewModel.onNavigate(MainDestination.CreateProject) },
@@ -285,6 +298,8 @@ fun MainScreen(
       }
 
       MainDestination.Documentation -> {
+        // You'll need to create a dedicated DocumentationScreen for MainDestination.Documentation
+        // For now, I'm providing a placeholder that navigates back to HomeContent
         HomeContent(
           onNavigate = { viewModel.onNavigate(it) },
           onCreateProject = { viewModel.onNavigate(MainDestination.CreateProject) },

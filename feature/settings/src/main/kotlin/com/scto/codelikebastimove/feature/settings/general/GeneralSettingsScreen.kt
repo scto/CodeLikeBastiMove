@@ -47,87 +47,21 @@ fun GeneralSettingsScreen(
         onBack = onBack,
         modifier = modifier,
     ) {
-        PreferenceGroup(heading = stringResource(R.string.settings_theme)) {
-            ThemeOption(
-                icon = Icons.Default.LightMode,
-                title = stringResource(R.string.settings_theme_light),
-                isSelected = selectedThemeMode == ThemeMode.LIGHT,
-                onClick = { viewModel.setThemeMode(ThemeMode.LIGHT) },
-            )
-
-            ThemeOption(
-                icon = Icons.Default.DarkMode,
-                title = stringResource(R.string.settings_theme_dark),
-                isSelected = selectedThemeMode == ThemeMode.DARK,
-                onClick = { viewModel.setThemeMode(ThemeMode.DARK) },
-            )
-
-            ThemeOption(
-                icon = Icons.Default.BrightnessAuto,
-                title = stringResource(R.string.settings_theme_system),
-                isSelected = selectedThemeMode == ThemeMode.FOLLOW_SYSTEM,
-                onClick = { viewModel.setThemeMode(ThemeMode.FOLLOW_SYSTEM) },
-            )
-        }
-
-        PreferenceGroup(heading = stringResource(R.string.settings_appearance)) {
-            SettingsToggle(
-                label = stringResource(R.string.settings_dynamic_colors),
-                description = stringResource(R.string.settings_dynamic_colors_subtitle),
-                checked = dynamicColorsEnabled,
-                onCheckedChange = { viewModel.setDynamicColorsEnabled(it) },
-                startWidget = {
-                    Icon(
-                        imageVector = Icons.Default.Palette,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(24.dp),
-                    )
-                },
-            )
-        }
-    }
-}
-
-@Composable
-private fun ThemeOption(
-    icon: ImageVector,
-    title: String,
-    isSelected: Boolean,
-    onClick: () -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = title,
-            tint = if (isSelected) MaterialTheme.colorScheme.primary
-            else MaterialTheme.colorScheme.onSurfaceVariant,
+    PreferenceGroup(heading = stringResource(R.string.settings_general)) {
+      SettingsToggle(
+        label = "Example General Setting",
+        description = "This is a placeholder for general settings",
+        checked = true,
+        onCheckedChange = { /* TODO */ },
+        startWidget = {
+          Icon(
+            imageVector = Icons.Default.Settings, // Replace with a more specific icon
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(24.dp),
-        )
-
-        Spacer(modifier = Modifier.width(16.dp))
-
-        Text(
-            text = title,
-            style = MaterialTheme.typography.bodyLarge,
-            color = if (isSelected) MaterialTheme.colorScheme.primary
-            else MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.weight(1f),
-        )
-
-        if (isSelected) {
-            Icon(
-                imageVector = Icons.Default.Check,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(24.dp),
-            )
-        }
+          )
+        },
+      )
     }
+  }
 }
