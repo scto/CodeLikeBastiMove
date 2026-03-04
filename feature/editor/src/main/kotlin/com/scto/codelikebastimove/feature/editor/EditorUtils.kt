@@ -4,18 +4,15 @@ import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
-import com.scto.codelikebastimove.feature.editor.highlighting.EditorLanguage
+import com.scto.codelikebastimove.feature.soraeditor.model.EditorLanguageType
 import io.github.rosemoe.sora.langs.textmate.TextMateLanguage
 import io.github.rosemoe.sora.langs.textmate.registry.FileProviderRegistry
 import io.github.rosemoe.sora.langs.textmate.registry.GrammarRegistry
-import io.github.rosemoe.sora.langs.textmate.registry.ThemeRegistry
+import io.github.rosemoe.sora.langs.textmate.registry.ThemeRegistry as TextMateThemeRegistry
 import io.github.rosemoe.sora.langs.textmate.registry.model.ThemeModel
 import io.github.rosemoe.sora.langs.textmate.registry.provider.AssetsFileProvider
 import io.github.rosemoe.sora.widget.CodeEditor
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.InputStreamReader
 
 object EditorUtils {
 
@@ -26,7 +23,7 @@ object EditorUtils {
 
         // Initialize TextMate registries
         FileProviderRegistry.setFileProvider(AssetsFileProvider(context.assets))
-        ThemeRegistry.getInstance().loadThemes(context.assets.open("textmate/themes/themes.json").reader())
+        TextMateThemeRegistry.getInstance().loadThemes(context.assets.open("textmate/themes/themes.json").reader())
         GrammarRegistry.getInstance().loadGrammars(context.assets.open("textmate/languages/languages.json").reader())
 
         // Register custom languages / overrides if needed
@@ -46,7 +43,7 @@ object EditorUtils {
         private val loadedThemes = mutableMapOf<String, EditorColorScheme>()
 
         fun getTheme(themeName: String): EditorColorScheme? {
-            return loadedThemes[themeName] ?: ThemeRegistry.getInstance().getTheme(themeName)?.let { themeModel ->
+            return loadedThemes[themeName] ?: TextMateThemeRegistry.getInstance().getTheme(themeName)?.let { themeModel ->
                 val colorScheme = EditorColorScheme(EditorColorScheme.LIGHT).apply {
                     applyFromTheme(themeModel)
                 }
@@ -56,8 +53,11 @@ object EditorUtils {
         }
 
         fun getAvailableThemeNames(): List<String> {
-            return ThemeRegistry.getInstance().themes.map { it.name }
+            return TextMateThemeRegistry.getInstance().themes.map { it.name }
         }
+
+        fun getDarkThemeName(): String = "Darcula" // Or any other preferred dark theme
+        fun getLightThemeName(): String = "QuietLight" // Or any other preferred light theme
     }
 
     object GrammarRegistry {
@@ -74,7 +74,7 @@ object EditorUtils {
             println("TreesitterRegistry initialized (stub)")
         }
 
-        fun getLanguage(lang: EditorLanguage): Language? {
+        fun getLanguage(lang: EditorLanguageType): Any? { // Use Any? as actual Treesitter type is unknown
             // Stub: Return a TreesitterLanguage instance for a given EditorLanguage
             println("Treesitter language for ${lang.displayName} requested (stub)")
             return null // Replace with actual Treesitter language instance
