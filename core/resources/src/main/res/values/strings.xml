@@ -48,7 +48,12 @@
     <string name="editor_search">Search</string>
     <string name="editor_format">Format Code</string>
     <string name="editor_action_select_all">Select All</string>
+    <string name="select_all">Select All</string>
+    <string name="editor_action_cut">Cut</string>
+    <string name="editor_action_paste">Paste</string>
     <string name="editor_action_explain_code">Explain Code</string>
+    <string name="format_code">Format Code</string>
+    <string name="find">Find</string>
 
     <!-- Dateisystem -->
     <string name="files">Files</string>
@@ -74,7 +79,34 @@
     <!-- Git -->
     <string name="git">Git</string>
     <string name="git_clone">Clone Repository</string>
+    <string name="clone_repository">Clone Repository</string>
     <string name="git_cloning">Cloning…</string>
+    <string name="cloning">Cloning...</string>
+    <string name="clone">Clone</string>
+    <string name="repository_url">Repository URL</string>
+    <string name="target_directory">Target Directory</string>
+    <string name="branch_optional">Branch (Optional)</string>
+    <string name="clone_options">Clone Options</string>
+    <string name="recursive_submodules">Recursive Submodules</string>
+    <string name="shallow_clone">Shallow Clone</string>
+    <string name="clone_single_branch">Clone Single Branch</string>
+    <string name="clone_depth">Clone Depth</string>
+    <string name="diff_viewer">Diff Viewer</string>
+    <string name="no_changes">No changes</string>
+    <string name="stash_management">Stash Management</string>
+    <string name="no_stashes">No stashes</string>
+    <string name="stash_changes">Stash Changes</string>
+    <string name="message_optional">Message (Optional)</string>
+    <string name="stash">Stash</string>
+    <string name="pop">Pop</string>
+    <string name="apply">Apply</string>
+    <string name="drop">Drop</string>
+    <string name="tag_management">Tag Management</string>
+    <string name="no_tags">No tags</string>
+    <string name="create_tag">Create Tag</string>
+    <string name="tag_name">Tag Name</string>
+    <string name="annotated_tag">Annotated Tag</string>
+    <string name="tag_message">Tag Message</string>
     <string name="git_commit">Commit</string>
     <string name="git_push">Push</string>
     <string name="git_pull">Pull</string>
