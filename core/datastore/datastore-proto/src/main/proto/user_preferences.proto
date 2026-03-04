@@ -122,6 +122,8 @@ message ProjectProto {
 message OnboardingConfigProto {
     bool onboarding_completed = 1;
     bool file_access_permission_granted = 2;
+    bool notification_permission_granted = 18; // Assign a unique field number
+    bool install_packages_permission_granted = 19; // Assign a unique field number
     bool usage_analytics_permission_granted = 3;
     bool battery_optimization_disabled = 4;
     OpenJdkVersion selected_openjdk_version = 5;
