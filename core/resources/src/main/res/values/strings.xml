@@ -127,4 +127,16 @@
     <string name="create_new_project">Neues Projekt erstellen</string>
     <string name="get_started">Loslegen</string>
 
+    <!-- Create Project Screen -->
+    <string name="project_details">Project Details</string>
+    <string name="project_name">Project Name</string>
+    <string name="my_application_placeholder">My Application</string>
+    <string name="package_name">Package Name</string>
+    <string name="minimum_sdk">Minimum SDK</string>
+    <string name="select_template">Select Template</string>
+    <string name="language_and_build">Language &amp; Build</string>
+    <string name="use_kotlin">Use Kotlin</string>
+    <string name="kotlin_dsl">Kotlin DSL</string>
+    <string name="create_project">Create Project</string>
+
 </resources>
