@@ -136,6 +136,8 @@ data class StoredProject(
 data class OnboardingConfig(
   val onboardingCompleted: Boolean = false,
   val fileAccessPermissionGranted: Boolean = false,
+  val notificationPermissionGranted: Boolean = false,
+  val installPackagesPermissionGranted: Boolean = false,
   val usageAnalyticsPermissionGranted: Boolean = false,
   val batteryOptimizationDisabled: Boolean = false,
   val selectedOpenJdkVersion: OpenJdkVersion = OpenJdkVersion.OPENJDK_17,

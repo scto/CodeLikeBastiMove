@@ -167,6 +167,22 @@ class UserPreferencesRepository(private val context: Context) {
     }
   }
 
+  suspend fun setNotificationPermissionGranted(granted: Boolean) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      val onboardingProto =
+        currentPrefs.onboardingConfig.toBuilder().setNotificationPermissionGranted(granted).build()
+      currentPrefs.toBuilder().setOnboardingConfig(onboardingProto).build()
+    }
+  }
+
+  suspend fun setInstallPackagesPermissionGranted(granted: Boolean) {
+    context.userPreferencesStore.updateData { currentPrefs ->
+      val onboardingProto =
+        currentPrefs.onboardingConfig.toBuilder().setInstallPackagesPermissionGranted(granted).build()
+      currentPrefs.toBuilder().setOnboardingConfig(onboardingProto).build()
+    }
+  }
+
   suspend fun setBatteryOptimizationDisabled(disabled: Boolean) {
     context.userPreferencesStore.updateData { currentPrefs ->
       val onboardingProto =
@@ -241,6 +257,8 @@ class UserPreferencesRepository(private val context: Context) {
         OnboardingConfigProto.newBuilder()
           .setOnboardingCompleted(config.onboardingCompleted)
           .setFileAccessPermissionGranted(config.fileAccessPermissionGranted)
+          .setNotificationPermissionGranted(config.notificationPermissionGranted)
+          .setInstallPackagesPermissionGranted(config.installPackagesPermissionGranted)
           .setUsageAnalyticsPermissionGranted(config.usageAnalyticsPermissionGranted)
           .setBatteryOptimizationDisabled(config.batteryOptimizationDisabled)
           .setSelectedOpenjdkVersion(config.selectedOpenJdkVersion.toProtoOpenJdkVersion())
@@ -290,6 +308,8 @@ class UserPreferencesRepository(private val context: Context) {
       OnboardingConfig(
         onboardingCompleted = onboardingCompleted,
         fileAccessPermissionGranted = fileAccessPermissionGranted,
+        notificationPermissionGranted = notificationPermissionGranted,
+        installPackagesPermissionGranted = installPackagesPermissionGranted,
         usageAnalyticsPermissionGranted = usageAnalyticsPermissionGranted,
         batteryOptimizationDisabled = batteryOptimizationDisabled,
         selectedOpenJdkVersion = selectedOpenjdkVersion.toOpenJdkVersion(),

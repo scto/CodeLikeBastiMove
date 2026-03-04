@@ -8,5 +8,8 @@ android {
 
 dependencies {
     implementation(project(":core:logger"))
+    implementation(project(":core:datastore:datastore"))
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.accompanist.permissions)
 }
