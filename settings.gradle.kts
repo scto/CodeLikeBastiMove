@@ -59,6 +59,7 @@ include(":feature:main")
 include(":feature:onboarding")
 include(":feature:settings")
 include(":feature:soraeditor")
+include(":feature:editor") // New editor module
 include(":feature:submodulemaker")
 include(":feature:themebuilder")
 include(":feature:treeview")
