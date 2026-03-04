@@ -29,19 +29,23 @@ fun PermissionsPage(
     config: OnboardingConfig,
     onPermissionChange: (PermissionUtils.PermissionType, Boolean) -> Unit,
     onNext: () -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
-    val notificationLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
-        onPermissionChange(PermissionUtils.PermissionType.NOTIFICATIONS, it)
+    val notificationLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        onPermissionChange(PermissionUtils.PermissionType.NOTIFICATIONS, isGranted)
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(16.dp).padding(bottom = 80.dp).verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+                .padding(bottom = 80.dp)
+                .verticalScroll(scrollState),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Text("Berechtigungen", style = MaterialTheme.typography.headlineMedium)
 
@@ -54,7 +58,8 @@ fun PermissionsPage(
                         val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse("package:${context.packageName}"))
                         context.startActivity(intent)
                     }
-                }
+                    // onPermissionChange for file access will be handled in OnboardingScreen's LaunchedEffect
+                },
             )
 
             PermissionItem(
@@ -64,8 +69,10 @@ fun PermissionsPage(
                 onGrant = {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    } else {
+                        onPermissionChange(PermissionUtils.PermissionType.NOTIFICATIONS, true)
                     }
-                }
+                },
             )
 
             PermissionItem(
@@ -75,11 +82,31 @@ fun PermissionsPage(
                 onGrant = {
                     val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:${context.packageName}"))
                     context.startActivity(intent)
+                    // onPermissionChange for install packages will be handled in OnboardingScreen's LaunchedEffect
+                    onPermissionChange(PermissionUtils.PermissionType.INSTALL_PACKAGES, true) // Assume granted after intent
+                },
+            )
+
+            PermissionItem(
+                title = "Akku-Optimierung",
+                desc = "Für bessere Stabilität bei langen Builds.",
+                isGranted = config.batteryOptimizationDisabled,
+                onGrant = {
+                    val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:${context.packageName}"))
+                    context.startActivity(intent)
+                    // onPermissionChange for battery optimization will be handled in OnboardingScreen's LaunchedEffect
+                    onPermissionChange(PermissionUtils.PermissionType.BATTERY_OPTIMIZATION, true) // Assume granted after intent
                 }
             )
         }
 
-        Row(modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(24.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(24.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
             FloatingActionButton(onClick = onBack, containerColor = MaterialTheme.colorScheme.secondary) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
             }

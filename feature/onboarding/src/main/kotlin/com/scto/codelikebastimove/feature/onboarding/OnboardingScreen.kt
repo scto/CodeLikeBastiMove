@@ -41,15 +41,15 @@ fun OnboardingScreen(
       0 -> WelcomePage(onNextClick = { viewModel.nextPage() })
       1 ->
         PermissionsPage(
-          onboardingConfig = onboardingConfig,
-          onFileAccessPermissionChange = { granted ->
-            viewModel.setFileAccessPermissionGranted(granted)
-            hasRealFilePermission = granted
+          config = onboardingConfig,
+          onPermissionChange = { type, granted ->
+            viewModel.setPermission(type, granted)
+            if (type == PermissionUtils.PermissionType.FILE_ACCESS) {
+              hasRealFilePermission = granted
+            }
           },
-          onUsageAnalyticsPermissionChange = { viewModel.setUsageAnalyticsPermissionGranted(it) },
-          onBatteryOptimizationChange = { viewModel.setBatteryOptimizationDisabled(it) },
-          onNextClick = { viewModel.nextPage() },
-          onBackClick = { viewModel.previousPage() },
+          onNext = { viewModel.nextPage() },
+          onBack = { viewModel.previousPage() },
         )
       2 ->
         InstallationOptionsPage(
@@ -64,7 +64,7 @@ fun OnboardingScreen(
         )
       3 ->
         SummaryPage(
-          onboardingConfig = onboardingConfig,
+          config = onboardingConfig,
           canComplete = hasRealFilePermission,
           onStartInstallation = {
             val currentPermission = checkFileAccessPermission()
@@ -77,7 +77,8 @@ fun OnboardingScreen(
               viewModel.setFileAccessPermissionGranted(false)
             }
           },
-          onBackClick = { viewModel.previousPage() },
+          onFinish = onOnboardingComplete, // Mapping to onOnboardingComplete
+          onBack = { viewModel.previousPage() },
         )
     }
   }
