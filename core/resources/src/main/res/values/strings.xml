@@ -190,6 +190,7 @@
     <string name="search_projects">Projekte suchen...</string>
     <string name="create_new_project">Neues Projekt erstellen</string>
     <string name="get_started">Loslegen</string>
+    <string name="sub_module_maker">Submodule Maker</string>
 
     <!-- Create Project Screen -->
     <string name="project_details">Project Details</string>
