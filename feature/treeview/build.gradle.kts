@@ -8,4 +8,9 @@ android {
 
 dependencies {
     api(project(":core:templates:templates-api"))
+    implementation(project(":core :resources"))
+
+    implementation(project(":feature:buildvariants"))
+    implementation(project(":feature:submodulemaker"))
+
 }

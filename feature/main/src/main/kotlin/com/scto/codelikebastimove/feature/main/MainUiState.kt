@@ -25,7 +25,6 @@ data class MainUiState(
   val projectViewType: ProjectViewMode = ProjectViewMode.ANDROID,
   val isLoading: Boolean = false,
   val hasUnsavedChanges: Boolean = false,
-
   // Trigger für Dateisystem-Aktualisierungen (Timestamp)
   val lastFileSystemUpdate: Long = 0L,
 )

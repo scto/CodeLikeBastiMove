@@ -75,6 +75,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+import com.scto.codelikebastimove.feature.buildVariants.BuildVariantsScreen
+import com.scto.codelikebastimove.feature.submodulemaker.SubModuleMakerScreen
+
 enum class DrawerTab(val title: String, val icon: ImageVector) {
   FILES("Files", Icons.Default.Folder),
   BUILD("Build", Icons.Default.Android),
@@ -153,10 +156,14 @@ fun FileTreeDrawer(
           )
         }
         DrawerTab.BUILD -> {
-          BuildVariantsTabContent()
+          //BuildVariantsTabContent()
+          BuildVariantsScreen(
+            projectPath = projectPath,
+          )
         }
         DrawerTab.MODULE -> {
-          SubModuleMakerTabContent()
+          //SubModuleMakerTabContent()
+          SubModuleMakerScreen()
         }
         DrawerTab.ASSETS -> {
           AssetStudioTabContent()

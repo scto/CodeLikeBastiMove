@@ -50,6 +50,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
 import com.scto.codelikebastimove.core.datastore.ProjectTemplateType
 import com.scto.codelikebastimove.core.resources.R
 import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar

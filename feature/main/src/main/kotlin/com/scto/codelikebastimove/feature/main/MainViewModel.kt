@@ -3,6 +3,7 @@ package com.scto.codelikebastimove.feature.main
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+
 import com.scto.codelikebastimove.core.datastore.DirectoryItem
 import com.scto.codelikebastimove.core.datastore.ProjectTemplateType
 import com.scto.codelikebastimove.core.datastore.StoredProject
@@ -15,7 +16,9 @@ import com.scto.codelikebastimove.core.templates.api.ProjectManager
 import com.scto.codelikebastimove.core.templates.impl.ProjectManagerImpl
 import com.scto.codelikebastimove.core.utils.ProjectUtils
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
+
 import java.io.File
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

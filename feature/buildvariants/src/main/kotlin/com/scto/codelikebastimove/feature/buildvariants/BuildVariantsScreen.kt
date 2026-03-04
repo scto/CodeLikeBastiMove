@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+
 import com.scto.codelikebastimove.core.ui.components.AdaptiveTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -140,7 +141,7 @@ fun BuildVariantsScreen(
               )
               Spacer(modifier = Modifier.height(16.dp))
             }
-            
+
             uiState.moduleGroups.forEach { group ->
               item(key = "group_${group.name}") {
                 ModuleGroupHeader(
@@ -150,12 +151,9 @@ fun BuildVariantsScreen(
                   onToggle = { viewModel.toggleGroupExpanded(group.name) },
                 )
               }
-              
+
               if (group.isExpanded) {
-                items(
-                  items = group.modules,
-                  key = { "module_${it.moduleName}" }
-                ) { variant ->
+                items(items = group.modules, key = { "module_${it.moduleName}" }) { variant ->
                   AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),
@@ -170,7 +168,7 @@ fun BuildVariantsScreen(
                   }
                 }
               }
-              
+
               item { Spacer(modifier = Modifier.height(8.dp)) }
             }
           }
@@ -193,9 +191,7 @@ private fun ProjectInfoHeader(
     shape = RoundedCornerShape(12.dp),
   ) {
     Column(modifier = Modifier.padding(16.dp)) {
-      Row(
-        verticalAlignment = Alignment.CenterVertically,
-      ) {
+      Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
           imageVector = Icons.Default.Folder,
           contentDescription = null,
@@ -210,23 +206,12 @@ private fun ProjectInfoHeader(
           color = MaterialTheme.colorScheme.onPrimaryContainer,
         )
       }
-      
+
       Spacer(modifier = Modifier.height(12.dp))
-      
-      Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-      ) {
-        StatChip(
-          label = "Gesamt",
-          value = totalModules.toString(),
-          icon = Icons.Default.ViewModule,
-        )
-        StatChip(
-          label = "Android",
-          value = androidModules.toString(),
-          icon = Icons.Default.Android,
-        )
+
+      Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        StatChip(label = "Gesamt", value = totalModules.toString(), icon = Icons.Default.ViewModule)
+        StatChip(label = "Android", value = androidModules.toString(), icon = Icons.Default.Android)
         StatChip(
           label = "Andere",
           value = (totalModules - androidModules).toString(),
@@ -285,11 +270,9 @@ private fun ModuleGroupHeader(
   onToggle: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  val rotationAngle by animateFloatAsState(
-    targetValue = if (isExpanded) 0f else -90f,
-    label = "rotation"
-  )
-  
+  val rotationAngle by
+    animateFloatAsState(targetValue = if (isExpanded) 0f else -90f, label = "rotation")
+
   Surface(
     onClick = onToggle,
     modifier = modifier.fillMaxWidth(),
@@ -337,37 +320,38 @@ private fun BuildVariantCard(
   modifier: Modifier = Modifier,
 ) {
   var expanded by remember { mutableStateOf(false) }
-  
-  val moduleTypeIcon = when (variant.moduleType) {
-    ModuleType.APPLICATION -> Icons.Default.Android
-    ModuleType.LIBRARY -> Icons.Default.LibraryBooks
-    ModuleType.JAVA_LIBRARY -> Icons.Default.Code
-    ModuleType.KOTLIN_LIBRARY -> Icons.Default.Code
-    ModuleType.UNKNOWN -> Icons.Default.ViewModule
-  }
-  
-  val moduleTypeLabel = when (variant.moduleType) {
-    ModuleType.APPLICATION -> "App"
-    ModuleType.LIBRARY -> "Android Library"
-    ModuleType.JAVA_LIBRARY -> "Java Library"
-    ModuleType.KOTLIN_LIBRARY -> "Kotlin Library"
-    ModuleType.UNKNOWN -> "Modul"
-  }
-  
-  val moduleTypeColor = when (variant.moduleType) {
-    ModuleType.APPLICATION -> MaterialTheme.colorScheme.primary
-    ModuleType.LIBRARY -> MaterialTheme.colorScheme.secondary
-    ModuleType.JAVA_LIBRARY -> MaterialTheme.colorScheme.tertiary
-    ModuleType.KOTLIN_LIBRARY -> Color(0xFF7F52FF)
-    ModuleType.UNKNOWN -> MaterialTheme.colorScheme.outline
-  }
-  
+
+  val moduleTypeIcon =
+    when (variant.moduleType) {
+      ModuleType.APPLICATION -> Icons.Default.Android
+      ModuleType.LIBRARY -> Icons.Default.LibraryBooks
+      ModuleType.JAVA_LIBRARY -> Icons.Default.Code
+      ModuleType.KOTLIN_LIBRARY -> Icons.Default.Code
+      ModuleType.UNKNOWN -> Icons.Default.ViewModule
+    }
+
+  val moduleTypeLabel =
+    when (variant.moduleType) {
+      ModuleType.APPLICATION -> "App"
+      ModuleType.LIBRARY -> "Android Library"
+      ModuleType.JAVA_LIBRARY -> "Java Library"
+      ModuleType.KOTLIN_LIBRARY -> "Kotlin Library"
+      ModuleType.UNKNOWN -> "Modul"
+    }
+
+  val moduleTypeColor =
+    when (variant.moduleType) {
+      ModuleType.APPLICATION -> MaterialTheme.colorScheme.primary
+      ModuleType.LIBRARY -> MaterialTheme.colorScheme.secondary
+      ModuleType.JAVA_LIBRARY -> MaterialTheme.colorScheme.tertiary
+      ModuleType.KOTLIN_LIBRARY -> Color(0xFF7F52FF)
+      ModuleType.UNKNOWN -> MaterialTheme.colorScheme.outline
+    }
+
   val indentPadding = (variant.depth * 16).dp
 
   Card(
-    modifier = modifier
-      .fillMaxWidth()
-      .padding(start = indentPadding),
+    modifier = modifier.fillMaxWidth().padding(start = indentPadding),
     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
     shape = RoundedCornerShape(10.dp),
     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
@@ -390,9 +374,9 @@ private fun BuildVariantCard(
           )
         }
       }
-      
+
       Spacer(modifier = Modifier.width(12.dp))
-      
+
       Column(modifier = Modifier.weight(1f)) {
         Text(
           text = getDisplayModuleName(variant.moduleName),
@@ -408,9 +392,9 @@ private fun BuildVariantCard(
           color = moduleTypeColor.copy(alpha = 0.8f),
         )
       }
-      
+
       Spacer(modifier = Modifier.width(8.dp))
-      
+
       Box {
         Surface(
           onClick = { expanded = true },
@@ -440,27 +424,25 @@ private fun BuildVariantCard(
         }
 
         if (variant.availableVariants.size > 1) {
-          DropdownMenu(
-            expanded = expanded, 
-            onDismissRequest = { expanded = false },
-          ) {
+          DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             variant.availableVariants.forEach { variantName ->
               DropdownMenuItem(
                 text = {
                   Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
-                      modifier = Modifier
-                        .size(8.dp)
-                        .background(
-                          color = getBuildTypeColor(variantName),
-                          shape = RoundedCornerShape(4.dp),
-                        )
+                      modifier =
+                        Modifier.size(8.dp)
+                          .background(
+                            color = getBuildTypeColor(variantName),
+                            shape = RoundedCornerShape(4.dp),
+                          )
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
                       text = variantName,
-                      fontWeight = if (variantName == variant.activeVariant) 
-                        FontWeight.Bold else FontWeight.Normal,
+                      fontWeight =
+                        if (variantName == variant.activeVariant) FontWeight.Bold
+                        else FontWeight.Normal,
                     )
                     if (variantName == variant.activeVariant) {
                       Spacer(modifier = Modifier.width(8.dp))

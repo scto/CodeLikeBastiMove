@@ -1,26 +1,13 @@
 package com.scto.codelikebastimove.feature.onboarding
 
-import android.app.AppOpsManager
-import android.content.Context
+import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
-import android.os.PowerManager
-import android.os.Process
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -28,240 +15,90 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.scto.codelikebastimove.core.datastore.OnboardingConfig
+import com.scto.codelikebastimove.core.utils.PermissionUtils
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun PermissionsPage(
-  onboardingConfig: OnboardingConfig,
-  onFileAccessPermissionChange: (Boolean) -> Unit,
-  onUsageAnalyticsPermissionChange: (Boolean) -> Unit,
-  onBatteryOptimizationChange: (Boolean) -> Unit,
-  onNextClick: () -> Unit,
-  onBackClick: () -> Unit,
+    config: OnboardingConfig,
+    onPermissionChange: (PermissionUtils.PermissionType, Boolean) -> Unit,
+    onNext: () -> Unit,
+    onBack: () -> Unit
 ) {
-  val context = LocalContext.current
-  val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
+    val scrollState = rememberScrollState()
 
-  var isFileAccessGranted by remember { mutableStateOf(checkFileAccessPermission(context)) }
-  var isUsageStatsGranted by remember { mutableStateOf(checkUsageStatsPermission(context)) }
-  var isBatteryOptimizationDisabled by remember {
-    mutableStateOf(checkBatteryOptimization(context))
-  }
-
-  val manageStorageLauncher =
-    rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
-      isFileAccessGranted = checkFileAccessPermission(context)
-      onFileAccessPermissionChange(isFileAccessGranted)
+    val notificationLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
+        onPermissionChange(PermissionUtils.PermissionType.NOTIFICATIONS, it)
     }
 
-  val usageStatsLauncher =
-    rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
-      isUsageStatsGranted = checkUsageStatsPermission(context)
-      onUsageAnalyticsPermissionChange(isUsageStatsGranted)
-    }
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(16.dp).padding(bottom = 80.dp).verticalScroll(scrollState),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Text("Berechtigungen", style = MaterialTheme.typography.headlineMedium)
 
-  val batteryOptimizationLauncher =
-    rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
-      isBatteryOptimizationDisabled = checkBatteryOptimization(context)
-      onBatteryOptimizationChange(isBatteryOptimizationDisabled)
-    }
+            PermissionItem(
+                title = "Dateizugriff (Alle Dateien)",
+                desc = "Erforderlich für das Management deiner Projekte.",
+                isGranted = config.fileAccessPermissionGranted,
+                onGrant = {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse("package:${context.packageName}"))
+                        context.startActivity(intent)
+                    }
+                }
+            )
 
-  LaunchedEffect(lifecycleOwner) {
-    lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-      isFileAccessGranted = checkFileAccessPermission(context)
-      isUsageStatsGranted = checkUsageStatsPermission(context)
-      isBatteryOptimizationDisabled = checkBatteryOptimization(context)
+            PermissionItem(
+                title = "Benachrichtigungen",
+                desc = "Status-Infos zu deinen Builds.",
+                isGranted = config.notificationPermissionGranted,
+                onGrant = {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
+                }
+            )
 
-      onFileAccessPermissionChange(isFileAccessGranted)
-      onUsageAnalyticsPermissionChange(isUsageStatsGranted)
-      onBatteryOptimizationChange(isBatteryOptimizationDisabled)
-    }
-  }
+            PermissionItem(
+                title = "Apps installieren",
+                desc = "APKs direkt aus der IDE testen.",
+                isGranted = config.installPackagesPermissionGranted,
+                onGrant = {
+                    val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:${context.packageName}"))
+                    context.startActivity(intent)
+                }
+            )
+        }
 
-  Box(modifier = Modifier.fillMaxSize()) {
-    Column(
-      modifier =
-        Modifier.fillMaxSize()
-          .padding(16.dp)
-          .padding(bottom = 80.dp)
-          .verticalScroll(rememberScrollState()),
-      verticalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-      Text(
-        text = "Berechtigungen",
-        style = MaterialTheme.typography.headlineMedium,
-        color = MaterialTheme.colorScheme.onBackground,
-      )
-
-      Spacer(modifier = Modifier.height(8.dp))
-
-      PermissionCard(
-        title = "Die Berechtigung für den Zugriff auf alle Dateien wird benötigt.",
-        description =
-          "CodeLikeBastiMove benötigt Zugriff auf die Dateien um Projekte zu erstellen, öffnen oder zu löschen.",
-        isEnabled = isFileAccessGranted,
-        onToggle = {
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val intent =
-              Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
-                data = Uri.parse("package:${context.packageName}")
-              }
-            manageStorageLauncher.launch(intent)
-          }
-        },
-      )
-
-      PermissionCard(
-        title = "Berechtigung für die Nutzung Analyse wird benötigt.",
-        description = "CodeLikeBastiMove benötigt die Rechte auf die Nutzer Daten.",
-        isEnabled = isUsageStatsGranted,
-        onToggle = {
-          val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-          usageStatsLauncher.launch(intent)
-        },
-      )
-
-      PermissionCard(
-        title = "Berechtigung für die Reaktivierung der Akku Optimierung wird empfohlen.",
-        description =
-          "CodeLikeBastiMove benötigt die Reaktivierung der Akku Optimierung um optimal zu funktionieren. Dies wird empfohlen, ist jedoch nicht unbedingt erforderlich.",
-        isEnabled = isBatteryOptimizationDisabled,
-        onToggle = {
-          val intent =
-            Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
-              data = Uri.parse("package:${context.packageName}")
+        Row(modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(24.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+            FloatingActionButton(onClick = onBack, containerColor = MaterialTheme.colorScheme.secondary) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
             }
-          batteryOptimizationLauncher.launch(intent)
-        },
-      )
+            FloatingActionButton(onClick = onNext, containerColor = MaterialTheme.colorScheme.primary) {
+                Icon(Icons.AutoMirrored.Filled.ArrowForward, "Next")
+            }
+        }
     }
-
-    Row(
-      modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(24.dp),
-      horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-      FloatingActionButton(
-        onClick = onBackClick,
-        containerColor = MaterialTheme.colorScheme.secondary,
-      ) {
-        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Zurück")
-      }
-
-      FloatingActionButton(
-        onClick = onNextClick,
-        containerColor = MaterialTheme.colorScheme.primary,
-      ) {
-        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Weiter")
-      }
-    }
-  }
 }
 
 @Composable
-private fun PermissionCard(
-  title: String,
-  description: String,
-  isEnabled: Boolean,
-  onToggle: () -> Unit,
-) {
-  Card(
-    modifier = Modifier.fillMaxWidth(),
-    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-  ) {
-    Column(modifier = Modifier.padding(16.dp)) {
-      Text(
-        text = description,
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-      )
-
-      Spacer(modifier = Modifier.height(12.dp))
-
-      Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-      ) {
-        Row(
-          modifier = Modifier.fillMaxWidth().padding(12.dp),
-          horizontalArrangement = Arrangement.SpaceBetween,
-          verticalAlignment = Alignment.CenterVertically,
-        ) {
-          Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-              imageVector = if (isEnabled) Icons.Default.Check else Icons.Default.Close,
-              contentDescription = if (isEnabled) "Erteilt" else "Nicht erteilt",
-              tint =
-                if (isEnabled) MaterialTheme.colorScheme.primary
-                else MaterialTheme.colorScheme.error,
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-              text = title,
-              style = MaterialTheme.typography.bodySmall,
-              color = MaterialTheme.colorScheme.onSurface,
-            )
-          }
-
-          Spacer(modifier = Modifier.width(8.dp))
-
-          Switch(checked = isEnabled, onCheckedChange = { onToggle() })
+fun PermissionItem(title: String, desc: String, isGranted: Boolean, onGrant: () -> Unit) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(title, style = MaterialTheme.typography.titleSmall)
+                Text(desc, style = MaterialTheme.typography.bodySmall)
+            }
+            Switch(checked = isGranted, onCheckedChange = { onGrant() })
         }
-      }
     }
-  }
-}
-
-private fun checkFileAccessPermission(context: Context): Boolean {
-  return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-    Environment.isExternalStorageManager()
-  } else {
-    true
-  }
-}
-
-private fun checkUsageStatsPermission(context: Context): Boolean {
-  val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-  val mode =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-      appOps.unsafeCheckOpNoThrow(
-        AppOpsManager.OPSTR_GET_USAGE_STATS,
-        Process.myUid(),
-        context.packageName,
-      )
-    } else {
-      @Suppress("DEPRECATION")
-      appOps.checkOpNoThrow(
-        AppOpsManager.OPSTR_GET_USAGE_STATS,
-        Process.myUid(),
-        context.packageName,
-      )
-    }
-  return mode == AppOpsManager.MODE_ALLOWED
-}
-
-private fun checkBatteryOptimization(context: Context): Boolean {
-  val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-  return powerManager.isIgnoringBatteryOptimizations(context.packageName)
 }
