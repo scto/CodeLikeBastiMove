@@ -203,5 +203,7 @@
     <string name="use_kotlin">Use Kotlin</string>
     <string name="kotlin_dsl">Kotlin DSL</string>
     <string name="create_project">Create Project</string>
+    <string name="light_scheme">Light Scheme</string>
+    <string name="dark_scheme">Dark Scheme</string>
 
 </resources>
