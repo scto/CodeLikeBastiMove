@@ -125,6 +125,7 @@
     <string name="clbm_statistics">CLBM Statistics</string>
     <string name="developer_options">Developer Options</string>
     <string name="settings_general">General</string>
+    <string name="appearance">Appearance</string>
     <string name="settings_appearance">Appearance</string>
     <string name="settings_theme">Theme</string>
     <string name="settings_theme_system">Follow system</string>
