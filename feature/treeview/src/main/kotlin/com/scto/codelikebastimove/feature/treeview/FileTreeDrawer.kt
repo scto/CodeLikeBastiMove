@@ -77,6 +77,7 @@ import androidx.compose.ui.unit.sp
 
 import com.scto.codelikebastimove.feature.buildVariants.BuildVariantsScreen
 import com.scto.codelikebastimove.feature.submodulemaker.SubModuleMakerScreen
+import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 
 enum class DrawerTab(val title: String, val icon: ImageVector) {
   FILES("Files", Icons.Default.Folder),
@@ -156,14 +157,15 @@ fun FileTreeDrawer(
           )
         }
         DrawerTab.BUILD -> {
-          //BuildVariantsTabContent()
           BuildVariantsScreen(
             projectPath = projectPath,
+            onBackClick = {}, // No back navigation within the drawer, pass empty lambda
           )
         }
         DrawerTab.MODULE -> {
-          //SubModuleMakerTabContent()
-          SubModuleMakerScreen()
+          SubModuleMakerScreen(
+            onBackClick = {}, // No back navigation within the drawer, pass empty lambda
+          )
         }
         DrawerTab.ASSETS -> {
           AssetStudioTabContent()
@@ -207,150 +209,6 @@ private fun DrawerHeader(title: String, modifier: Modifier = Modifier) {
   }
 }
 
-@Composable
-private fun BuildVariantsTabContent(modifier: Modifier = Modifier) {
-  var selectedModule by remember { mutableStateOf("app") }
-  val modules = listOf("app", "core:core-ui", "core:core-datastore", "features:feature-main")
-  val variants = listOf("debug", "release")
-  var selectedVariant by remember { mutableStateOf("debug") }
-
-  Column(
-    modifier = modifier.fillMaxSize().padding(16.dp),
-    verticalArrangement = Arrangement.spacedBy(16.dp),
-  ) {
-    Text(
-      text = "Build Varianten",
-      style = MaterialTheme.typography.titleMedium,
-      fontWeight = FontWeight.SemiBold,
-    )
-
-    Text(
-      text = "Modul auswählen",
-      style = MaterialTheme.typography.labelMedium,
-      color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
-
-    Row(
-      modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
-      horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-      modules.forEach { module ->
-        FilterChip(
-          selected = selectedModule == module,
-          onClick = { selectedModule = module },
-          label = { Text(module, fontSize = 11.sp) },
-          colors =
-            FilterChipDefaults.filterChipColors(
-              selectedContainerColor = MaterialTheme.colorScheme.primaryContainer
-            ),
-        )
-      }
-    }
-
-    Text(
-      text = "Variante",
-      style = MaterialTheme.typography.labelMedium,
-      color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
-
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-      variants.forEach { variant ->
-        FilterChip(
-          selected = selectedVariant == variant,
-          onClick = { selectedVariant = variant },
-          label = { Text(variant) },
-          colors =
-            FilterChipDefaults.filterChipColors(
-              selectedContainerColor = MaterialTheme.colorScheme.primaryContainer
-            ),
-        )
-      }
-    }
-
-    Spacer(modifier = Modifier.weight(1f))
-
-    Button(onClick = {}, modifier = Modifier.fillMaxWidth()) {
-      Icon(Icons.Default.PlayArrow, contentDescription = null)
-      Spacer(modifier = Modifier.width(8.dp))
-      Text("Build starten")
-    }
-  }
-}
-
-@Composable
-private fun SubModuleMakerTabContent(modifier: Modifier = Modifier) {
-  var moduleName by remember { mutableStateOf("") }
-  var selectedLanguage by remember { mutableStateOf("Kotlin") }
-  var selectedType by remember { mutableStateOf("Library") }
-
-  Column(
-    modifier = modifier.fillMaxSize().padding(16.dp),
-    verticalArrangement = Arrangement.spacedBy(16.dp),
-  ) {
-    Text(
-      text = "Sub-Module erstellen",
-      style = MaterialTheme.typography.titleMedium,
-      fontWeight = FontWeight.SemiBold,
-    )
-
-    OutlinedTextField(
-      value = moduleName,
-      onValueChange = { moduleName = it },
-      label = { Text("Modulname") },
-      placeholder = { Text("z.B. feature-auth") },
-      singleLine = true,
-      modifier = Modifier.fillMaxWidth(),
-    )
-
-    Text(
-      text = "Sprache",
-      style = MaterialTheme.typography.labelMedium,
-      color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
-
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-      listOf("Kotlin", "Java").forEach { lang ->
-        FilterChip(
-          selected = selectedLanguage == lang,
-          onClick = { selectedLanguage = lang },
-          label = { Text(lang) },
-          colors =
-            FilterChipDefaults.filterChipColors(
-              selectedContainerColor = MaterialTheme.colorScheme.primaryContainer
-            ),
-        )
-      }
-    }
-
-    Text(
-      text = "Modultyp",
-      style = MaterialTheme.typography.labelMedium,
-      color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
-
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-      listOf("Application", "Library").forEach { type ->
-        FilterChip(
-          selected = selectedType == type,
-          onClick = { selectedType = type },
-          label = { Text(type) },
-          colors =
-            FilterChipDefaults.filterChipColors(
-              selectedContainerColor = MaterialTheme.colorScheme.primaryContainer
-            ),
-        )
-      }
-    }
-
-    Spacer(modifier = Modifier.weight(1f))
-
-    Button(onClick = {}, enabled = moduleName.isNotBlank(), modifier = Modifier.fillMaxWidth()) {
-      Icon(Icons.Default.Extension, contentDescription = null)
-      Spacer(modifier = Modifier.width(8.dp))
-      Text("Modul erstellen")
-    }
-  }
-}
 
 @Composable
 private fun AssetStudioTabContent(modifier: Modifier = Modifier) {
