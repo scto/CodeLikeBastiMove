@@ -77,7 +77,6 @@ import androidx.compose.ui.unit.sp
 
 import com.scto.codelikebastimove.feature.buildvariants.BuildVariantsScreen
 import com.scto.codelikebastimove.feature.submodulemaker.SubModuleMakerScreen
-import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 
 enum class DrawerTab(val title: String, val icon: ImageVector) {
   FILES("Files", Icons.Default.Folder),
