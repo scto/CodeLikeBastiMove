@@ -22,5 +22,6 @@ dependencies {
     api(project(":feature:assetstudio"))
     api(project(":feature:themebuilder"))
     api(project(":feature:submodulemaker"))
+    api(project(":feature:buildvariants"))
     api(project(":feature:settings"))
 }
