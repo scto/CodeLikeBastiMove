@@ -3,7 +3,7 @@
 java = "17"
 
 kotlin = "2.2.0"
-ksp = "2.2.0-2.0.2"
+ksp = "2.3.5"
 
 androidGradlePlugin = "8.11.1"
 androidTools = "32.0.0"
