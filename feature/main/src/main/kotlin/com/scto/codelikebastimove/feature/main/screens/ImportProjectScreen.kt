@@ -74,7 +74,7 @@ fun ImportProjectScreen(
             .background(MaterialTheme.colorScheme.background)
     ) {
         AdaptiveTopAppBar(
-            title = stringResource(R.string.import_project_title),
+            title = "Import Project", // Placeholder for R.string.import_project_title
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
                     Icon(
@@ -123,7 +123,7 @@ fun ImportProjectScreen(
             }
 
             Text(
-                text = stringResource(R.string.import_project_description),
+                text = "Select a project folder from your device to import it into the workspace.", // Placeholder for R.string.import_project_description
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
                 modifier = Modifier.fillMaxWidth()
@@ -132,7 +132,7 @@ fun ImportProjectScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = stringResource(R.string.select_project_folder),
+                text = "Select Project Folder", // Placeholder for R.string.select_project_folder
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
             )
@@ -145,8 +145,8 @@ fun ImportProjectScreen(
                 OutlinedTextField(
                     value = selectedPath,
                     onValueChange = onPathChanged,
-                    label = { Text(stringResource(R.string.selected_path)) },
-                    placeholder = { Text(stringResource(R.string.no_path_selected)) },
+                    label = { Text("Selected Path") }, // Placeholder for R.string.selected_path
+                    placeholder = { Text("No path selected") }, // Placeholder for R.string.no_path_selected
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -173,23 +173,23 @@ fun ImportProjectScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = stringResource(R.string.import_options),
+                text = "Import Options", // Placeholder for R.string.import_options
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
             )
 
             ImportOptionCard(
                 icon = Icons.Outlined.ContentCopy,
-                title = stringResource(R.string.copy_to_workspace),
-                description = stringResource(R.string.copy_to_workspace_description),
+                title = "Copy to Workspace", // Placeholder for R.string.copy_to_workspace
+                description = "Copy the project files to the internal workspace.", // Placeholder for R.string.copy_to_workspace_description
                 isSelected = copyToWorkspace,
                 onClick = { copyToWorkspace = true },
             )
 
             ImportOptionCard(
                 icon = Icons.Outlined.Link,
-                title = stringResource(R.string.link_in_place),
-                description = stringResource(R.string.link_in_place_description),
+                title = "Link in Place", // Placeholder for R.string.link_in_place
+                description = "Reference the project files from their original location.", // Placeholder for R.string.link_in_place_description
                 isSelected = !copyToWorkspace,
                 onClick = { copyToWorkspace = false },
             )
@@ -226,7 +226,7 @@ fun ImportProjectScreen(
                 ) {
                     Icon(Icons.Default.Check, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(stringResource(R.string.import_button), fontWeight = FontWeight.SemiBold)
+                    Text("Import", fontWeight = FontWeight.SemiBold) // Placeholder for R.string.import_button
                 }
             }
 

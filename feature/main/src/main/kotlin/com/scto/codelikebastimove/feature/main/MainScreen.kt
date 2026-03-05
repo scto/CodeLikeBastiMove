@@ -72,7 +72,7 @@ import com.scto.codelikebastimove.feature.settings.general.GeneralSettingsScreen
 import com.scto.codelikebastimove.feature.settings.privacy.PrivacySettingsScreen
 import com.scto.codelikebastimove.feature.settings.statistics.StatisticsSettingsScreen
 import com.scto.codelikebastimove.feature.settings.termux.TermuxSettingsScreen
-import com.scto.codelikebastimove.feature.submodulemaker.BuildVariantsScreen
+import com.scto.codelikebastimove.feature.buildvariants.BuildVariantsScreen
 import com.scto.codelikebastimove.feature.submodulemaker.SubModuleMakerScreen
 
 @Composable
@@ -200,7 +200,6 @@ fun MainScreen(
           onBackClick = { viewModel.onBackPressed() },
           onNavigateToGeneral = { viewModel.onNavigate(MainDestination.GeneralSettings) },
           onNavigateToAppearance = { viewModel.onNavigate(MainDestination.AppearanceSettings) },
-          onNavigateToGeneral = { viewModel.onNavigate(MainDestination.GeneralSettings) },
           onNavigateToEditorSettings = { viewModel.onNavigate(MainDestination.EditorSettings) },
           onNavigateToAIAgent = { viewModel.onNavigate(MainDestination.AIAgentSettings) },
           onNavigateToBuildAndRun = { viewModel.onNavigate(MainDestination.BuildAndRunSettings) },
@@ -360,7 +359,7 @@ private fun HomeContent(
         )
 
         Text(
-            text = stringResource(R.string.your_ideas_anywhere),
+            text = "Your ideas, anywhere", // Placeholder for R.string.your_ideas_anywhere
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
         )
@@ -379,7 +378,7 @@ private fun HomeContent(
         )
 
         Text(
-            text = stringResource(R.string.start_your_project),
+            text = "Start your project in a snap", // Placeholder for R.string.start_your_project
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
         )
@@ -404,7 +403,7 @@ private fun HomeContent(
 
         HomeActionButton(
             icon = Icons.Default.Folder,
-            title = stringResource(R.string.open_existing_project),
+            title = "Open Existing Project", // Placeholder for R.string.open_existing_project
             onClick = onOpenProject,
         )
 
@@ -420,7 +419,7 @@ private fun HomeContent(
 
         HomeActionButton(
             icon = Icons.Default.Terminal,
-            title = stringResource(R.string.console),
+            title = "Console", // Placeholder for R.string.console
             onClick = { onNavigate(MainDestination.Console) },
         )
 
@@ -436,7 +435,7 @@ private fun HomeContent(
 
         HomeActionButton(
             icon = Icons.Default.Tune,
-            title = stringResource(R.string.ide_configurations),
+            title = "IDE Configurations", // Placeholder for R.string.ide_configurations
             onClick = { onNavigate(MainDestination.Settings) },
         )
 
@@ -444,7 +443,7 @@ private fun HomeContent(
 
         HomeActionButton(
             icon = Icons.Default.Book,
-            title = stringResource(R.string.documentation),
+            title = "Documentation", // Placeholder for R.string.documentation
             onClick = { onNavigate(MainDestination.Documentation) },
         )
 
