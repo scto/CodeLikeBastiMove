@@ -75,7 +75,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-import com.scto.codelikebastimove.feature.buildVariants.BuildVariantsScreen
+import com.scto.codelikebastimove.feature.buildvariants.BuildVariantsScreen
 import com.scto.codelikebastimove.feature.submodulemaker.SubModuleMakerScreen
 import com.scto.codelikebastimove.feature.main.navigation.MainDestination
 
@@ -159,12 +159,12 @@ fun FileTreeDrawer(
         DrawerTab.BUILD -> {
           BuildVariantsScreen(
             projectPath = projectPath,
-            onBackClick = {}, // No back navigation within the drawer, pass empty lambda
+            onBackClick = {},
           )
         }
         DrawerTab.MODULE -> {
           SubModuleMakerScreen(
-            onBackClick = {}, // No back navigation within the drawer, pass empty lambda
+            onBackClick = {},
           )
         }
         DrawerTab.ASSETS -> {

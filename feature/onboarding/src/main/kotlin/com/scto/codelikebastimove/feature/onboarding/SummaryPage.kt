@@ -18,6 +18,7 @@ import com.scto.codelikebastimove.core.datastore.OnboardingConfig
 @Composable
 fun SummaryPage(
     config: OnboardingConfig,
+    onStartInstallation: () -> Unit,
     onFinish: () -> Unit,
     onBack: () -> Unit
 ) {
@@ -43,7 +44,7 @@ fun SummaryPage(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Button(onClick = onFinish, enabled = canComplete, modifier = Modifier.fillMaxWidth().height(56.dp)) {
+            Button(onClick = onStartInstallation, enabled = canComplete, modifier = Modifier.fillMaxWidth().height(56.dp)) {
                 Icon(Icons.Default.PlayArrow, null)
                 Text("Einrichtung abschließen")
             }

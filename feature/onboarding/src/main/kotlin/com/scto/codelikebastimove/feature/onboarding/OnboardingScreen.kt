@@ -17,6 +17,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.scto.codelikebastimove.core.utils.PermissionUtils
 
 @Composable
 fun OnboardingScreen(
@@ -65,7 +66,6 @@ fun OnboardingScreen(
       3 ->
         SummaryPage(
           config = onboardingConfig,
-          canComplete = hasRealFilePermission,
           onStartInstallation = {
             val currentPermission = checkFileAccessPermission()
             if (currentPermission) {
@@ -77,7 +77,7 @@ fun OnboardingScreen(
               viewModel.setFileAccessPermissionGranted(false)
             }
           },
-          onFinish = onOnboardingComplete, // Mapping to onOnboardingComplete
+          onFinish = onOnboardingComplete,
           onBack = { viewModel.previousPage() },
         )
     }
