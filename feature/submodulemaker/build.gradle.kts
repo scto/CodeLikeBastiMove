@@ -8,4 +8,6 @@ android {
 
 dependencies {
     implementation(libs.androidx.documentfile)
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.mockk)
 }
