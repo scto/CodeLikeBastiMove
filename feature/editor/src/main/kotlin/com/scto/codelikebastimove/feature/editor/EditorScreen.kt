@@ -9,6 +9,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -56,6 +58,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -106,6 +109,7 @@ fun EditorScreen(
     var goToLineInput by remember { mutableStateOf("1") }
 
     var showMoreActionsBottomSheet by remember { mutableStateOf(false) }
+    var showLanguagePicker by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
 
@@ -148,6 +152,19 @@ fun EditorScreen(
             onDismiss = {
                 showGoToLineDialog = false
                 goToLineInput = "1"
+            }
+        )
+    }
+
+    if (showLanguagePicker) {
+        LanguagePickerDialog(
+            currentLanguage = currentLanguage,
+            onLanguageSelected = {
+                viewModel.setLanguage(it)
+                showLanguagePicker = false
+            },
+            onDismiss = {
+                showLanguagePicker = false
             }
         )
     }
@@ -246,8 +263,7 @@ fun EditorScreen(
                 DropdownMenuItem(
                     text = { Text(stringResource(R.string.editor_action_change_language)) },
                     onClick = {
-                        // TODO: Implement language picker
-                        println("Change language clicked!")
+                        showLanguagePicker = true
                         coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
                             if (!sheetState.isVisible) showMoreActionsBottomSheet = false
                         }
@@ -528,6 +544,42 @@ private fun GoToLineDialog(
             }
         },
         dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.cancel))
+            }
+        }
+    )
+}
+
+@Composable
+private fun LanguagePickerDialog(
+    currentLanguage: EditorLanguageType,
+    onLanguageSelected: (EditorLanguageType) -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.editor_action_change_language)) },
+        text = {
+            Column(modifier = Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState())) {
+                EditorLanguageType.entries.forEach { language ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onLanguageSelected(language) }
+                            .padding(vertical = 12.dp, horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = language.displayName,
+                            color = if (language == currentLanguage) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
             TextButton(onClick = onDismiss) {
                 Text(stringResource(R.string.cancel))
             }
