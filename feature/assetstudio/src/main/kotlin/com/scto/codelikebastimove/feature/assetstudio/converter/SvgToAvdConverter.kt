@@ -263,8 +263,7 @@ class SvgToAvdConverter {
   }
 
   private fun extractPaths(svg: String): List<VectorPath> {
-    val pathRegex = Regex("""<path[^>]*>""", RegexOption.DOT_MATCHES_ALL)
-    return pathRegex
+    return PATH_REGEX
       .findAll(svg)
       .mapNotNull { match ->
         val pathTag = match.value
@@ -347,6 +346,10 @@ class SvgToAvdConverter {
     val g = (color.green * 255).toInt()
     val b = (color.blue * 255).toInt()
     return "0x${String.format("%02X%02X%02X%02X", a, r, g, b)}"
+  }
+
+  companion object {
+    private val PATH_REGEX = Regex("""<path[^>]*>""", RegexOption.DOT_MATCHES_ALL)
   }
 }
 
