@@ -41,7 +41,13 @@ class ModuleGenerator(private val context: Context? = null) {
 
   fun generateModule(projectRoot: File, config: ModuleConfig): Result<Unit> = runCatching {
     val moduleDir = File(projectRoot, config.directoryPath)
-    moduleDir.mkdirs()
+    if (!moduleDir.exists()) {
+      if (!moduleDir.mkdirs()) {
+        throw IllegalStateException("Failed to create module directory: ${config.directoryPath}")
+      }
+    } else if (!moduleDir.isDirectory) {
+      throw IllegalStateException("Failed to create module directory: ${config.directoryPath}")
+    }
 
     generateBuildGradleKtsFile(moduleDir, config)
     generateAndroidManifestFile(moduleDir, config)
