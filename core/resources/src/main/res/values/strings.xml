@@ -209,5 +209,6 @@
     <string name="create_project">Create Project</string>
     <string name="light_scheme">Light Scheme</string>
     <string name="dark_scheme">Dark Scheme</string>
+    <string name="editor_action_change_language">Change Language</string>
 
 </resources>
