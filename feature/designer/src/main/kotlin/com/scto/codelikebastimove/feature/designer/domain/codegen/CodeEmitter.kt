@@ -428,12 +428,16 @@ class CodeEmitter {
 
   private fun generateBottomAppBarCode(block: Block, indent: Int): String {
     val indentStr = "    ".repeat(indent)
+    val childrenCode =
+      block.children.joinToString("\n") { child -> generateBlockCode(child, indent + 1) }
 
     requiredImports.add("androidx.compose.material3.BottomAppBar")
 
     return buildString {
       appendLine("${indentStr}BottomAppBar {")
-      appendLine("${indentStr}    // TODO: Add content")
+      if (childrenCode.isNotEmpty()) {
+        append(childrenCode)
+      }
       appendLine("${indentStr}}")
     }
   }
