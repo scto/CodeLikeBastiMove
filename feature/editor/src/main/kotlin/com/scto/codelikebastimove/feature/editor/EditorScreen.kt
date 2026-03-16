@@ -487,12 +487,12 @@ private fun SearchBar(
             OutlinedTextField(
                 value = replaceQuery,
                 onValueChange = onReplaceQueryChange,
-                label = { Text("Replace with") }, // TODO: Add string resource for "Replace with"
+                label = { Text(stringResource(R.string.editor_replace_with)) },
                 singleLine = true,
                 modifier = Modifier.weight(1f)
             )
             Button(onClick = onReplaceAll, modifier = Modifier.padding(start = 8.dp)) {
-                Text("Replace All") // TODO: Add string resource for "Replace All"
+                Text(stringResource(R.string.editor_replace_all))
             }
         }
     }
