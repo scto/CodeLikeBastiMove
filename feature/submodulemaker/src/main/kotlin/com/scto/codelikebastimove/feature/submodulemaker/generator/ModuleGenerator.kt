@@ -135,7 +135,7 @@ class ModuleGenerator(private val context: Context? = null) {
       appendLine()
       if (config.moduleType == ModuleType.APPLICATION) {
         appendLine("    <application")
-        appendLine("        android:allowBackup=\"true\"")
+        appendLine("        android:allowBackup=\"false\"")
         appendLine("        android:label=\"${config.moduleName}\"")
         appendLine("        android:supportsRtl=\"true\"")
         appendLine("        android:theme=\"@style/Theme.Material3.DayNight.NoActionBar\">")
@@ -360,7 +360,7 @@ public final class $className {
       appendLine("<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\">")
       if (config.moduleType == ModuleType.APPLICATION) {
         appendLine("    <application")
-        appendLine("        android:allowBackup=\"true\"")
+        appendLine("        android:allowBackup=\"false\"")
         appendLine("        android:label=\"${config.moduleName}\"")
         appendLine("        android:supportsRtl=\"true\">")
         appendLine("    </application>")
