@@ -210,4 +210,12 @@
     <string name="light_scheme">Light Scheme</string>
     <string name="dark_scheme">Dark Scheme</string>
 
+    <string name="editor_more_actions">More Actions</string>
+    <string name="editor_action_change_language">Change Language</string>
+    <string name="editor_action_enable_word_wrap">Enable Word Wrap</string>
+    <string name="editor_action_disable_word_wrap">Disable Word Wrap</string>
+    <string name="editor_action_indent">Indent</string>
+    <string name="editor_action_outdent">Outdent</string>
+    <string name="editor_action_go_to_line">Go to line</string>
+    <string name="editor_go_to_line">Go to Line</string>
 </resources>
