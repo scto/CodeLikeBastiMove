@@ -12,8 +12,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -37,6 +40,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
@@ -108,6 +112,8 @@ fun EditorScreen(
     var showMoreActionsBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
+
+    var showLanguagePicker by remember { mutableStateOf(false) }
 
     val isDarkTheme = isSystemInDarkTheme()
 
@@ -246,16 +252,28 @@ fun EditorScreen(
                 DropdownMenuItem(
                     text = { Text(stringResource(R.string.editor_action_change_language)) },
                     onClick = {
-                        // TODO: Implement language picker
-                        println("Change language clicked!")
                         coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) showMoreActionsBottomSheet = false
+                            if (!sheetState.isVisible) {
+                                showMoreActionsBottomSheet = false
+                                showLanguagePicker = true
+                            }
                         }
                     },
                     leadingIcon = { Icon(Icons.Default.Language, contentDescription = null) }
                 )
             }
         }
+    }
+
+    if (showLanguagePicker) {
+        LanguagePickerDialog(
+            currentLanguage = currentLanguage,
+            onLanguageSelected = { selectedLanguage ->
+                viewModel.setLanguage(selectedLanguage)
+                showLanguagePicker = false
+            },
+            onDismiss = { showLanguagePicker = false }
+        )
     }
 
     Scaffold(
@@ -496,6 +514,38 @@ private fun SearchBar(
             }
         }
     }
+}
+
+@Composable
+private fun LanguagePickerDialog(
+    currentLanguage: EditorLanguageType,
+    onLanguageSelected: (EditorLanguageType) -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.editor_action_change_language)) },
+        text = {
+            LazyColumn {
+                items(EditorLanguageType.entries) { language ->
+                    ListItem(
+                        headlineContent = { Text(language.displayName) },
+                        modifier = Modifier.clickable { onLanguageSelected(language) },
+                        trailingContent = {
+                            if (language == currentLanguage) {
+                                Icon(Icons.Default.Language, contentDescription = null)
+                            }
+                        }
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.cancel))
+            }
+        }
+    )
 }
 
 @Composable
