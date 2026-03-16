@@ -21,4 +21,9 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:resources"))
     implementation(libs.org.eclipse.jgit)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.test.mockk)
+    testImplementation(libs.test.kotlin.coroutines)
+    testImplementation(libs.test.coroutines.flow)
 }
