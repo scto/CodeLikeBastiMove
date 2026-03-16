@@ -329,6 +329,18 @@ class GradleParser(private val content: String) {
 
 class BuildVariantsViewModel : ViewModel() {
 
+  companion object {
+    private val createRegisterRegex = Regex("""(?:create|register)\s*\(\s*["']([^"']+)["']""")
+    private val getByNameRegex = Regex("""getByName\s*\(\s*["']([^"']+)["']""")
+    private val namedRegex = Regex("""named\s*\(\s*["']([^"']+)["']""")
+    private val flavorRegex = Regex("""^\s*(\w+)\s*\{""", RegexOption.MULTILINE)
+
+    private val knownBuildTypes = listOf("debug", "release", "benchmark", "staging", "qa", "beta", "alpha", "canary")
+    private val knownBuildTypeRegexes = knownBuildTypes.associateWith { buildType ->
+      Regex("""\b$buildType\s*\{""")
+    }
+  }
+
   private val _uiState = MutableStateFlow(BuildVariantsUiState())
   val uiState: StateFlow<BuildVariantsUiState> = _uiState.asStateFlow()
 
@@ -698,22 +710,21 @@ class BuildVariantsViewModel : ViewModel() {
     val buildTypesBlock = GradleParser.extractBlockWithBraces(androidBlock, "buildTypes")
 
     if (buildTypesBlock != null) {
-      Regex("""(?:create|register)\s*\(\s*["']([^"']+)["']""").findAll(buildTypesBlock).forEach {
+      createRegisterRegex.findAll(buildTypesBlock).forEach {
         foundTypes.add(it.groupValues[1])
       }
 
-      Regex("""getByName\s*\(\s*["']([^"']+)["']""").findAll(buildTypesBlock).forEach {
+      getByNameRegex.findAll(buildTypesBlock).forEach {
         foundTypes.add(it.groupValues[1])
       }
 
-      Regex("""named\s*\(\s*["']([^"']+)["']""").findAll(buildTypesBlock).forEach {
+      namedRegex.findAll(buildTypesBlock).forEach {
         foundTypes.add(it.groupValues[1])
       }
 
-      val knownBuildTypes =
-        listOf("debug", "release", "benchmark", "staging", "qa", "beta", "alpha", "canary")
       for (buildType in knownBuildTypes) {
-        if (buildTypesBlock.contains(Regex("""\b$buildType\s*\{"""))) {
+        val regex = knownBuildTypeRegexes[buildType]
+        if (regex != null && buildTypesBlock.contains(regex)) {
           foundTypes.add(buildType)
         }
       }
@@ -731,11 +742,11 @@ class BuildVariantsViewModel : ViewModel() {
     val flavorsBlock = GradleParser.extractBlockWithBraces(androidBlock, "productFlavors")
 
     if (flavorsBlock != null) {
-      Regex("""(?:create|register)\s*\(\s*["']([^"']+)["']""").findAll(flavorsBlock).forEach {
+      createRegisterRegex.findAll(flavorsBlock).forEach {
         foundFlavors.add(it.groupValues[1])
       }
 
-      Regex("""getByName\s*\(\s*["']([^"']+)["']""").findAll(flavorsBlock).forEach {
+      getByNameRegex.findAll(flavorsBlock).forEach {
         foundFlavors.add(it.groupValues[1])
       }
 
@@ -759,7 +770,7 @@ class BuildVariantsViewModel : ViewModel() {
           "setDimension",
         )
 
-      Regex("""^\s*(\w+)\s*\{""", RegexOption.MULTILINE).findAll(flavorsBlock).forEach {
+      flavorRegex.findAll(flavorsBlock).forEach {
         val name = it.groupValues[1]
         if (name !in excludedNames && name.first().isLowerCase()) {
           foundFlavors.add(name)
