@@ -258,8 +258,14 @@ class SvgToAvdConverter {
   }
 
   private fun extractAttribute(svg: String, attribute: String): String? {
-    val regex = Regex("""$attribute\s*=\s*["']([^"']+)["']""")
+    val regex = attributeRegexCache.getOrPut(attribute) {
+      Regex("""$attribute\s*=\s*["']([^"']+)["']""")
+    }
     return regex.find(svg)?.groupValues?.get(1)
+  }
+
+  companion object {
+    private val attributeRegexCache = java.util.concurrent.ConcurrentHashMap<String, Regex>()
   }
 
   private fun extractPaths(svg: String): List<VectorPath> {
