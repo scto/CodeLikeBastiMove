@@ -135,8 +135,9 @@
     <string name="settings_dynamic_colors_subtitle">Use colors from your wallpaper</string>
 
     <string name="editor_screen_title">Code Editor</string>
-    <string name="replace_with">Replace with</string>
-    <string name="replace_all">Replace All</string>
+    <string name="editor_more_actions">More actions</string>
+    <string name="editor_replace_with">Replace with</string>
+    <string name="editor_replace_all">Replace All</string>
     
     <string name="settings_editor">Editor Settings</string>
     <string name="settings_font_size">Font Size</string>
