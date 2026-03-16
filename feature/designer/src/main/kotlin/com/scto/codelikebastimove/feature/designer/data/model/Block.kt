@@ -165,6 +165,16 @@ data class Block(
           common["icon"] = BlockProperty("icon", "Icon", PropertyType.ICON, "Icons.Default.Star")
           common["tint"] = BlockProperty("tint", "Tint", PropertyType.COLOR, null)
         }
+        BlockType.IMAGE -> {
+          common["resource"] = BlockProperty("resource", "Resource", PropertyType.STRING, "R.drawable.placeholder")
+          common["contentScale"] = BlockProperty(
+            "contentScale",
+            "Content Scale",
+            PropertyType.ENUM,
+            "Fit",
+            listOf("Fit", "Crop", "FillBounds", "Inside", "None", "FillWidth", "FillHeight"),
+          )
+        }
         BlockType.SWITCH -> {
           common["checked"] = BlockProperty("checked", "Checked", PropertyType.BOOLEAN, false)
           common["enabled"] = BlockProperty("enabled", "Enabled", PropertyType.BOOLEAN, true)

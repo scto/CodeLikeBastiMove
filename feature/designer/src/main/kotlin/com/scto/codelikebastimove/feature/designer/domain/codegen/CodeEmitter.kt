@@ -398,16 +398,22 @@ class CodeEmitter {
 
   private fun generateImageCode(block: Block, indent: Int): String {
     val indentStr = "    ".repeat(indent)
+    val resource = block.properties["resource"]?.value as? String ?: "R.drawable.placeholder"
+    val contentDescription = block.properties["contentDescription"]?.value as? String
+    val contentScale = block.properties["contentScale"]?.value as? String ?: "Fit"
 
     requiredImports.add("androidx.compose.foundation.Image")
     requiredImports.add("androidx.compose.ui.res.painterResource")
+    requiredImports.add("androidx.compose.ui.layout.ContentScale")
+
+    val cdArg = if (contentDescription != null) "\"$contentDescription\"" else "null"
 
     return buildString {
-      appendLine("${indentStr}// TODO: Replace with actual image resource")
-      appendLine("${indentStr}Box(")
-      appendLine("${indentStr}    modifier = Modifier")
-      appendLine("${indentStr}        .size(${block.width.toInt()}.dp, ${block.height.toInt()}.dp)")
-      appendLine("${indentStr}        .background(Color.Gray)")
+      appendLine("${indentStr}Image(")
+      appendLine("${indentStr}    painter = painterResource(id = $resource),")
+      appendLine("${indentStr}    contentDescription = $cdArg,")
+      appendLine("${indentStr}    modifier = Modifier.size(${block.width.toInt()}.dp, ${block.height.toInt()}.dp),")
+      appendLine("${indentStr}    contentScale = ContentScale.$contentScale")
       appendLine("${indentStr})")
     }
   }
