@@ -314,7 +314,7 @@ class SvgToAvdConverter {
         colorStr == "green" -> Color.Green
         colorStr == "blue" -> Color.Blue
         colorStr.startsWith("rgb") -> {
-          val match = Regex("""rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)""").find(colorStr)
+          val match = RGB_REGEX.find(colorStr)
           if (match != null) {
             val (r, g, b) = match.destructured
             Color(r.toInt(), g.toInt(), b.toInt())
@@ -347,6 +347,10 @@ class SvgToAvdConverter {
     val g = (color.green * 255).toInt()
     val b = (color.blue * 255).toInt()
     return "0x${String.format("%02X%02X%02X%02X", a, r, g, b)}"
+  }
+
+  companion object {
+    private val RGB_REGEX = Regex("""rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)""")
   }
 }
 
