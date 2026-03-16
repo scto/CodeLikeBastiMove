@@ -243,10 +243,10 @@ class SvgToAvdConverter {
   }
 
   private fun extractViewBox(svg: String): Quadruple<Float, Float, Float, Float> {
-    val viewBoxMatch = Regex("""viewBox\s*=\s*["']([^"']+)["']""").find(svg)
+    val viewBoxMatch = VIEW_BOX_REGEX.find(svg)
     return if (viewBoxMatch != null) {
       val parts =
-        viewBoxMatch.groupValues[1].split(Regex("[\\s,]+")).map { it.toFloatOrNull() ?: 0f }
+        viewBoxMatch.groupValues[1].split(VIEW_BOX_SPLIT_REGEX).map { it.toFloatOrNull() ?: 0f }
       if (parts.size >= 4) {
         Quadruple(parts[0], parts[1], parts[2], parts[3])
       } else {
@@ -263,8 +263,7 @@ class SvgToAvdConverter {
   }
 
   private fun extractPaths(svg: String): List<VectorPath> {
-    val pathRegex = Regex("""<path[^>]*>""", RegexOption.DOT_MATCHES_ALL)
-    return pathRegex
+    return PATH_REGEX
       .findAll(svg)
       .mapNotNull { match ->
         val pathTag = match.value
@@ -314,7 +313,7 @@ class SvgToAvdConverter {
         colorStr == "green" -> Color.Green
         colorStr == "blue" -> Color.Blue
         colorStr.startsWith("rgb") -> {
-          val match = Regex("""rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)""").find(colorStr)
+          val match = RGB_COLOR_REGEX.find(colorStr)
           if (match != null) {
             val (r, g, b) = match.destructured
             Color(r.toInt(), g.toInt(), b.toInt())
@@ -347,6 +346,13 @@ class SvgToAvdConverter {
     val g = (color.green * 255).toInt()
     val b = (color.blue * 255).toInt()
     return "0x${String.format("%02X%02X%02X%02X", a, r, g, b)}"
+  }
+
+  companion object {
+    private val VIEW_BOX_REGEX = Regex("""viewBox\s*=\s*["']([^"']+)["']""")
+    private val VIEW_BOX_SPLIT_REGEX = Regex("""[\s,]+""")
+    private val PATH_REGEX = Regex("""<path[^>]*>""", RegexOption.DOT_MATCHES_ALL)
+    private val RGB_COLOR_REGEX = Regex("""rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)""")
   }
 }
 
