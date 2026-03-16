@@ -2,6 +2,7 @@ package com.scto.codelikebastimove.feature.themebuilder.ui
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
+import kotlin.math.pow
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -892,5 +893,3 @@ private fun Color.luminance(): Float {
     val b = if (blue <= 0.03928f) blue / 12.92f else ((blue + 0.055f) / 1.055f).pow(2.4f)
     return 0.2126f * r + 0.7152f * g + 0.0722f * b
 }
-
-private fun Float.pow(exponent: Float): Float = java.lang.Math.pow(this.toDouble(), exponent.toDouble()).toFloat()
