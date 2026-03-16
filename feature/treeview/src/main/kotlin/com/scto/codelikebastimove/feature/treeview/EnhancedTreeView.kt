@@ -643,20 +643,46 @@ private fun buildFileViewTree(dir: File, includeHidden: Boolean, level: Int): Li
 
 private fun buildAndroidViewTree(root: File, includeHidden: Boolean): List<FileTreeNode> {
   val androidStructure = mutableListOf<FileTreeNode>()
-  val discoveredModules = mutableListOf<Pair<String, File>>()
   
+  val settingsFile = getSettingsFile(root)
+  val discoveredModules = discoverModules(root, settingsFile)
+
+  discoveredModules
+    .sortedWith(compareBy({ !it.first.equals(":app", ignoreCase = true) }, { it.first }))
+    .forEach { (gradlePath, moduleDir) ->
+      val displayName = gradlePath.trimStart(':')
+      androidStructure.add(buildAndroidModuleNode(moduleDir, displayName, includeHidden))
+    }
+
+  val gradleScriptsNode = buildGradleScriptsNode(root, discoveredModules)
+  if (gradleScriptsNode.children.isNotEmpty()) {
+    androidStructure.add(gradleScriptsNode)
+  }
+
+  if (androidStructure.isEmpty()) {
+    return buildFileViewTree(root, includeHidden, 0)
+  }
+
+  return androidStructure
+}
+
+private fun getSettingsFile(root: File): File? {
   val settingsKts = File(root, "settings.gradle.kts")
   val settingsGroovy = File(root, "settings.gradle")
-  val settingsFile = when {
+  return when {
     settingsKts.exists() -> settingsKts
     settingsGroovy.exists() -> settingsGroovy
     else -> null
   }
-  
+}
+
+private fun discoverModules(root: File, settingsFile: File?): List<Pair<String, File>> {
+  val discoveredModules = mutableListOf<Pair<String, File>>()
+
   if (settingsFile != null) {
     val content = settingsFile.readText()
     val modulePaths = parseIncludeStatements(content)
-    
+
     modulePaths.forEach { gradlePath ->
       val relativePath = gradlePath.trimStart(':').replace(':', File.separatorChar)
       val moduleDir = File(root, relativePath)
@@ -665,31 +691,15 @@ private fun buildAndroidViewTree(root: File, includeHidden: Boolean): List<FileT
       }
     }
   }
-  
+
   if (discoveredModules.isEmpty()) {
     val appDir = File(root, "app")
     if (appDir.exists() && hasGradleBuildFile(appDir)) {
       discoveredModules.add(":app" to appDir)
     }
   }
-  
-  discoveredModules
-    .sortedWith(compareBy({ !it.first.equals(":app", ignoreCase = true) }, { it.first }))
-    .forEach { (gradlePath, moduleDir) ->
-      val displayName = gradlePath.trimStart(':')
-      androidStructure.add(buildAndroidModuleNode(moduleDir, displayName, includeHidden))
-    }
-  
-  val gradleScriptsNode = buildGradleScriptsNode(root, discoveredModules)
-  if (gradleScriptsNode.children.isNotEmpty()) {
-    androidStructure.add(gradleScriptsNode)
-  }
-  
-  if (androidStructure.isEmpty()) {
-    return buildFileViewTree(root, includeHidden, 0)
-  }
-  
-  return androidStructure
+
+  return discoveredModules
 }
 
 private fun parseIncludeStatements(content: String): List<String> {
